@@ -18,4 +18,18 @@
     <DocumentationFile>C:\Users\chris\OneDrive\Documents\All Documents\Programming\Code\C#\QuasarCode\QuasarCode\QuasarCode_Library\QuasarCode_Library.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Games\Cards\" />
+    <Folder Include="Games\Dice\" />
+    <Folder Include="Games\Spinners\" />
+    <Folder Include="Games\Systems\" />
+    <Folder Include="IO\Console\" />
+    <Folder Include="IO\FileSystem\" />
+    <Folder Include="Maths\Matrix\" />
+    <Folder Include="Tools\DataStructures\" />
+    <Folder Include="Tools\Systems\" />
+    <Folder Include="Tools\Sort\" />
+    <Folder Include="Tools\Search\" />
+  </ItemGroup>
+
 </Project>
