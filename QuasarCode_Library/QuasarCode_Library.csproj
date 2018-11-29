@@ -27,6 +27,7 @@
     <Folder Include="IO\FileSystem\" />
     <Folder Include="Maths\Matrix\" />
     <Folder Include="Tools\DataStructures\" />
+    <Folder Include="Tools\Exceptions\" />
     <Folder Include="Tools\Systems\" />
     <Folder Include="Tools\Sort\" />
     <Folder Include="Tools\Search\" />
