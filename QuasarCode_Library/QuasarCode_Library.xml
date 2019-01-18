@@ -4,5 +4,307 @@
         <name>QuasarCode_Library</name>
     </assembly>
     <members>
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Coordinate`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Coordinates.ICoordinate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.Cartesian">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Coordinates.Systems.Cartesian.Axis">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Coordinates.Systems.Cartesian.#ctor(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="dimentions"></param>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.CylindricalPolar">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Coordinates.Systems.CylindricalPolar.Axis">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.ICoordinateSystem">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.Polar">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Coordinates.Systems.Polar.Axis">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Coordinates.Systems.Polar.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.SphericalPolar">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Coordinates.Systems.SphericalPolar.Axis">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1.#ctor(QuasarCode.Library.Maths.Coordinates.ICoordinate,QuasarCode.Library.Maths.Coordinates.ICoordinate)">
+            <summary>
+            
+            </summary>
+            <param name="point1">A point on the line in the direction of the vector</param>
+            <param name="point2">A point on the line in the direction of the vector</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1.#ctor(QuasarCode.Library.Maths.Matrices.Vectors.Vector{`0})">
+            <summary>
+            
+            </summary>
+            <param name="vector"></param>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Matrices.Vectors.Vector`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T">Coordinate system</typeparam>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Matrices.Vectors.Vector`1.#ctor(System.Double,QuasarCode.Library.Maths.Coordinates.ICoordinate,QuasarCode.Library.Maths.Coordinates.ICoordinate)">
+            <summary>
+            
+            </summary>
+            <param name="magnitude">The length of the vector</param>
+            <param name="point1">A point on the line in the direction of the vector</param>
+            <param name="point2">A point on the line in the direction of the vector</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Matrices.Vectors.Vector`1.#ctor(System.Double,QuasarCode.Library.Maths.Matrices.Vectors.UnitVector{`0})">
+            <summary>
+            
+            </summary>
+            <param name="magnitude"></param>
+            <param name="direction"></param>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.Base.Angle`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Quantities.Base.Angle`1.#ctor(System.Double,QuasarCode.Library.Maths.Units)">
+            <summary>
+            
+            </summary>
+            <param name="magnitude">The size of the mass</param>
+            <param name="unit">The unit of mass</param>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.Magnitude">
+            <summary>
+            The size of the mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.Unit">
+            <summary>
+            The unit of mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.SIUnit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.Direction">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.Base.Length`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Quantities.Base.Length`1.#ctor(System.Double,`0,QuasarCode.Library.Maths.Units)">
+            <summary>
+            
+            </summary>
+            <param name="magnitude">The size of the mass</param>
+            /// <param name="direction">    </param>
+            <param name="unit">The unit of mass</param>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.Magnitude">
+            <summary>
+            The size of the mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.Unit">
+            <summary>
+            The unit of mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.SIUnit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.Direction">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.Base.Mass">
+            <summary>
+            The mesure of the matter comprising a body
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Quantities.Base.Mass.#ctor(System.Double,QuasarCode.Library.Maths.Units)">
+            <summary>
+            
+            </summary>
+            <param name="magnitude">The size of the mass</param>
+            <param name="unit">The unit of mass</param>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Mass.Magnitude">
+            <summary>
+            The size of the mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Mass.Unit">
+            <summary>
+            The unit of mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Mass.SIUnit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.IQuantity">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.IQuantity.Magnitude">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.IQuantity.Unit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.IQuantity.SIUnit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.IVectorQuantity`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T">Coordinate system</typeparam>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.IVectorQuantity`1.Direction">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Units">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.Degrees">
+            <summary>
+            Unit of angle
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.Radians">
+            <summary>
+            Unit of angle
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.km">
+            <summary>
+            Unit of length (SI)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.m">
+            <summary>
+            Unit of length (SI base)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.cm">
+            <summary>
+            Unit of length (SI)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.mm">
+            <summary>
+            Unit of length (SI)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.micro_m">
+            <summary>
+            Unit of length (SI)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.nm">
+            <summary>
+            Unit of length (SI)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.Kg">
+            <summary>
+            Unit of mass (SI base)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.g">
+            <summary>
+            Unit of mass (SI)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.mg">
+            <summary>
+            Unit of mass (SI)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.lb">
+            <summary>
+            Unit of mass (Imperial)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.oz">
+            <summary>
+            Unit of mass (Imperial)
+            </summary>
+        </member>
     </members>
 </doc>

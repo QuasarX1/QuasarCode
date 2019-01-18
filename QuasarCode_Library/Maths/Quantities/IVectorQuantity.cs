@@ -8,7 +8,7 @@ namespace QuasarCode.Library.Maths.Quantities
     /// 
     /// </summary>
     /// <typeparam name="T">Coordinate system</typeparam>
-    public interface IVectorQuantity<T>: IQuantity where T : Coordinates.ICoordinateSystem
+    public interface IVectorQuantity<T>: IQuantity where T : Coordinates.Systems.ICoordinateSystem
     {
         /// <summary>
         /// 

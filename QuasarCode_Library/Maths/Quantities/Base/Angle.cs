@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using QuasarCode.Library.Maths.Matrices.Vectors;
 
 namespace QuasarCode.Library.Maths.Quantities.Base
 {
-    public class Angle<T>: IVectorQuantity<T> where T : Coordinates.ICoordinateSystem
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class Angle<T>: IVectorQuantity<T> where T : Coordinates.Systems.ICoordinateSystem
     {
         /// <summary>
         /// 
@@ -31,5 +36,10 @@ namespace QuasarCode.Library.Maths.Quantities.Base
         /// 
         /// </summary>
         public Units SIUnit { get { return Units.Kg; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector<T> Direction { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

@@ -4,7 +4,11 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Matrices.Vectors
 {
-    public class UnitVector<T> where T : Coordinates.ICoordinateSystem
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class UnitVector<T> where T : Coordinates.Systems.ICoordinateSystem
     {
         double Magnitude { get; set; }
 
@@ -13,14 +17,13 @@ namespace QuasarCode.Library.Maths.Matrices.Vectors
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="magnitude">The length of the vector</param>
         /// <param name="point1">A point on the line in the direction of the vector</param>
         /// <param name="point2">A point on the line in the direction of the vector</param>
         public UnitVector(Coordinates.ICoordinate point1, Coordinates.ICoordinate point2)
         {
             Magnitude = 1;
 
-            Direction = point2 - point1;
+            //Direction = point2 - point1;
         }
 
         /// <summary>

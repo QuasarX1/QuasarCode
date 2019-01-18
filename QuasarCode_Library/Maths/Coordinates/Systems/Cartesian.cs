@@ -10,6 +10,9 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems
     /// </summary>
     public class Cartesian: ICoordinateSystem
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public Type[] Axis { get; set; }
 
         /// <summary>
