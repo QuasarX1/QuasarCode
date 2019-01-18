@@ -23,7 +23,6 @@
     <Folder Include="Games\Dice\" />
     <Folder Include="Games\Spinners\" />
     <Folder Include="Games\Systems\" />
-    <Folder Include="IO\Console\" />
     <Folder Include="IO\FileSystem\" />
     <Folder Include="Maths\Quantities\Compound\" />
     <Folder Include="Tools\DataStructures\" />
