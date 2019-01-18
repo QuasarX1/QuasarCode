@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace QuasarCode.Library.Maths.Quantities
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T">Coordinate system</typeparam>
+    public interface IVectorQuantity<T>: IQuantity where T : Coordinates.ICoordinateSystem
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        Matrices.Vectors.Vector<T> Direction { get; set; }//can be null!
+    }
+}

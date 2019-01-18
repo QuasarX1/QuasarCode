@@ -25,7 +25,7 @@
     <Folder Include="Games\Systems\" />
     <Folder Include="IO\Console\" />
     <Folder Include="IO\FileSystem\" />
-    <Folder Include="Maths\Matrix\" />
+    <Folder Include="Maths\Quantities\Compound\" />
     <Folder Include="Tools\DataStructures\" />
     <Folder Include="Tools\Exceptions\" />
     <Folder Include="Tools\Systems\" />
