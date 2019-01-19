@@ -4,6 +4,57 @@
         <name>QuasarCode_Library</name>
     </assembly>
     <members>
+        <member name="T:QuasarCode.Library.IO.Text.Console">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print">
+            <summary>
+            Outputs text to the console. Prints only a new line.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.String,System.String,System.String[])">
+            <summary>
+            Outputs text to the console.
+            </summary>
+            <param name="text">The text to output.</param>
+            <param name="end">String added to the end of the output.</param>
+            <param name="moreText">List of any other strings to output.</param>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.Object,System.String,System.Object[])">
+            <summary>
+            Outputs text versions of objects to the console.
+            </summary>
+            <param name="text">The object to output. Must be able to be implicitly converted to a string.</param>
+            <param name="end">String added to the end of the output.</param>
+            <param name="moreText">List of any other strings to output. Must be able to be implicitly converted to a string.</param>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String)">
+            <summary>
+            Retrives an input from the console.
+            </summary>
+            <param name="indicator">String to format line for input.</param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.String)">
+            <summary>
+            Retrives an input from the console with a prompt message.
+            </summary>
+            <param name="prompt">Message to be printed to the display to request input.</param>
+            <param name="indicator">String to format line for input.</param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.String)">
+            <summary>
+            Retrives an input from the console with a prompt message. Converts the input to the given type.
+            </summary>
+            <typeparam name="T">Return type</typeparam>
+            <param name="prompt">Message to be printed to the display to request input.</param>
+            <param name="converter">Method deligate to convert the string input to the requested type.</param>
+            <param name="indicator">String to format line for input.</param>
+            <returns></returns>
+        </member>
         <member name="T:QuasarCode.Library.Maths.Coordinates.Coordinate`1">
             <summary>
             
