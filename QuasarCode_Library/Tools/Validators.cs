@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace QuasarCode.Library.Tools
 {
@@ -25,24 +26,20 @@ namespace QuasarCode.Library.Tools
             {
                 return false;
             }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
-        /// Checks to see if the provided object can be converted to a character.
+        /// Checks to see if the provided object is a character object or a string with a single character.
         /// </summary>
         /// <param name="testCase">The object to be tested.</param>
         /// <returns>Boolean</returns>
         public static bool IsChar(object testCase)
         {
-            try
-            {
-                Convert.ToChar(testCase);
-                return true;
-            }
-            catch (InvalidCastException)
-            {
-                return false;
-            }
+            return testCase.GetType() == typeof(char) || testCase.GetType() == typeof(string) && ((string)testCase).Length == 1;
         }
 
         /// <summary>
@@ -61,6 +58,10 @@ namespace QuasarCode.Library.Tools
             {
                 return false;
             }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace QuasarCode.Library.Tools
         /// <returns>Boolean</returns>
         public static bool IsAlpha(char testCase)
         {
-            throw new NotImplementedException();
+            return Regex.IsMatch(Convert.ToString(testCase), @"^[\p{L}_']{1}$");
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace QuasarCode.Library.Tools
         /// <returns>Boolean</returns>
         public static bool IsAlpha(string testCase)
         {
-            throw new NotImplementedException();
+            return Regex.IsMatch(testCase, @"^[\p{L}_']+$");
         }
 
         /// <summary>
@@ -113,10 +114,26 @@ namespace QuasarCode.Library.Tools
         {
             try
             {
-                Convert.ToInt64(testCase);
-                return true;
+                Convert.ToInt32(testCase);
+
+                try
+                {
+                    return Convert.ToDouble(Convert.ToInt32(testCase)) == Convert.ToDouble(testCase);
+                }
+                catch (InvalidCastException)
+                {
+                    return true;
+                }
+                catch (FormatException)
+                {
+                    return true;
+                }
             }
             catch (InvalidCastException)
+            {
+                return false;
+            }
+            catch (FormatException)
             {
                 return false;
             }
@@ -135,6 +152,10 @@ namespace QuasarCode.Library.Tools
                 return true;
             }
             catch (InvalidCastException)
+            {
+                return false;
+            }
+            catch (FormatException)
             {
                 return false;
             }

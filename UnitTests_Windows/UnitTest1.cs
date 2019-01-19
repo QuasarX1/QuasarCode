@@ -72,9 +72,10 @@ namespace UnitTests_Windows
 
             // IsChar
             Assert.AreEqual(IsChar('a'), true);
-            Assert.AreEqual(IsChar("a"), true);// ?????
+            Assert.AreEqual(IsChar("a"), true);
 
-            Assert.AreEqual(IsChar(1), false);
+            Assert.AreEqual(IsChar("abc"), false);
+            Assert.AreEqual(IsChar(10), false);
 
             // IsDouble
             Assert.AreEqual(IsDouble(1.1), true);
@@ -95,8 +96,7 @@ namespace UnitTests_Windows
             // IsString
             Assert.AreEqual(IsString("A string"), true);
             Assert.AreEqual(IsString('a'), true);
-
-            Assert.AreEqual(IsString(5), false);
+            Assert.AreEqual(IsString(5), true);
         }
     }
 }

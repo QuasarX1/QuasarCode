@@ -65,7 +65,7 @@
             <param name="indicator">String to format line for input.</param>
             <returns>A line of input from the console, coverted to the specified type.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.Func{``0,System.Boolean},System.String,System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.Func{System.Object,System.Boolean},System.String,System.String)">
             <summary>
             Retrives an input from the console with a prompt message. Uses a method deligate to force valid input. Converts the input to the given type (before validation)
             </summary>
@@ -411,7 +411,7 @@
         </member>
         <member name="M:QuasarCode.Library.Tools.Validators.IsChar(System.Object)">
             <summary>
-            Checks to see if the provided object can be converted to a character.
+            Checks to see if the provided object is a character object or a string with a single character.
             </summary>
             <param name="testCase">The object to be tested.</param>
             <returns>Boolean</returns>
