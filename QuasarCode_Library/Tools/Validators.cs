@@ -160,5 +160,68 @@ namespace QuasarCode.Library.Tools
                 return false;
             }
         }
+        
+
+        /// <summary>
+        /// Tests if a number lies in the range lower (inclusive) to upper (exclusive) or outside the range if requested.
+        /// </summary>
+        /// <param name="testCase">Number to be tested.</param>
+        /// <param name="lower">Lower boundry (inclusive).</param>
+        /// <param name="upper">Upper boundry (exclusive).</param>
+        /// <param name="inside">Specifies wether the test should be for lying inside the range (outside if false).</param>
+        /// <returns>Boolean</returns>
+        public static bool InRange(object testCase, double lower, double upper, bool inside = true)
+        {
+            if (IsDouble(testCase))
+            {
+                double value = Convert.ToDouble(testCase);
+                if (upper != lower)
+                {
+                    if (lower <= value && value < upper)
+                    {
+                        return inside;
+                    }
+                    else
+                    {
+                        return !inside;
+                    }
+                }
+                else// min == max
+                {
+                    throw new ArgumentException("The arguments for paramiters min and max are the same. They must be different as min is inclusive and max is exclusive.");
+                }
+                
+            }
+            else
+            {
+                throw new ArgumentException("The argument for paramiter testCase could not be converted to a double.");
+            }
+        }
+
+
+        /// <summary>
+        /// Tests if a given number is even.
+        /// --| WARNING |-- Will ROUND floating point numbers to the nearest integer.
+        /// </summary>
+        /// <param name="testCase">The number to test. Must be convertable to an integer.</param>
+        /// <returns>Boolean</returns>
+        public static bool IsEven(object testCase)
+        {
+            if (IsDouble(testCase))
+            {
+                if (Convert.ToInt32(testCase) / 2.0 == (double)(Convert.ToInt32(testCase) / 2))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("The argument for paramiter testCase could not be converted to an integer. Only integer values can be tested.");
+            }
+        }
     }
 }

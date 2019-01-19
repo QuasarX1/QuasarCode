@@ -397,6 +397,116 @@
             Unit of mass (Imperial)
             </summary>
         </member>
+        <member name="T:QuasarCode.Library.Tools.MultiItterator">
+            <summary>
+            Allows for itteration of multiple collections similtaniously.
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.MultiItterator.Items">
+            <summary>
+            The collections being itterated over.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Tools.MultiItterator.Count">
+            <summary>
+            The number of items in the contained collections.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator.#ctor(System.Collections.Generic.ICollection{System.Object}[])">
+            <summary>
+            Creates a new instance of the MultiItterator class. Collections must have the same length.
+            </summary>
+            <param name="items">IColections of objects.</param>
+        </member>
+        <member name="P:QuasarCode.Library.Tools.MultiItterator.Item(System.Int32)">
+            <summary>
+            Returns the index and data at the specified index in the collections.
+            </summary>
+            <param name="index">Index of location.</param>
+            <returns>A tuple containing the index of the location and an array of the data.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator.GetEnumerator">
+            <summary>
+            Gets an object to enumerate over.
+            </summary>
+            <returns>The current object.</returns>
+        </member>
+        <member name="P:QuasarCode.Library.Tools.MultiItterator.Current">
+            <summary>
+            The data at the current point in the itteration.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator.Dispose">
+            <summary>
+            Releses any resources and disposes.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator.MoveNext">
+            <summary>
+            Attempts to move to the next position in the itteration.
+            </summary>
+            <returns>Boolean indicating wether the itteration can continue.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator.Reset">
+            <summary>
+            Resets the enumeration.
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Tools.MultiItterator`1">
+            <summary>
+            Allows for itteration of multiple collections similtaniously. Generic version for simplified use if all collections hold the same data type.
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.MultiItterator`1.Items">
+            <summary>
+            The collections being itterated over.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Tools.MultiItterator`1.Count">
+            <summary>
+            The number of items in the contained collections.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator`1.#ctor(System.Collections.Generic.ICollection{`0}[])">
+            <summary>
+            Creates a new instance of the MultiItterator class. Collections must have the same length.
+            </summary>
+            <param name="items">IColections of objects.</param>
+        </member>
+        <member name="P:QuasarCode.Library.Tools.MultiItterator`1.Item(System.Int32)">
+            <summary>
+            Returns the index and data at the specified index in the collections.
+            </summary>
+            <param name="index">Index of location.</param>
+            <returns>A tuple containing the index of the location and an array of the data.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator`1.GetEnumerator">
+            <summary>
+            Gets an object to enumerate over.
+            </summary>
+            <returns>The current object.</returns>
+        </member>
+        <member name="P:QuasarCode.Library.Tools.MultiItterator`1.Current">
+            <summary>
+            The data at the current point in the itteration.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator`1.Dispose">
+            <summary>
+            Releses any resources and disposes.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator`1.MoveNext">
+            <summary>
+            Attempts to move to the next position in the itteration.
+            </summary>
+            <returns>Boolean indicating wether the itteration can continue.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.MultiItterator`1.Reset">
+            <summary>
+            Resets the enumeration.
+            </summary>
+        </member>
         <member name="T:QuasarCode.Library.Tools.Validators">
             <summary>
             Provides type and content testing methods for testing objects.
@@ -456,6 +566,24 @@
             Checks to see if the provided object can be converted to a float.
             </summary>
             <param name="testCase">The object to be tested.</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.InRange(System.Object,System.Double,System.Double,System.Boolean)">
+            <summary>
+            Tests if a number lies in the range lower (inclusive) to upper (exclusive) or outside the range if requested.
+            </summary>
+            <param name="testCase">Number to be tested.</param>
+            <param name="lower">Lower boundry (inclusive).</param>
+            <param name="upper">Upper boundry (exclusive).</param>
+            <param name="inside">Specifies wether the test should be for lying inside the range (outside if false).</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.IsEven(System.Object)">
+            <summary>
+            Tests if a given number is even.
+            --| WARNING |-- Will ROUND floating point numbers to the nearest integer.
+            </summary>
+            <param name="testCase">The number to test. Must be convertable to an integer.</param>
             <returns>Boolean</returns>
         </member>
     </members>
