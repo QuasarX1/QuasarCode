@@ -110,5 +110,143 @@ namespace QuasarCode.Library.IO.Text
 
             return converter(System.Console.ReadLine());
         }
+
+
+        /// <summary>
+        /// Allows the user to select an item from an array of options. Returns the option.
+        /// </summary>
+        /// <typeparam name="T">Type of the objects in the array.</typeparam>
+        /// <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
+        /// <param name="message">Optional message to display to the user.</param>
+        /// <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
+        /// <returns>Selected option.</returns>
+        public static T Option<T>(T[] options, string message = null, bool displayInput = false)
+        {
+            if (options.Length == 0)
+            {
+                throw new ArgumentException("No options were provided - the array was enpty.");
+            }
+
+            if (message != null)
+            {
+                System.Console.WriteLine(message);
+            }
+
+            int index = 0;
+            int i;
+            while (true)
+            {
+                i = 0;
+                for (i = 0; i < 8; i++)
+                {
+                    System.Console.WriteLine((index + i + 1) + ".) " + options[index + i]);
+
+                    if (i + 1 == options.Length)
+                    {
+                        break;
+                    }
+                }
+
+                if (options.Length > 8)
+                {
+                    System.Console.WriteLine("9.) Next Page");
+                }
+
+                string result = Convert.ToString(System.Console.ReadKey(!displayInput).KeyChar);
+
+                if (Validators.InputValidator.IsInt(result))
+                {
+                    int resultnumber = Convert.ToInt32(result);
+                    if (resultnumber <= i)
+                    {
+                        return options[index + resultnumber];
+                    }
+                    else if (options.Length > 8 && resultnumber == 9)
+                    {
+                        index += i;
+                        if (index + 1 == options.Length)
+                        {
+                            index = 0;
+                        }
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("Invalid selection - the number selected was out of range. You must chose an option from 1 to {0}", (options.Length > 8) ? i + 1 : i);
+                    }
+                }
+                else
+                {
+                    System.Console.WriteLine("Invalid selection - the selection was not a number. You must chose an option from 1 to {0}", (options.Length > 8) ? i + 1 : i);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Allows the user to select an item from an array of options. Returns the option's index.
+        /// </summary>
+        /// <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
+        /// <param name="message">Optional message to display to the user.</param>
+        /// <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
+        /// <returns>Index of selected option.</returns>
+        public static int Option(object[] options, string message = null, bool displayInput = false)
+        {
+            if (options.Length == 0)
+            {
+                throw new ArgumentException("No options were provided - the array was enpty.");
+            }
+
+            if (message != null)
+            {
+                System.Console.WriteLine(message);
+            }
+
+            int index = 0;
+            int i;
+            while (true)
+            {
+                i = 0;
+                for (i = 0; i < 8; i++)
+                {
+                    System.Console.WriteLine((index + i + 1) + ".) " + options[index + i]);
+
+                    if (i + 1 == options.Length)
+                    {
+                        break;
+                    }
+                }
+
+                if (options.Length > 8)
+                {
+                    System.Console.WriteLine("9.) Next Page");
+                }
+
+                string result = Convert.ToString(System.Console.ReadKey(!displayInput).KeyChar);
+
+                if (Validators.InputValidator.IsInt(result))
+                {
+                    int resultnumber = Convert.ToInt32(result);
+                    if (resultnumber <= i)
+                    {
+                        return index + resultnumber;
+                    }
+                    else if (options.Length > 8 && resultnumber == 9)
+                    {
+                        index += i;
+                        if (index + 1 == options.Length)
+                        {
+                            index = 0;
+                        }
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("Invalid selection - the number selected was out of range. You must chose an option from 1 to {0}", (options.Length > 8) ? i + 1 : i);
+                    }
+                }
+                else
+                {
+                    System.Console.WriteLine("Invalid selection - the selection was not a number. You must chose an option from 1 to {0}", (options.Length > 8) ? i + 1 : i);
+                }
+            }
+        }
     }
 }

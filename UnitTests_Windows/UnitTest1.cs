@@ -32,5 +32,15 @@ namespace UnitTests_Windows
 
             Input("Numerical input wanted:", new Func<string, int>(convert));
         }
+
+        [TestMethod]
+        public void Option_Test()
+        {
+            string[] choices = new string[] { "Option A", "Option B", "Option C", "Option D", "Option E", "Option F", "Option G", "Option H", "Option I", "Option J", "Option K", "Option L" };
+
+            Option(choices, "Select an option:");
+
+            Option<string>(choices, "Select an option:");
+        }
     }
 }
