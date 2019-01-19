@@ -6,7 +6,7 @@
     <members>
         <member name="T:QuasarCode.Library.IO.Text.Console">
             <summary>
-            
+            Provites IO methods for intervacing with a text based console.
             </summary>
         </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Print">
@@ -35,7 +35,7 @@
             Retrives an input from the console.
             </summary>
             <param name="indicator">String to format line for input.</param>
-            <returns></returns>
+            <returns>A line of input from the console as a string.</returns>
         </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.String)">
             <summary>
@@ -43,7 +43,17 @@
             </summary>
             <param name="prompt">Message to be printed to the display to request input.</param>
             <param name="indicator">String to format line for input.</param>
-            <returns></returns>
+            <returns>A line of input from the console as a string.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.Func{System.String,System.Boolean},System.String,System.String)">
+            <summary>
+            Retrives an input from the console with a prompt message. Uses a method deligate to force valid input.
+            </summary>
+            <param name="prompt">Message to be printed to the display to request input.</param>
+            <param name="validator">Validator method deligate. Takes a string and returns a boolean.</param>
+            <param name="errorMessage">Message to display if validation fails before asking for the input again.</param>
+            <param name="indicator">String to format line for input.</param>
+            <returns>A line of input from the console as a string.</returns>
         </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.String)">
             <summary>
@@ -53,7 +63,37 @@
             <param name="prompt">Message to be printed to the display to request input.</param>
             <param name="converter">Method deligate to convert the string input to the requested type.</param>
             <param name="indicator">String to format line for input.</param>
-            <returns></returns>
+            <returns>A line of input from the console, coverted to the specified type.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.Func{``0,System.Boolean},System.String,System.String)">
+            <summary>
+            Retrives an input from the console with a prompt message. Uses a method deligate to force valid input. Converts the input to the given type (before validation)
+            </summary>
+            <param name="prompt">Message to be printed to the display to request input.</param>
+            <param name="converter">Method deligate to convert the string input to the requested type.</param>
+            <param name="validator">Validator method deligate. Takes an object of the specified type and returns a boolean.</param>
+            <param name="errorMessage">Message to display if validation fails before asking for the input again.</param>
+            <param name="indicator">String to format line for input.</param>
+            <returns>A line of input from the console, coverted to the specified type.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Option``1(``0[],System.String,System.Boolean)">
+            <summary>
+            Allows the user to select an item from an array of options. Returns the option.
+            </summary>
+            <typeparam name="T">Type of the objects in the array.</typeparam>
+            <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
+            <param name="message">Optional message to display to the user.</param>
+            <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
+            <returns>Selected option.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Option(System.Object[],System.String,System.Boolean)">
+            <summary>
+            Allows the user to select an item from an array of options. Returns the option's index.
+            </summary>
+            <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
+            <param name="message">Optional message to display to the user.</param>
+            <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
+            <returns>Index of selected option.</returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.Coordinates.Coordinate`1">
             <summary>
@@ -356,6 +396,67 @@
             <summary>
             Unit of mass (Imperial)
             </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Tools.Validators">
+            <summary>
+            Provides type and content testing methods for testing objects.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.IsBool(System.Object)">
+            <summary>
+            Checks to see if the provided object can be converted to a boolean.
+            </summary>
+            <param name="testCase">The object to be tested.</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.IsChar(System.Object)">
+            <summary>
+            Checks to see if the provided object can be converted to a character.
+            </summary>
+            <param name="testCase">The object to be tested.</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.IsString(System.Object)">
+            <summary>
+            Checks to see if the provided object can be converted to a string.
+            </summary>
+            <param name="testCase">The object to be tested.</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.IsAlpha(System.Char)">
+            <summary>
+            Checks to see if the provided character is an alpha character.
+            </summary>
+            <param name="testCase">Character to test.</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.IsAlpha(System.String)">
+            <summary>
+            Checks to see if the provided string contains only alpha character.
+            </summary>
+            <param name="testCase">String to test.</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.IsAlpha(System.Object)">
+            <summary>
+            Checks to see if the provided object is a valid character or string and contains only alpha characters.
+            </summary>
+            <param name="testCase">Object to test.</param>
+            <returns>Boolean - false if not a character or string or has no conversion to one</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.IsInt(System.Object)">
+            <summary>
+            Checks to see if the provided object can be converted to an integer (int64).
+            </summary>
+            <param name="testCase">The object to be tested.</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Tools.Validators.IsDouble(System.Object)">
+            <summary>
+            Checks to see if the provided object can be converted to a float.
+            </summary>
+            <param name="testCase">The object to be tested.</param>
+            <returns>Boolean</returns>
         </member>
     </members>
 </doc>

@@ -26,12 +26,16 @@ namespace UnitTests_Windows
             Input("Input required:");
             Input("More input required", " -> ");
 
+            Input("Numerical input wanted:", new Func<object, bool>(IsInt), "The input wasn't an integer.");
+
             int convert(string input)
             {
                 return Convert.ToInt16(input);
             }
 
             Input("Numerical input wanted:", new Func<string, int>(convert));
+            //Input("Numerical input wanted:", new Func<object, bool>(IsInt), "The input wasn't an integer.", new Func<string, int>(convert));
+            Input<int>("Numerical input wanted:", new Func<string, int>(convert), new Func<object, bool>(IsInt), "The input wasn't an integer.");
         }
 
         [TestMethod]

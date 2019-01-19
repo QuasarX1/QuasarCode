@@ -75,7 +75,7 @@ namespace QuasarCode.Library.IO.Text
         /// Retrives an input from the console.
         /// </summary>
         /// <param name="indicator">String to format line for input.</param>
-        /// <returns></returns>
+        /// <returns>A line of input from the console as a string.</returns>
         public static string Input(string indicator = ">>> ")
         {
             System.Console.Write(indicator);
@@ -88,12 +88,42 @@ namespace QuasarCode.Library.IO.Text
         /// </summary>
         /// <param name="prompt">Message to be printed to the display to request input.</param>
         /// <param name="indicator">String to format line for input.</param>
-        /// <returns></returns>
+        /// <returns>A line of input from the console as a string.</returns>
         public static string Input(string prompt, string indicator = "\n>>> ")
         {
             System.Console.Write(prompt + indicator);
 
             return System.Console.ReadLine();
+        }
+
+        /// <summary>
+        /// Retrives an input from the console with a prompt message. Uses a method deligate to force valid input.
+        /// </summary>
+        /// <param name="prompt">Message to be printed to the display to request input.</param>
+        /// <param name="validator">Validator method deligate. Takes a string and returns a boolean.</param>
+        /// <param name="errorMessage">Message to display if validation fails before asking for the input again.</param>
+        /// <param name="indicator">String to format line for input.</param>
+        /// <returns>A line of input from the console as a string.</returns>
+        public static string Input(string prompt, Func<string, bool> validator, string errorMessage, string indicator = "\n>>> ")
+        {
+            string result;
+            while (true)
+            {
+                System.Console.Write(prompt + indicator);
+                result = System.Console.ReadLine();
+
+                if (validator(result))
+                {
+                    break;
+                }
+                else
+                {
+                    System.Console.WriteLine(errorMessage);
+                }
+            }
+            
+
+            return result;
         }
 
         /// <summary>
@@ -103,12 +133,74 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="prompt">Message to be printed to the display to request input.</param>
         /// <param name="converter">Method deligate to convert the string input to the requested type.</param>
         /// <param name="indicator">String to format line for input.</param>
-        /// <returns></returns>
+        /// <returns>A line of input from the console, coverted to the specified type.</returns>
         public static T Input<T>(string prompt, Func<string, T> converter, string indicator = "\n>>> ")
         {
             System.Console.Write(prompt + indicator);
 
             return converter(System.Console.ReadLine());
+        }
+
+        ///// <summary>
+        ///// Retrives an input from the console with a prompt message. Uses a method deligate to force valid input. Converts the input to the given type (after validation).
+        ///// </summary>
+        ///// <param name="prompt">Message to be printed to the display to request input.</param>
+        ///// <param name="validator">Validator method deligate. Takes a string and returns a boolean.</param>
+        ///// <param name="errorMessage">Message to display if validation fails before asking for the input again.</param>
+        ///// <param name="converter">Method deligate to convert the string input to the requested type.</param>
+        ///// <param name="indicator">String to format line for input.</param>
+        ///// <returns>A line of input from the console, coverted to the specified type.</returns>
+        //public static T Input<T>(string prompt, Func<string, bool> validator, string errorMessage, Func<string, T> converter, string indicator = "\n>>> ")
+        //{
+        //    string result;
+        //    while (true)
+        //    {
+        //        System.Console.Write(prompt + indicator);
+        //        result = System.Console.ReadLine();
+
+        //        if (validator(result))
+        //        {
+        //            break;
+        //        }
+        //        else
+        //        {
+        //            System.Console.WriteLine(errorMessage);
+        //        }
+        //    }
+
+
+        //    return converter(result);
+        //}
+
+        /// <summary>
+        /// Retrives an input from the console with a prompt message. Uses a method deligate to force valid input. Converts the input to the given type (before validation)
+        /// </summary>
+        /// <param name="prompt">Message to be printed to the display to request input.</param>
+        /// <param name="converter">Method deligate to convert the string input to the requested type.</param>
+        /// <param name="validator">Validator method deligate. Takes an object of the specified type and returns a boolean.</param>
+        /// <param name="errorMessage">Message to display if validation fails before asking for the input again.</param>
+        /// <param name="indicator">String to format line for input.</param>
+        /// <returns>A line of input from the console, coverted to the specified type.</returns>
+        public static T Input<T>(string prompt, Func<string, T> converter, Func<object, bool> validator, string errorMessage, string indicator = "\n>>> ")
+        {
+            T result;
+            while (true)
+            {
+                System.Console.Write(prompt + indicator);
+                result = converter(System.Console.ReadLine());
+
+                if (validator(result))
+                {
+                    break;
+                }
+                else
+                {
+                    System.Console.WriteLine(errorMessage);
+                }
+            }
+
+
+            return result;
         }
 
 
