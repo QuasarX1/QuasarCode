@@ -5,9 +5,9 @@ using System.Text;
 namespace QuasarCode.Library.IO.Text
 {
     /// <summary>
-    /// 
+    /// Provites IO methods for intervacing with a text based console.
     /// </summary>
-    public class Console
+    public static class Console
     {
         /// <summary>
         /// Outputs text to the console. Prints only a new line.
@@ -154,7 +154,7 @@ namespace QuasarCode.Library.IO.Text
 
                 string result = Convert.ToString(System.Console.ReadKey(!displayInput).KeyChar);
 
-                if (Validators.InputValidator.IsInt(result))
+                if (Tools.Validators.IsInt(result))
                 {
                     int resultnumber = Convert.ToInt32(result);
                     if (resultnumber <= i)
@@ -222,7 +222,7 @@ namespace QuasarCode.Library.IO.Text
 
                 string result = Convert.ToString(System.Console.ReadKey(!displayInput).KeyChar);
 
-                if (Validators.InputValidator.IsInt(result))
+                if (Tools.Validators.IsInt(result))
                 {
                     int resultnumber = Convert.ToInt32(result);
                     if (resultnumber <= i)

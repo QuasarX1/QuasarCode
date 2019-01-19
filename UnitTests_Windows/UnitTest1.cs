@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using QuasarCode;
 using static QuasarCode.Library.IO.Text.Console;
+using static QuasarCode.Library.Tools.Validators;
 
 namespace UnitTests_Windows
 {
@@ -41,6 +42,57 @@ namespace UnitTests_Windows
             Option(choices, "Select an option:");
 
             Option<string>(choices, "Select an option:");
+        }
+
+        [TestMethod]
+        public void Validator_Test()
+        {
+            // IsAlpha
+            Assert.AreEqual(IsAlpha('a'), true);
+            Assert.AreEqual(IsAlpha("a"), true);
+            Assert.AreEqual(IsAlpha("abc"), true);
+            Assert.AreEqual(IsAlpha((object)'a'), true);
+            Assert.AreEqual(IsAlpha((object)"abc"), true);
+            
+            Assert.AreEqual(IsAlpha('1'), false);
+            Assert.AreEqual(IsAlpha("1"), false);
+            Assert.AreEqual(IsAlpha("a1c"), false);
+            Assert.AreEqual(IsAlpha((object)'1'), false);
+            Assert.AreEqual(IsAlpha((object)"a1c"), false);
+
+            // IsBool
+            Assert.AreEqual(IsBool(true), true);
+            Assert.AreEqual(IsBool(false), true);
+
+            Assert.AreEqual(IsBool("Not bool"), false);
+
+            // IsChar
+            Assert.AreEqual(IsChar('a'), true);
+            Assert.AreEqual(IsChar("a"), true);// ?????
+
+            Assert.AreEqual(IsChar(1), false);
+
+            // IsDouble
+            Assert.AreEqual(IsDouble(1.1), true);
+            Assert.AreEqual(IsDouble(1), true);
+            Assert.AreEqual(IsDouble("0.5"), true);
+
+            Assert.AreEqual(IsDouble("Not double"), false);
+
+            // IsInt
+            Assert.AreEqual(IsInt(10), true);
+            Assert.AreEqual(IsInt("100"), true);
+            Assert.AreEqual(IsInt('5'), true);
+
+            Assert.AreEqual(IsInt(0.1), false);
+            Assert.AreEqual(IsInt("8.3"), false);
+            Assert.AreEqual(IsInt("Not an integer"), false);
+
+            // IsString
+            Assert.AreEqual(IsString("A string"), true);
+            Assert.AreEqual(IsString('a'), true);
+
+            Assert.AreEqual(IsString(5), false);
         }
     }
 }
