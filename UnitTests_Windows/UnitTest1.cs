@@ -6,6 +6,7 @@ using QuasarCode;
 using static QuasarCode.Library.IO.Text.Console;
 using static QuasarCode.Library.Tools.Validators;
 using QuasarCode.Library.Tools;
+using QuasarCode.Library.Games.Spinners;
 
 namespace UnitTests_Windows
 {
@@ -164,6 +165,20 @@ namespace UnitTests_Windows
             Assert.AreEqual(averages[0], 2);// Truncates float
             Assert.AreEqual(averages[1], 3);
             Assert.AreEqual(averages[2], 4);
+        }
+
+        [TestMethod]
+        public void Spinner_Test()
+        {
+            string[] backup = new string[] { "Red", "Blue", "Yellow", "Green" };
+            Spinner<string> spinner = new Spinner<string>("Red", "Blue", "Yellow", "Green");
+
+            Tuple<int, string> result;
+            for (int i = 0; i < 20; i++)
+            {
+                result = spinner.ContextSpin();
+                Assert.AreEqual(result.Item2, backup[result.Item1]);
+            }
         }
     }
 }

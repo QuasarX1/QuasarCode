@@ -4,6 +4,98 @@
         <name>QuasarCode_Library</name>
     </assembly>
     <members>
+        <member name="T:QuasarCode.Library.Games.Spinners.ISpinner`1">
+            <summary>
+            Interface for all Spinner objects.
+            </summary>
+            <typeparam name="T">Type of result data held by the spinner.</typeparam>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Spinners.ISpinner`1.Labels">
+            <summary>
+            Array of side labels
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Spinners.ISpinner`1.Sides">
+            <summary>
+            Number of sides/labels
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Spinners.ISpinner`1.ContextSpin">
+            <summary>
+            Randomly selects a side and retuns the side and the corisponding label.
+            </summary>
+            <returns>Tuple with int and label type</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Spinners.ISpinner`1.Spin">
+            <summary>
+            Randomly selects a side and retuns the corisponding label.
+            </summary>
+            <returns>Side label</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Spinners.ISpinner`1.IndexSpin">
+            <summary>
+            Randomly selects a side and retuns the side number.
+            </summary>
+            <returns>Side number</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Spinners.Spinner`1">
+            <summary>
+            Creates spinner objects with n sides and labels. Labels are selected and returned by calling the avalable methods.
+            </summary>
+            <typeparam name="T">Data type of labels</typeparam>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Spinners.Spinner`1.Generator">
+            <summary>
+            Random number generator
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Spinners.Spinner`1.Labels">
+            <summary>
+            Array of side labels
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Spinners.Spinner`1.Sides">
+            <summary>
+            Number of sides/labels
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Spinners.Spinner`1.#ctor(`0[])">
+            <summary>
+            Creates a new spinner object.
+            </summary>
+            <param name="labels">Array of labels - one for each side.</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Spinners.Spinner`1.#ctor(System.Collections.Generic.ICollection{`0})">
+            <summary>
+            Creates a new spinner object.
+            </summary>
+            <param name="labels">Array of labels - one for each side.</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Spinners.Spinner`1.#ctor(System.Collections.Generic.ICollection{`0},System.Int32)">
+            <summary>
+            Creates a new spinner object.
+            </summary>
+            <param name="labels">Array of labels - one for each side.</param>
+            <param name="seed">Seed for the random generator.</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Spinners.Spinner`1.ContextSpin">
+            <summary>
+            Randomly selects a side and retuns the side and the corisponding label.
+            </summary>
+            <returns>Tuple with int and label type</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Spinners.Spinner`1.Spin">
+            <summary>
+            Randomly selects a side and retuns the corisponding label.
+            </summary>
+            <returns>Side label</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Spinners.Spinner`1.IndexSpin">
+            <summary>
+            Randomly selects a side and retuns the side number.
+            </summary>
+            <returns>Side number</returns>
+        </member>
         <member name="T:QuasarCode.Library.IO.Text.Console">
             <summary>
             Provites IO methods for intervacing with a text based console.
