@@ -12,26 +12,26 @@ namespace QuasarCode.Library.Games.Dice
         /// <summary>
         /// List of the NDice objects rolled by the cup.
         /// </summary>
-        List<NDice> AllDice { get; }
+        List<IDice> AllDice { get; }
 
         /// <summary>
         /// Provides index access to the NDice list
         /// </summary>
         /// <param name="index">Location in the collection</param>
         /// <returns>NDice</returns>
-        NDice this[int index] { get; set; }
+        IDice this[int index] { get; set; }
 
         /// <summary>
         /// Adds a dice to the cup
         /// </summary>
         /// <param name="dice">Dice to be added to the cup</param>
-        void PushDice(NDice dice);
+        void PushDice(IDice dice);
 
         /// <summary>
         /// Removes the last avalable dice in the cup
         /// </summary>
         /// <exception cref="InvalidOperationException" />
         /// <returns>NDice removed from cup</returns>
-        NDice PopDice();
+        IDice PopDice();
     }
 }

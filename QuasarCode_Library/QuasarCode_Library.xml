@@ -160,7 +160,7 @@
             <param name="index">Location in the collection</param>
             <returns>NDice</returns>
         </member>
-        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.PushDice(QuasarCode.Library.Games.Dice.NDice)">
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.PushDice(QuasarCode.Library.Games.Dice.IDice)">
             <summary>
             Adds a dice to the cup
             </summary>
@@ -173,7 +173,7 @@
             <exception cref="T:System.InvalidOperationException" />
             <returns>NDice removed from cup</returns>
         </member>
-        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.op_Addition(QuasarCode.Library.Games.Dice.DynamicDiceCup,QuasarCode.Library.Games.Dice.NDice)">
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.op_Addition(QuasarCode.Library.Games.Dice.DynamicDiceCup,QuasarCode.Library.Games.Dice.IDice)">
             <summary>
             Adds a dice to a DynamicDiceCup instance
             </summary>
@@ -246,7 +246,7 @@
             <param name="index">Location in the collection</param>
             <returns>NDice</returns>
         </member>
-        <member name="M:QuasarCode.Library.Games.Dice.IDynamicDiceCup.PushDice(QuasarCode.Library.Games.Dice.NDice)">
+        <member name="M:QuasarCode.Library.Games.Dice.IDynamicDiceCup.PushDice(QuasarCode.Library.Games.Dice.IDice)">
             <summary>
             Adds a dice to the cup
             </summary>
@@ -267,6 +267,11 @@
         <member name="P:QuasarCode.Library.Games.Dice.IStaticDiceCup.AllDice">
             <summary>
             Array of the NDice objects rolled by the cup.
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Dice.NDice">
+            <summary>
+            A dice with a specified number of sides
             </summary>
         </member>
         <member name="P:QuasarCode.Library.Games.Dice.NDice.Sides">

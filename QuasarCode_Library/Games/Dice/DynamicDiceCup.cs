@@ -12,7 +12,7 @@ namespace QuasarCode.Library.Games.Dice
         /// <summary>
         /// List of the NDice objects rolled by the cup.
         /// </summary>
-        public List<NDice> AllDice { get; private set; }
+        public List<IDice> AllDice { get; private set; }
 
         /// <summary>
         /// Number of dice stored.
@@ -24,7 +24,7 @@ namespace QuasarCode.Library.Games.Dice
         /// </summary>
         public DynamicDiceCup()
         {
-            AllDice = new List<NDice>();
+            AllDice = new List<IDice>();
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace QuasarCode.Library.Games.Dice
         /// <param name="noOfDice">Number of dice to create</param>
         public DynamicDiceCup(int sides, int noOfDice)
         {
-            AllDice = new List<NDice>();
+            AllDice = new List<IDice>();
 
             foreach (NDice dice in NDice.MultipleDice(sides, noOfDice))
             {
@@ -48,7 +48,7 @@ namespace QuasarCode.Library.Games.Dice
         /// <param name="sides">Side numbers representing each unique dice</param>
         public DynamicDiceCup(params int[] sides)
         {
-            AllDice = new List<NDice>();
+            AllDice = new List<IDice>();
 
             foreach (NDice dice in NDice.MultipleDice(sides))
             {
@@ -62,7 +62,7 @@ namespace QuasarCode.Library.Games.Dice
         /// <param name="sides">Collection of side numbers representing unique dice</param>
         public DynamicDiceCup(ICollection<int> sides)
         {
-            AllDice = new List<NDice>();
+            AllDice = new List<IDice>();
 
             foreach (NDice dice in NDice.MultipleDice(sides))
             {
@@ -86,7 +86,7 @@ namespace QuasarCode.Library.Games.Dice
 
             List<int> results = new List<int>();
 
-            foreach (NDice dice in AllDice)
+            foreach (IDice dice in AllDice)
             {
                 results.Add(dice.Roll());
             }
@@ -110,7 +110,7 @@ namespace QuasarCode.Library.Games.Dice
 
             int result = 0;
 
-            foreach (NDice dice in AllDice)
+            foreach (IDice dice in AllDice)
             {
                 result += dice.Roll();
             }
@@ -121,7 +121,7 @@ namespace QuasarCode.Library.Games.Dice
         /// <summary />
         /// <param name="index">Location in the collection</param>
         /// <returns>NDice</returns>
-        public NDice this[int index]
+        public IDice this[int index]
         {
             get
             {
@@ -152,7 +152,7 @@ namespace QuasarCode.Library.Games.Dice
         /// Adds a dice to the cup
         /// </summary>
         /// <param name="dice">Dice to be added to the cup</param>
-        public void PushDice(NDice dice)
+        public void PushDice(IDice dice)
         {
             AllDice.Add(dice);
         }
@@ -162,14 +162,14 @@ namespace QuasarCode.Library.Games.Dice
         /// </summary>
         /// <exception cref="InvalidOperationException" />
         /// <returns>NDice removed from cup</returns>
-        public NDice PopDice()
+        public IDice PopDice()
         {
             if (Count == 0)
             {
                 throw new InvalidOperationException("There are no dice in the cup.");
             }
 
-            NDice oldDice = AllDice[Count - 1];
+            IDice oldDice = AllDice[Count - 1];
 
             AllDice.RemoveAt(Count - 1);
 
@@ -183,7 +183,7 @@ namespace QuasarCode.Library.Games.Dice
         /// <param name="cup">Dice cup to add the dice to</param>
         /// <param name="dice">Dice to be added to the cup</param>
         /// <returns>DynamicDiceCup with additional dice</returns>
-        public static DynamicDiceCup operator+(DynamicDiceCup cup, NDice dice)
+        public static DynamicDiceCup operator+(DynamicDiceCup cup, IDice dice)
         {
             cup.PushDice(dice);
 

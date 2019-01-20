@@ -4,6 +4,9 @@ using System.Text;
 
 namespace QuasarCode.Library.Games.Dice
 {
+    /// <summary>
+    /// A dice with a specified number of sides
+    /// </summary>
     public class NDice : IDice
     {
         private Random Generator;

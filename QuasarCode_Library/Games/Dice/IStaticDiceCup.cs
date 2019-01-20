@@ -12,6 +12,6 @@ namespace QuasarCode.Library.Games.Dice
         /// <summary>
         /// Array of the NDice objects rolled by the cup.
         /// </summary>
-        NDice[] AllDice { get; }
+        IDice[] AllDice { get; }
     }
 }
