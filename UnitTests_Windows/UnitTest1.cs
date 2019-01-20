@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using QuasarCode;
@@ -7,6 +8,7 @@ using static QuasarCode.Library.IO.Text.Console;
 using static QuasarCode.Library.Tools.Validators;
 using QuasarCode.Library.Tools;
 using QuasarCode.Library.Games.Spinners;
+using QuasarCode.Library.Games.Dice;
 
 namespace UnitTests_Windows
 {
@@ -179,6 +181,86 @@ namespace UnitTests_Windows
                 result = spinner.ContextSpin();
                 Assert.AreEqual(result.Item2, backup[result.Item1]);
             }
+        }
+
+        [TestMethod]
+        public void Dice_Test()
+        {
+            NDice dice = new NDice(6);
+
+            for (int i = 0; i < 20; i++)
+            {
+                Assert.AreEqual(InRange(dice.Roll(), 1, 7), true);
+            }
+
+            dice = new Dice6();
+
+            for (int i = 0; i < 20; i++)
+            {
+                Assert.AreEqual(InRange(dice.Roll(), 1, 7), true);
+            }
+
+            dice = new Dice8();
+
+            for (int i = 0; i < 20; i++)
+            {
+                Assert.AreEqual(InRange(dice.Roll(), 1, 9), true);
+            }
+
+            dice = new Dice12();
+
+            for (int i = 0; i < 20; i++)
+            {
+                Assert.AreEqual(InRange(dice.Roll(), 1, 13), true);
+            }
+
+
+            DiceCup cup = new DiceCup(6, 2);
+
+            int[] results;
+            for (int i = 0; i < 20; i++)
+            {
+                results = cup.Roll();
+
+                foreach (int result in results)
+                {
+                    Assert.AreEqual(InRange(result, 1, 7), true);
+                }
+
+                Assert.AreEqual(InRange(results.Sum(), 2, 13), true);
+            }
+
+
+            DynamicDiceCup dynamicCup = new DynamicDiceCup();
+
+            dynamicCup += new Dice12();
+            dynamicCup.PushDice(new Dice6());
+
+
+            for (int i = 0; i < 20; i++)
+            {
+                results = dynamicCup.Roll();
+
+                Assert.AreEqual(InRange(results[0], 1, 13), true);
+                Assert.AreEqual(InRange(results[1], 1, 7), true);
+
+                Assert.AreEqual(InRange(results.Sum(), 2, 19), true);
+            }
+
+            dynamicCup--;
+
+            Assert.AreEqual(dynamicCup.Count, 1);
+
+            Assert.AreEqual(dynamicCup.PopDice().GetType(), typeof(Dice12));
+
+            Assert.AreEqual(dynamicCup.Count, 0);
+
+            try
+            {
+                dynamicCup.Roll();
+                throw new Exception("Roll() didn't throw an exception. It should have been empty.");
+            }
+            catch (InvalidOperationException) { }
         }
     }
 }

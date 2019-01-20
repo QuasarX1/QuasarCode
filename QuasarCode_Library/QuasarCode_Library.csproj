@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Games\Cards\" />
-    <Folder Include="Games\Dice\" />
     <Folder Include="Games\Systems\" />
     <Folder Include="IO\FileSystem\" />
     <Folder Include="Maths\Quantities\Compound\" />

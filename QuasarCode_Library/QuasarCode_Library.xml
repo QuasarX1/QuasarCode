@@ -4,6 +4,317 @@
         <name>QuasarCode_Library</name>
     </assembly>
     <members>
+        <member name="T:QuasarCode.Library.Games.Dice.Dice12">
+            <summary>
+            Simple didce with 12 sides.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.Dice12.#ctor">
+            <summary>
+            Creates a new Dice12 instance
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.Dice12.#ctor(System.Int32)">
+            <summary>
+            Creates a new Dice12 instance with a seed for the random generator
+            </summary>
+            <param name="seed">Seed for the random generator</param>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Dice.Dice6">
+            <summary>
+            Simple didce with 6 sides.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.Dice6.#ctor">
+            <summary>
+            Creates a new Dice6 instance
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.Dice6.#ctor(System.Int32)">
+            <summary>
+            Creates a new Dice6 instance with a seed for the random generator
+            </summary>
+            <param name="seed">Seed for the random generator</param>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Dice.Dice8">
+            <summary>
+            Simple didce with 8 sides.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.Dice8.#ctor">
+            <summary>
+            Creates a new Dice8 instance
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.Dice8.#ctor(System.Int32)">
+            <summary>
+            Creates a new Dice8 instance with a seed for the random generator
+            </summary>
+            <param name="seed">Seed for the random generator</param>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Dice.DiceCup">
+            <summary>
+            An immutable collection of NDice objects that are rolled together.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.DiceCup.AllDice">
+            <summary>
+            Array of the NDice objects rolled by the cup.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.DiceCup.Count">
+            <summary>
+            Number of dice stored.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DiceCup.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new dice cup.
+            </summary>
+            <param name="sides">The number of sides on each dice</param>
+            <param name="noOfDice">Number of dice to create</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DiceCup.#ctor(System.Int32[])">
+            <summary>
+            Creates a new dice cup.
+            </summary>
+            <param name="sides">Side numbers representing each unique dice</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DiceCup.#ctor(System.Collections.Generic.ICollection{System.Int32})">
+            <summary>
+            Creates a new dice cup.
+            </summary>
+            <param name="sides">Collection of side numbers representing unique dice</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DiceCup.Roll(System.Boolean)">
+            <summary>
+            Rolls all the dice. Returns each individual result.
+            </summary>
+            <param name="suppressEmptyExeption">Suppress the exeption raised when the cup is empty</param>
+            <returns>Array of integers</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DiceCup.RollTotal(System.Boolean)">
+            <summary>
+            Rolls all the dice. Returns the sum of the results.
+            </summary>
+            <param name="suppressEmptyExeption">Suppress the exeption raised when the cup is empty</param>
+            <returns>Integer</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Dice.DynamicDiceCup">
+            <summary>
+            A mutable collection of NDice objects that are rolled together.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.DynamicDiceCup.AllDice">
+            <summary>
+            List of the NDice objects rolled by the cup.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.DynamicDiceCup.Count">
+            <summary>
+            Number of dice stored.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.#ctor">
+            <summary>
+            Creates a new dynamic dice cup with no starting dice.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new dynamic dice cup.
+            </summary>
+            <param name="sides">The number of sides on each dice</param>
+            <param name="noOfDice">Number of dice to create</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.#ctor(System.Int32[])">
+            <summary>
+            Creates a new dynamic dice cup.
+            </summary>
+            <param name="sides">Side numbers representing each unique dice</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.#ctor(System.Collections.Generic.ICollection{System.Int32})">
+            <summary>
+            Creates a new dynamic dice cup.
+            </summary>
+            <param name="sides">Collection of side numbers representing unique dice</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.Roll(System.Boolean)">
+            <summary>
+            Rolls all the dice. Returns each individual result.
+            </summary>
+            <param name="suppressEmptyExeption">Suppress the exeption raised when the cup is empty</param>
+            <exception cref="T:System.InvalidOperationException" />
+            <returns>Array of integers</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.RollTotal(System.Boolean)">
+            <summary>
+            Rolls all the dice. Returns the sum of the results.
+            </summary>
+            <param name="suppressEmptyExeption">Suppress the exeption raised when the cup is empty</param>
+            <exception cref="T:System.InvalidOperationException" />
+            <returns>Integer</returns>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.DynamicDiceCup.Item(System.Int32)">
+            <summary />
+            <param name="index">Location in the collection</param>
+            <returns>NDice</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.PushDice(QuasarCode.Library.Games.Dice.NDice)">
+            <summary>
+            Adds a dice to the cup
+            </summary>
+            <param name="dice">Dice to be added to the cup</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.PopDice">
+            <summary>
+            Removes the last avalable dice in the cup
+            </summary>
+            <exception cref="T:System.InvalidOperationException" />
+            <returns>NDice removed from cup</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.op_Addition(QuasarCode.Library.Games.Dice.DynamicDiceCup,QuasarCode.Library.Games.Dice.NDice)">
+            <summary>
+            Adds a dice to a DynamicDiceCup instance
+            </summary>
+            <param name="cup">Dice cup to add the dice to</param>
+            <param name="dice">Dice to be added to the cup</param>
+            <returns>DynamicDiceCup with additional dice</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.DynamicDiceCup.op_Decrement(QuasarCode.Library.Games.Dice.DynamicDiceCup)">
+            <summary>
+            Removes the last avalable dice in a DynamicDiceCup instance
+            </summary>
+            <param name="cup">Dice cup to remove the dice from</param>
+            <exception cref="T:System.InvalidOperationException" />
+            <returns>DynamicDiceCup with last dice removed</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Dice.IDice">
+            <summary>
+            A dice that can be rolled to produce an integer result starting from 1
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.IDice.Sides">
+            <summary>
+            Number of sides on the dice
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.IDice.Roll">
+            <summary>
+            Rolls the dice
+            </summary>
+            <returns>Integer outcome of the roll</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Dice.IDiceCup">
+            <summary>
+            Root interface in the dice cup type hierarchy.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.IDiceCup.Count">
+            <summary>
+            Number of dice stored.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.IDiceCup.Roll(System.Boolean)">
+            <summary>
+            Rolls all the dice. Returns each individual result.
+            </summary>
+            <param name="suppressEmptyExeption">Suppress the exeption raised when the cup is empty</param>
+            <returns>Array of integers</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.IDiceCup.RollTotal(System.Boolean)">
+            <summary>
+            Rolls all the dice. Returns the sum of the results.
+            </summary>
+            <param name="suppressEmptyExeption">Suppress the exeption raised when the cup is empty</param>
+            <returns>Integer</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Dice.IDynamicDiceCup">
+            <summary>
+            Interface for dice cups where the number of dice can be changed.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.IDynamicDiceCup.AllDice">
+            <summary>
+            List of the NDice objects rolled by the cup.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.IDynamicDiceCup.Item(System.Int32)">
+            <summary>
+            Provides index access to the NDice list
+            </summary>
+            <param name="index">Location in the collection</param>
+            <returns>NDice</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.IDynamicDiceCup.PushDice(QuasarCode.Library.Games.Dice.NDice)">
+            <summary>
+            Adds a dice to the cup
+            </summary>
+            <param name="dice">Dice to be added to the cup</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.IDynamicDiceCup.PopDice">
+            <summary>
+            Removes the last avalable dice in the cup
+            </summary>
+            <exception cref="T:System.InvalidOperationException" />
+            <returns>NDice removed from cup</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Dice.IStaticDiceCup">
+            <summary>
+            Interface for dice cups where the number of dice is fixed.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.IStaticDiceCup.AllDice">
+            <summary>
+            Array of the NDice objects rolled by the cup.
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Dice.NDice.Sides">
+            <summary>
+            Number of sides on the dice
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.NDice.#ctor(System.Int32)">
+            <summary>
+            Creates a new NDice instance
+            </summary>
+            <param name="sides">Number of sides on the dice</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.NDice.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new NDice instance
+            </summary>
+            <param name="sides">Number of sides on the dice</param>
+            <param name="seed">Seed for the random generator</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.NDice.Roll">
+            <summary>
+            Rolls the dice
+            </summary>
+            <returns>Integer outcome of the roll</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.NDice.MultipleDice(System.Int32,System.Int32)">
+            <summary>
+            Convenience method for creating multiple dice
+            </summary>
+            <param name="sides">The number of sides on each dice</param>
+            <param name="noOfDice">Number of dice to create</param>
+            <returns>Yeilds dice to produce an IEnumerable</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.NDice.MultipleDice(System.Int32[])">
+            <summary>
+            Convenience method for creating multiple dice
+            </summary>
+            <param name="sides">Side numbers representing each unique dice</param>
+            <returns>Yeilds dice to produce an IEnumerable</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Dice.NDice.MultipleDice(System.Collections.Generic.ICollection{System.Int32})">
+            <summary>
+            Convenience method for creating multiple dice
+            </summary>
+            <param name="sides">Collection of side numbers representing unique dice</param>
+            <returns>Yeilds dice to produce an IEnumerable</returns>
+        </member>
         <member name="T:QuasarCode.Library.Games.Spinners.ISpinner`1">
             <summary>
             Interface for all Spinner objects.
