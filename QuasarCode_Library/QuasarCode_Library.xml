@@ -4,6 +4,402 @@
         <name>QuasarCode_Library</name>
     </assembly>
     <members>
+        <member name="T:QuasarCode.Library.Games.Cards.CardGroup`1">
+            <summary>
+            A collection of IPlaying cards
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Cards.CardGroup`1.Name">
+            <summary>
+            Name of the collection
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardGroup`1.#ctor(System.String)">
+            <summary>
+            Creates a CardGroup instance with no cards
+            </summary>
+            <param name="name">The name of the group</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardGroup`1.#ctor(System.String,QuasarCode.Library.Games.Cards.IPlayingCard[])">
+            <summary>
+            Creates a CardGroup instance with a starting set of cards
+            </summary>
+            <param name="name">The name of the group</param>
+            <param name="cards">The cards to be added to the group</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardGroup`1.#ctor(System.String,System.Collections.Generic.IEnumerable{QuasarCode.Library.Games.Cards.IPlayingCard})">
+            <summary>
+            Creates a CardGroup instance with a starting set of cards
+            </summary>
+            <param name="name">The name of the group</param>
+            <param name="cards">The cards to be added to the group</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardGroup`1.Remove(System.Int32)">
+            <summary>
+            Remove a card from the collection at the specified index
+            </summary>
+            <param name="index">The index of the card to be removed</param>
+            <returns>An IPlaying card</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardGroup`1.Shuffle">
+            <summary>
+            Randomises the order of the cards in the group
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardGroup`1.ReturnCards(System.Object)">
+            <summary>
+            Event handler for requesting the return of cards
+            </summary>
+            <param name="sender">The object triggering the event</param>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.CardQueue`1">
+            <summary>
+            A queue data structure containing IPlayingCards
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Cards.CardQueue`1.Name">
+            <summary>
+            Name of the collection
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardQueue`1.#ctor(System.String)">
+            <summary>
+            Creates an new CardQueue instance
+            </summary>
+            <param name="name">The name of the queue</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardQueue`1.Add(`0)">
+            <summary>
+            Add a card to the collection
+            </summary>
+            <param name="card">The card to add</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardQueue`1.Remove(System.Int32)">
+            <summary>
+            Remove a card from the collection at the specified index
+            </summary>
+            <param name="index">The index of the card to be removed</param>
+            <returns>An IPlaying card</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardQueue`1.Shuffle">
+            <summary>
+            Randomises the order of the cards in the group
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardQueue`1.ReturnCards(System.Object)">
+            <summary>
+            Event handler for requesting the return of cards
+            </summary>
+            <param name="sender">The object triggering the event</param>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.CardStack`1">
+            <summary>
+            A stack data structure containing IPlayingCards
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Cards.CardStack`1.Name">
+            <summary>
+            Name of the collection
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardStack`1.#ctor(System.String)">
+            <summary>
+            Creates an new CardStack instance
+            </summary>
+            <param name="name">The name of the stack</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardStack`1.Add(`0)">
+            <summary>
+            Add a card to the collection
+            </summary>
+            <param name="card">The card to add</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardStack`1.Remove(System.Int32)">
+            <summary>
+            Remove a card from the collection at the specified index
+            </summary>
+            <param name="index">The index of the card to be removed</param>
+            <returns>An IPlaying card</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardStack`1.Shuffle">
+            <summary>
+            Randomises the order of the cards in the group
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.CardStack`1.ReturnCards(System.Object)">
+            <summary>
+            Event handler for requesting the return of cards
+            </summary>
+            <param name="sender">The object triggering the event</param>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.Deck">
+            <summary>
+            A collection of 52+ unique playing cards. The exact number can vary dependant on the number of jokers added
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.Deck.Cards">
+            <summary>
+            The cards in the deck (including the jokers).
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Cards.Deck.Jokers">
+            <summary>
+            The number of jokers in this deck
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.Deck.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates a new Deck instance of 52 cards along with a specified number of jokers (deafult is 0)
+            </summary>
+            <param name="name">The name of the deck</param>
+            <param name="jokers">Number of jokers to add to the standard 52 cards</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.Deck.InitialiseGroup(QuasarCode.Library.Games.Cards.ICardGroup{QuasarCode.Library.Games.Cards.PlayingCard}[])">
+            <summary>
+            Initialises a card group for use with the deck
+            </summary>
+            <param name="groups">The group(s) to be initialised</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.Deck.ReleaseGroup(QuasarCode.Library.Games.Cards.ICardGroup{QuasarCode.Library.Games.Cards.PlayingCard}[])">
+            <summary>
+            Removes card groups from use with the deck
+            </summary>
+            <param name="groups">The group(s) to remove</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.Deck.Deal``1(System.Collections.Generic.ICollection{``0})">
+            <summary>
+            Deals the deck into a list of groups untill the deck is empty
+            </summary>
+            <param name="hands">The groups (ICardGroup's) to deal into</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.Deck.Deal``1(``0[])">
+            <summary>
+            Deals the deck into a list of groups untill the deck is empty
+            </summary>
+            <param name="hands">The groups (ICardGroup's) to deal into</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.Deck.Deal``1(System.Collections.Generic.ICollection{``0},System.Int32,System.Boolean)">
+            <summary>
+            Deals a set number of cards from the deck into a list of groups
+            </summary>
+            <param name="hands">The hands to deal into</param>
+            <param name="cardsPerHand">The number of cards to deal to each hand</param>
+            <param name="suppressEmptyException">Whether or not to suppress the exception generated when there isn't enough cards remaining to fill deal the number requested to each hand</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.Deck.Deal``1(System.Collections.Generic.ICollection{``0},System.Int32,``0,System.Boolean)">
+            <summary>
+            Deals a set number of cards from the deck into a list of groups and then dumps the rest into a group
+            </summary>
+            <param name="hands">The hands to deal into</param>
+            <param name="cardsPerHand">The number of cards to deal to each hand</param>
+            <param name="group">The group to dump any remaining cards into</param>
+            <param name="suppressEmptyException">Whether or not to suppress the exception generated when there isn't enough cards remaining to fill deal the number requested to each hand</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.Deck.Deal``1(System.Collections.Generic.ICollection{``0},System.Int32,System.Collections.Generic.ICollection{``0},System.Boolean)">
+            <summary>
+            Deals a set number of cards from the deck into a list of groups and then deals the remaining cards to a list of groups
+            </summary>
+            <param name="hands">The hands to deal into</param>
+            <param name="cardsPerHand">The number of cards to deal to each hand</param>
+            <param name="groups">The groups to deal any remaining cards into</param>
+            <param name="suppressEmptyException">Whether or not to suppress the exception generated when there isn't enough cards remaining to fill deal the number requested to each hand</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.Deck.Reset">
+            <summary>
+            Reset the deck so that it has all the cards it started with and asks all ICardGroups dealt to to remove references to the cards
+            </summary>
+        </member>
+        <member name="E:QuasarCode.Library.Games.Cards.Deck.ReturnCards">
+            <summary>
+            Request that all subscribers remove their held card objects
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.ICardGroup`1">
+            <summary>
+            A collection of IPlaying cards
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Cards.ICardGroup`1.Name">
+            <summary>
+            Name of the collection
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.ICardGroup`1.Add(`0)">
+            <summary>
+            Add a card to the collection
+            </summary>
+            <param name="card">The card to add</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.ICardGroup`1.Remove(System.Int32)">
+            <summary>
+            Remove a card from the collection at the specified index
+            </summary>
+            <param name="index">The index of the card to be removed</param>
+            <returns>An IPlaying card</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.ICardGroup`1.Shuffle">
+            <summary>
+            Randomises the order of the cards in the group
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.ICardGroup`1.ReturnCards(System.Object)">
+            <summary>
+            Event handler for requesting the return of cards
+            </summary>
+            <param name="sender">The object triggering the event</param>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.ICardQueue`1">
+            <summary>
+            A queue data structure containing IPlayingCards
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.ICardQueue`1.Enqueue(`0)">
+            <summary>
+            Add a new card to the end of the queue
+            </summary>
+            <param name="card">The card to add</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.ICardQueue`1.Dequeue">
+            <summary>
+            Remove the card from the front of the queue
+            </summary>
+            <returns>An IPlaying card</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.ICardStack`1">
+            <summary>
+            A stack data structure containing IPlayingCards
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.ICardStack`1.Push(`0)">
+            <summary>
+            Add a new card to the top of the stack
+            </summary>
+            <param name="card">The card to add</param>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.ICardStack`1.Pop">
+            <summary>
+            Remove the card on top of the stack
+            </summary>
+            <returns>An IPlaying card</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.IPlayingCard">
+            <summary>
+            A card from a standard deck of 52 playing cards
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Cards.IPlayingCard.Value">
+            <summary>
+            The card's value
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Cards.IPlayingCard.Suit">
+            <summary>
+            The card's suit
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.PlayingCard">
+            <summary>
+            A card from a standard deck of 52 playing cards
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Cards.PlayingCard.Value">
+            <summary>
+            The card's value
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Games.Cards.PlayingCard.Suit">
+            <summary>
+            The card's suit
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.PlayingCard.#ctor(QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues,QuasarCode.Library.Games.Cards.PlayingCard.AllowedSuits)">
+            <summary>
+            Creates a new PlayingCard instance
+            </summary>
+            <param name="value">The card's value</param>
+            <param name="suit">The card's suit</param>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues">
+            <summary>
+            Enum of card values from ace to king
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.A">
+            <summary>Ace</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Two">
+            <summary>Two</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Three">
+            <summary>Three</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Four">
+            <summary>Four</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Five">
+            <summary>Five</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Six">
+            <summary>Six</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Seven">
+            <summary>Seven</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Eight">
+            <summary>Eight</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Nine">
+            <summary>Nine</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Ten">
+            <summary>Ten</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.J">
+            <summary>Jack</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Q">
+            <summary>Queen</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.K">
+            <summary>King</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues.Jo">
+            <summary>Joker</summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.PlayingCard.GetValueString(QuasarCode.Library.Games.Cards.PlayingCard.AllowedValues)">
+            <summary>
+            Retrive the string counterpart to the AllowedValues enum value
+            </summary>
+            <param name="value">Card value from AllowedValues</param>
+            <returns>String representing the provided value</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Games.Cards.PlayingCard.AllowedSuits">
+            <summary>
+            Enum of card suits - hearts, clubs, dimonds, spades, joker
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedSuits.H">
+            <summary>Heart</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedSuits.C">
+            <summary>Club</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedSuits.D">
+            <summary>Dimond</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedSuits.S">
+            <summary>Spade</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Games.Cards.PlayingCard.AllowedSuits.J">
+            <summary>Joker</summary>
+        </member>
+        <member name="M:QuasarCode.Library.Games.Cards.PlayingCard.GetSuitString(QuasarCode.Library.Games.Cards.PlayingCard.AllowedSuits)">
+            <summary>
+            Retrive the string counterpart to the AllowedSuits enum suit
+            </summary>
+            <param name="suit">Card suit from AllowedSuits</param>
+            <returns>String representing the provided suit</returns>
+        </member>
         <member name="T:QuasarCode.Library.Games.Dice.Dice12">
             <summary>
             Simple didce with 12 sides.

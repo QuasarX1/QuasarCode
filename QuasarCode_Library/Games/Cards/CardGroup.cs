@@ -7,7 +7,7 @@ namespace QuasarCode.Library.Games.Cards
     /// <summary>
     /// A collection of IPlaying cards
     /// </summary>
-    public class CardGroup : System.Collections.ObjectModel.Collection<IPlayingCard>
+    public class CardGroup<T> : System.Collections.ObjectModel.Collection<T>, ICardGroup<T> where T : IPlayingCard
     {
         /// <summary>
         /// Name of the collection
@@ -34,7 +34,7 @@ namespace QuasarCode.Library.Games.Cards
 
             foreach (IPlayingCard card in cards)
             {
-                Items.Add(card);
+                Items.Add((T)card);
             }
         }
 
@@ -49,7 +49,7 @@ namespace QuasarCode.Library.Games.Cards
 
             foreach (IPlayingCard card in cards)
             {
-                Items.Add(card);
+                Items.Add((T)card);
             }
         }
 
@@ -58,9 +58,9 @@ namespace QuasarCode.Library.Games.Cards
         /// </summary>
         /// <param name="index">The index of the card to be removed</param>
         /// <returns>An IPlaying card</returns>
-        public IPlayingCard Remove(int index)
+        public T Remove(int index)
         {
-            IPlayingCard element = Items[index];
+            T element = Items[index];
 
             Items.RemoveAt(index);
 
@@ -85,7 +85,7 @@ namespace QuasarCode.Library.Games.Cards
 
             while (currentOrder.Count > 0)
             {
-                int position = generator.Next();
+                int position = generator.Next(currentOrder.Count);
 
                 newOrder.Add(currentOrder[position]);
 
@@ -94,8 +94,17 @@ namespace QuasarCode.Library.Games.Cards
 
             foreach (IPlayingCard card in newOrder)
             {
-                this.Add(card);
+                this.Add((T)card);
             }
+        }
+
+        /// <summary>
+        /// Event handler for requesting the return of cards
+        /// </summary>
+        /// <param name="sender">The object triggering the event</param>
+        public void ReturnCards(object sender)
+        {
+            Items.Clear();
         }
     }
 }

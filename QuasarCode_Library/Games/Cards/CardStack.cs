@@ -8,7 +8,7 @@ namespace QuasarCode.Library.Games.Cards
     /// <summary>
     /// A stack data structure containing IPlayingCards
     /// </summary>
-    public class CardStack : Stack<IPlayingCard>, ICardStack
+    public class CardStack<T> : Stack<T>, ICardStack<T> where T : IPlayingCard
     {
         /// <summary>
         /// Name of the collection
@@ -16,10 +16,19 @@ namespace QuasarCode.Library.Games.Cards
         public string Name { get; protected set; }
 
         /// <summary>
+        /// Creates an new CardStack instance
+        /// </summary>
+        /// <param name="name">The name of the stack</param>
+        public CardStack(string name)
+        {
+            Name = name;
+        }
+
+        /// <summary>
         /// Add a card to the collection
         /// </summary>
         /// <param name="card">The card to add</param>
-        public void Add(IPlayingCard card)
+        public void Add(T card)
         {
             Push(card);
         }
@@ -29,17 +38,17 @@ namespace QuasarCode.Library.Games.Cards
         /// </summary>
         /// <param name="index">The index of the card to be removed</param>
         /// <returns>An IPlaying card</returns>
-        public IPlayingCard Remove(int index)
+        public T Remove(int index)
         {
             int popCount = this.Count - 1 - index;
 
-            Stack<IPlayingCard> holding = new Stack<IPlayingCard>();
+            Stack<T> holding = new Stack<T>();
             for (int i = 0; i < popCount; i++)
             {
                 holding.Push(this.Pop());
             }
 
-            IPlayingCard element = this.Pop();
+            T element = this.Pop();
 
             for (int i = 0; i < popCount; i++)
             {
@@ -56,9 +65,9 @@ namespace QuasarCode.Library.Games.Cards
         {
             Random generator = new Random();
 
-            List<IPlayingCard> newOrder = new List<IPlayingCard>();
+            List<T> newOrder = new List<T>();
 
-            List<IPlayingCard> currentOrder = new List<IPlayingCard>();
+            List<T> currentOrder = new List<T>();
 
             while (this.Count > 0)
             {
@@ -67,17 +76,26 @@ namespace QuasarCode.Library.Games.Cards
 
             while (currentOrder.Count > 0)
             {
-                int position = generator.Next();
+                int position = generator.Next(currentOrder.Count);
 
                 newOrder.Add(currentOrder[position]);
 
                 currentOrder.RemoveAt(position);
             }
 
-            foreach (IPlayingCard card in newOrder)
+            foreach (T card in newOrder)
             {
                 this.Push(card);
             }
+        }
+
+        /// <summary>
+        /// Event handler for requesting the return of cards
+        /// </summary>
+        /// <param name="sender">The object triggering the event</param>
+        public void ReturnCards(object sender)
+        {
+            this.Clear();
         }
     }
 }

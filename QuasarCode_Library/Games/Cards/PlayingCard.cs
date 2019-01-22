@@ -8,7 +8,7 @@ namespace QuasarCode.Library.Games.Cards
     /// <summary>
     /// A card from a standard deck of 52 playing cards
     /// </summary>
-    public class PlayingCard
+    public class PlayingCard : IPlayingCard
     {
         /// <summary>
         /// The card's value
