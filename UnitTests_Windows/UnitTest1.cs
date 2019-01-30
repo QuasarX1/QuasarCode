@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using QuasarCode;
 using static QuasarCode.Library.IO.Text.Console;
 using static QuasarCode.Library.Tools.Validators;
 using QuasarCode.Library.Tools;
+using QuasarCode.Library.Games.Spinners;
+using QuasarCode.Library.Games.Dice;
+using QuasarCode.Library.Games.Cards;
 
 namespace UnitTests_Windows
 {
@@ -164,6 +168,276 @@ namespace UnitTests_Windows
             Assert.AreEqual(averages[0], 2);// Truncates float
             Assert.AreEqual(averages[1], 3);
             Assert.AreEqual(averages[2], 4);
+        }
+
+        [TestMethod]
+        public void Spinner_Test()
+        {
+            string[] backup = new string[] { "Red", "Blue", "Yellow", "Green" };
+            Spinner<string> spinner = new Spinner<string>("Red", "Blue", "Yellow", "Green");
+
+            Tuple<int, string> result;
+            for (int i = 0; i < 20; i++)
+            {
+                result = spinner.ContextSpin();
+                Assert.AreEqual(result.Item2, backup[result.Item1]);
+            }
+        }
+
+        [TestMethod]
+        public void Dice_Test()
+        {
+            NDice dice = new NDice(6);
+
+            for (int i = 0; i < 20; i++)
+            {
+                Assert.AreEqual(InRange(dice.Roll(), 1, 7), true);
+            }
+
+            dice = new Dice6();
+
+            for (int i = 0; i < 20; i++)
+            {
+                Assert.AreEqual(InRange(dice.Roll(), 1, 7), true);
+            }
+
+            dice = new Dice8();
+
+            for (int i = 0; i < 20; i++)
+            {
+                Assert.AreEqual(InRange(dice.Roll(), 1, 9), true);
+            }
+
+            dice = new Dice12();
+
+            for (int i = 0; i < 20; i++)
+            {
+                Assert.AreEqual(InRange(dice.Roll(), 1, 13), true);
+            }
+
+
+            DiceCup cup = new DiceCup(6, 2);
+
+            int[] results;
+            for (int i = 0; i < 20; i++)
+            {
+                results = cup.Roll();
+
+                foreach (int result in results)
+                {
+                    Assert.AreEqual(InRange(result, 1, 7), true);
+                }
+
+                Assert.AreEqual(InRange(results.Sum(), 2, 13), true);
+            }
+
+
+            DynamicDiceCup dynamicCup = new DynamicDiceCup();
+
+            dynamicCup += new Dice12();
+            dynamicCup.PushDice(new Dice6());
+
+
+            for (int i = 0; i < 20; i++)
+            {
+                results = dynamicCup.Roll();
+
+                Assert.AreEqual(InRange(results[0], 1, 13), true);
+                Assert.AreEqual(InRange(results[1], 1, 7), true);
+
+                Assert.AreEqual(InRange(results.Sum(), 2, 19), true);
+            }
+
+            dynamicCup--;
+
+            Assert.AreEqual(dynamicCup.Count, 1);
+
+            Assert.AreEqual(dynamicCup.PopDice().GetType(), typeof(Dice12));
+
+            Assert.AreEqual(dynamicCup.Count, 0);
+
+            try
+            {
+                dynamicCup.Roll();
+                throw new Exception("Roll() didn't throw an exception. It should have been empty.");
+            }
+            catch (InvalidOperationException) { }
+        }
+
+        [TestMethod]
+        public void Cards_Test()
+        {
+            Deck deck = new Deck("Deck", 2);
+
+            Assert.AreEqual(54, deck.Cards.Length);
+            Assert.AreEqual(deck.Cards.Length, deck.Count);
+
+            CardGroup<PlayingCard> hand1 = new CardGroup<PlayingCard>("Hand1");
+            CardGroup<PlayingCard> hand2 = new CardGroup<PlayingCard>("Hand2");
+            CardGroup<PlayingCard> hand3 = new CardGroup<PlayingCard>("Hand3");
+
+            CardGroup<PlayingCard> spare1 = new CardGroup<PlayingCard>("Spare1");
+            CardGroup<PlayingCard> spare2 = new CardGroup<PlayingCard>("Spare2");
+            CardGroup<PlayingCard> spare3 = new CardGroup<PlayingCard>("Spare3");
+
+            CardGroup<PlayingCard>[] hands = new CardGroup<PlayingCard>[] { hand1, hand2, hand3 };
+            List<CardGroup<PlayingCard>> handsList = new List<CardGroup<PlayingCard>> { hand1, hand2, hand3 };
+
+            CardGroup<PlayingCard>[] spares = new CardGroup<PlayingCard>[] { spare1, spare2, spare3 };
+            List<CardGroup<PlayingCard>> sparesList = new List<CardGroup<PlayingCard>> { spare1, spare2, spare3 };
+
+            deck.InitialiseGroup(new CardGroup<PlayingCard>[] { hand1, hand2, hand3, spare1, spare2, spare3 });
+
+            deck.Shuffle();
+
+            deck.Deal<CardGroup<PlayingCard>>(hand1, hand2, hand3);
+
+            foreach (CardGroup<PlayingCard> hand in hands)
+            {
+                Assert.AreEqual(18, hand.Count);
+            }
+
+            deck.Reset();
+
+            Assert.AreEqual(0, hand1.Count);
+            Assert.AreEqual(0, hand2.Count);
+            Assert.AreEqual(0, hand3.Count);
+            Assert.AreEqual(0, spare1.Count);
+            Assert.AreEqual(0, spare2.Count);
+            Assert.AreEqual(0, spare3.Count);
+
+
+            deck.Shuffle();
+
+            deck.Deal<CardGroup<PlayingCard>>(hands);
+
+            foreach (CardGroup<PlayingCard> hand in hands)
+            {
+                Assert.AreEqual(18, hand.Count);
+            }
+
+            deck.Reset();
+
+
+            deck.Shuffle();
+
+            deck.Deal<CardGroup<PlayingCard>>(handsList);
+
+            foreach (CardGroup<PlayingCard> hand in handsList)
+            {
+                Assert.AreEqual(18, hand.Count);
+            }
+
+            deck.Reset();
+
+
+            deck.Shuffle();
+
+            deck.Deal<CardGroup<PlayingCard>>(hands, 7);
+
+            foreach (CardGroup<PlayingCard> hand in hands)
+            {
+                Assert.AreEqual(7, hand.Count);
+            }
+
+            deck.Reset();
+
+
+            deck.Shuffle();
+
+            deck.Deal<CardGroup<PlayingCard>>(handsList, 7);
+
+            foreach (CardGroup<PlayingCard> hand in handsList)
+            {
+                Assert.AreEqual(7, hand.Count);
+            }
+
+            deck.Reset();
+
+
+            deck.Shuffle();
+
+            deck.Deal<CardGroup<PlayingCard>>(hands, 7, spare1);
+
+            foreach (CardGroup<PlayingCard> hand in hands)
+            {
+                Assert.AreEqual(7, hand.Count);
+            }
+
+            Assert.AreEqual(33, spare1.Count);
+
+            deck.Reset();
+
+
+            deck.Shuffle();
+
+            deck.Deal<CardGroup<PlayingCard>>(handsList, 7, spare1);
+
+            foreach (CardGroup<PlayingCard> hand in handsList)
+            {
+                Assert.AreEqual(7, hand.Count);
+            }
+
+            Assert.AreEqual(33, spare1.Count);
+
+            deck.Reset();
+
+
+            deck.Shuffle();
+
+            deck.Deal<CardGroup<PlayingCard>>(hands, 7, spares);
+
+            foreach (CardGroup<PlayingCard> hand in hands)
+            {
+                Assert.AreEqual(7, hand.Count);
+            }
+
+            foreach (CardGroup<PlayingCard> hand in spares)
+            {
+                Assert.AreEqual(11, hand.Count);
+            }
+
+            deck.Reset();
+
+
+            deck.Shuffle();
+
+            deck.Deal<CardGroup<PlayingCard>>(handsList, 7, sparesList);
+
+            foreach (CardGroup<PlayingCard> hand in handsList)
+            {
+                Assert.AreEqual(7, hand.Count);
+            }
+
+            foreach (CardGroup<PlayingCard> hand in sparesList)
+            {
+                Assert.AreEqual(11, hand.Count);
+            }
+
+            deck.Reset();
+
+            deck.ReleaseGroup(new CardGroup<PlayingCard>[] { hand1, hand2, hand3, spare1, spare2, spare3 });
+
+
+            Deck newDeck = new Deck("Deck", 0);
+
+            CardGroup<PlayingCard> gameHand1 = new CardGroup<PlayingCard>("Hand1");
+            CardGroup<PlayingCard> gameHand2 = new CardGroup<PlayingCard>("Hand2");
+            CardStack<PlayingCard> drawPile = new CardStack<PlayingCard>("Draw Pile");
+
+            newDeck.InitialiseGroup(gameHand1, gameHand2, drawPile);
+
+            newDeck.Deal<ICardGroup<PlayingCard>>(new CardGroup<PlayingCard>[] { gameHand1, gameHand2 }, 7, drawPile, false);
+
+            newDeck.ReleaseGroup(gameHand1, gameHand2);// These still have cards
+
+            newDeck.Reset();
+
+            Assert.AreEqual(7, gameHand1.Count);// Hand hasn't returned cards!
+            Assert.AreEqual(7, gameHand2.Count);// Hand hasn't returned cards!
+            Assert.AreEqual(0, drawPile.Count);
+
+            Assert.AreEqual(52, newDeck.Count);// All cards appear to have been returned but hands still reference some!
         }
     }
 }
