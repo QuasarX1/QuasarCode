@@ -10,6 +10,13 @@ namespace QuasarCode.Library.Maths
     public enum Units
     {
         /// <summary>
+        /// Lack of units
+        /// </summary>
+        NoUnit,
+
+
+
+        /// <summary>
         /// Unit of angle
         /// </summary>
         Degrees,
@@ -77,5 +84,8 @@ namespace QuasarCode.Library.Maths
         /// Unit of mass (Imperial)
         /// </summary>
         oz
+
+
+        // time, other base quantities?
     }
 }
