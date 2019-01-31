@@ -946,6 +946,19 @@
             <param name="units">The array of pairs to simplify</param>
             <returns>A simplified array of UnitPowerPairs</returns>
         </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.Equals(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="o"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.GetHashCode">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:QuasarCode.Library.Maths.CompoundUnit.op_Equality(QuasarCode.Library.Maths.CompoundUnit,QuasarCode.Library.Maths.CompoundUnit)">
             <summary>
             
@@ -960,19 +973,6 @@
             </summary>
             <param name="a"></param>
             <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.Equals(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="o"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.GetHashCode">
-            <summary>
-            
-            </summary>
             <returns></returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.Coordinates.Coordinate`1">
@@ -1114,6 +1114,12 @@
             <summary>
             The size of the value
             </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.IValue.GetMagnitude">
+            <summary>
+            Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
+            </summary>
+            <returns>The magnitude of the value</returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1">
             <summary>
@@ -1311,7 +1317,7 @@
             <summary>
             Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
             </summary>
-            <returns></returns>
+            <returns>The magnitude of the value</returns>
         </member>
         <member name="M:QuasarCode.Library.Maths.StandardValue.ToString">
             <summary>
@@ -1324,6 +1330,14 @@
             Converts to a Value object without standard form
             </summary>
             <returns>A new Value object</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.StandardValue.op_ExclusiveOr(QuasarCode.Library.Maths.StandardValue,System.Int32)">
+            <summary>
+            Raise the standard value to an integer power
+            </summary>
+            <param name="a">The standard value</param>
+            <param name="b">Integer power</param>
+            <returns></returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.Unit">
             <summary>
@@ -1359,6 +1373,19 @@
             </summary>
             <returns>The unit as a string</returns>
         </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.Equals(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="o"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.GetHashCode">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:QuasarCode.Library.Maths.Unit.op_Equality(QuasarCode.Library.Maths.Unit,QuasarCode.Library.Maths.Unit)">
             <summary>
             
@@ -1373,19 +1400,6 @@
             </summary>
             <param name="a"></param>
             <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.Equals(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="o"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.GetHashCode">
-            <summary>
-            
-            </summary>
             <returns></returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.Units">
@@ -1517,7 +1531,7 @@
             <summary>
             Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
             </summary>
-            <returns></returns>
+            <returns>The magnitude of the value</returns>
         </member>
         <member name="M:QuasarCode.Library.Maths.Value.ToString">
             <summary>
@@ -1562,6 +1576,19 @@
             <param name="a">object 1</param>
             <param name="b">object 2</param>
             <returns>A new value object with a new unit</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.Equals(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="o"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.GetHashCode">
+            <summary>
+            
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:QuasarCode.Library.Maths.Value.op_Equality(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
             <summary>

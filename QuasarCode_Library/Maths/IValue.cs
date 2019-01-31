@@ -18,5 +18,11 @@ namespace QuasarCode.Library.Maths
         /// The size of the value
         /// </summary>
         double Magnitude { get; }
+
+        /// <summary>
+        /// Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
+        /// </summary>
+        /// <returns>The magnitude of the value</returns>
+        double GetMagnitude();
     }
 }

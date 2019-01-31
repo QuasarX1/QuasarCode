@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace QuasarCode.Library.Maths
 {
@@ -63,33 +64,25 @@ namespace QuasarCode.Library.Maths
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static bool operator ==(Unit a, Unit b)
-        {
-            return a.Value == b.Value && a.Power == b.Power;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static bool operator !=(Unit a, Unit b)
-        {
-            return a.Value != b.Value || a.Power != b.Power;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
         public override bool Equals(object o)
         {
-            return base.Equals(o);
+            List<UnitPowerPair> aValues = GetUnitPairs().ToList();
+            List<UnitPowerPair> bValues = ((IGeneralUnit)o).GetUnitPairs().OrderBy(new Func<UnitPowerPair, Units>((UnitPowerPair pair) => pair.Unit)).ToList();
+
+            if (bValues.Count != 1)
+            {
+                return false;
+            }
+            else if (aValues[0].Unit != bValues[0].Unit || aValues[0].Power != bValues[0].Power)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         /// <summary>
@@ -100,5 +93,29 @@ namespace QuasarCode.Library.Maths
         {
             return base.GetHashCode();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator ==(Unit a, Unit b)
+        {
+            return a.Equals(b);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator !=(Unit a, Unit b)
+        {
+            return !a.Equals(b);
+        }
+
+        
     }
 }

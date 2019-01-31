@@ -151,26 +151,52 @@ namespace QuasarCode.Library.Maths
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public override bool Equals(object o)
+        {
+            bool result = true;
+
+            List<UnitPowerPair> aValues = Values.OrderBy(new Func<UnitPowerPair, Units>((UnitPowerPair pair) => pair.Unit)).ToList();
+            List<UnitPowerPair> bValues = ((IGeneralUnit)o).GetUnitPairs().OrderBy(new Func<UnitPowerPair, Units>((UnitPowerPair pair) => pair.Unit)).ToList();
+
+            if (aValues.Count != bValues.Count)
+            {
+                return false;
+            }
+            else
+            {
+                for (int i = 0; i < Values.Length; i++)
+                {
+                    if (aValues[i].Unit != bValues[i].Unit || aValues[i].Power != bValues[i].Power)
+                    {
+                        result = false;
+                        break;
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
         public static bool operator ==(CompoundUnit a, CompoundUnit b)
         {
-            bool result = true;
-
-            List<UnitPowerPair> aValues = a.Values.OrderBy(new Func<UnitPowerPair, Units>((UnitPowerPair pair) => pair.Unit)).ToList();
-            List<UnitPowerPair> bValues = b.Values.OrderBy(new Func<UnitPowerPair, Units>((UnitPowerPair pair) => pair.Unit)).ToList();
-
-            for (int i = 0; i < a.Values.Length; i++)
-            {
-                if (aValues[i].Unit != bValues[i].Unit || aValues[i].Power != bValues[i].Power)
-                {
-                    result = false;
-                    break;
-                }
-            }
-
-            return result;
+            return a.Equals(b);
         }
 
         /// <summary>
@@ -181,26 +207,7 @@ namespace QuasarCode.Library.Maths
         /// <returns></returns>
         public static bool operator !=(CompoundUnit a, CompoundUnit b)
         {
-            return !(a == b);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="o"></param>
-        /// <returns></returns>
-        public override bool Equals(object o)
-        {
-            return base.Equals(o);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            return !a.Equals(b);
         }
     }
 }

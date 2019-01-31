@@ -68,8 +68,8 @@ namespace QuasarCode.Library.Maths
         /// <summary>
         /// Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
         /// </summary>
-        /// <returns></returns>
-        protected override double GetMagnitude()
+        /// <returns>The magnitude of the value</returns>
+        public override double GetMagnitude()
         {
             return Magnitude * Math.Pow(10, StandardPower);
         }
@@ -90,6 +90,21 @@ namespace QuasarCode.Library.Maths
         public Value ToValue()
         {
             return new Value(GetMagnitude(), Unit);
+        }
+
+        /// <summary>
+        /// Raise the standard value to an integer power
+        /// </summary>
+        /// <param name="a">The standard value</param>
+        /// <param name="b">Integer power</param>
+        /// <returns></returns>
+        public static StandardValue operator ^(StandardValue a, int b)
+        {
+            a.Magnitude *= b;
+            a.StandardPower *= b;
+            //a.Unit ^= b;
+
+            return a;
         }
     }
 }

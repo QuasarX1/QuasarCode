@@ -47,8 +47,8 @@ namespace QuasarCode.Library.Maths
         /// <summary>
         /// Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
         /// </summary>
-        /// <returns></returns>
-        protected virtual double GetMagnitude()
+        /// <returns>The magnitude of the value</returns>
+        public virtual double GetMagnitude()
         {
             return Magnitude;
         }
@@ -137,12 +137,38 @@ namespace QuasarCode.Library.Maths
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public override bool Equals(object o)
+        {
+            try
+            {
+                return GetMagnitude() == ((IValue)o).GetMagnitude() && Unit == ((IValue)o).Unit;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
         public static bool operator ==(Value a, Value b)
         {
-            return a.Magnitude == b.Magnitude && a.Unit == b.Unit;
+            return a.Equals(b);
         }
 
         /// <summary>
@@ -153,7 +179,7 @@ namespace QuasarCode.Library.Maths
         /// <returns></returns>
         public static bool operator !=(Value a, Value b)
         {
-            return a.Magnitude != b.Magnitude || a.Unit != b.Unit;
+            return !a.Equals(b);
         }
     }
 }
