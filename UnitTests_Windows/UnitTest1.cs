@@ -10,6 +10,7 @@ using QuasarCode.Library.Tools;
 using QuasarCode.Library.Games.Spinners;
 using QuasarCode.Library.Games.Dice;
 using QuasarCode.Library.Games.Cards;
+using QuasarCode.Library.Maths;
 
 namespace UnitTests_Windows
 {
@@ -438,6 +439,65 @@ namespace UnitTests_Windows
             Assert.AreEqual(0, drawPile.Count);
 
             Assert.AreEqual(52, newDeck.Count);// All cards appear to have been returned but hands still reference some!
+        }
+
+        [TestMethod]
+        public void UnitsAndValues_Test()
+        {
+            Value length = new Value(10.25, Units.m);
+            StandardValue stdLength = length.ToStandardValue();
+
+            Assert.AreEqual(length.Magnitude, stdLength.Magnitude * Math.Pow(10, stdLength.StandardPower));
+            Assert.AreEqual(length.Unit, stdLength.Unit);
+
+            Value revertedLength = stdLength.ToValue();
+
+            Assert.AreEqual(length.Magnitude, revertedLength.Magnitude);
+            Assert.AreEqual(length.Unit, revertedLength.Unit);
+
+
+            CompoundUnit KgPERm3 = new CompoundUnit(new Tuple<Units, int>(Units.Kg, 1), new Tuple<Units, int>(Units.m, -3));
+
+            Value density = new Value(1.0/8.0, KgPERm3);
+
+            Value volume = new Value(8, Units.m, 3);
+
+            Value mass = density * volume;
+
+            Assert.AreEqual(1, mass.Magnitude);
+            CompoundUnit massUnit = new CompoundUnit(new Tuple<Units, int>(Units.Kg, 1));
+            Assert.AreEqual(true, massUnit == (CompoundUnit)mass.Unit);
+
+
+            Value dist1 = new Value(2, Units.m);
+
+            Value dist2 = new Value(1, Units.m);
+
+            Value ratio = dist1 / dist2;
+
+            Assert.AreEqual(2, ratio.Magnitude);
+
+            CompoundUnit ratioUnit = new CompoundUnit(new Tuple<Units, int>(Units.NoUnit, 0));
+            Assert.AreEqual(true, ratioUnit == (CompoundUnit)ratio.Unit);
+
+
+            Value velocity = new Value(2, new CompoundUnit(new Tuple<Units, int>(Units.m, 1), new Tuple<Units, int>(Units.s, -1)));
+
+            Value time = new Value(1, Units.s);
+
+            StandardValue acc = (velocity / time).ToStandardValue();
+
+            Assert.AreEqual(2, acc.Magnitude);
+            CompoundUnit accUnit = new CompoundUnit(new Tuple<Units, int>(Units.m, 1), new Tuple<Units, int>(Units.s, -2));
+            Assert.AreEqual(true, accUnit == (CompoundUnit)acc.Unit);
+
+            Print(velocity + " / " + time + " = " + acc);
+            Assert.AreEqual("2 m s^-1 / 1 s = 2 m s^-2", velocity + " / " + time + " = " + acc);
+            
+            
+            StandardValue sValue = new StandardValue(10.23, new CompoundUnit(new Tuple<Units, int>(Units.km, 1), new Tuple<Units, int>(Units.h, -1)), 2);
+            Print(sValue);
+            Assert.AreEqual("1.023 x 10^3 km h^-1", sValue.ToString());
         }
     }
 }

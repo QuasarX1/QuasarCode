@@ -12,17 +12,31 @@ namespace QuasarCode.Library.Maths
         /// <summary>
         /// The standard form power
         /// </summary>
-        public int StandardPower { get; }
+        public int StandardPower { get; protected set; }
 
         /// <summary>
         /// Creates a new value, altering the provided value and power (if nessessary) to express the value in standard form
         /// </summary>
         /// <param name="size">The size of the value</param>
-        /// <param name="standardPower">The standard form power (for the provided value)</param>
+        /// <param name="standardPower">The standard form power (for the provided value).</param>
         /// <param name="unit">The unit</param>
-        public StandardValue(double size, int standardPower, IGeneralUnit unit) : base(size, unit)
+        public StandardValue(double size, IGeneralUnit unit, int standardPower = 0) : base(size, unit)
         {
             StandardPower = standardPower;
+
+            while (!(Magnitude >= 0 && Magnitude < 10))
+            {
+                if (Magnitude < 0)
+                {
+                    Magnitude *= 10;
+                    StandardPower -= 1;
+                }
+                else// Magnitude >= 10
+                {
+                    Magnitude /= 10;
+                    StandardPower += 1;
+                }
+            }
         }
 
         /// <summary>
@@ -32,9 +46,23 @@ namespace QuasarCode.Library.Maths
         /// <param name="standardPower">The standard form power (for the provided value)</param>
         /// <param name="unit">The unit</param>
         /// <param name="unitPower">The unit's power</param>
-        public StandardValue(double size, int standardPower, Units unit, int unitPower = 1) : base(size, unit, unitPower)
+        public StandardValue(double size, Units unit, int standardPower = 0, int unitPower = 1) : base(size, unit, unitPower)
         {
             StandardPower = standardPower;
+
+            while (!(Magnitude >= 0 && Magnitude < 10))
+            {
+                if (Magnitude < 0)
+                {
+                    Magnitude *= 10;
+                    StandardPower -= 1;
+                }
+                else// Magnitude >= 10
+                {
+                    Magnitude /= 10;
+                    StandardPower += 1;
+                }
+            }
         }
 
         /// <summary>
@@ -43,7 +71,16 @@ namespace QuasarCode.Library.Maths
         /// <returns></returns>
         protected override double GetMagnitude()
         {
-            return Magnitude * (10 ^ StandardPower);
+            return Magnitude * Math.Pow(10, StandardPower);
+        }
+
+        /// <summary>
+        /// Provides a string representation of the value with its unit
+        /// </summary>
+        /// <returns>The value as a string</returns>
+        public override string ToString()
+        {
+            return Magnitude.ToString() + ((StandardPower != 0) ?  " x 10^" + StandardPower : "") + ((Unit.ToString() != "") ? " " + Unit.ToString() : "");
         }
 
         /// <summary>

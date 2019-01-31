@@ -13,5 +13,11 @@ namespace QuasarCode.Library.Maths
         /// The standard form power
         /// </summary>
         int StandardPower { get;  }
+
+        /// <summary>
+        /// Provides a string representation of the value with its unit
+        /// </summary>
+        /// <returns>The value as a string</returns>
+        string ToString();
     }
 }

@@ -899,6 +899,82 @@
             <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
             <returns>Index of selected option.</returns>
         </member>
+        <member name="T:QuasarCode.Library.Maths.CompoundUnit">
+            <summary>
+            Multiple base units with powers multiplied together to form a compound unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.CompoundUnit.Values">
+            <summary>
+            The base units and their powers
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.#ctor(QuasarCode.Library.Maths.IGeneralUnit[])">
+            <summary>
+            Creates a new compound unit from an array of other units
+            </summary>
+            <param name="units">The compound units to combine</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.#ctor(System.Tuple{QuasarCode.Library.Maths.Units,System.Int32}[])">
+            <summary>
+            Creates a new compound unit from an array of tuples containing units and their corisponding powers
+            </summary>
+            <param name="units">Array of units and their powers as Tuples</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.#ctor(QuasarCode.Library.Maths.UnitPowerPair[])">
+            <summary>
+            Creates a new compound unit from an array of UnitPowerPairs
+            </summary>
+            <param name="units">Array of units and their powers as UnitPowerPairs</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.GetUnitPairs">
+            <summary>
+            Allows compatibility between ordenary and compound unit types by providing common access to their data
+            </summary>
+            <returns>An array of UnitPowerPairs representing all units in the object</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.ToString">
+            <summary>
+            Provides a string representation of the unit
+            </summary>
+            <returns>The unit as a string</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.SimplifyUnits(QuasarCode.Library.Maths.UnitPowerPair[])">
+            <summary>
+            Simplifies an array of UnitPowerPairs so it contains only one instance of each unit
+            </summary>
+            <param name="units">The array of pairs to simplify</param>
+            <returns>A simplified array of UnitPowerPairs</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.op_Equality(QuasarCode.Library.Maths.CompoundUnit,QuasarCode.Library.Maths.CompoundUnit)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.op_Inequality(QuasarCode.Library.Maths.CompoundUnit,QuasarCode.Library.Maths.CompoundUnit)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.Equals(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="o"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.GetHashCode">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:QuasarCode.Library.Maths.Coordinates.Coordinate`1">
             <summary>
             
@@ -964,6 +1040,79 @@
         <member name="P:QuasarCode.Library.Maths.Coordinates.Systems.SphericalPolar.Axis">
             <summary>
             
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.ICompoundUnit">
+            <summary>
+            Multiple base units with powers multiplied together to form a compound unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.ICompoundUnit.Values">
+            <summary>
+            The base units and their powers
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.IGeneralUnit">
+            <summary>
+            Blank interface to provide a link between ordenary and compound unit types
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.IGeneralUnit.GetUnitPairs">
+            <summary>
+            Allows compatibility between ordenary and compound unit types by providing common access to their data
+            </summary>
+            <returns>An array of UnitPowerPairs representing all units in the object</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.IGeneralUnit.ToString">
+            <summary>
+            Provides a string representation of the unit
+            </summary>
+            <returns>The unit as a string</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.IStandardValue">
+            <summary>
+            A value in standard form associated with a unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.IStandardValue.StandardPower">
+            <summary>
+            The standard form power
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.IStandardValue.ToString">
+            <summary>
+            Provides a string representation of the value with its unit
+            </summary>
+            <returns>The value as a string</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.IUnit">
+            <summary>
+            A single base unit with an optional power
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.IUnit.Value">
+            <summary>
+            The base unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.IUnit.Power">
+            <summary>
+            The power on the unit
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.IValue">
+            <summary>
+            A value associated with a unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.IValue.Unit">
+            <summary>
+            The unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.IValue.Magnitude">
+            <summary>
+            The size of the value
             </summary>
         </member>
         <member name="T:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1">
@@ -1131,9 +1280,122 @@
             
             </summary>
         </member>
+        <member name="T:QuasarCode.Library.Maths.StandardValue">
+            <summary>
+            A value in standard form associated with a unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.StandardValue.StandardPower">
+            <summary>
+            The standard form power
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.StandardValue.#ctor(System.Double,QuasarCode.Library.Maths.IGeneralUnit,System.Int32)">
+            <summary>
+            Creates a new value, altering the provided value and power (if nessessary) to express the value in standard form
+            </summary>
+            <param name="size">The size of the value</param>
+            <param name="standardPower">The standard form power (for the provided value).</param>
+            <param name="unit">The unit</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.StandardValue.#ctor(System.Double,QuasarCode.Library.Maths.Units,System.Int32,System.Int32)">
+            <summary>
+            Creates a new value, altering the provided value and power (if nessessary) to express the value in standard form
+            </summary>
+            <param name="size">The size of the value</param>
+            <param name="standardPower">The standard form power (for the provided value)</param>
+            <param name="unit">The unit</param>
+            <param name="unitPower">The unit's power</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.StandardValue.GetMagnitude">
+            <summary>
+            Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.StandardValue.ToString">
+            <summary>
+            Provides a string representation of the value with its unit
+            </summary>
+            <returns>The value as a string</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.StandardValue.ToValue">
+            <summary>
+            Converts to a Value object without standard form
+            </summary>
+            <returns>A new Value object</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Unit">
+            <summary>
+            A single base unit with an optional power
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Unit.Value">
+            <summary>
+            The base unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Unit.Power">
+            <summary>
+            The power on the unit
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.#ctor(QuasarCode.Library.Maths.Units,System.Int32)">
+            <summary>
+            Creates a new base unit with an optional power
+            </summary>
+            <param name="value">The base unit</param>
+            <param name="power">The power on the unit. Deafult is 1</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.GetUnitPairs">
+            <summary>
+            Allows compatibility between ordenary and compound unit types by providing common access to their data
+            </summary>
+            <returns>An array of UnitPowerPairs representing all units in the object</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.ToString">
+            <summary>
+            Provides a string representation of the unit
+            </summary>
+            <returns>The unit as a string</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.op_Equality(QuasarCode.Library.Maths.Unit,QuasarCode.Library.Maths.Unit)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.op_Inequality(QuasarCode.Library.Maths.Unit,QuasarCode.Library.Maths.Unit)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.Equals(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="o"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.GetHashCode">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:QuasarCode.Library.Maths.Units">
             <summary>
             
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.NoUnit">
+            <summary>
+            Lack of units
             </summary>
         </member>
         <member name="F:QuasarCode.Library.Maths.Units.Degrees">
@@ -1200,6 +1462,122 @@
             <summary>
             Unit of mass (Imperial)
             </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.h">
+            <summary>
+            Unit of time (SI)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.min">
+            <summary>
+            Unit of time (SI)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.s">
+            <summary>
+            Unit of time (SI base)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Units.ms">
+            <summary>
+            Unit of time (SI)
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Value">
+            <summary>
+            A value associated with a unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Value.Unit">
+            <summary>
+            The unit
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Value.Magnitude">
+            <summary>
+            The size of the value
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.#ctor(System.Double,QuasarCode.Library.Maths.IGeneralUnit)">
+            <summary>
+            Creates a new Value object
+            </summary>
+            <param name="size">The size of the value</param>
+            <param name="unit">The unit</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.#ctor(System.Double,QuasarCode.Library.Maths.Units,System.Int32)">
+            <summary>
+            Creates a new Value object
+            </summary>
+            <param name="size">The size of the value</param>
+            <param name="unit">The unit</param>
+            <param name="power">The unit's power</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.GetMagnitude">
+            <summary>
+            Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.ToString">
+            <summary>
+            Provides a string representation of the value with its unit
+            </summary>
+            <returns>The value as a string</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.ToStandardValue">
+            <summary>
+            Converts to a StandardValue object with standard form
+            </summary>
+            <returns>A new StandardValue object</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.op_Addition(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
+            <summary>
+            Adds two Value objects together provided their units are equivilant
+            </summary>
+            <param name="a">object 1</param>
+            <param name="b">object 2</param>
+            <returns>A new Value object using the unit specified by a</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.op_Subtraction(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
+            <summary>
+            Subtracts one Value object from annother provided their units are equivilant
+            </summary>
+            <param name="a">object 1</param>
+            <param name="b">object 2</param>
+            <returns>A new Value object using the unit specified by a</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.op_Multiply(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
+            <summary>
+            Multiplies two Value objects
+            </summary>
+            <param name="a">object 1</param>
+            <param name="b">object 2</param>
+            <returns>A new value object with a new unit</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.op_Division(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
+            <summary>
+            Divides one Value object by another
+            </summary>
+            <param name="a">object 1</param>
+            <param name="b">object 2</param>
+            <returns>A new value object with a new unit</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.op_Equality(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.op_Inequality(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
+            <summary>
+            
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
         </member>
         <member name="T:QuasarCode.Library.Tools.MultiItterator">
             <summary>

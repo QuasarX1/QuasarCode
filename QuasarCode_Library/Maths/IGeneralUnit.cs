@@ -14,5 +14,11 @@ namespace QuasarCode.Library.Maths
         /// </summary>
         /// <returns>An array of UnitPowerPairs representing all units in the object</returns>
         UnitPowerPair[] GetUnitPairs();
+
+        /// <summary>
+        /// Provides a string representation of the unit
+        /// </summary>
+        /// <returns>The unit as a string</returns>
+        string ToString();
     }
 }

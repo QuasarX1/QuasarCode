@@ -12,12 +12,12 @@ namespace QuasarCode.Library.Maths
         /// <summary>
         /// The unit
         /// </summary>
-        public IGeneralUnit Unit { get; }
+        public IGeneralUnit Unit { get; protected set; }
 
         /// <summary>
         /// The size of the value
         /// </summary>
-        public double Magnitude { get; }
+        public double Magnitude { get; protected set; }
 
         /// <summary>
         /// Creates a new Value object
@@ -54,12 +54,21 @@ namespace QuasarCode.Library.Maths
         }
 
         /// <summary>
+        /// Provides a string representation of the value with its unit
+        /// </summary>
+        /// <returns>The value as a string</returns>
+        public override string ToString()
+        {
+            return Magnitude.ToString() + ((Unit.ToString() != "") ? " " + Unit.ToString() : "");
+        }
+
+        /// <summary>
         /// Converts to a StandardValue object with standard form
         /// </summary>
         /// <returns>A new StandardValue object</returns>
         public StandardValue ToStandardValue()
         {
-            return new StandardValue(GetMagnitude(), 1, Unit);
+            return new StandardValue(GetMagnitude(), Unit);
         }
 
         /// <summary>
@@ -123,6 +132,28 @@ namespace QuasarCode.Library.Maths
             }
 
             return new Value(a.GetMagnitude() / b.GetMagnitude(), new CompoundUnit(a.Unit, new CompoundUnit(newUnits.ToArray())));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator ==(Value a, Value b)
+        {
+            return a.Magnitude == b.Magnitude && a.Unit == b.Unit;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool operator !=(Value a, Value b)
+        {
+            return a.Magnitude != b.Magnitude || a.Unit != b.Unit;
         }
     }
 }

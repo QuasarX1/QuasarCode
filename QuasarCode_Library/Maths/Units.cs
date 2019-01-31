@@ -83,9 +83,28 @@ namespace QuasarCode.Library.Maths
         /// <summary>
         /// Unit of mass (Imperial)
         /// </summary>
-        oz
+        oz,
 
 
         // time, other base quantities?
+        /// <summary>
+        /// Unit of time (SI)
+        /// </summary>
+        h,
+
+        /// <summary>
+        /// Unit of time (SI)
+        /// </summary>
+        min,
+
+        /// <summary>
+        /// Unit of time (SI base)
+        /// </summary>
+        s,
+
+        /// <summary>
+        /// Unit of time (SI)
+        /// </summary>
+        ms
     }
 }
