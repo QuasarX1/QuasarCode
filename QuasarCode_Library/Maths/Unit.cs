@@ -57,7 +57,20 @@ namespace QuasarCode.Library.Maths
             }
             else
             {
-                return Value.ToString() + "^" + Power.ToString();
+                string power = "";
+                foreach (char num in Power.ToString())
+                {
+                    if (num == '-')
+                    {
+                        power += Tools.StringLiterals.Superscript_Minus;
+                    }
+                    else
+                    {
+                        power += Tools.StringLiterals.SuperscriptInt[int.Parse((num.ToString()))];
+                    }
+                }
+
+                return Value.ToString() + power;
             }
         }
 
@@ -116,6 +129,14 @@ namespace QuasarCode.Library.Maths
             return !a.Equals(b);
         }
 
-        
+        /// <summary>
+        /// Raises a unit to a power
+        /// </summary>
+        /// <param name="p">The power</param>
+        /// <returns>A new IGeneralUnit instance</returns>
+        public IGeneralUnit Pow(int p)
+        {
+            return new Unit(Value, Power * p);
+        }
     }
 }

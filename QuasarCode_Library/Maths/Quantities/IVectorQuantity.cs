@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuasarCode.Library.Maths.Quantities
+namespace QuasarCode.Library.Maths._Quantities
 {
     /// <summary>
     /// 

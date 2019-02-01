@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using QuasarCode.Library.Maths.Matrices.Vectors;
 
-namespace QuasarCode.Library.Maths.Quantities.Base
+namespace QuasarCode.Library.Maths._Quantities.Base
 {
     /// <summary>
     /// 

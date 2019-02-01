@@ -492,12 +492,38 @@ namespace UnitTests_Windows
             Assert.AreEqual(true, accUnit == (CompoundUnit)acc.Unit);
 
             Print(velocity + " / " + time + " = " + acc);
-            Assert.AreEqual("2 m s^-1 / 1 s = 2 m s^-2", velocity + " / " + time + " = " + acc);
+            Assert.AreEqual("2 m s\u02C9\u00B9 / 1 s = 2 m s\u02C9\u00B2", velocity + " / " + time + " = " + acc);
             
             
             StandardValue sValue = new StandardValue(10.23, new CompoundUnit(new Tuple<Units, int>(Units.km, 1), new Tuple<Units, int>(Units.h, -1)), 2);
             Print(sValue);
-            Assert.AreEqual("1.023 x 10^3 km h^-1", sValue.ToString());
+            Assert.AreEqual("1.023 x 10\u00B3 km h\u02C9\u00B9", sValue.ToString());
+
+
+            Value r_1 = new Value(10, Units.m);
+            Value r2_1 = r_1 ^ 2;
+            Print(r2_1);
+
+
+            StandardValue r_2 = new StandardValue(10, Units.m);
+            StandardValue r2_2 = r_2 ^ 2;
+            Print(r2_2);
+
+
+            Value testConversion1 = new Value(1000, new Unit(Units.g));
+            Value gInKg = (Value)testConversion1.As(Units.Kg);
+            Print(gInKg.ToString() + " in " + testConversion1.ToString());
+            //Assert.AreEqual(1, gInKg.Magnitude);
+
+            Value testConversion2 = new Value(1, new Unit(Units.g));
+            StandardValue oxInGrams = ((Value)testConversion2.As(Units.oz)).ToStandardValue();
+            Print(oxInGrams.ToString() + " in " + testConversion2.ToString());
+            //Assert.AreEqual(0.03527396195, oxInGrams.GetMagnitude());
+
+            StandardValue testConversion3 = new StandardValue(1, new CompoundUnit(new Unit(Units.m), new Unit(Units.km)));
+            StandardValue m2Inmkm = ((Value)testConversion3.As(new Unit(Units.m, 2))).ToStandardValue();
+            Print(m2Inmkm.ToString() + " in " + testConversion3.ToString());
+            //Assert.AreEqual(1000, m2Inmkm.GetMagnitude());
         }
     }
 }

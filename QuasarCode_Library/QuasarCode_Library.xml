@@ -975,6 +975,13 @@
             <param name="b"></param>
             <returns></returns>
         </member>
+        <member name="M:QuasarCode.Library.Maths.CompoundUnit.Pow(System.Int32)">
+            <summary>
+            Raises a unit to a power
+            </summary>
+            <param name="p">The power</param>
+            <returns>A new IGeneralUnit instance</returns>
+        </member>
         <member name="T:QuasarCode.Library.Maths.Coordinates.Coordinate`1">
             <summary>
             
@@ -1069,6 +1076,13 @@
             </summary>
             <returns>The unit as a string</returns>
         </member>
+        <member name="M:QuasarCode.Library.Maths.IGeneralUnit.Pow(System.Int32)">
+            <summary>
+            Raises a unit to a power
+            </summary>
+            <param name="p">The power</param>
+            <returns>A new IGeneralUnit instance</returns>
+        </member>
         <member name="T:QuasarCode.Library.Maths.IStandardValue">
             <summary>
             A value in standard form associated with a unit
@@ -1084,6 +1098,13 @@
             Provides a string representation of the value with its unit
             </summary>
             <returns>The value as a string</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.IStandardValue.Pow(System.Int32)">
+            <summary>
+            Raises a standard value to a power
+            </summary>
+            <param name="p">The power</param>
+            <returns>A new standard value</returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.IUnit">
             <summary>
@@ -1120,6 +1141,27 @@
             Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
             </summary>
             <returns>The magnitude of the value</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.IValue.As(QuasarCode.Library.Maths.Units)">
+            <summary>
+            Converts the value to one with an equivilant unit
+            </summary>
+            <param name="unit">The new value's units</param>
+            <returns>The corisponding IValue object</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.IValue.As(QuasarCode.Library.Maths.IGeneralUnit)">
+            <summary>
+            Converts the value to one with an equivilant unit
+            </summary>
+            <param name="unit">The new value's units</param>
+            <returns>The corisponding IValue object</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.IValue.Pow(System.Int32)">
+            <summary>
+            Raises a value to a power
+            </summary>
+            <param name="p">The power</param>
+            <returns>A new value</returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1">
             <summary>
@@ -1161,46 +1203,46 @@
             <param name="magnitude"></param>
             <param name="direction"></param>
         </member>
-        <member name="T:QuasarCode.Library.Maths.Quantities.Base.Angle`1">
+        <member name="T:QuasarCode.Library.Maths._Quantities.Base.Angle`1">
             <summary>
             
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="M:QuasarCode.Library.Maths.Quantities.Base.Angle`1.#ctor(System.Double,QuasarCode.Library.Maths.Units)">
+        <member name="M:QuasarCode.Library.Maths._Quantities.Base.Angle`1.#ctor(System.Double,QuasarCode.Library.Maths.Units)">
             <summary>
             
             </summary>
             <param name="magnitude">The size of the mass</param>
             <param name="unit">The unit of mass</param>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.Magnitude">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Angle`1.Magnitude">
             <summary>
             The size of the mass
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.Unit">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Angle`1.Unit">
             <summary>
             The unit of mass
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.SIUnit">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Angle`1.SIUnit">
             <summary>
             
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.Direction">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Angle`1.Direction">
             <summary>
             
             </summary>
         </member>
-        <member name="T:QuasarCode.Library.Maths.Quantities.Base.Length`1">
+        <member name="T:QuasarCode.Library.Maths._Quantities.Base.Length`1">
             <summary>
             
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="M:QuasarCode.Library.Maths.Quantities.Base.Length`1.#ctor(System.Double,`0,QuasarCode.Library.Maths.Units)">
+        <member name="M:QuasarCode.Library.Maths._Quantities.Base.Length`1.#ctor(System.Double,`0,QuasarCode.Library.Maths.Units)">
             <summary>
             
             </summary>
@@ -1208,80 +1250,80 @@
             /// <param name="direction">    </param>
             <param name="unit">The unit of mass</param>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.Magnitude">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Length`1.Magnitude">
             <summary>
             The size of the mass
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.Unit">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Length`1.Unit">
             <summary>
             The unit of mass
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.SIUnit">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Length`1.SIUnit">
             <summary>
             
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.Direction">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Length`1.Direction">
             <summary>
             
             </summary>
         </member>
-        <member name="T:QuasarCode.Library.Maths.Quantities.Base.Mass">
+        <member name="T:QuasarCode.Library.Maths._Quantities.Base.Mass">
             <summary>
             The mesure of the matter comprising a body
             </summary>
         </member>
-        <member name="M:QuasarCode.Library.Maths.Quantities.Base.Mass.#ctor(System.Double,QuasarCode.Library.Maths.Units)">
+        <member name="M:QuasarCode.Library.Maths._Quantities.Base.Mass.#ctor(System.Double,QuasarCode.Library.Maths.Units)">
             <summary>
             
             </summary>
             <param name="magnitude">The size of the mass</param>
             <param name="unit">The unit of mass</param>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Mass.Magnitude">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Mass.Magnitude">
             <summary>
             The size of the mass
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Mass.Unit">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Mass.Unit">
             <summary>
             The unit of mass
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Mass.SIUnit">
+        <member name="P:QuasarCode.Library.Maths._Quantities.Base.Mass.SIUnit">
             <summary>
             
             </summary>
         </member>
-        <member name="T:QuasarCode.Library.Maths.Quantities.IQuantity">
+        <member name="T:QuasarCode.Library.Maths._Quantities.IQuantity">
             <summary>
             
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.IQuantity.Magnitude">
+        <member name="P:QuasarCode.Library.Maths._Quantities.IQuantity.Magnitude">
             <summary>
             
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.IQuantity.Unit">
+        <member name="P:QuasarCode.Library.Maths._Quantities.IQuantity.Unit">
             <summary>
             
             </summary>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.IQuantity.SIUnit">
+        <member name="P:QuasarCode.Library.Maths._Quantities.IQuantity.SIUnit">
             <summary>
             
             </summary>
         </member>
-        <member name="T:QuasarCode.Library.Maths.Quantities.IVectorQuantity`1">
+        <member name="T:QuasarCode.Library.Maths._Quantities.IVectorQuantity`1">
             <summary>
             
             </summary>
             <typeparam name="T">Coordinate system</typeparam>
         </member>
-        <member name="P:QuasarCode.Library.Maths.Quantities.IVectorQuantity`1.Direction">
+        <member name="P:QuasarCode.Library.Maths._Quantities.IVectorQuantity`1.Direction">
             <summary>
             
             </summary>
@@ -1313,11 +1355,23 @@
             <param name="unit">The unit</param>
             <param name="unitPower">The unit's power</param>
         </member>
+        <member name="M:QuasarCode.Library.Maths.StandardValue.NormaliseValue">
+            <summary>
+            Alter the Magnitude and Power so that the value is in standard form
+            </summary>
+        </member>
         <member name="M:QuasarCode.Library.Maths.StandardValue.GetMagnitude">
             <summary>
             Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
             </summary>
             <returns>The magnitude of the value</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.StandardValue.Pow(System.Int32)">
+            <summary>
+            Raises a standard value to a power
+            </summary>
+            <param name="p">The power</param>
+            <returns>A new standard value</returns>
         </member>
         <member name="M:QuasarCode.Library.Maths.StandardValue.ToString">
             <summary>
@@ -1402,6 +1456,28 @@
             <param name="b"></param>
             <returns></returns>
         </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.Pow(System.Int32)">
+            <summary>
+            Raises a unit to a power
+            </summary>
+            <param name="p">The power</param>
+            <returns>A new IGeneralUnit instance</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.UnitPowerPair">
+            <summary>
+            A unit paired with a power
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.UnitPowerPair.Unit">
+            <summary>
+            The unit
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.UnitPowerPair.Power">
+            <summary>
+            The power
+            </summary>
+        </member>
         <member name="T:QuasarCode.Library.Maths.Units">
             <summary>
             
@@ -1469,7 +1545,7 @@
         </member>
         <member name="F:QuasarCode.Library.Maths.Units.lb">
             <summary>
-            Unit of mass (Imperial)
+            Unit of mass (Imperial base)
             </summary>
         </member>
         <member name="F:QuasarCode.Library.Maths.Units.oz">
@@ -1496,6 +1572,94 @@
             <summary>
             Unit of time (SI)
             </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.UnitsMethods">
+            <summary>
+            Extends the Units enum
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.UnitsMethods.AsString(QuasarCode.Library.Maths.Units)">
+            <summary>
+            Gets the string representation of the unit
+            </summary>
+            <param name="unit">The unit</param>
+            <returns>String</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetBaseMultyplier(QuasarCode.Library.Maths.Units)">
+            <summary>
+            Retrives the multiplier used to convert 1 of the relivent system's base unit into the desiered unit. Use 1/return value to go the other way
+            </summary>
+            <param name="unit">The desiered unit</param>
+            <returns>Multiplier to convert the base unit into the desiered one</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetUnitConversion(QuasarCode.Library.Maths.Units,QuasarCode.Library.Maths.Units)">
+            <summary>
+            Calculates the conversion multiplier needed to convert between two Units
+            </summary>
+            <param name="currentUnit">The starting unit</param>
+            <param name="newUnit">The target unit</param>
+            <returns>Multyplier as a double</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities">
+            <summary>
+            Physical quantitys that have units
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Quantities.None">
+            <summary>No assigned quantity</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Quantities.Angle">
+            <summary></summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Quantities.Distance">
+            <summary></summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Quantities.Mass">
+            <summary></summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.Quantities.Time">
+            <summary></summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.QuantitiesMethods">
+            <summary>
+            Extends the Quantities enum
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.QuantitiesMethods.conversions">
+            <summary>
+            Array of relitive size between base quantities in a given system. The system is at the index of its enum integer value
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.QuantitiesMethods.GetSystemBaseUnit(QuasarCode.Library.Maths.Quantities,QuasarCode.Library.Maths.UnitSystems)">
+            <summary>
+            Gets the base unit for a quantity in a system
+            </summary>
+            <param name="quantity">The quantity</param>
+            /// <param name="system">The unisystemt</param>
+            <returns>The quantity's base unit in the system</returns>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.UnitSystems">
+            <summary>
+            The systems of mesurement with avalable units
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.UnitSystems.None">
+            <summary>No present system</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.UnitSystems.SI">
+            <summary>SI or Metric</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.UnitSystems.Imperial">
+            <summary></summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.UnitSystems.Degrees">
+            <summary></summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.UnitSystems.Radians">
+            <summary></summary>
+        </member>
+        <member name="F:QuasarCode.Library.Maths.UnitSystems.Time">
+            <summary></summary>
         </member>
         <member name="T:QuasarCode.Library.Maths.Value">
             <summary>
@@ -1532,6 +1696,27 @@
             Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
             </summary>
             <returns>The magnitude of the value</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.As(QuasarCode.Library.Maths.Units)">
+            <summary>
+            Converts the value to one with an equivilant unit
+            </summary>
+            <param name="unit">The new value's units</param>
+            <returns>The corisponding IValue object</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.As(QuasarCode.Library.Maths.IGeneralUnit)">
+            <summary>
+            Converts the value to one with an equivilant unit
+            </summary>
+            <param name="unit">The new value's units</param>
+            <returns>The corisponding IValue object</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.Pow(System.Int32)">
+            <summary>
+            Raises a value to a power
+            </summary>
+            <param name="p">The power</param>
+            <returns>A new value</returns>
         </member>
         <member name="M:QuasarCode.Library.Maths.Value.ToString">
             <summary>
@@ -1604,6 +1789,14 @@
             </summary>
             <param name="a"></param>
             <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.op_ExclusiveOr(QuasarCode.Library.Maths.Value,System.Int32)">
+            <summary>
+            Raise the value to an integer power
+            </summary>
+            <param name="a">The value</param>
+            <param name="b">Integer power</param>
             <returns></returns>
         </member>
         <member name="T:QuasarCode.Library.Tools.MultiItterator">
@@ -1715,6 +1908,49 @@
             <summary>
             Resets the enumeration.
             </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Tools.StringLiterals">
+            <summary>
+            A collection of usefull string litterals
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_0">
+            <summary>Superscript 0</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_1">
+            <summary>Superscript 1</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_2">
+            <summary>Superscript 2</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_3">
+            <summary>Superscript 3</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_4">
+            <summary>Superscript 4</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_5">
+            <summary>Superscript 5</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_6">
+            <summary>Superscript 6</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_7">
+            <summary>Superscript 7</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_8">
+            <summary>Superscript 8</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_9">
+            <summary>Superscript 9</summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.SuperscriptInt">
+            <summary>
+            Superscript integer characters (value is the index)
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_Minus">
+            <summary>Superscript -</summary>
         </member>
         <member name="T:QuasarCode.Library.Tools.Validators">
             <summary>

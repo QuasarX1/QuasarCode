@@ -54,6 +54,38 @@ namespace QuasarCode.Library.Maths
         }
 
         /// <summary>
+        /// Converts the value to one with an equivilant unit
+        /// </summary>
+        /// <param name="unit">The new value's units</param>
+        /// <returns>The corisponding IValue object</returns>
+        public IValue As(Units unit)
+        {
+            IGeneralUnit newUnit = new Unit(unit);
+
+            return new Value(GetMagnitude() * UnitsMethods.GetUnitConversion(Unit, newUnit), newUnit);
+        }
+
+        /// <summary>
+        /// Converts the value to one with an equivilant unit
+        /// </summary>
+        /// <param name="unit">The new value's units</param>
+        /// <returns>The corisponding IValue object</returns>
+        public IValue As(IGeneralUnit unit)
+        {
+            return new Value(GetMagnitude() * UnitsMethods.GetUnitConversion(Unit, unit), unit);
+        }
+
+        /// <summary>
+        /// Raises a value to a power
+        /// </summary>
+        /// <param name="p">The power</param>
+        /// <returns>A new value</returns>
+        public IValue Pow(int p)
+        {
+            return this ^ p;
+        }
+
+        /// <summary>
         /// Provides a string representation of the value with its unit
         /// </summary>
         /// <returns>The value as a string</returns>
@@ -180,6 +212,22 @@ namespace QuasarCode.Library.Maths
         public static bool operator !=(Value a, Value b)
         {
             return !a.Equals(b);
+        }
+
+        /// <summary>
+        /// Raise the value to an integer power
+        /// </summary>
+        /// <param name="a">The value</param>
+        /// <param name="b">Integer power</param>
+        /// <returns></returns>
+        public static Value operator ^(Value a, int b)
+        {
+            Value result = new Value(a.Magnitude, a.Unit);
+            
+            result.Magnitude = Math.Pow(result.Magnitude, b);
+            result.Unit = a.Unit.Pow(b);
+
+            return result;
         }
     }
 }

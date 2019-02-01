@@ -24,19 +24,7 @@ namespace QuasarCode.Library.Maths
         {
             StandardPower = standardPower;
 
-            while (!(Magnitude >= 0 && Magnitude < 10))
-            {
-                if (Magnitude < 0)
-                {
-                    Magnitude *= 10;
-                    StandardPower -= 1;
-                }
-                else// Magnitude >= 10
-                {
-                    Magnitude /= 10;
-                    StandardPower += 1;
-                }
-            }
+            NormaliseValue();
         }
 
         /// <summary>
@@ -50,6 +38,14 @@ namespace QuasarCode.Library.Maths
         {
             StandardPower = standardPower;
 
+            NormaliseValue();
+        }
+
+        /// <summary>
+        /// Alter the Magnitude and Power so that the value is in standard form
+        /// </summary>
+        protected void NormaliseValue()
+        {
             while (!(Magnitude >= 0 && Magnitude < 10))
             {
                 if (Magnitude < 0)
@@ -75,12 +71,35 @@ namespace QuasarCode.Library.Maths
         }
 
         /// <summary>
+        /// Raises a standard value to a power
+        /// </summary>
+        /// <param name="p">The power</param>
+        /// <returns>A new standard value</returns>
+        new public IStandardValue Pow(int p)
+        {
+            return this ^ p;
+        }
+
+        /// <summary>
         /// Provides a string representation of the value with its unit
         /// </summary>
         /// <returns>The value as a string</returns>
         public override string ToString()
         {
-            return Magnitude.ToString() + ((StandardPower != 0) ?  " x 10^" + StandardPower : "") + ((Unit.ToString() != "") ? " " + Unit.ToString() : "");
+            string power = "";
+            foreach (char num in StandardPower.ToString())
+            {
+                if (num == '-')
+                {
+                    power += Tools.StringLiterals.Superscript_Minus;
+                }
+                else
+                {
+                    power += Tools.StringLiterals.SuperscriptInt[int.Parse((num.ToString()))];
+                }
+            }
+            
+            return Magnitude.ToString() + ((StandardPower != 0) ?  " x 10" + power : "") + ((Unit.ToString() != "") ? " " + Unit.ToString() : "");
         }
 
         /// <summary>
@@ -100,11 +119,15 @@ namespace QuasarCode.Library.Maths
         /// <returns></returns>
         public static StandardValue operator ^(StandardValue a, int b)
         {
-            a.Magnitude *= b;
-            a.StandardPower *= b;
-            //a.Unit ^= b;
+            StandardValue result = new StandardValue(a.Magnitude, a.Unit, a.StandardPower);
 
-            return a;
+            result.Magnitude = Math.Pow(result.Magnitude, b);
+            result.StandardPower *= b;
+            result.Unit = a.Unit.Pow(b);
+
+            result.NormaliseValue();
+
+            return result;
         }
     }
 }

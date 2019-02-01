@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuasarCode.Library.Maths.Quantities.Base
+namespace QuasarCode.Library.Maths._Quantities.Base
 {
     /// <summary>
     /// The mesure of the matter comprising a body

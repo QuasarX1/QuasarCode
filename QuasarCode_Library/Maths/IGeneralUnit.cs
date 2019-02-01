@@ -20,5 +20,12 @@ namespace QuasarCode.Library.Maths
         /// </summary>
         /// <returns>The unit as a string</returns>
         string ToString();
+
+        /// <summary>
+        /// Raises a unit to a power
+        /// </summary>
+        /// <param name="p">The power</param>
+        /// <returns>A new IGeneralUnit instance</returns>
+        IGeneralUnit Pow(int p);
     }
 }

@@ -25,7 +25,7 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems
 
             for (int i = 0; i < dimentions; i++)
             {
-                axis.Add(typeof(Quantities.Base.Length<Cartesian>));
+                axis.Add(typeof(_Quantities.Base.Length<Cartesian>));
             }
         }
     }

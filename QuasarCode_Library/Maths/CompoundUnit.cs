@@ -81,7 +81,20 @@ namespace QuasarCode.Library.Maths
 
                 foreach (UnitPowerPair pair in Values)
                 {
-                    unitString += pair.Unit.ToString() + ((pair.Power == 1) ? "" : "^" + pair.Power.ToString()) + " ";
+                    string power = "";
+                    foreach (char num in pair.Power.ToString())
+                    {
+                        if (num == '-')
+                        {
+                            power += Tools.StringLiterals.Superscript_Minus;
+                        }
+                        else
+                        {
+                            power += Tools.StringLiterals.SuperscriptInt[int.Parse((num.ToString()))];
+                        }
+                    }
+
+                    unitString += pair.Unit.ToString() + ((pair.Power == 1) ? "" : power) + " ";
                 }
 
                 if (unitString != "")
@@ -208,6 +221,22 @@ namespace QuasarCode.Library.Maths
         public static bool operator !=(CompoundUnit a, CompoundUnit b)
         {
             return !a.Equals(b);
+        }
+
+        /// <summary>
+        /// Raises a unit to a power
+        /// </summary>
+        /// <param name="p">The power</param>
+        /// <returns>A new IGeneralUnit instance</returns>
+        public IGeneralUnit Pow(int p)
+        {
+            UnitPowerPair[] newValues = new UnitPowerPair[Values.Length];
+            for (int i = 0; i < Values.Length; i++)
+            {
+                newValues[i] = new UnitPowerPair { Unit = Values[i].Unit, Power = Values[i].Power * p };
+            }
+            
+            return new CompoundUnit(newValues);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems
         /// <summary>
         /// 
         /// </summary>
-        public Quantities.IQuantity[] Axis { get; set; }
+        public _Quantities.IQuantity[] Axis { get; set; }
 
 
     }
