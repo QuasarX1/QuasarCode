@@ -4,14 +4,15 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Coordinates.Systems
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface ICoordinateSystem
     {
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //Type[] Axis { get; set; }
+        Dictionary<string, IGeneralUnit> Axes { get; }
+
+        int Dimentions { get; }
+    }
+
+    public interface ICoordinateSystem<T> : ICoordinateSystem where T : ICoordinateSystem<T>
+    {
+        event Func<ICoordinateSystem<T>, ICoordinate<T>[]> ReportPosition;
     }
 }

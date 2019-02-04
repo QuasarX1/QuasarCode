@@ -8,7 +8,7 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems
     /// <summary>
     /// 
     /// </summary>
-    public class Cartesian: ICoordinateSystem
+    public class _Cartesian: ICoordinateSystem
     {
         /// <summary>
         /// 
@@ -19,13 +19,13 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems
         /// 
         /// </summary>
         /// <param name="dimentions"></param>
-        public Cartesian(int dimentions)
+        public _Cartesian(int dimentions)
         {
             List<Type> axis = new List<Type>();
 
             for (int i = 0; i < dimentions; i++)
             {
-                axis.Add(typeof(_Quantities.Base.Length<Cartesian>));
+                axis.Add(typeof(_Quantities.Base.Length<_Cartesian>));
             }
         }
     }

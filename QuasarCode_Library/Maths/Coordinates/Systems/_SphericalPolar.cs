@@ -7,7 +7,7 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems
     /// <summary>
     /// 
     /// </summary>
-    public class CylindricalPolar : ICoordinateSystem
+    public class _SphericalPolar : ICoordinateSystem
     {
         /// <summary>
         /// 
