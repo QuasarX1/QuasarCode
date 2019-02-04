@@ -46,6 +46,11 @@ namespace QuasarCode.Library.Maths
         /// <returns>A new value</returns>
         IValue Pow(int p);
 
-        Value Round(int digits);
+        /// <summary>
+        /// Rounds the value to the provided number of decimal places provided
+        /// </summary>
+        /// <param name="digits">The number of decimal places to round to.</param>
+        /// <returns>A new IValue instance with the rounded value</returns>
+        IValue Round(int digits);
     }
 }

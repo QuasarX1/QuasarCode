@@ -1106,6 +1106,13 @@
             <param name="p">The power</param>
             <returns>A new standard value</returns>
         </member>
+        <member name="M:QuasarCode.Library.Maths.IStandardValue.Round(System.Int32)">
+            <summary>
+            Rounds the value to the provided number of decimal places provided
+            </summary>
+            <param name="digits">The number of decimal places to round to.</param>
+            <returns>A new IStandardValue instance with the rounded value</returns>
+        </member>
         <member name="T:QuasarCode.Library.Maths.IUnit">
             <summary>
             A single base unit with an optional power
@@ -1162,6 +1169,13 @@
             </summary>
             <param name="p">The power</param>
             <returns>A new value</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.IValue.Round(System.Int32)">
+            <summary>
+            Rounds the value to the provided number of decimal places provided
+            </summary>
+            <param name="digits">The number of decimal places to round to.</param>
+            <returns>A new IValue instance with the rounded value</returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1">
             <summary>
@@ -1373,6 +1387,13 @@
             <param name="p">The power</param>
             <returns>A new standard value</returns>
         </member>
+        <member name="M:QuasarCode.Library.Maths.StandardValue.Round(System.Int32)">
+            <summary>
+            Rounds the value to the provided number of decimal places provided. Uses Math.Round()
+            </summary>
+            <param name="digits">The number of decimal places to round to.</param>
+            <returns>A new StandardValue object with the rounded value</returns>
+        </member>
         <member name="M:QuasarCode.Library.Maths.StandardValue.ToString">
             <summary>
             Provides a string representation of the value with its unit
@@ -1456,6 +1477,12 @@
             <param name="b"></param>
             <returns></returns>
         </member>
+        <member name="M:QuasarCode.Library.Maths.Unit.op_Implicit(QuasarCode.Library.Maths.Units)~QuasarCode.Library.Maths.Unit">
+            <summary>
+            Converts a single unit from the Units enum to a Unit object with a power of 1
+            </summary>
+            <param name="o"></param>
+        </member>
         <member name="M:QuasarCode.Library.Maths.Unit.Pow(System.Int32)">
             <summary>
             Raises a unit to a power
@@ -1480,7 +1507,7 @@
         </member>
         <member name="T:QuasarCode.Library.Maths.Units">
             <summary>
-            
+            An enumeration of units relating to physical quantities
             </summary>
         </member>
         <member name="F:QuasarCode.Library.Maths.Units.NoUnit">
@@ -1578,6 +1605,14 @@
             Extends the Units enum
             </summary>
         </member>
+        <member name="M:QuasarCode.Library.Maths.UnitsMethods.Pow(QuasarCode.Library.Maths.Units,System.Int32)">
+            <summary>
+            Creates a Unit object with a single unit raised to a power
+            </summary>
+            <param name="unit">The unit</param>
+            <param name="power">The power to raise the unit to</param>
+            <returns></returns>
+        </member>
         <member name="M:QuasarCode.Library.Maths.UnitsMethods.AsString(QuasarCode.Library.Maths.Units)">
             <summary>
             Gets the string representation of the unit
@@ -1592,6 +1627,20 @@
             <param name="unit">The desiered unit</param>
             <returns>Multiplier to convert the base unit into the desiered one</returns>
         </member>
+        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetQuantity(QuasarCode.Library.Maths.Units)">
+            <summary>
+            Retrives the physical Quantity the provided unit is associated with
+            </summary>
+            <param name="unit">The unit</param>
+            <returns>An option from the Quantities enum</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetSystem(QuasarCode.Library.Maths.Units)">
+            <summary>
+            Retrives the unit System the provided unit is associated with
+            </summary>
+            <param name="unit">The unit</param>
+            <returns>An option from the UnitSystems enum</returns>
+        </member>
         <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetUnitConversion(QuasarCode.Library.Maths.Units,QuasarCode.Library.Maths.Units)">
             <summary>
             Calculates the conversion multiplier needed to convert between two Units
@@ -1599,6 +1648,14 @@
             <param name="currentUnit">The starting unit</param>
             <param name="newUnit">The target unit</param>
             <returns>Multyplier as a double</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetUnitConversion(QuasarCode.Library.Maths.IGeneralUnit,QuasarCode.Library.Maths.IGeneralUnit)">
+            <summary>
+            Gets the conversion multiplier applied to the current value needed to associate the value with a different unit
+            </summary>
+            <param name="currentUnit">The current units</param>
+            <param name="newUnit">The units to convert to</param>
+            <returns>A multiplier as a double. current * multiplier = new</returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.Quantities">
             <summary>
@@ -1637,6 +1694,13 @@
             <param name="quantity">The quantity</param>
             /// <param name="system">The unisystemt</param>
             <returns>The quantity's base unit in the system</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.QuantitiesMethods.GetSystemConversions(QuasarCode.Library.Maths.Quantities)">
+            <summary>
+            Gets a dictionary of relitive values for the base quantities in a unit system. The SI unit normaly takes a value of 1
+            </summary>
+            <param name="currentQuantity"></param>
+            <returns></returns>
         </member>
         <member name="T:QuasarCode.Library.Maths.UnitSystems">
             <summary>
@@ -1717,6 +1781,13 @@
             </summary>
             <param name="p">The power</param>
             <returns>A new value</returns>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Value.Round(System.Int32)">
+            <summary>
+            Rounds the value to the provided number of decimal places provided. Uses Math.Round()
+            </summary>
+            <param name="digits">The number of decimal places to round to.</param>
+            <returns>A new Value object with the rounded value</returns>
         </member>
         <member name="M:QuasarCode.Library.Maths.Value.ToString">
             <summary>

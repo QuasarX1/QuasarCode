@@ -85,7 +85,12 @@ namespace QuasarCode.Library.Maths
             return this ^ p;
         }
 
-        public Value Round(int digits)
+        /// <summary>
+        /// Rounds the value to the provided number of decimal places provided. Uses Math.Round()
+        /// </summary>
+        /// <param name="digits">The number of decimal places to round to.</param>
+        /// <returns>A new Value object with the rounded value</returns>
+        public IValue Round(int digits)
         {
             return new Value(Math.Round(this.Magnitude, digits, MidpointRounding.AwayFromZero), this.Unit);
         }

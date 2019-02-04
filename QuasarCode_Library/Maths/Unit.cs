@@ -129,6 +129,10 @@ namespace QuasarCode.Library.Maths
             return !a.Equals(b);
         }
 
+        /// <summary>
+        /// Converts a single unit from the Units enum to a Unit object with a power of 1
+        /// </summary>
+        /// <param name="o"></param>
         public static implicit operator Unit(Units o)
         {
             return new Unit(o);

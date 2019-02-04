@@ -6,7 +6,7 @@ using System.Linq;
 namespace QuasarCode.Library.Maths
 {
     /// <summary>
-    /// 
+    /// An enumeration of units relating to physical quantities
     /// </summary>
     public enum Units
     {
@@ -114,9 +114,15 @@ namespace QuasarCode.Library.Maths
     /// </summary>
     public static class UnitsMethods
     {
-        public static Unit Pow(this Units a, int b)
+        /// <summary>
+        /// Creates a Unit object with a single unit raised to a power
+        /// </summary>
+        /// <param name="unit">The unit</param>
+        /// <param name="power">The power to raise the unit to</param>
+        /// <returns></returns>
+        public static Unit Pow(this Units unit, int power)
         {
-            return new Unit(a, b);
+            return new Unit(unit, power);
         }
 
         /// <summary>
@@ -266,6 +272,11 @@ namespace QuasarCode.Library.Maths
             return result;
         }
 
+        /// <summary>
+        /// Retrives the physical Quantity the provided unit is associated with
+        /// </summary>
+        /// <param name="unit">The unit</param>
+        /// <returns>An option from the Quantities enum</returns>
         public static Quantities GetQuantity(this Units unit)
         {
             Quantities result;
@@ -334,6 +345,11 @@ namespace QuasarCode.Library.Maths
             return result;
         }
 
+        /// <summary>
+        /// Retrives the unit System the provided unit is associated with
+        /// </summary>
+        /// <param name="unit">The unit</param>
+        /// <returns>An option from the UnitSystems enum</returns>
         public static UnitSystems GetSystem(this Units unit)
         {
             UnitSystems result;
@@ -410,12 +426,19 @@ namespace QuasarCode.Library.Maths
         /// <returns>Multyplier as a double</returns>
         public static double GetUnitConversion(Units currentUnit, Units newUnit)
         {
+            Quantities currentQuantity = currentUnit.GetQuantity();
+            Quantities newQuantity = newUnit.GetQuantity();
+            
             double conversion;
 
-            if (currentUnit.GetQuantity() == newUnit.GetQuantity())
+            if (currentQuantity == newQuantity)
             {
                 // The units can be converted between
-                if (currentUnit.GetSystem() == newUnit.GetSystem())
+
+                UnitSystems currentSystem = currentUnit.GetSystem();
+                UnitSystems newSystem = newUnit.GetSystem();
+
+                if (currentSystem == newSystem)
                 {
                     // Same system - convert from current unit to base to new unit
                     // new * 1/current
@@ -424,17 +447,17 @@ namespace QuasarCode.Library.Maths
                 else
                 {
                     // Systems are different - convert to system base -> convert to new system -> convert to new unit
-                    conversion = GetUnitConversion(currentUnit, currentUnit.GetQuantity().GetSystemBaseUnit(currentUnit.GetSystem()));
 
-                    Dictionary<Units, double> conversions = currentUnit.GetQuantity().GetSystemConversions();
+                    Units currentSystemBaseUnit = currentQuantity.GetSystemBaseUnit(currentSystem);
+                    Units newSystemBaseUnit = newQuantity.GetSystemBaseUnit(newSystem);
 
-                    //conversion *= conversions[newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())] / conversions[currentUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())];
-                    conversion *= conversions[newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())] / conversions[currentUnit.GetQuantity().GetSystemBaseUnit(currentUnit.GetSystem())];
-                    //double t1 = conversions[currentUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())];
-                    //double t2 = conversions[newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())];
-                    //conversion *= conversions[currentUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())] / conversions[newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())];
+                    conversion = GetUnitConversion(currentUnit, currentQuantity.GetSystemBaseUnit(currentSystem));
 
-                    conversion *= GetUnitConversion(newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem()), newUnit);
+                    Dictionary<Units, double> conversions = currentQuantity.GetSystemConversions();
+
+                    conversion *= conversions[newQuantity.GetSystemBaseUnit(newSystem)] / conversions[currentQuantity.GetSystemBaseUnit(currentSystem)];
+
+                    conversion *= GetUnitConversion(newQuantity.GetSystemBaseUnit(newSystem), newUnit);
                 }
 
                 return conversion;
@@ -446,11 +469,15 @@ namespace QuasarCode.Library.Maths
             }
         }
 
+        /// <summary>
+        /// Gets the conversion multiplier applied to the current value needed to associate the value with a different unit
+        /// </summary>
+        /// <param name="currentUnit">The current units</param>
+        /// <param name="newUnit">The units to convert to</param>
+        /// <returns>A multiplier as a double. current * multiplier = new</returns>
         public static double GetUnitConversion(IGeneralUnit currentUnit, IGeneralUnit newUnit)
         {
             double conversion = 1;
-
-            //don't forget to take powers into account!!!!!!
 
             CompoundUnit currentCompound = new CompoundUnit(currentUnit);
             CompoundUnit newCompound = new CompoundUnit(newUnit);
@@ -617,6 +644,11 @@ namespace QuasarCode.Library.Maths
             return result;
         }
 
+        /// <summary>
+        /// Gets a dictionary of relitive values for the base quantities in a unit system. The SI unit normaly takes a value of 1
+        /// </summary>
+        /// <param name="currentQuantity"></param>
+        /// <returns></returns>
         public static Dictionary<Units, double> GetSystemConversions(this Quantities currentQuantity)
         {
             return conversions[(int)currentQuantity];

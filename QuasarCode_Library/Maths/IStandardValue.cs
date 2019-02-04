@@ -26,5 +26,12 @@ namespace QuasarCode.Library.Maths
         /// <param name="p">The power</param>
         /// <returns>A new standard value</returns>
         new IStandardValue Pow(int p);
+
+        /// <summary>
+        /// Rounds the value to the provided number of decimal places provided
+        /// </summary>
+        /// <param name="digits">The number of decimal places to round to.</param>
+        /// <returns>A new IStandardValue instance with the rounded value</returns>
+        new IStandardValue Round(int digits);
     }
 }
