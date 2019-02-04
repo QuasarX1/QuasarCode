@@ -513,17 +513,23 @@ namespace UnitTests_Windows
             Value testConversion1 = new Value(1000, new Unit(Units.g));
             Value gInKg = (Value)testConversion1.As(Units.Kg);
             Print(gInKg.ToString() + " in " + testConversion1.ToString());
-            //Assert.AreEqual(1, gInKg.Magnitude);
+            Assert.AreEqual(1, gInKg.Magnitude);
 
             Value testConversion2 = new Value(1, new Unit(Units.g));
             StandardValue oxInGrams = ((Value)testConversion2.As(Units.oz)).ToStandardValue();
             Print(oxInGrams.ToString() + " in " + testConversion2.ToString());
-            //Assert.AreEqual(0.03527396195, oxInGrams.GetMagnitude());
+            Assert.AreEqual(Math.Round(0.0352739619495804, 6, MidpointRounding.AwayFromZero), Math.Round(oxInGrams.GetMagnitude(), 6, MidpointRounding.AwayFromZero));
 
             StandardValue testConversion3 = new StandardValue(1, new CompoundUnit(new Unit(Units.m), new Unit(Units.km)));
-            StandardValue m2Inmkm = ((Value)testConversion3.As(new Unit(Units.m, 2))).ToStandardValue();
+            StandardValue m2Inmkm = ((Value)testConversion3.As(Units.m.Pow(2))).ToStandardValue();
             Print(m2Inmkm.ToString() + " in " + testConversion3.ToString());
-            //Assert.AreEqual(1000, m2Inmkm.GetMagnitude());
+            Assert.AreEqual(1000, m2Inmkm.GetMagnitude());
+
+            StandardValue testConversion4 = new StandardValue(1, new CompoundUnit((Unit)Units.Kg, (Unit)Units.m, Units.s.Pow(-1)));
+            StandardValue noncenceConversion = ((Value)testConversion4.As(new CompoundUnit((Unit)Units.lb, (Unit)Units.m, Units.s.Pow(-1)))).ToStandardValue();
+            Print(noncenceConversion.ToString() + " in " + testConversion4.ToString());
+
+            Print(new Value(16, Units.oz).Round() + " in " + new Value(16, Units.oz).As((Unit)Units.lb));
         }
     }
 }

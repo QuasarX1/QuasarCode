@@ -114,6 +114,11 @@ namespace QuasarCode.Library.Maths
     /// </summary>
     public static class UnitsMethods
     {
+        public static Unit Pow(this Units a, int b)
+        {
+            return new Unit(a, b);
+        }
+
         /// <summary>
         /// Gets the string representation of the unit
         /// </summary>
@@ -423,7 +428,11 @@ namespace QuasarCode.Library.Maths
 
                     Dictionary<Units, double> conversions = currentUnit.GetQuantity().GetSystemConversions();
 
-                    conversion *= conversions[newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())] / conversions[currentUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())];
+                    //conversion *= conversions[newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())] / conversions[currentUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())];
+                    conversion *= conversions[newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())] / conversions[currentUnit.GetQuantity().GetSystemBaseUnit(currentUnit.GetSystem())];
+                    //double t1 = conversions[currentUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())];
+                    //double t2 = conversions[newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())];
+                    //conversion *= conversions[currentUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())] / conversions[newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem())];
 
                     conversion *= GetUnitConversion(newUnit.GetQuantity().GetSystemBaseUnit(newUnit.GetSystem()), newUnit);
                 }
@@ -483,7 +492,7 @@ namespace QuasarCode.Library.Maths
                     newValues[i] = new UnitPowerPair { Unit = preConvertedUnit, Power = newValues[i].Power };
                 }
 
-                conversion = GetUnitConversion(new CompoundUnit(currentValues.ToArray()), new CompoundUnit(newValues.ToArray()));
+                conversion *= GetUnitConversion(new CompoundUnit(currentValues.ToArray()), new CompoundUnit(newValues.ToArray()));
             }
 
             return conversion;

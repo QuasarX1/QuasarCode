@@ -45,5 +45,7 @@ namespace QuasarCode.Library.Maths
         /// <param name="p">The power</param>
         /// <returns>A new value</returns>
         IValue Pow(int p);
+
+        void RoundV(int digits);
     }
 }

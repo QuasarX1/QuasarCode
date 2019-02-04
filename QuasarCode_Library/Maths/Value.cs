@@ -62,7 +62,7 @@ namespace QuasarCode.Library.Maths
         {
             IGeneralUnit newUnit = new Unit(unit);
 
-            return new Value(GetMagnitude() * UnitsMethods.GetUnitConversion(Unit, newUnit), newUnit);
+            return new Value(GetMagnitude() / UnitsMethods.GetUnitConversion(Unit, newUnit), newUnit);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace QuasarCode.Library.Maths
         /// <returns>The corisponding IValue object</returns>
         public IValue As(IGeneralUnit unit)
         {
-            return new Value(GetMagnitude() * UnitsMethods.GetUnitConversion(Unit, unit), unit);
+            return new Value(GetMagnitude() / UnitsMethods.GetUnitConversion(Unit, unit), unit);
         }
 
         /// <summary>
@@ -83,6 +83,11 @@ namespace QuasarCode.Library.Maths
         public IValue Pow(int p)
         {
             return this ^ p;
+        }
+
+        public void RoundV(int digits)
+        {
+            Magnitude = Math.Round(this.Magnitude, digits, MidpointRounding.AwayFromZero);
         }
 
         /// <summary>
@@ -228,6 +233,13 @@ namespace QuasarCode.Library.Maths
             result.Unit = a.Unit.Pow(b);
 
             return result;
+        }
+
+        public static Value Round(this Value value, int digits)
+        {
+            value.RoundV(digits);
+
+            return value;
         }
     }
 }

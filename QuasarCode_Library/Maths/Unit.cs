@@ -129,6 +129,11 @@ namespace QuasarCode.Library.Maths
             return !a.Equals(b);
         }
 
+        public static implicit operator Unit(Units o)
+        {
+            return new Unit(o);
+        }
+
         /// <summary>
         /// Raises a unit to a power
         /// </summary>
