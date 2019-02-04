@@ -21,8 +21,6 @@
   <ItemGroup>
     <Folder Include="Games\Systems\" />
     <Folder Include="IO\FileSystem\" />
-    <Folder Include="Maths\Coordinates\ND\" />
-    <Folder Include="Maths\Coordinates\Systems\ND\" />
     <Folder Include="Maths\Quantities\Compound\" />
     <Folder Include="Tools\DataStructures\" />
     <Folder Include="Tools\Exceptions\" />
