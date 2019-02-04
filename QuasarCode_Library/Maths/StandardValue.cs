@@ -80,6 +80,11 @@ namespace QuasarCode.Library.Maths
             return this ^ p;
         }
 
+        public new Value Round(int digits)
+        {
+            return new StandardValue(Math.Round(this.Magnitude, digits, MidpointRounding.AwayFromZero), this.Unit, this.StandardPower);
+        }
+
         /// <summary>
         /// Provides a string representation of the value with its unit
         /// </summary>

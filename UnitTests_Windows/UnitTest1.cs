@@ -527,9 +527,9 @@ namespace UnitTests_Windows
 
             StandardValue testConversion4 = new StandardValue(1, new CompoundUnit((Unit)Units.Kg, (Unit)Units.m, Units.s.Pow(-1)));
             StandardValue noncenceConversion = ((Value)testConversion4.As(new CompoundUnit((Unit)Units.lb, (Unit)Units.m, Units.s.Pow(-1)))).ToStandardValue();
-            Print(noncenceConversion.ToString() + " in " + testConversion4.ToString());
+            Print(noncenceConversion.Round(5).ToString() + " in " + testConversion4.ToString());
 
-            Print(new Value(16, Units.oz).Round() + " in " + new Value(16, Units.oz).As((Unit)Units.lb));
+            Print(new Value(16, Units.oz) + " in " + new Value(16, Units.oz).As((Unit)Units.lb));
         }
     }
 }

@@ -85,9 +85,9 @@ namespace QuasarCode.Library.Maths
             return this ^ p;
         }
 
-        public void RoundV(int digits)
+        public Value Round(int digits)
         {
-            Magnitude = Math.Round(this.Magnitude, digits, MidpointRounding.AwayFromZero);
+            return new Value(Math.Round(this.Magnitude, digits, MidpointRounding.AwayFromZero), this.Unit);
         }
 
         /// <summary>
@@ -233,13 +233,6 @@ namespace QuasarCode.Library.Maths
             result.Unit = a.Unit.Pow(b);
 
             return result;
-        }
-
-        public static Value Round(this Value value, int digits)
-        {
-            value.RoundV(digits);
-
-            return value;
         }
     }
 }

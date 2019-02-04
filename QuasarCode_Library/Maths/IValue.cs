@@ -46,6 +46,6 @@ namespace QuasarCode.Library.Maths
         /// <returns>A new value</returns>
         IValue Pow(int p);
 
-        void RoundV(int digits);
+        Value Round(int digits);
     }
 }
