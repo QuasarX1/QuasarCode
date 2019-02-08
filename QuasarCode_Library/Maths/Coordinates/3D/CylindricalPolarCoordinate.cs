@@ -12,20 +12,21 @@ namespace QuasarCode.Library.Maths.Coordinates._3D
     {
         public ICoordinateSystem<CylindricalPolar> System { get; }
 
-        public double[] Ordinates { get; }
+        public decimal[] Ordinates { get; }
 
         public int Dimentions { get { return System.Dimentions; } }
 
-        public CylindricalPolarCoordinate(ICoordinateSystem<CylindricalPolar> coordinateSystem, double r, double theta, double z)
+        public CylindricalPolarCoordinate(ICoordinateSystem<CylindricalPolar> coordinateSystem, decimal r, decimal theta, decimal z)
         {
             System = coordinateSystem;
 
-            Ordinates = new double[] { r, theta, z };
+            Ordinates = new decimal[] { r, theta, z };
         }
 
-        public Vector<CylindricalPolar> GetVector()
+        public Matrices.Vectors.IVector GetVector()
         {
-
+            throw new NotImplementedException();
+            //return new Matrices.Vectors.PolarVector<CylindricalPolar>(Ordinates);
         }
     }
 }

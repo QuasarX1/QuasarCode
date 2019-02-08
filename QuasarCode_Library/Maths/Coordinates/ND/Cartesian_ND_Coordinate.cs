@@ -12,20 +12,20 @@ namespace QuasarCode.Library.Maths.Coordinates.ND
     {
         public ICoordinateSystem<Cartesian_ND> System { get; }
 
-        public double[] Ordinates { get; }
+        public decimal[] Ordinates { get; }
 
         public int Dimentions { get { return System.Dimentions; } }
 
-        public Cartesian_ND_Coordinate(ICoordinateSystem<Cartesian_ND> coordinateSystem, params double[] ordinates)
+        public Cartesian_ND_Coordinate(ICoordinateSystem<Cartesian_ND> coordinateSystem, params decimal[] ordinates)
         {
             System = coordinateSystem;
 
             Ordinates = ordinates;
         }
 
-        public Vector<Cartesian_ND> GetVector()
+        public Matrices.Vectors.IVector GetVector()
         {
-
+            return new Matrices.Vectors.CartesianVector<Cartesian_ND>(Ordinates);
         }
     }
 }

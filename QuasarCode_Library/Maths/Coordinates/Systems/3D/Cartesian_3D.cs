@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Coordinates.Systems._3D
 {
-    public class Cartesian_3D : ICoordinateSystem<Cartesian_3D>
+    public class Cartesian_3D : ICartesianBase<Cartesian_3D>
     {
         public Dictionary<string, IGeneralUnit> Axes { get; }
 

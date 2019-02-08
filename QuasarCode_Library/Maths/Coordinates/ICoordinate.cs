@@ -11,10 +11,10 @@ namespace QuasarCode.Library.Maths.Coordinates
     {
         Systems.ICoordinateSystem<T> System { get; }
 
-        double[] Ordinates { get; }
+        decimal[] Ordinates { get; }
 
         int Dimentions { get; }
 
-        Vector<T> GetVector();
+        Matrices.Vectors.IVector GetVector();
     }
 }

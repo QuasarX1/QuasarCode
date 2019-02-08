@@ -11,20 +11,21 @@ namespace QuasarCode.Library.Maths.Coordinates._2D
     {
         public ICoordinateSystem<Polar> System { get; }
 
-        public double[] Ordinates { get; }
+        public decimal[] Ordinates { get; }
 
         public int Dimentions { get { return System.Dimentions; } }
 
-        public PolarCoordinate(ICoordinateSystem<Polar> coordinateSystem, double r, double theta)
+        public PolarCoordinate(ICoordinateSystem<Polar> coordinateSystem, decimal r, decimal theta)
         {
             System = coordinateSystem;
 
-            Ordinates = new double[] { r, theta };
+            Ordinates = new decimal[] { r, theta };
         }
 
-        public Vector<Polar> GetVector()
+        public Matrices.Vectors.IVector GetVector()
         {
-
+            throw new NotImplementedException();
+            //return new Matrices.Vectors.PolarVector<Polar>(Ordinates);
         }
     }
 }

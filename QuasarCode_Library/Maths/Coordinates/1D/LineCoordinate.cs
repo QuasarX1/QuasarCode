@@ -7,24 +7,24 @@ using QuasarCode.Library.Maths.Coordinates.Systems._1D;
 
 namespace QuasarCode.Library.Maths.Coordinates._1D
 {
-    public class Coordinate_1D : ICoordinate<Line>
+    public class LineCoordinate : ICoordinate<Line>
     {
         public ICoordinateSystem<Line> System { get; }
 
-        public double[] Ordinates { get; }
+        public decimal[] Ordinates { get; }
 
         public int Dimentions { get { return System.Dimentions; } }
 
-        public Coordinate_1D(ICoordinateSystem<Line> coordinateSystem, double x)
+        public LineCoordinate(ICoordinateSystem<Line> coordinateSystem, decimal x)
         {
             System = coordinateSystem;
 
-            Ordinates = new double[] { x };
+            Ordinates = new decimal[] { x };
         }
 
-        public Vector<Line> GetVector()
+        public Matrices.Vectors.IVector GetVector()
         {
-
+            return new Matrices.Vectors.CartesianVector<Line>(Ordinates);
         }
     }
 }

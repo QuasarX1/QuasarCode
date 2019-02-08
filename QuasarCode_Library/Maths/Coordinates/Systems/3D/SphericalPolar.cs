@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Coordinates.Systems._3D
 {
-    public class SphericalPolar : ICoordinateSystem<SphericalPolar>
+    public class SphericalPolar : IPolarBase<SphericalPolar>
     {
         public Dictionary<string, IGeneralUnit> Axes { get; }
 

@@ -11,6 +11,7 @@ using QuasarCode.Library.Games.Spinners;
 using QuasarCode.Library.Games.Dice;
 using QuasarCode.Library.Games.Cards;
 using QuasarCode.Library.Maths;
+using QuasarCode.Library.Maths.Matrices;
 
 namespace UnitTests_Windows
 {
@@ -530,6 +531,110 @@ namespace UnitTests_Windows
             Print(noncenceConversion.Round(5).ToString() + " in " + testConversion4.ToString());
 
             Print(new Value(16, Units.oz) + " in " + new Value(16, Units.oz).As((Unit)Units.lb));
+        }
+
+        [TestMethod]
+        public void Matraces_Test()
+        {
+            NMatrix matrix = new NMatrix(new decimal[2, 2] { { 1, 0 }, { 0, 1 } });
+
+            Assert.AreEqual(1, matrix.Determinant());
+
+            Assert.AreEqual(4, (matrix * 2).Determinant());
+
+            NMatrix test = matrix.T();
+            Assert.IsTrue(matrix == matrix.T());
+
+            Assert.IsTrue(matrix == matrix.I());
+
+
+            NMatrix A = new NMatrix(new double[2, 2] {
+                { 2, 4 },
+                { 7, 5 }
+            });
+
+            NMatrix A_T = A.T();
+
+            Assert.AreEqual(new NMatrix(new double[2, 2] { { 2, 7 }, { 4, 5 } }), A_T);
+
+            NMatrix A_I = A.I();
+
+            NMatrix A_adjoint = A.Adjoint();
+
+            NMatrix A_inverse = A_adjoint / A.Determinant();
+
+            NMatrix A_result = A * A_inverse;
+
+            Assert.AreEqual(A_I, A_result);
+
+
+            NMatrix B = new NMatrix(new decimal[2, 2] {
+                { 2, 4 },
+                { 1, 5 }
+            });
+
+            NMatrix B_T = B.T();
+
+            Assert.AreEqual(new NMatrix(new decimal[2, 2] { { 2, 1 }, { 4, 5 } }), B_T);
+
+            NMatrix B_I = B.I();
+
+            NMatrix B_adjoint = B.Adjoint();
+
+            NMatrix B_inverse = B_adjoint / B.Determinant();
+
+            NMatrix B_result = B * B_inverse;
+
+            Assert.AreEqual(B_I, B_result);
+
+
+            NMatrix C = new NMatrix(new double[3, 3] {
+            { 13, 8, -12 },
+            { 11, 20, 6 },
+            { 3, -8, 15 }
+            });
+
+            NMatrix C_T = C.T();
+
+            Assert.AreEqual(new NMatrix(new double[3, 3] { { 13, 11, 3 }, { 8, 20, -8 }, { -12, 6, 15 } }), C_T);
+
+            NMatrix C_I = C.I();
+
+            NMatrix C_adjoint = C.Adjoint();
+
+            NMatrix C_inverse = C_adjoint / C.Determinant();
+
+            NMatrix C_result = C * C_inverse;
+
+            Assert.AreEqual(C_I, C_result);
+
+
+            NMatrix D = new NMatrix(new double[3, 3] {
+                { 255, -98, 11 },
+                { 45, 67, 59 },
+                { -15, 36, -20 }
+            });
+            Print(D.ToStringWithBrackets());
+
+            NMatrix D_T = D.T();
+            Print(D_T.ToStringWithBrackets());
+            
+            Assert.AreEqual(new NMatrix(new double[3, 3] { { 255, 45, -15 }, { -98, 67, 36 }, { 11, 59, -20 } }), D_T);
+
+            NMatrix D_I = D.I();
+            Print(D_I.ToStringWithBrackets());
+
+            NMatrix D_adjoint = D.Adjoint();
+            Print(D_adjoint.ToStringWithBrackets());
+
+            NMatrix D_inverse = D_adjoint / D.Determinant();
+            Print(D_inverse.ToStringWithBrackets());
+
+            NMatrix D_result = D * D_inverse;
+            Print(D_result.ToStringWithBrackets());
+            
+            Assert.AreEqual(D_I, D_result);
+            Assert.IsFalse(D_I.EqualsPrecision(D_result, 24));
         }
     }
 }
