@@ -4,7 +4,7 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Matrices.Vectors
 {
-    public interface ILocatedVector<T> where T : Coordinates.Systems.ICoordinateSystem<T>
+    public interface ILocatedVector<T> : IVector<T> where T : Coordinates.Systems.ICoordinateSystem<T>
     {
         Coordinates.ICoordinate<T> Location { get; }
     }

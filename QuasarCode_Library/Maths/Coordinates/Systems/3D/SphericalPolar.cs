@@ -4,6 +4,9 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Coordinates.Systems._3D
 {
+    /// <summary>
+    /// Three dimantional polar coordinate system in a spherical shape
+    /// </summary>
     public class SphericalPolar : IPolarBase<SphericalPolar>
     {
         public Dictionary<string, IGeneralUnit> Axes { get; }
@@ -19,6 +22,16 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems._3D
         public SphericalPolar(IGeneralUnit xUnit, IGeneralUnit yUnit, IGeneralUnit zUnit)
         {
             Axes = new Dictionary<string, IGeneralUnit> { { "r", xUnit }, { "theta", yUnit }, { "phi", zUnit } };
+        }
+
+        public ICoordinate<SphericalPolar> GetCoordinate(params decimal[] ordinates)
+        {
+            if (ordinates.Length != this.Dimentions)
+            {
+                throw new ArgumentException("Coordinate creation failed - number of ordinates provided was inapropriate for the number of dimentions in the coordinate system.");
+            }
+
+            return new Coordinates._3D.SphericalPolarCoordinate(this, ordinates[0], ordinates[1], ordinates[2]);
         }
 
 

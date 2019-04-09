@@ -7,7 +7,7 @@ namespace QuasarCode.Library.Maths.Coordinates
     /// <summary>
     /// 
     /// </summary>
-    public interface ICoordinate<T> where T : Systems.ICoordinateSystem<T>
+    public interface ICoordinate<T> : ICloneable where T : Systems.ICoordinateSystem<T>
     {
         Systems.ICoordinateSystem<T> System { get; }
 
@@ -15,6 +15,10 @@ namespace QuasarCode.Library.Maths.Coordinates
 
         int Dimentions { get; }
 
-        Matrices.Vectors.IVector GetVector();
+        Matrices.Vectors.IVector<T> GetVector();
+
+        void Move(Matrices.Vectors.IVector<T> vector);
+
+        string ToString();
     }
 }

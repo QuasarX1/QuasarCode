@@ -987,6 +987,11 @@
             
             </summary>
         </member>
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems._1D.Line">
+            <summary>
+            One dimentional coordinate system
+            </summary>
+        </member>
         <member name="T:QuasarCode.Library.Maths.ICompoundUnit">
             <summary>
             Multiple base units with powers multiplied together to form a compound unit
@@ -1642,6 +1647,532 @@
             <param name="a">The value</param>
             <param name="b">Integer power</param>
             <returns></returns>
+        </member>
+        <member name="T:QuasarCode.Library.Symbolic.Constant">
+            <summary>
+            Object representing a symbol with a constant value
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Symbolic.Constant.PI">
+            <summary>
+            The constant pi
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Symbolic.Constant.E">
+            <summary>
+            Euler's number "e"
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Symbolic.Constant.PHI">
+            <summary>
+            The golden ratio
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Constant.#ctor(System.Decimal)">
+            <summary>
+            Creates a new constant with no symbol from a number
+            </summary>
+            <param name="initialValue">The constant's value</param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Constant.#ctor(System.String,System.Decimal)">
+            <summary>
+            Creates a new constant with a symbol and number
+            </summary>
+            <param name="symbol">The algebraic letter or symbol to associate with the value</param>
+            <param name="initialValue">The constant's value</param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Constant.GetComponentString(System.Int32)">
+            <summary>
+            Gets a string containing the constant's symbol or its value if it has no symbol
+            </summary>
+            <param name="expantionDepth">The number of symbol layers to expand before just quoting symbols</param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Constant.Evaluate">
+            <summary>
+            Provides the constant's value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:QuasarCode.Library.Symbolic.Symbol">
+            <summary>
+            Basis for symbolic objects
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Symbolic.Symbol.symbol">
+            <summary>
+            The mathmatical symbol for the value
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Symbolic.Symbol.Value">
+            <summary>
+            The value associated with the symbol
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Symbolic.Symbol.Operators">
+            <summary>
+            Array of all valid operators as strings
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Symbol.GetComponentString(System.Int32)">
+            <summary>
+            Gets a string containing the components that produce the value
+            </summary>
+            <param name="expantionDepth">The number of symbol layers to expand before just quoting symbols</param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Symbol.Evaluate">
+            <summary>
+            Attempts to evaluate the expression to provide a value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:QuasarCode.Library.Symbolic.Variable">
+            <summary>
+            Object representing a symbol with an equivalant expression which can be evaluated or displayed
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.Symbolic.Variable.operations">
+            <summary>
+            A list of symbolic operators and operands to be evaluated in order
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Symbolic.Variable.Initialised">
+            <summary>
+            Boolean swich indicating whether or not the variable has been asigned an expression to evaluate
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Symbolic.Variable.Value">
+            <summary>
+            The value associated with the symbol. This attempts to evaluate the variable's expression or overites it with a constant
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.SetValue(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Assignes the variable an expression taken from the provided symbol. Overites any current expression
+            </summary>
+            <param name="value">The variable or constant to set the variable's expression to</param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.#ctor(System.String)">
+            <summary>
+            Creates an un-initialised variable with a symbol
+            </summary>
+            <param name="symbol"></param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.#ctor(System.String,System.Decimal)">
+            <summary>
+            Creates a variable and asigns it an initial value
+            </summary>
+            <param name="symbol"></param>
+            <param name="initialValue"></param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.#ctor(System.String,QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Creates a variable and asigns it an initial value
+            </summary>
+            <param name="symbol"></param>
+            <param name="initialValue"></param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.Initialise(System.Decimal)">
+            <summary>
+            Initialises an un-initialised variable with a starting value
+            </summary>
+            <param name="initialValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.Initialise(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Initialises an un-initialised variable with a starting expression
+            </summary>
+            <param name="initialValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.Evaluate">
+            <summary>
+            Attempts to evaluate the expression to provide a value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.GetComponentString(System.Int32)">
+            <summary>
+            Gets a string containing the components that produce the value
+            </summary>
+            <param name="expantionDepth">The number of symbol layers to expand before just quoting symbols</param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.GetEquasion(System.Int32)">
+            <summary>
+            Constructs an algebraic equasion as a string representing the variable and its expression
+            </summary>
+            <param name="expantionDepth">The number of symbol layers to expand before just quoting symbols</param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.GetOperations(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Returns the contence of a symbol in the format of a variable's operations list
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Adds two variables
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Ads a variable and a symbol
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Adds a symbol and a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
+            <summary>
+            Adds a variable and a constant produced from a number
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Adds a onstant produced from a number and a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.Add(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Adds a symbol to the variable
+            </summary>
+            <param name="a"></param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Subtracts one variable from another
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Subtracts a symbol from a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Subtracts a variable from a symbol
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
+            <summary>
+            Subtracts a constant produced from a number from a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Subtracts a variable from a constant produced from a number
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.Subtract(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Subtracts a symbol from the variable
+            </summary>
+            <param name="a"></param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Multiplies a variable by another
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Multiplies a variable by a symbol
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Multiplies a symbol by a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
+            <summary>
+            Multiplies a variable by a constant produced from a number
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Multiplies a constant produced from a number by a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.Multyply(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Multiplies the variable by a symbol
+            </summary>
+            <param name="a"></param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Divides a variable by another
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Divides a variable by a symbol
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Divides a symbol by a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
+            <summary>
+            Divides a variable by a constant produced from a number
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Divides a constant produced from a number by a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.Divide(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Divides the variable by a symbol
+            </summary>
+            <param name="a"></param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Raises one variable to the power of another
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Raises a variable to the power of a symbol
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Raises a symbol to the power of a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
+            <summary>
+            Raises a variable to the power of a constant produced from a number
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Raises a constant produced from a number to the power of a variable
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.Pow(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Raises the variable to the power of a symbol
+            </summary>
+            <param name="a"></param>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.sqrt(QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Square roots a variable
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.sqrt(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Square roots a symbol
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.sqrt(System.Decimal)">
+            <summary>
+            Square roots a constant produced from a number
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.sqrt">
+            <summary>
+            Square roots the variable
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.sin(QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Applies the sin function to a variable
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.sin(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Applies the sin function to a symbol
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.sin(System.Decimal)">
+            <summary>
+            Applies the sin function to a constant produced from a number
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.sin">
+            <summary>
+            Applies the sin function to the variable
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.cos(QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Applies the cosine function to a variable
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.cos(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Applies the cosin function to a symbol
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.cos(System.Decimal)">
+            <summary>
+            Applies the cosin function to a constant produced from a number
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.cos">
+            <summary>
+            Applies the cosin function to the variable
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.tan(QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Applies the tangent function to a variable
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.tan(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Applies the tangent function to a symbol
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.tan(System.Decimal)">
+            <summary>
+            Applies the tangent function to a constant produced from a number
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.tan">
+            <summary>
+            Applies the tangent function to the variable
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.abs(QuasarCode.Library.Symbolic.Variable)">
+            <summary>
+            Makes value of a variable positive
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.abs(QuasarCode.Library.Symbolic.Symbol)">
+            <summary>
+            Makes value of a symbol positive
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.abs(System.Decimal)">
+            <summary>
+            Makes value of a constant produced from a number positive
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QuasarCode.Library.Symbolic.Variable.abs">
+            <summary>
+            Makes value of the variable positive
+            </summary>
         </member>
         <member name="T:QuasarCode.Library.Tools.MultiItterator">
             <summary>

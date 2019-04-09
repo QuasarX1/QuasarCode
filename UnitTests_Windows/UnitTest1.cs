@@ -12,6 +12,19 @@ using QuasarCode.Library.Games.Dice;
 using QuasarCode.Library.Games.Cards;
 using QuasarCode.Library.Maths;
 using QuasarCode.Library.Maths.Matrices;
+using QuasarCode.Library.Maths.Matrices.Vectors;
+using QuasarCode.Library.Maths.Coordinates;
+using QuasarCode.Library.Maths.Coordinates._1D;
+using QuasarCode.Library.Maths.Coordinates._2D;
+using QuasarCode.Library.Maths.Coordinates._3D;
+using QuasarCode.Library.Maths.Coordinates.ND;
+using QuasarCode.Library.Maths.Coordinates.Systems;
+using QuasarCode.Library.Maths.Coordinates.Systems._1D;
+using QuasarCode.Library.Maths.Coordinates.Systems._2D;
+using QuasarCode.Library.Maths.Coordinates.Systems._3D;
+using QuasarCode.Library.Maths.Coordinates.Systems.ND;
+using QuasarCode.Library.Maths.Fields;
+using QuasarCode.Library.Symbolic;
 
 namespace UnitTests_Windows
 {
@@ -635,6 +648,153 @@ namespace UnitTests_Windows
             
             Assert.AreEqual(D_I, D_result);
             Assert.IsFalse(D_I.EqualsPrecision(D_result, 24));
+        }
+
+        [TestMethod]
+        public void Vectors_Test()
+        {
+            var spaceTime = new Cartesian_ND(Units.m, Units.m, Units.m, Units.s);
+
+            var i = new CartesianVector<Cartesian_ND>(1, 0, 0, 0);// Instantaniously move 1 in x
+
+            var j = new CartesianVector<Cartesian_ND>(0, 1, 0, 0);// Instantaniously move 1 in y
+
+            var k = new CartesianVector<Cartesian_ND>(0, 0, 1, 0);// Instantaniously move 1 in z
+
+            var t = new CartesianVector<Cartesian_ND>(0, 0, 0, 1);// Move 1 in t
+
+            var it = i + t;// Move 1 in x in 1 t
+            var jt = j + t;// Move 1 in y in 1 t
+            var kt = k + t;// Move 1 in z in 1 t
+
+            var loc = new Cartesian_ND_Coordinate(spaceTime, 0, 0, 0, 0);
+
+            CartesianVector<Cartesian_ND> doSomthing(int time)
+            {
+                CartesianVector<Cartesian_ND> result = new CartesianVector<Cartesian_ND>(0, 0, 0, 0);
+
+                Random rand = new Random(DateTime.Now.GetHashCode() + time);
+
+                result += (rand.Next(-10, 20) * i) + (rand.Next(-10, 20) * j) + (rand.Next(-10, 20) * k);
+
+                return result;
+            }
+
+            CartesianVector<Cartesian_ND> movement;
+            for (int time = 0; time < 200; time++)
+            {
+                movement = new CartesianVector<Cartesian_ND>(0, 0, 0, 1);
+
+                movement += doSomthing(time);
+
+                loc.Move(movement);
+            }
+            
+            Print(loc.Ordinates[0].ToString() + ", " + loc.Ordinates[1].ToString() + ", " + loc.Ordinates[2].ToString());
+        }
+
+        [TestMethod]
+        public void Field_Test()
+        {
+            var space = new Cartesian_3D(Units.m, Units.m, Units.m);
+
+            var loc0 = new Cartesian_3D_Coordinate(space, 0, 0, 0);
+            var loc = new Cartesian_3D_Coordinate(space, 10, 0, 0);
+
+            LocatedCartesianVector<Cartesian_3D> fieldEquasion(ICoordinate<Cartesian_3D> coordinate) =>new LocatedCartesianVector<Cartesian_3D>(coordinate, (decimal)(0.01 * -Math.Pow((double)coordinate.Ordinates[0], 2)), (decimal)(0.01 * -Math.Pow((double)coordinate.Ordinates[1], 2)), (decimal)(0.01 * -Math.Pow((double)coordinate.Ordinates[2], 2)));
+
+            var flow = new VectorField<Cartesian_3D, LocatedCartesianVector<Cartesian_3D>>(space, new Func<ICoordinate<Cartesian_3D>, LocatedCartesianVector<Cartesian_3D>>(fieldEquasion));
+            
+            int count = 0;
+            Print(loc.Ordinates[0].ToString() + ", " + loc.Ordinates[1].ToString() + ", " + loc.Ordinates[2].ToString());
+            while ((loc.Ordinates[0] != loc0.Ordinates[0] || loc.Ordinates[1] != loc0.Ordinates[1] || loc.Ordinates[2] != loc0.Ordinates[2]) && count < 200)
+            {
+                loc.Move(flow.AtLoc(loc));
+                Print(loc.ToString() + flow.CalculateAtLoc(loc).ToString());
+
+                count++;
+            }
+
+
+
+            ScalarField<Cartesian_2D> potential;
+            VectorField<Cartesian_2D, LocatedCartesianVector<Cartesian_2D>> EField;
+
+            decimal q1 = 1;
+            decimal q2 = -1;
+
+            decimal EFieldEquasion(ICoordinate<Cartesian_2D> coordinate)
+            {
+                return (1 / (4 * (decimal)Math.PI * (decimal)0.00000000000885418781762039)) * ((q1 * q2) / (decimal)(Math.Pow((double)coordinate.Ordinates[0], 2) + Math.Pow((double)coordinate.Ordinates[1], 2)));
+            }
+
+            decimal EFieldPotential(ICoordinate<Cartesian_2D> coordinate)
+            {
+                return (1 / (4 * (decimal)Math.PI * (decimal)0.00000000000885418781762039)) * (q1 / (decimal)Math.Sqrt(Math.Pow((double)coordinate.Ordinates[0], 2) + Math.Pow((double)coordinate.Ordinates[1], 2)));
+            }
+
+            potential = new ScalarField<Cartesian_2D>(new Cartesian_2D(Units.m, Units.m), EFieldPotential);
+        }
+
+        [TestMethod]
+        public void Symbolic_Test()
+        {
+            Variable A = new Variable("A");
+
+            Variable r = new Variable("r");
+            
+            A.SetValue(Constant.PI * (r ^ 2));
+
+            Print(A.GetEquasion(20));
+
+            r.Initialise(5);
+
+            Print("r = 5: " + A.Value);
+
+            r.Value = 10;
+
+            Print("r = 10: " + A.Value);
+
+            Print();
+
+
+            Variable y = new Variable("y");
+
+            Variable m = new Variable("m").Initialise(2);
+
+            Variable x = new Variable("x");
+
+            Variable c = new Variable("c").Initialise(1);
+
+            Print(y.GetEquasion());
+
+            y.SetValue(m * x + c);
+
+            Print(y.GetEquasion());
+
+            x.SetValue(new Variable("i", 1) + new Variable("j", 1) + new Variable("k", 1));
+
+            Print(y.GetEquasion());
+
+            Print(y.GetEquasion(20));// Not evaluating j and k
+
+            Print("y = " + y.Value);
+
+            Print();
+
+
+            Variable theta = new Variable("theta").Initialise(Constant.PI);
+
+            Variable result = Variable.tan(theta);
+
+            Print(result.GetEquasion());
+            Print(result.GetEquasion(20));
+            Print(result.Value);
+
+            Print();
+
+
+            Print(Constant.PHI.symbol + " = " + Constant.PHI.Value);
         }
     }
 }

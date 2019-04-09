@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace QuasarCode.Library.Maths.Matrices.Vectors
 {
-    public class CartesianVector<T> : NMatrix, IVector where T : Coordinates.Systems.ICartesianBase<T>
+    public class CartesianVector<T> : NMatrix, IVector<T> where T : Coordinates.Systems.ICartesianBase<T>
     {
-        public NMatrix Components { get; }
+        //public NMatrix Components { get; }
 
         public decimal[] ComponentArray
         {
@@ -27,17 +27,36 @@ namespace QuasarCode.Library.Maths.Matrices.Vectors
             get
             {
                 decimal sum = 0;
-                for (int i = 0; i < Components.Rows; i++)
+                for (int i = 0; i < this.Rows; i++)
                 {
-                    sum += (decimal)Math.Pow((double)Components[i, 0], 2);
+                    sum += (decimal)Math.Pow((double)this.Data[i, 0], 2);
                 }
 
                 return (decimal)Math.Sqrt((double)sum);
             }
             set
             {
-                // Use matrix to ajust components to produce requested mag
-                // or just find mag. ratio...
+                decimal ratio = value / Magnitude;
+
+                Multiply(ratio);
+            }
+        }
+
+        public IVector Direction {
+            get
+            {
+                return new CartesianVector<T>(this / Magnitude);
+            }
+            set
+            {
+                // Temporeraly store the magnitude
+                decimal mag = this.Magnitude;
+
+                // change vector to the provided vector which is pointing in the desired direction
+                this.Data = GridFromArray(value.ComponentArray);
+
+                //Rejust to the origanal magnitude
+                this.Magnitude = mag;
             }
         }
 
@@ -62,6 +81,14 @@ namespace QuasarCode.Library.Maths.Matrices.Vectors
 
         public CartesianVector(CartesianVector<T> vector) : base(vector.Data) { }
 
+        public CartesianVector(IMatrix matrix) : base(matrix.GetData())
+        {
+            if (this.Columns > 1)
+            {
+                throw new ArgumentException("Vector creation from matrix failed - the matrix had more than one column.");
+            }
+        }
+
         public static string[] ComponentIdentifiers = new string[] { "i", "j", "k", "l", "m", "n", "o", "p" };
 
         new public string ToString()
@@ -76,9 +103,24 @@ namespace QuasarCode.Library.Maths.Matrices.Vectors
                 }
             }
 
-            result = result.Remove(result.Length - 2);
+            if (result.Length > 0)
+            {
+                result = result.Remove(result.Length - 2);
+            }
 
             return result;
+        }
+
+        public IVector<T> AsUnitVector()
+        {
+            return UnitVector();
+        }
+
+        public CartesianVector<T> UnitVector()
+        {
+            var newVector = new CartesianVector<T>(this);
+            newVector.Magnitude = 1;
+            return newVector;
         }
 
         public string[] GetComponentStrings()
@@ -108,12 +150,12 @@ namespace QuasarCode.Library.Maths.Matrices.Vectors
             return result;
         }
 
-        public decimal Dot(IVector vector)
+        public decimal Dot(IVector<T> vector)
         {
             return base.Dot(vector);
         }
 
-        public IVector Cross(IVector vector)
+        public IVector<T> Cross(IVector<T> vector)
         {
             if (this.Rows != vector.Rows || this.Columns != vector.Columns)
             {
@@ -140,5 +182,91 @@ namespace QuasarCode.Library.Maths.Matrices.Vectors
         }
 
         public decimal this[int row] { get { return this.Data[row, 0]; } }
+
+        public IVector<T> Add(IVector<T> vector)
+        {
+            NMatrix result = new NMatrix(this.GetData());
+
+            result.Add(vector);
+
+            return new CartesianVector<T>(result);
+        }
+
+        public IVector<T> Subtract(IVector<T> vector)
+        {
+            NMatrix result = new NMatrix(this.GetData());
+
+            result.Subtract(vector);
+
+            return new CartesianVector<T>(result);
+        }
+
+        public IVector<T> Multyply(IVector<T> vector)
+        {
+            NMatrix result = new NMatrix(this.GetData());
+
+            result.Multiply(vector);
+
+            return new CartesianVector<T>(result);
+        }
+
+        public IVector<T> Divide(IVector<T> vector)
+        {
+            NMatrix result = new NMatrix(this.GetData());
+
+            result.Divide(vector);
+
+            return new CartesianVector<T>(result);
+        }
+        
+        public static CartesianVector<T> operator +(CartesianVector<T> a, CartesianVector<T> b)
+        {
+            return new CartesianVector<T>((NMatrix)a + (NMatrix)b);
+        }
+
+        public static CartesianVector<T> operator +(CartesianVector<T> a, decimal b)
+        {
+            return new CartesianVector<T>((NMatrix)a + b);
+        }
+
+        public static CartesianVector<T> operator +(decimal a, CartesianVector<T> b)
+        {
+            return new CartesianVector<T>(a + (NMatrix)b);
+        }
+
+        public static CartesianVector<T> operator -(CartesianVector<T> a, CartesianVector<T> b)
+        {
+            return new CartesianVector<T>((NMatrix)a - (NMatrix)b);
+        }
+
+        public static CartesianVector<T> operator -(CartesianVector<T> a, decimal b)
+        {
+            return new CartesianVector<T>((NMatrix)a - b);
+        }
+
+        public static CartesianVector<T> operator -(decimal a, CartesianVector<T> b)
+        {
+            return new CartesianVector<T>(a - (NMatrix)b);
+        }
+        
+        public static CartesianVector<T> operator *(CartesianVector<T> a, decimal b)
+        {
+            return new CartesianVector<T>((NMatrix)a * b);
+        }
+
+        public static CartesianVector<T> operator *(decimal a, CartesianVector<T> b)
+        {
+            return new CartesianVector<T>(a * (NMatrix)b);
+        }
+
+        public static CartesianVector<T> operator /(CartesianVector<T> a, decimal b)
+        {
+            return new CartesianVector<T>((NMatrix)a / b);
+        }
+
+        public static CartesianVector<T> operator /(decimal a, CartesianVector<T> b)
+        {
+            return new CartesianVector<T>(a / (NMatrix)b);
+        }
     }
 }

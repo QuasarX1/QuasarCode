@@ -4,7 +4,8 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Matrices.Vectors
 {
-    //public class PolarVector<T> : NMatrix, IVector where T : Coordinates.Systems.IPolarBase<T>
+    //public class PolarVector<T> : NMatrix, IVector<T> where T : Coordinates.Systems.IPolarBase<T>
     //{
+    //Implement as bearing????
     //}
 }

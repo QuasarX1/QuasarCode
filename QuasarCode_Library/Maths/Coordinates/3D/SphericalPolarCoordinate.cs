@@ -23,10 +23,35 @@ namespace QuasarCode.Library.Maths.Coordinates._3D
             Ordinates = new decimal[] { r, theta, phi };
         }
 
-        public Matrices.Vectors.IVector GetVector()
+        public Matrices.Vectors.IVector<SphericalPolar> GetVector()
         {
             throw new NotImplementedException();
             //return new Matrices.Vectors.PolarVector<SphericalPolar>(Ordinates);
+        }
+
+        public void Move(Matrices.Vectors.IVector<SphericalPolar> vector)
+        {
+            if (vector.Rows != this.Dimentions)
+            {
+                throw new ArgumentException("The vector provided has the wrong number of dimentions.");
+            }
+
+            decimal[] result = GetVector().Add(vector).ComponentArray;
+
+            for (int i = 0; i < Dimentions; i++)
+            {
+                Ordinates[i] = result[i];
+            }
+        }
+
+        new public object Clone()
+        {
+            return new SphericalPolarCoordinate(this.System, this.Ordinates[0], this.Ordinates[1], this.Ordinates[2]);
+        }
+
+        public override string ToString()
+        {
+            return "(" + Ordinates[0].ToString() + ", " + Ordinates[1].ToString() + ", " + Ordinates[2].ToString() + ")";
         }
     }
 }

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Coordinates.Systems.ND
 {
+    /// <summary>
+    /// Multi-dimantional cartesian coordinate system
+    /// </summary>
     public class Cartesian_ND : ICartesianBase<Cartesian_ND>
     {
         public Dictionary<string, IGeneralUnit> Axes { get; }
@@ -33,6 +36,16 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems.ND
             }
 
             Dimentions = Axes.Count;
+        }
+
+        public ICoordinate<Cartesian_ND> GetCoordinate(params decimal[] ordinates)
+        {
+            if (ordinates.Length != this.Dimentions)
+            {
+                throw new ArgumentException("Coordinate creation failed - number of ordinates provided was inapropriate for the number of dimentions in the coordinate system.");
+            }
+
+            return new Coordinates.ND.Cartesian_ND_Coordinate(this, ordinates);
         }
 
 

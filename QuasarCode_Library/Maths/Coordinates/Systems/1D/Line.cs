@@ -4,6 +4,9 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Coordinates.Systems._1D
 {
+    /// <summary>
+    /// One dimentional cartesian coordinate system
+    /// </summary>
     public class Line : ICartesianBase<Line>
     {
         public Dictionary<string, IGeneralUnit> Axes { get; }
@@ -19,6 +22,24 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems._1D
         public Line(IGeneralUnit xUnit)
         {
             Axes = new Dictionary<string, IGeneralUnit> { { "x", xUnit } };
+        }
+
+        public ICoordinate<Line> GetCoordinate(params decimal[] ordinates)
+        {
+            if (ordinates.Length != this.Dimentions)
+            {
+                throw new ArgumentException("Coordinate creation failed - number of ordinates provided was inapropriate for the number of dimentions in the coordinate system.");
+            }
+
+            return new Coordinates._1D.LineCoordinate(this, ordinates[0]);
+        }
+
+        public Matrices.Vectors.CartesianVector<Line> i
+        {
+            get
+            {
+                return new Matrices.Vectors.CartesianVector<Line>(1);
+            }
         }
 
 

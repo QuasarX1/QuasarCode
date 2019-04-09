@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace QuasarCode.Library.Maths.Matrices.Vectors
 {
-    //public class LocatedVector<T> : ILocatedVector<T>, IVector where T : Coordinates.Systems.ICoordinateSystem<T>
+    //public class LocatedVector<T> : ILocatedVector<T>, IVector<T> where T : Coordinates.Systems.ICoordinateSystem<T>
     //{
     //    protected IVector UnderlyingVector;
 

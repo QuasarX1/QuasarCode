@@ -4,6 +4,9 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Coordinates.Systems._3D
 {
+    /// <summary>
+    /// Three dimantional polar coordinate system in a cylinder shape
+    /// </summary>
     public class CylindricalPolar : IPolarBase<CylindricalPolar>
     {
         public Dictionary<string, IGeneralUnit> Axes { get; }
@@ -19,6 +22,16 @@ namespace QuasarCode.Library.Maths.Coordinates.Systems._3D
         public CylindricalPolar(IGeneralUnit xUnit, IGeneralUnit yUnit, IGeneralUnit zUnit)
         {
             Axes = new Dictionary<string, IGeneralUnit> { { "r", xUnit }, { "theta", yUnit }, { "z", zUnit } };
+        }
+
+        public ICoordinate<CylindricalPolar> GetCoordinate(params decimal[] ordinates)
+        {
+            if (ordinates.Length != this.Dimentions)
+            {
+                throw new ArgumentException("Coordinate creation failed - number of ordinates provided was inapropriate for the number of dimentions in the coordinate system.");
+            }
+
+            return new Coordinates._3D.CylindricalPolarCoordinate(this, ordinates[0], ordinates[1], ordinates[2]);
         }
 
 

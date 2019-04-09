@@ -8,16 +8,31 @@ namespace QuasarCode.Library.Maths.Matrices.Vectors
     {
         decimal Magnitude { get; set; }
 
+        IVector Direction { get; set; }
+
         decimal[] ComponentArray { get; }
 
         string ToString();
 
         string[] GetComponentStrings();
 
-        decimal Dot(IVector vector);
-
-        IVector Cross(IVector vector);
-
         decimal this[int row] { get; }
+    }
+
+    public interface IVector<T> : IVector where T : QuasarCode.Library.Maths.Coordinates.Systems.ICoordinateSystem<T>
+    {
+        decimal Dot(IVector<T> vector);
+
+        IVector<T> Cross(IVector<T> vector);
+
+        IVector<T> Add(IVector<T> vector);
+
+        IVector<T> Subtract(IVector<T> vector);
+
+        IVector<T> Multyply(IVector<T> vector);
+
+        IVector<T> Divide(IVector<T> vector);
+
+        IVector<T> AsUnitVector();
     }
 }

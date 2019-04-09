@@ -9,6 +9,11 @@ namespace QuasarCode.Library.Maths.Matrices
     {
         protected decimal[,] Data { get; set; }
 
+        public decimal[,] GetData()
+        {
+            return (decimal[,])this;
+        }
+
         protected static double[,] DecimalsToDoubles(decimal[,] array)
         {
             int rows = array.GetUpperBound(0) - array.GetLowerBound(0) + 1;
@@ -296,6 +301,22 @@ namespace QuasarCode.Library.Maths.Matrices
             return (b.I() * a) + b;
         }
 
+        public void Add(IMatrix matrix)
+        {
+            for (int i = 0; i < this.Rows; i++)
+            {
+                for (int j = 0; j < this.Columns; j++)
+                {
+                    this.Data[i, j] = this.Data[i, j] + matrix[i, j];
+                }
+            }
+        }
+
+        public void Add(decimal value)
+        {
+            this.Add(this.I() * value);
+        }
+
         public static NMatrix operator -(NMatrix a, NMatrix b)
         {
             decimal[,] newData = new decimal[a.Rows, a.Columns];
@@ -319,6 +340,22 @@ namespace QuasarCode.Library.Maths.Matrices
         public static NMatrix operator -(decimal a, NMatrix b)
         {
             return (b.I() * a) - b;
+        }
+
+        public void Subtract(IMatrix matrix)
+        {
+            for (int i = 0; i < this.Rows; i++)
+            {
+                for (int j = 0; j < this.Columns; j++)
+                {
+                    this.Data[i, j] = this.Data[i, j] - matrix[i, j];
+                }
+            }
+        }
+
+        public void Subtract(decimal value)
+        {
+            this.Subtract(this.I() * value);
         }
 
         public static NMatrix operator *(NMatrix a, NMatrix b)
@@ -371,6 +408,31 @@ namespace QuasarCode.Library.Maths.Matrices
             return new NMatrix(newData);
         }
 
+        public void Multiply(IMatrix matrix)
+        {
+            decimal[,] newData = new decimal[this.Rows, matrix.Columns];
+
+            for (int x = 0; x < this.Rows; x++)
+            {
+                for (int y = 0; y < matrix.Columns; y++)
+                {
+                    newData[x, y] = 0;
+
+                    for (int i = 0; i < this.Columns; i++)
+                    {
+                        newData[x, y] += this.Data[x, i] * matrix[i, y];
+                    }
+                }
+            }
+
+            this.Data = newData;
+        }
+
+        public void Multiply(decimal value)
+        {
+            this.Multiply(this.I() * value);
+        }
+
         public static NMatrix operator /(NMatrix a, NMatrix b)
         {
             // Undifined exeption
@@ -394,6 +456,19 @@ namespace QuasarCode.Library.Maths.Matrices
 
 
             return a * (b.Adjoint() / b.Determinant());
+        }
+
+        public void Divide(IMatrix matrix)
+        {
+            IMatrix adjoint = matrix.AdjointMatrix();
+            adjoint.Multiply(1 / matrix.Determinant());
+
+            this.Multiply(adjoint);
+        }
+
+        public void Divide(decimal value)
+        {
+            this.Multiply(1 / value);
         }
 
         public virtual bool EqualsPrecision(object o, int precision = 24)
@@ -439,7 +514,7 @@ namespace QuasarCode.Library.Maths.Matrices
 
             return result;
         }
-
+        
         public override bool Equals(object o)
         {
             return this.EqualsPrecision(o, 12);

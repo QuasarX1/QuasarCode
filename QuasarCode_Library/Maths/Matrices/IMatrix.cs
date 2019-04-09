@@ -14,6 +14,8 @@ namespace QuasarCode.Library.Maths.Matrices
 
         decimal this[int row, int col] { get; }
 
+        decimal[,] GetData();
+
         IMatrix Identity();
 
         IMatrix Transpose();
@@ -27,5 +29,17 @@ namespace QuasarCode.Library.Maths.Matrices
         IMatrix AdjointMatrix();
 
         decimal Dot(IMatrix matrix);
+
+        void Add(IMatrix matrix);
+        void Add(decimal value);
+
+        void Subtract(IMatrix matrix);
+        void Subtract(decimal value);
+
+        void Multiply(IMatrix matrix);
+        void Multiply(decimal value);
+
+        void Divide(IMatrix matrix);
+        void Divide(decimal value);
     }
 }
