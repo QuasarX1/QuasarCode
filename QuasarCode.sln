@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuasarCode_Library", "QuasarCode_Library\QuasarCode_Library.csproj", "{580BE906-A8DD-480F-8E23-AA155E175D4D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests_Windows", "UnitTests_Windows\UnitTests_Windows.csproj", "{AB2099B9-CC99-4915-8E81-743CBA12FB24}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "QuasarCode_Python", "QuasarCode_Python\QuasarCode_Python.pyproj", "{BCAD998C-0ACC-456B-9E63-4148B52D092F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,8 @@ Global
 		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCAD998C-0ACC-456B-9E63-4148B52D092F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCAD998C-0ACC-456B-9E63-4148B52D092F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
