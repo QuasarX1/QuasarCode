@@ -32,10 +32,17 @@
     <Folder Include="QuasarCode\IO\" />
     <Folder Include="QuasarCode\IO\Text\" />
     <Folder Include="QuasarCode\Maths\" />
+    <Folder Include="QuasarCode\Graphs\" />
     <Folder Include="QuasarCode\Tools\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="build.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Graphs\fitline.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Graphs\graph.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\IO\Text\Console.py">
