@@ -1,3 +1,5 @@
+from edp import *
+
 from QuasarCode.Graphs.fitline import LineOfBestFit
 from QuasarCode.Graphs.graph import Figure
 
