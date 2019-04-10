@@ -1,10 +1,13 @@
 from enum import Enum
 
+class LineType(Enum):
+    straight = 0
+
 class LineOfBestFit(object):
     """
     """
 
-    def __init__(self, lineType: LineTypes = LineType.straight, graph = None):
+    def __init__(self, lineType: LineType = LineType.straight, graph = None):
         self.lineType = lineType
         self.graph = graph
 
@@ -18,6 +21,3 @@ class LineOfBestFit(object):
         """
         if self.lineType == LineType.straight:
             pass
-
-    class LineType(Enum):
-        straight

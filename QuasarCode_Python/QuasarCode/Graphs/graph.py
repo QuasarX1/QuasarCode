@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import fitline
+from QuasarCode.Graphs import fitline
 
 class Figure(object):
     """
@@ -50,7 +50,7 @@ class Figure(object):
         if self.fit is not None:
             self.figure.plot(self.x, self.fit.fit)
 
-    def createFitLine(self, type: fitline.LineOfBestFit.LineType = fitline.LineOfBestFit.LineType.straight):
+    def createFitLine(self, type: fitline.LineType = fitline.LineType.straight):
         self.fit = fitline.LineOfBestFit(type, self)
 
     def show():
