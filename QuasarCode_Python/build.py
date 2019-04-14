@@ -108,7 +108,7 @@ time = datetime.datetime.now()
 file = open(os.path.join(buildRoot, "configuration.txt"), "w")
 file.writelines([
     "project_name={}\n".format(folderName),
-    "version={}\n".format(0.1),
+    "version={}\n".format(0.3),
     "author={}\n".format(author),
     "configuration={}\n".format(configuration),
     "optimization={}\n".format(optimization),

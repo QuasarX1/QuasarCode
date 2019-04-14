@@ -56,3 +56,6 @@ class Event(object):
                 raise NotEnoughArgumentsError(str(e))
         else:
             raise UndersubscribedEventError("No subscribers.")
+
+    def getTotalSubscribers(self):
+        return len(self.__subscribers)

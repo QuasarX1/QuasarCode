@@ -7,7 +7,7 @@ Credits:
     Written by Christopher Rowe 04/2019
     Notable contribusions from Tim Greenshaw 10/2018
 
-Version: 0.1
+Version: 0.2
 """
 
 import QuasarCode.edp
