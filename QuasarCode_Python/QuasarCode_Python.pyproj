@@ -33,7 +33,7 @@
     <Folder Include="QuasarCode\IO\" />
     <Folder Include="QuasarCode\IO\Text\" />
     <Folder Include="QuasarCode\Maths\" />
-    <Folder Include="QuasarCode\Graphs\" />
+    <Folder Include="QuasarCode\Science\" />
     <Folder Include="QuasarCode\Tools\" />
   </ItemGroup>
   <ItemGroup>
@@ -45,13 +45,25 @@
     <Compile Include="QuasarCode\edp\_SubscriberNotPresentError.py" />
     <Compile Include="QuasarCode\edp\_UndersubscribedEventError.py" />
     <Compile Include="QuasarCode\edp\__init__.py" />
-    <Compile Include="QuasarCode\Graphs\fitline.py">
+    <Compile Include="QuasarCode\IO\Text\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuasarCode\Graphs\graph.py">
+    <Compile Include="QuasarCode\IO\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuasarCode\IO\Text\Console.py">
+    <Compile Include="QuasarCode\Science\data.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Science\fitline.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Science\graph.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\IO\Text\console.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Science\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\__init__.py">
@@ -73,11 +85,23 @@
   <PropertyGroup>
     <PythonCommands>
       $(PythonCommands);
-      Custom Build
+      Custom Build;
+      Custom Optimize Build;
+      Custom Optimize Build 2;
     </PythonCommands>
   </PropertyGroup>
   <Target Name="Custom Build" Label="Build" Returns="@(Commands)">
-    <CreatePythonCommandItem TargetType="script" Target="build.py" Arguments="$(Configuration)" WorkingDirectory="$(MSBuildProjectDirectory)" ExecuteIn="consolepause">
+    <CreatePythonCommandItem TargetType="script" Target="build.py" Arguments="QuasarCode $(Configuration) STANDARD QuasarX1" WorkingDirectory="$(MSBuildProjectDirectory)" ExecuteIn="consolepause">
+      <Output TaskParameter="Command" ItemName="Commands" />
+    </CreatePythonCommandItem>
+  </Target>
+  <Target Name="Custom Optimize Build" Label="Build and Optimize" Returns="@(Commands)">
+    <CreatePythonCommandItem TargetType="script" Target="build.py" Arguments="QuasarCode $(Configuration) OPTIMIZE QuasarX1" WorkingDirectory="$(MSBuildProjectDirectory)" ExecuteIn="consolepause">
+      <Output TaskParameter="Command" ItemName="Commands" />
+    </CreatePythonCommandItem>
+  </Target>
+  <Target Name="Custom Optimize Build 2" Label="Build and Optimize v2" Returns="@(Commands)">
+    <CreatePythonCommandItem TargetType="script" Target="build.py" Arguments="QuasarCode $(Configuration) OPTIMIZE2 QuasarX1" WorkingDirectory="$(MSBuildProjectDirectory)" ExecuteIn="consolepause">
       <Output TaskParameter="Command" ItemName="Commands" />
     </CreatePythonCommandItem>
   </Target>

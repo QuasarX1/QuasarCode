@@ -5,13 +5,15 @@ Adds functionality to Python along with wrapers for existing modules for ease of
 
 Credits:
     Written by Christopher Rowe 04/2019
+    Notable contribusions from Tim Greenshaw 10/2018
 
 Version: 0.1
 """
 
-from QuasarCode.edp import *
+import QuasarCode.edp
 
-from QuasarCode.Graphs.fitline import LineOfBestFit
-from QuasarCode.Graphs.graph import Figure
+import QuasarCode.Science
 
-from QuasarCode.IO.Text.Console import test
+import QuasarCode.IO
+
+from QuasarCode.IO.Text.console import pause
