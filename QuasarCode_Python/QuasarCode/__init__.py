@@ -16,4 +16,6 @@ import QuasarCode.Science
 
 import QuasarCode.IO
 
+import QuasarCode.Maths
+
 from QuasarCode.IO.Text.console import pause
