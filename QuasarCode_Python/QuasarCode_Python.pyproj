@@ -44,13 +44,13 @@
     <Compile Include="QuasarCode\edp\_SubscriberNotPresentError.py" />
     <Compile Include="QuasarCode\edp\_UndersubscribedEventError.py" />
     <Compile Include="QuasarCode\edp\__init__.py" />
-    <Compile Include="QuasarCode\Games\Dice\Dice12.py">
+    <Compile Include="QuasarCode\Games\Dice\_Dice12.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuasarCode\Games\Dice\Dice6.py">
+    <Compile Include="QuasarCode\Games\Dice\_Dice6.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuasarCode\Games\Dice\Dice8.py">
+    <Compile Include="QuasarCode\Games\Dice\_Dice8.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Games\Dice\_IDice.py">
