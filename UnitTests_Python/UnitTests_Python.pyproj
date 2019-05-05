@@ -26,9 +26,6 @@
     <Compile Include="test_edp.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test_maths.py">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda37-64" />
