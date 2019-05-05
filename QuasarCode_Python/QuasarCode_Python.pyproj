@@ -53,6 +53,9 @@
     <Compile Include="QuasarCode\Games\Dice\_Dice8.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="QuasarCode\Games\Dice\_DiceCup.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="QuasarCode\Games\Dice\_IDice.py">
       <SubType>Code</SubType>
     </Compile>
