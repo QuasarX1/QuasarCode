@@ -2,7 +2,13 @@ import unittest
 import QuasarCode.edp as edp
 
 class Test_edp(unittest.TestCase):
-    def standalone_method(self):
+    def test_A(self):
+        pass
+
+    #def test_testNameHere(self):
+    #    self.fail("Not implemented")
+
+    def test_standaloneMethod(self):
         def testMethod():
             return 0
 

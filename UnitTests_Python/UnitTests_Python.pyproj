@@ -23,7 +23,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="test_edp.py">
+    <Compile Include="edp.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Games.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

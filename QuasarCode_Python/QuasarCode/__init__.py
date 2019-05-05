@@ -12,10 +12,12 @@ Version: 0.3
 
 import QuasarCode.edp
 
-import QuasarCode.Science
+import QuasarCode.Games
 
 import QuasarCode.IO
 
 import QuasarCode.Maths
+
+import QuasarCode.Science
 
 from QuasarCode.IO.Text.console import pause
