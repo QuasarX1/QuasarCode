@@ -19,7 +19,7 @@ class NDice(IDice):
         """
         Rolls the dice
         """
-        return self.__Generator.randint(0, self.Sides) + 1
+        return self.__Generator.randint(1, self.Sides + 1)
 
     def MultipleDice(sides: list, noOfDice: int = len(sides)):
         """
