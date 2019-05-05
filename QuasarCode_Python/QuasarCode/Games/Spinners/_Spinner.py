@@ -7,7 +7,7 @@ class Spinner(ISpinner):
 
     __init__():
         list labels --> list of labels - one for each side
-        int seed --> seed for the random generator (deafult None)
+        int seed --> seed for the random generator (deafult is None)
     """
     def __init__(self, labels: list, seed: int = None):
         self.__Generator: random.Random = random.Random() if seed == None else random.Random(seed)
@@ -18,17 +18,17 @@ class Spinner(ISpinner):
         """
         Randomly selects a side and retuns the side and the corisponding label.
         """
-        index = self.Generator.randint(0, self.Sides)
+        index = self.__Generator.randint(0, self.Sides)
         return (index, self.Labels[index])
 
     def Spin(self):
         """
         Randomly selects a side and retuns the corisponding label.
         """
-        return self.Labels[self.Generator.randint(0, self.Sides)]
+        return self.Labels[self.__Generator.randint(0, self.Sides)]
         
     def IndexSpin(self):
         """
         Randomly selects a side and retuns the side number.
         """
-        return self.Generator.randint(0, self.Sides)
+        return self.__Generator.randint(0, self.Sides)

@@ -27,6 +27,7 @@
     <Folder Include="QuasarCode\" />
     <Folder Include="QuasarCode\edp\" />
     <Folder Include="QuasarCode\Games\" />
+    <Folder Include="QuasarCode\Games\Dice\" />
     <Folder Include="QuasarCode\Games\Spinners\" />
     <Folder Include="QuasarCode\IO\" />
     <Folder Include="QuasarCode\IO\Text\" />
@@ -43,6 +44,15 @@
     <Compile Include="QuasarCode\edp\_SubscriberNotPresentError.py" />
     <Compile Include="QuasarCode\edp\_UndersubscribedEventError.py" />
     <Compile Include="QuasarCode\edp\__init__.py" />
+    <Compile Include="QuasarCode\Games\Dice\_IDice.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Dice\_NDice.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Dice\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="QuasarCode\Games\Spinners\_ISpinner.py">
       <SubType>Code</SubType>
     </Compile>
