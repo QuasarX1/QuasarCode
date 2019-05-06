@@ -1,4 +1,5 @@
 from random import Random
+from QuasarCode.Games.Cards import IPlayingCard
 
 class CardGroup(list):
     """
@@ -11,11 +12,11 @@ class CardGroup(list):
         str name --> name of the collection
         list cards --> list of IPlayingCards to initialise the collection with (deafult is blank list)
     """
-    def __init__(self, name: str, cards = []):#TODO: ad type reference for IPlayingCard
+    def __init__(self, name: str, cards: list = []):
         self.Name = name
         self += cards
 
-    def Remove(self, index: int):
+    def Remove(self, index: int) -> IPlayingCard:
         """
         Remove a card from the collection at the specified index
         """
@@ -44,3 +45,9 @@ class CardGroup(list):
 
     def __str__(self):
         return self.Name + ": " + super().__str__()
+
+    def sort(self, *args, **kwargs):
+        if "key" in kwargs.keys():
+            return super().sort(*args, **kwargs)
+        else:
+            return super().sort(*args, key = lambda card: (card.Value + 1) * (card.Suit + 1), **kwargs)

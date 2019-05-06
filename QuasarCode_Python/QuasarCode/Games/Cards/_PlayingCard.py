@@ -4,6 +4,10 @@ from enum import Enum
 class PlayingCard(IPlayingCard):
     """
     A card from a standard deck of 52 playing cards
+
+    Atributes:
+        PlayingCard.AllowedValues Value --> The card's value
+        PlayingCard.AllowedSuits Suit --> The card's suit
     """
 
     class AllowedValues(Enum):
@@ -74,7 +78,7 @@ class PlayingCard(IPlayingCard):
 
     __ValueStrings = ("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K")
 
-    def GetValueString(value: AllowedValues):
+    def GetValueString(value: AllowedValues) -> str:
         """
         Retrive the string counterpart to the AllowedValues enum value
         """
@@ -82,7 +86,7 @@ class PlayingCard(IPlayingCard):
 
     __SuitStrings = ("Heart", "Club", "Dimond", "Spade", "Joker")
 
-    def GetSuitString(suit: AllowedSuits):
+    def GetSuitString(suit: AllowedSuits) -> str:
         """
         Retrive the string counterpart to the AllowedSuits enum suit
         """
