@@ -5,25 +5,6 @@ class PlayingCard(IPlayingCard):
     """
     A card from a standard deck of 52 playing cards
     """
-    def __init__(self, value: PlayingCard.AllowedValues, suit: AllowedSuits):
-        self.__value = value
-        self.__suit = suit
-
-    @property
-    def Value(self) -> PlayingCard.AllowedValues:
-        """
-        The card's value
-        """
-        return self.__value
-
-    @property
-    def Suit(self) -> PlayingCard.AllowedSuits:
-        """
-        The card's suit
-        """
-        return self.__suit
-
-    __ValueStrings = ("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K")
 
     class AllowedValues(Enum):
         """
@@ -58,14 +39,6 @@ class PlayingCard(IPlayingCard):
 
         Jo = 13# Joker
 
-    def GetValueString(value: PlayingCard.AllowedValues):
-        """
-        Retrive the string counterpart to the AllowedValues enum value
-        """
-        return PlayingCard.__ValueStrings[int(value)]
-
-    __SuitStrings = ("Heart", "Club", "Dimond", "Spade", "Joker")
-
     class AllowedSuits(Enum):
         """
         Enum of card suits - hearts, clubs, dimonds, spades, joker
@@ -81,7 +54,35 @@ class PlayingCard(IPlayingCard):
 
         J = 4# Joker
 
-    def GetSuitString(suit: PlayingCard.AllowedSuits):
+    def __init__(self, value: AllowedValues, suit: AllowedSuits):
+        self.__value = value
+        self.__suit = suit
+
+    @property
+    def Value(self) -> AllowedValues:
+        """
+        The card's value
+        """
+        return self.__value
+
+    @property
+    def Suit(self) -> AllowedSuits:
+        """
+        The card's suit
+        """
+        return self.__suit
+
+    __ValueStrings = ("A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K")
+
+    def GetValueString(value: AllowedValues):
+        """
+        Retrive the string counterpart to the AllowedValues enum value
+        """
+        return PlayingCard.__ValueStrings[int(value)]
+
+    __SuitStrings = ("Heart", "Club", "Dimond", "Spade", "Joker")
+
+    def GetSuitString(suit: AllowedSuits):
         """
         Retrive the string counterpart to the AllowedSuits enum suit
         """

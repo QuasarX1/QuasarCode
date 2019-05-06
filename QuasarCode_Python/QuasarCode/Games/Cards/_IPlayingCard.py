@@ -1,4 +1,11 @@
-from QuasarCode.Games.Cards import PlayingCard
+from enum import Enum
+
+# Class to help prevent circular reference. See EOF for import
+class PlayingCard(object):
+    class AllowedValues(Enum):
+        pass
+    class AllowedSuits(Enum):
+        pass
 
 class IPlayingCard(object):
     """
