@@ -1,9 +1,9 @@
 class IPlayingCard(object):
 
     @property
-    def Value(self):
+    def Value(self) -> int:
         raise NotImplementedError()
 
     @property
-    def Suit(self):
+    def Suit(self) -> int:#TODO: change for card suit
         raise NotImplementedError()

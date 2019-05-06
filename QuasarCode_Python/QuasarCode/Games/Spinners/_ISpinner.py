@@ -2,12 +2,20 @@ class ISpinner(object):
     """
     Interface for all Spinner objects.
     """
-    def __init__(self):
-        # Array of side labels
-        self.Labels: list
 
-        # Number of sides/labels
-        self.Sides: int
+    @property
+    def Labels(self) -> list:
+        """
+        Array of side labels
+        """
+        raise NotImplementedError()
+
+    @property
+    def Sides(self) -> int:
+        """
+        Number of sides/labels
+        """
+        raise NotImplementedError()
 
     def ContextSpin(self):
         """
