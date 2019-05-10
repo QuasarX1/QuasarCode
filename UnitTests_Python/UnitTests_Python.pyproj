@@ -31,9 +31,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda37-64" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\QuasarCode_Python\QuasarCode_Python.pyproj">
       <Name>QuasarCode_Python</Name>
       <Project>{bcad998c-0acc-456b-9e63-4148b52d092f}</Project>
