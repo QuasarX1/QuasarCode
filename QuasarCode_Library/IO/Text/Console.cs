@@ -251,7 +251,7 @@ namespace QuasarCode.Library.IO.Text
                     int resultnumber = Convert.ToInt32(result);
                     if (resultnumber <= i)
                     {
-                        return options[index + resultnumber];
+                        return options[index + resultnumber - 1];
                     }
                     else if (options.Length > 8 && resultnumber == 9)
                     {
@@ -319,7 +319,7 @@ namespace QuasarCode.Library.IO.Text
                     int resultnumber = Convert.ToInt32(result);
                     if (resultnumber <= i)
                     {
-                        return index + resultnumber;
+                        return index + resultnumber - 1;
                     }
                     else if (options.Length > 8 && resultnumber == 9)
                     {
