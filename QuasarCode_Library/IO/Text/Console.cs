@@ -231,10 +231,11 @@ namespace QuasarCode.Library.IO.Text
                 i = 0;
                 for (i = 0; i < 8; i++)
                 {
-                    System.Console.WriteLine((index + i + 1) + ".) " + options[index + i]);
+                    System.Console.WriteLine((i + 1) + ".) " + options[index + i]);
 
-                    if (i + 1 == options.Length)
+                    if (index + i + 1 == options.Length)
                     {
+                        i++;
                         break;
                     }
                 }
@@ -299,10 +300,11 @@ namespace QuasarCode.Library.IO.Text
                 i = 0;
                 for (i = 0; i < 8; i++)
                 {
-                    System.Console.WriteLine((index + i + 1) + ".) " + options[index + i]);
+                    System.Console.WriteLine((i + 1) + ".) " + options[index + i]);
 
-                    if (i + 1 == options.Length)
+                    if (index + i + 1 == options.Length)
                     {
+                        i++;
                         break;
                     }
                 }
