@@ -138,16 +138,6 @@ namespace QuasarCode.Library.IO.Text
         /// <returns>A line of input from the console as a string.</returns>
         public static string Input(ref System.IO.TextWriter output, ref System.IO.TextReader input, string indicator = ">>> ")
         {
-            if (output is null)
-            {
-                output = DeafultOut;
-            }
-
-            if (input is null)
-            {
-                input = DeafultIn;
-            }
-
             output.Write(indicator);
 
             return input.ReadLine();
@@ -174,16 +164,6 @@ namespace QuasarCode.Library.IO.Text
         /// <returns>A line of input from the console as a string.</returns>
         public static string Input(ref System.IO.TextWriter output, ref System.IO.TextReader input, string prompt, string indicator = "\n>>> ")
         {
-            if (output is null)
-            {
-                output = DeafultOut;
-            }
-
-            if (input is null)
-            {
-                input = DeafultIn;
-            }
-
             output.Write(prompt + indicator);
 
             return input.ReadLine();
@@ -214,16 +194,6 @@ namespace QuasarCode.Library.IO.Text
         /// <returns>A line of input from the console as a string.</returns>
         public static string Input(ref System.IO.TextWriter output, ref System.IO.TextReader input, string prompt, Func<string, bool> validator, string errorMessage, string indicator = "\n>>> ")
         {
-            if (output is null)
-            {
-                output = DeafultOut;
-            }
-
-            if (input is null)
-            {
-                input = DeafultIn;
-            }
-
             string result;
             while (true)
             {
@@ -269,16 +239,6 @@ namespace QuasarCode.Library.IO.Text
         /// <returns>A line of input from the console, coverted to the specified type.</returns>
         public static T Input<T>(ref System.IO.TextWriter output, ref System.IO.TextReader input, string prompt, Func<string, T> converter, string indicator = "\n>>> ")
         {
-            if (output is null)
-            {
-                output = DeafultOut;
-            }
-
-            if (input is null)
-            {
-                input = DeafultIn;
-            }
-
             output.Write(prompt + indicator);
 
             return converter(input.ReadLine());
@@ -342,16 +302,6 @@ namespace QuasarCode.Library.IO.Text
         /// <returns>A line of input from the console, coverted to the specified type.</returns>
         public static T Input<T>(ref System.IO.TextWriter output, ref System.IO.TextReader input, string prompt, Func<string, T> converter, Func<object, bool> validator, string errorMessage, string indicator = "\n>>> ")
         {
-            if (output is null)
-            {
-                output = DeafultOut;
-            }
-
-            if (input is null)
-            {
-                input = DeafultIn;
-            }
-
             T result;
             while (true)
             {
@@ -527,11 +477,6 @@ namespace QuasarCode.Library.IO.Text
         /// <returns>Selected option.</returns>
         public static T Option<T>(T[] options, ref EventHandler<char> keyPressEvent, ref System.IO.TextWriter output, string message = null, bool displayInput = false)
         {
-            if (output is null)
-            {
-                output = DeafultOut;
-            }
-
             if (options.Length == 0)
             {
                 throw new ArgumentException("No options were provided - the array was enpty.");
@@ -604,11 +549,6 @@ namespace QuasarCode.Library.IO.Text
         /// <returns>Index of selected option.</returns>
         public static int Option(object[] options, ref EventHandler<char> keyPressEvent, ref System.IO.TextWriter output, string message = null, bool displayInput = false)
         {
-            if (output is null)
-            {
-                output = DeafultOut;
-            }
-
             if (options.Length == 0)
             {
                 throw new ArgumentException("No options were provided - the array was enpty.");
