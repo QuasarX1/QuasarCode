@@ -813,43 +813,65 @@
             Provites IO methods for intervacing with a text based console.
             </summary>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Print">
+        <member name="F:QuasarCode.Library.IO.Text.Console.DeafultOut">
             <summary>
-            Outputs text to the console. Prints only a new line.
+            Defult text output stream. Deafults to System.Console.Out
             </summary>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.String,System.String,System.String[])">
+        <member name="F:QuasarCode.Library.IO.Text.Console.DeafultError">
+            <summary>
+            Defult error stream. Deafults to System.Console.Error
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.IO.Text.Console.DeafultIn">
+            <summary>
+            Defult text input stream. Deafults to System.Console.In
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.IO.TextWriter)">
+            <summary>
+            Outputs text to the console. Prints only a new line.
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.String,System.String,System.IO.TextWriter,System.String[])">
             <summary>
             Outputs text to the console.
             </summary>
             <param name="text">The text to output.</param>
             <param name="end">String added to the end of the output.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
             <param name="moreText">List of any other strings to output.</param>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.Object,System.String,System.Object[])">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.Object,System.String,System.IO.TextWriter,System.Object[])">
             <summary>
             Outputs text versions of objects to the console.
             </summary>
             <param name="text">The object to output. Must be able to be implicitly converted to a string.</param>
             <param name="end">String added to the end of the output.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
             <param name="moreText">List of any other strings to output. Must be able to be implicitly converted to a string.</param>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.IO.TextWriter,System.IO.TextReader)">
             <summary>
             Retrives an input from the console.
             </summary>
             <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
             <returns>A line of input from the console as a string.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.String,System.IO.TextWriter,System.IO.TextReader)">
             <summary>
             Retrives an input from the console with a prompt message.
             </summary>
             <param name="prompt">Message to be printed to the display to request input.</param>
             <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
             <returns>A line of input from the console as a string.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.Func{System.String,System.Boolean},System.String,System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.Func{System.String,System.Boolean},System.String,System.String,System.IO.TextWriter,System.IO.TextReader)">
             <summary>
             Retrives an input from the console with a prompt message. Uses a method deligate to force valid input.
             </summary>
@@ -857,9 +879,11 @@
             <param name="validator">Validator method deligate. Takes a string and returns a boolean.</param>
             <param name="errorMessage">Message to display if validation fails before asking for the input again.</param>
             <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
             <returns>A line of input from the console as a string.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.String,System.IO.TextWriter,System.IO.TextReader)">
             <summary>
             Retrives an input from the console with a prompt message. Converts the input to the given type.
             </summary>
@@ -867,9 +891,11 @@
             <param name="prompt">Message to be printed to the display to request input.</param>
             <param name="converter">Method deligate to convert the string input to the requested type.</param>
             <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
             <returns>A line of input from the console, coverted to the specified type.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.Func{System.Object,System.Boolean},System.String,System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.Func{System.Object,System.Boolean},System.String,System.String,System.IO.TextWriter,System.IO.TextReader)">
             <summary>
             Retrives an input from the console with a prompt message. Uses a method deligate to force valid input. Converts the input to the given type (before validation)
             </summary>
@@ -878,9 +904,11 @@
             <param name="validator">Validator method deligate. Takes an object of the specified type and returns a boolean.</param>
             <param name="errorMessage">Message to display if validation fails before asking for the input again.</param>
             <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
             <returns>A line of input from the console, coverted to the specified type.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Option``1(``0[],System.String,System.Boolean)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Option``1(``0[],System.String,System.Boolean,System.IO.TextWriter,QuasarCode.Library.IO.Text.ReadCharEventHandler)">
             <summary>
             Allows the user to select an item from an array of options. Returns the option.
             </summary>
@@ -888,16 +916,34 @@
             <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
             <param name="message">Optional message to display to the user.</param>
             <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="keyPressEvent">Event raised when an option is selected</param>
             <returns>Selected option.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Option(System.Object[],System.String,System.Boolean)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Option(System.Object[],System.String,System.Boolean,System.IO.TextWriter,QuasarCode.Library.IO.Text.ReadCharEventHandler)">
             <summary>
             Allows the user to select an item from an array of options. Returns the option's index.
             </summary>
             <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
             <param name="message">Optional message to display to the user.</param>
             <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="keyPressEvent">Event raised when an option is selected</param>
             <returns>Index of selected option.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.ReadChar(QuasarCode.Library.IO.Text.ReadCharEventHandler)">
+            <summary>
+            Emulates the System.Console.ReadKey method but takes an event that provides characters returns a char.
+            </summary>
+            <param name="keyPressEvent">Action</param>
+            <returns></returns>
+        </member>
+        <member name="T:QuasarCode.Library.IO.Text.ReadCharEventHandler">
+            <summary>
+            Event handler for passing individual characters
+            </summary>
+            <param name="sender">Object raising the event</param>
+            <param name="character">The character to be passes to subscribers</param>
         </member>
         <member name="T:QuasarCode.Library.Maths.Coordinates.Coordinate`1">
             <summary>
