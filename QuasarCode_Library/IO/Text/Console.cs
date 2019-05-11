@@ -12,17 +12,17 @@ namespace QuasarCode.Library.IO.Text
         /// <summary>
         /// Defult text output stream. Deafults to System.Console.Out
         /// </summary>
-        public static System.IO.TextWriter DeafultOut = System.Console.Out;
+        public static System.IO.StreamWriter DeafultOut = (System.IO.StreamWriter)System.Console.Out;
 
         /// <summary>
         /// Defult error stream. Deafults to System.Console.Error
         /// </summary>
-        public static System.IO.TextWriter DeafultError = System.Console.Error;
+        public static System.IO.StreamWriter DeafultError = (System.IO.StreamWriter)System.Console.Error;
 
         /// <summary>
         /// Defult text input stream. Deafults to System.Console.In
         /// </summary>
-        public static System.IO.TextReader DeafultIn = System.Console.In;
+        public static System.IO.StreamReader DeafultIn = (System.IO.StreamReader)System.Console.In;
 
         /// <summary>
         /// Outputs text to the console. Prints only a new line.
@@ -36,7 +36,7 @@ namespace QuasarCode.Library.IO.Text
         /// Outputs text to the console. Prints only a new line.
         /// <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
         /// </summary>
-        public static void Print(ref System.IO.TextWriter output)
+        public static void Print(ref System.IO.StreamWriter output)
         {
             output.WriteLine();
         }
@@ -59,7 +59,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="end">String added to the end of the output.</param>
         /// <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
         /// <param name="moreText">List of any other strings to output.</param>
-        public static void Print(string text, ref System.IO.TextWriter output, string end = "\n", params string[] moreText)
+        public static void Print(string text, ref System.IO.StreamWriter output, string end = "\n", params string[] moreText)
         {
             output.Write(text);
 
@@ -94,7 +94,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="end">String added to the end of the output.</param>
         /// <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
         /// <param name="moreText">List of any other strings to output. Must be able to be implicitly converted to a string.</param>
-        public static void Print(object text, ref System.IO.TextWriter output, string end = "\n", params object[] moreText)
+        public static void Print(object text, ref System.IO.StreamWriter output, string end = "\n", params object[] moreText)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
         /// <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
         /// <returns>A line of input from the console as a string.</returns>
-        public static string Input(ref System.IO.TextWriter output, ref System.IO.TextReader input, string indicator = ">>> ")
+        public static string Input(ref System.IO.StreamWriter output, ref System.IO.StreamReader input, string indicator = ">>> ")
         {
             output.Write(indicator);
 
@@ -162,7 +162,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
         /// <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
         /// <returns>A line of input from the console as a string.</returns>
-        public static string Input(ref System.IO.TextWriter output, ref System.IO.TextReader input, string prompt, string indicator = "\n>>> ")
+        public static string Input(ref System.IO.StreamWriter output, ref System.IO.StreamReader input, string prompt, string indicator = "\n>>> ")
         {
             output.Write(prompt + indicator);
 
@@ -192,7 +192,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
         /// <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
         /// <returns>A line of input from the console as a string.</returns>
-        public static string Input(ref System.IO.TextWriter output, ref System.IO.TextReader input, string prompt, Func<string, bool> validator, string errorMessage, string indicator = "\n>>> ")
+        public static string Input(ref System.IO.StreamWriter output, ref System.IO.StreamReader input, string prompt, Func<string, bool> validator, string errorMessage, string indicator = "\n>>> ")
         {
             string result;
             while (true)
@@ -237,7 +237,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
         /// <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
         /// <returns>A line of input from the console, coverted to the specified type.</returns>
-        public static T Input<T>(ref System.IO.TextWriter output, ref System.IO.TextReader input, string prompt, Func<string, T> converter, string indicator = "\n>>> ")
+        public static T Input<T>(ref System.IO.StreamWriter output, ref System.IO.StreamReader input, string prompt, Func<string, T> converter, string indicator = "\n>>> ")
         {
             output.Write(prompt + indicator);
 
@@ -300,7 +300,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
         /// <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
         /// <returns>A line of input from the console, coverted to the specified type.</returns>
-        public static T Input<T>(ref System.IO.TextWriter output, ref System.IO.TextReader input, string prompt, Func<string, T> converter, Func<object, bool> validator, string errorMessage, string indicator = "\n>>> ")
+        public static T Input<T>(ref System.IO.StreamWriter output, ref System.IO.StreamReader input, string prompt, Func<string, T> converter, Func<object, bool> validator, string errorMessage, string indicator = "\n>>> ")
         {
             T result;
             while (true)
@@ -475,7 +475,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="output">Alternitive output stream.</param>
         /// <param name="keyPressEvent">Event raised when an option is selected</param>
         /// <returns>Selected option.</returns>
-        public static T Option<T>(T[] options, ref EventHandler<char> keyPressEvent, ref System.IO.TextWriter output, string message = null, bool displayInput = false)
+        public static T Option<T>(T[] options, ref EventHandler<char> keyPressEvent, ref System.IO.StreamWriter output, string message = null, bool displayInput = false)
         {
             if (options.Length == 0)
             {
@@ -547,7 +547,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="output">Alternitive output stream.</param>
         /// <param name="keyPressEvent">Event raised when an option is selected</param>
         /// <returns>Index of selected option.</returns>
-        public static int Option(object[] options, ref EventHandler<char> keyPressEvent, ref System.IO.TextWriter output, string message = null, bool displayInput = false)
+        public static int Option(object[] options, ref EventHandler<char> keyPressEvent, ref System.IO.StreamWriter output, string message = null, bool displayInput = false)
         {
             if (options.Length == 0)
             {
