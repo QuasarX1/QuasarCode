@@ -475,13 +475,13 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="output">Alternitive output stream.</param>
         /// <param name="keyPressEvent">Event raised when an option is selected</param>
         /// <returns>Selected option.</returns>
-        public static T Option<T>(T[] options, ref EventHandler<char> keyPressEvent, ref System.IO.StreamWriter output, string message = null, bool displayInput = false)
+        public static T Option<T>(T[] options, ref EventHandler<string> keyPressEvent, ref System.IO.StreamWriter output, string message = null, bool displayInput = false)
         {
             if (options.Length == 0)
             {
                 throw new ArgumentException("No options were provided - the array was enpty.");
             }
-
+            
             if (message != null)
             {
                 output.WriteLine(message);
@@ -507,9 +507,9 @@ namespace QuasarCode.Library.IO.Text
                 {
                     output.WriteLine("9.) Next Page");
                 }
-
+                
                 string result;
-                result = Convert.ToString(ReadChar(ref keyPressEvent));
+                result = ReadKey(ref keyPressEvent);
 
                 if (Tools.Validators.IsInt(result))
                 {
@@ -547,7 +547,7 @@ namespace QuasarCode.Library.IO.Text
         /// <param name="output">Alternitive output stream.</param>
         /// <param name="keyPressEvent">Event raised when an option is selected</param>
         /// <returns>Index of selected option.</returns>
-        public static int Option(object[] options, ref EventHandler<char> keyPressEvent, ref System.IO.StreamWriter output, string message = null, bool displayInput = false)
+        public static int Option(object[] options, ref EventHandler<string> keyPressEvent, ref System.IO.StreamWriter output, string message = null, bool displayInput = false)
         {
             if (options.Length == 0)
             {
@@ -581,7 +581,7 @@ namespace QuasarCode.Library.IO.Text
                 }
 
                 string result;
-                result = Convert.ToString(ReadChar(ref keyPressEvent));
+                result = ReadKey(ref keyPressEvent);
 
 
                 if (Tools.Validators.IsInt(result))
@@ -617,34 +617,36 @@ namespace QuasarCode.Library.IO.Text
         /// </summary>
         /// <param name="keyPressEvent">Event that provides characters</param>
         /// <returns></returns>
-        public static char ReadChar(ref EventHandler<char> keyPressEvent)
+        public static string ReadKey(ref EventHandler<string> keyPressEvent)
         {
             var updater = new KeyPressUpdater(ref keyPressEvent);
 
             // Block the calling thread untill a value is returned
-            while (updater.key is null)
+            while (true)
             {
-                break;
+                if (updater.key != null)
+                {
+                    break;
+                }
             }
             
-            return (char)updater.key;
-            
+            return updater.key;
         }
 
         private class KeyPressUpdater
         {
-            EventHandler<char> keyPressEvent;
+            EventHandler<string> keyPressEvent;
 
-            public char? key = null;
+            public string key = null;
 
-            public KeyPressUpdater(ref EventHandler<char> keyPressEvent)
+            public KeyPressUpdater(ref EventHandler<string> keyPressEvent)
             {
                 this.keyPressEvent = keyPressEvent;
 
                 keyPressEvent += onPress;
             }
 
-            void onPress(object sender, char keyPressed)
+            void onPress(object sender, string keyPressed)
             {
                 keyPressEvent -= onPress;
                 key = keyPressed;
