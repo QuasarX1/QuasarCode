@@ -117,7 +117,7 @@
     <Compile Include="QuasarCode\Science\graph.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuasarCode\IO\Text\console.py">
+    <Compile Include="QuasarCode\IO\Text\renameMe.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Science\__init__.py">
@@ -129,6 +129,9 @@
     <Compile Include="testing.py">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda37-64" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
