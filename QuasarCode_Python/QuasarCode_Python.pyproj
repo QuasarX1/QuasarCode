@@ -117,7 +117,7 @@
     <Compile Include="QuasarCode\Science\graph.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuasarCode\IO\Text\renameMe.py">
+    <Compile Include="QuasarCode\IO\Text\console.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Science\__init__.py">
