@@ -1,4 +1,22 @@
 import unittest
+
+import QuasarCode.edp as edp
+
+class Test_edp(unittest.TestCase):
+    #def test_testNameHere(self):
+    #    self.fail("Not implemented")
+
+    def test_standaloneMethod(self):
+        def testMethod():
+            return 0
+
+        event = edp.Event()
+        event += testMethod
+
+        self.assertEqual(event.run()[0], 0, "Method should have returned 0")
+
+
+
 from QuasarCode.Games.Spinners import Spinner, ISpinner
 from QuasarCode.Games.Dice import NDice, IDice, Dice6, Dice8, Dice12
 
