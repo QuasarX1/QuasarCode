@@ -19,7 +19,7 @@ def errorString(value: float, error: float, units: str = None, normalise: bool =
     """
     Formats a number and its error as a single string
     """
-    if normalise:
+    if normalise:#TODO: this dosn't normalise the value it just does the error
         error = sigFig(error, 1)
 
     if units is None:
