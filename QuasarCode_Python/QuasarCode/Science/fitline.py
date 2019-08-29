@@ -4,10 +4,14 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 from enum import Enum
-Figure = object# Partial initialisation to allow circular reference for type hints. See EOF for import
+IAutomaticFigure = object# Partial initialisation to allow circular reference for type hints. See EOF for import
 from QuasarCode.Science.data import errorString, standardFormStringIfNessessary
 
 class LineType(Enum):
+    """
+    An enumeration listing the valid line types used by the LineOfBestFit class.
+    """
+
     none = 0
     straight = 1,# mx + c
     quadratic = 2,# ax^2 + bx + c
@@ -17,15 +21,34 @@ class LineType(Enum):
     exponential = 6,# a e^(bx) + c
     logarithmic = 7,# a e^(bx) + c where b is negitive
     sin = 8,# a sin(bx + c)
+    custom = 9
 
 
 class LineOfBestFit(object):
     """
+    Calculates and stores a line of best fit using an associated Figure object holding the data and optional errors.
+
+    Arguments:
+        Figure figure -> the accociated Figure object with the data needed to calculate the fit.
+
+        LineType lineType -> The type of line to be created. Use LineType.custom for custom options.
+                                (Defualt is LineType.straight)
+
+        dict initialFitVariables -> A dictionary containing the fit variables and their starting value used to
+                                    overide he defults or to specify a custom fit. Variables should be in oposite
+                                    order to that expected by the fitting functions i.e. m then c for y = m * x + c (Defult is None)
+
+        list customFitMethods -> A list with two items: [the fitting function, the error function] (Defult is None)
+
+    A custom fit can be produced by specifying the lineType argument as LineType.custom and then specifying the fit
+    variables and providing the fitting functions. LineOfBestFit.createGenericErrorFunc allows a fit function to be
+    specified to produce a generic error function. Resulting customFitMethods for this would be
+    [fitFunc, errorFunc] or [fitFunc, LineOfBestFit.createGenericErrorFunc(fitFunc)]
     """
 
-    def __init__(self, lineType: LineType = LineType.straight, graph: Figure = None, initialFitVariables: dict = None, customFitMethods: list = None):
+    def __init__(self, figure: IAutomaticFigure, lineType: LineType = LineType.straight, initialFitVariables: dict = None, customFitMethods: list = None):
         self.lineType = lineType
-        self.graph: Figure = graph
+        self.figure: Figure = figure
 
         if initialFitVariables is None:
             if self.lineType == LineType.straight:
@@ -44,6 +67,8 @@ class LineOfBestFit(object):
                 self.initialFitVariables = {"a": 1.0, "b": -1.0, "c": 1.0}
             elif self.lineType == LineType.sin:
                 self.initialFitVariables = {"a": 1.0, "b": 1.0, "c": 1.0}
+            elif self.lineType == LineType.custom:
+                raise ValueError("No fit variables were provided. This is required for a custom fit.")
         else:
             self.initialFitVariables = initialFitVariables
 
@@ -69,7 +94,14 @@ class LineOfBestFit(object):
             elif self.lineType == LineType.sin:
                 self.fitLine = LineOfBestFit.fitLine_sin
                 self.fitError = LineOfBestFit.fitError_sin
+            elif self.lineType == LineType.custom:
+                raise ValueError("No fit functions were provided. This is required for a custom fit.")
         else:
+            if not isinstance(customFitMethods, list):
+                raise TypeError("The value provided for the argument of customFitMethods was not a list.")
+            elif len(customFitMethods) != 2:
+                raise ValueError("The value provided for the argument of customFitMethods had {} elements. It must have exactly 2.".format(len(customFitMethods)))
+
             self.fitLine = customFitMethods[0]
             self.fitError = customFitMethods[1]
 
@@ -81,23 +113,42 @@ class LineOfBestFit(object):
 
         self.runFit()
 
-    def runFit(self):
+    def runFit(self, linePoints = 1000000):
         """
         Runs the fitting algorithem with the current fit atributes
+
+        Arguments:
+            int linePoints -> the number of x values to use within the min to max range of
+                                the data points in order to create the fit line. (Defult is 1,000,000)
 
         Credits:
             Tim Greenshaw
             Christopher Rowe
         """
 
-        if self.graph is None:
-            raise AttributeError("The \"graph\" property was not set as no figure has been linked.")
+        if not isinstance(linePoints, int):
+            raise TypeError("The value provided for the argument \"linePoints\" was not of type int.")
+        elif linePoints <= 0:
+            raise ValueError("The number of points must be a non zero positive value.")
+
+        if not isinstance(self.figure, IAutomaticFigure):
+            raise AttributeError("The \"figure\" property was not set as no valid figure has been linked.")
 
         initialValues = []
         self.fitVariables = {}
 
-        if self.lineType == LineType.straight:
-            #self.fit, self.fittingOutput, self.fitVariables["m"], self.fitVariables["c"], self.fitQuality = plotStraightLineGraph(graph.x, graph.y, graph.xError, graph.yError, "", False, [self.initialFitVariables["c"], self.initialFitVariables["m"]])
+        # In the event that the line type none was specified - don't create a line.
+        if self.lineType == LineType.none or self.lineType is None:
+            self.fittingOutput = "Fit type \"none\" specified. No fit generated."
+            self.fitQuality = math.inf
+            for key in self.initialFitVariables:
+                self.fitVariables[key] = None
+            self.fit_X = None
+            self.fit_Y = None
+            return
+
+        # Set the initial values for the specified type of line
+        elif self.lineType == LineType.straight:
             initialValues = [self.initialFitVariables["c"], self.initialFitVariables["m"]]
         elif self.lineType == LineType.quadratic:
             initialValues = [self.initialFitVariables["c"], self.initialFitVariables["b"], self.initialFitVariables["a"]]
@@ -111,10 +162,13 @@ class LineOfBestFit(object):
             initialValues = [self.initialFitVariables["c"], self.initialFitVariables["b"], self.initialFitVariables["a"]]
         elif self.lineType == LineType.sin:
             initialValues = [self.initialFitVariables["c"], self.initialFitVariables["b"], self.initialFitVariables["a"]]
+        elif self.lineType == LineType.custom:
+            initialValues = [self.initialFitVariables[key] for key in self.initialFitVariables]
+            initialValues.reverse()
 
 
-        numberOfPoints = np.size(self.graph.x)
-        out = least_squares(self.fitError, initialValues, args=(self.graph.x, self.graph.y, self.graph.xError if self.graph.xError is not None else 0, self.graph.yError if self.graph.yError is not None else 0))
+        numberOfPoints = np.size(self.figure.get_x())
+        out = least_squares(self.fitError, initialValues, args=(self.figure.get_x(), self.figure.get_y(), self.figure.get_xError() if self.figure.get_xError() is not None else 0, self.figure.get_yError() if self.figure.get_yError() is not None else 0))
 
         if not out.success:
             #raise RuntimeWarning("Fit failed.")
@@ -123,6 +177,8 @@ class LineOfBestFit(object):
             self.fitVariables = {}
             for key in self.initialFitVariables:
                 self.fitVariables[key] = None
+            self.fit_X = None
+            self.fit_Y = None
             return
             
 
@@ -131,7 +187,7 @@ class LineOfBestFit(object):
         finalValues = out.x
 
         # Calculate chi^2 per point, summed chi^2 and chi^2/NDF (Number of Degrees of Freedom)
-        chiList = self.fitError(finalValues, self.graph.x, self.graph.y, self.graph.xError if self.graph.xError is not None else 0, self.graph.yError if self.graph.yError is not None else 0)**2
+        chiList = self.fitError(finalValues, self.figure.get_x(), self.figure.get_y(), self.figure.get_xError() if self.figure.get_xError() is not None else 0, self.figure.get_yError() if self.figure.get_yError() is not None else 0)**2
         chiSquared = np.sum(chiList)
         NDF = numberOfPoints - 2#TODO: check this - overide option?
         reducedChiSquared = chiSquared/NDF
@@ -141,9 +197,9 @@ class LineOfBestFit(object):
                 + "\n\n    chi Squared = {}".format(standardFormStringIfNessessary(chiSquared, 5)) \
                 + "\n    chi Squared / NDF = {}".format(standardFormStringIfNessessary(reducedChiSquared, 5)) \
                 + "\n\n    Final Fit Variables:\n        " + str(finalValues) \
-                + "\n\n    y:\n        " + str(self.graph.y) \
-                + "\n\n    dx:\n        " + str(self.graph.xError) \
-                + "\n\n    dy:\n        " + str(self.graph.yError)
+                + "\n\n    y:\n        " + str(self.figure.get_y()) \
+                + "\n\n    dx:\n        " + str(self.figure.get_xError()) \
+                + "\n\n    dy:\n        " + str(self.figure.get_yError())
 
         # Compute covariance
         jMat = out.jac
@@ -163,8 +219,7 @@ class LineOfBestFit(object):
                 finalErrors.append(np.sqrt(covar[i, i]))
             
         # Calculate fitted function values
-        #self.fit = self.fitLine(finalValues, self.graph.x)
-        self.fit_X = np.linspace(min(self.graph.x), max(self.graph.x), 1000000)
+        self.fit_X = np.linspace(min(self.figure.get_x()), max(self.figure.get_x()), linePoints)
         self.fit_Y = self.fitLine(finalValues, self.fit_X)
         
         self.fitQuality = reducedChiSquared
@@ -205,11 +260,12 @@ class LineOfBestFit(object):
 
         Credits:
             Tim Greenshaw
+            Christopher Rowe
         """
         if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(xerr, int) and yerr == 0):
             e = (y - LineOfBestFit.fitLine_straight(p, x)) / np.sqrt(yerr**2 + p[1]**2 * xerr**2)
         else:
-            e = y - LineOfBestFit.fitLine_straight(p, x)
+            e = y - predicted_y
 
         return e
 
@@ -232,12 +288,7 @@ class LineOfBestFit(object):
 
         p: [c, b, a]
         """
-        predicted_y = LineOfBestFit.fitLine_quadratic(p, x)
-        if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(xerr, int) and yerr == 0):
-            e = (y - predicted_y) / np.sqrt(xerr**2 + yerr**2)
-        else:
-            e = y - LineOfBestFit.fitLine_quadratic(p, x)
-        return e
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_quadratic, p, x, y, xerr, yerr)
 
     @staticmethod
     def fitLine_cubic(p: list, x):
@@ -258,12 +309,7 @@ class LineOfBestFit(object):
 
         p: [d, c, b, a]
         """
-        predicted_y = LineOfBestFit.fitLine_cubic(p, x)
-        if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(xerr, int) and yerr == 0):
-            e = (y - predicted_y) / np.sqrt(xerr**2 + yerr**2)
-        else:
-            e = y - LineOfBestFit.fitLine_cubic(p, x)
-        return e
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_cubic, p, x, y, xerr, yerr)
 
     @staticmethod
     def fitLine_quartic(p: list, x):
@@ -284,12 +330,7 @@ class LineOfBestFit(object):
 
         p: [e, d, c, b, a]
         """
-        predicted_y = LineOfBestFit.fitLine_quartic(p, x)
-        if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(xerr, int) and yerr == 0):
-            e = (y - predicted_y) / np.sqrt(xerr**2 + yerr**2)
-        else:
-            e = y - LineOfBestFit.fitLine_quartic(p, x)
-        return e
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_quartic, p, x, y, xerr, yerr)
 
     @staticmethod
     def fitLine_power(p: list, x):
@@ -310,12 +351,7 @@ class LineOfBestFit(object):
 
         p: [c, b, a]
         """
-        predicted_y = LineOfBestFit.fitLine_power(p, x)
-        if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(xerr, int) and yerr == 0):
-            e = (y - predicted_y) / np.sqrt(xerr**2 + yerr**2)
-        else:
-            e = y - LineOfBestFit.fitLine_power(p, x)
-        return e
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_power, p, x, y, xerr, yerr)
 
     @staticmethod
     def fitLine_exponential(p: list, x):
@@ -336,12 +372,7 @@ class LineOfBestFit(object):
 
         p: [c, b, a]
         """
-        predicted_y = LineOfBestFit.fitLine_exponential(p, x)
-        if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(xerr, int) and yerr == 0):
-            e = (y - predicted_y) / np.sqrt(xerr**2 + yerr**2)
-        else:
-            e = y - LineOfBestFit.fitLine_exponential(p, x)
-        return e
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_exponential, p, x, y, xerr, yerr)
 
     @staticmethod
     def fitLine_sin(p: list, x):
@@ -362,12 +393,28 @@ class LineOfBestFit(object):
 
         p: [c, b, a]
         """
-        predicted_y = LineOfBestFit.fitLine_sin(p, x)
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_sin, p, x, y, xerr, yerr)
+
+    @staticmethod
+    def __fitError_generic(fitFunction, p: list, x, y, xerr, yerr):
+        """
+        Calculates the error for a specified function
+        error = (y - y_guess) / sqrt(dy^2 + dx^2)
+        """
+        predicted_y = fitFunction(p, x)
         if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(xerr, int) and yerr == 0):
             e = (y - predicted_y) / np.sqrt(xerr**2 + yerr**2)
         else:
-            e = y - LineOfBestFit.fitLine_sin(p, x)
+            e = y - predicted_y
         return e
+
+    @staticmethod
+    def createGenericErrorFunc(fitFunction):
+        """
+        Wraps a fitting function inside the generic error function.
+        Use this to utilise the generic fitting function with a custom fit.
+        """
+        return lambda p, x, y, xerr, yerr: __fitError_generic(fitFunction, p, x, y, xerr, yerr)
 
 
 
@@ -485,4 +532,4 @@ class LineOfBestFit(object):
     
 #    return fitData, output, (mVal, mErr), (cVal, cErr), redchisq
 
-from QuasarCode.Science.figure import Figure
+from QuasarCode.Science.figure import IAutomaticFigure
