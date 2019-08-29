@@ -4,12 +4,26 @@ from QuasarCode.Science.figure import Figure
 
 class Graph(object):
     """
+    Displays multiple figures as a single figure and allows them to be saved as a single figure.
+
+    Arguments:
+        list[Figure] figures -> A list of figures to display in order. Must have at least one item if the "data" paramiter is blank. (Default is [])
+
+        list[list] data -> A list of lists of paramiters to be passed to the Figure object constructor. Must have at least one item if the "figures" paramiter is blank. (Default is [])
+
+        tuple shape -> The number of columns and rows to use to display the individual figures. (Default is (1, 1))
+
+        tuple size -> A tuple with the horizontal and vertical size of each individual figure. (Defult is (6.4, 4.8))
+
+        string title -> The title to be displayed on the graph. (Default is "")
+
+        string saveName -> The png file name (can be precided with a file path) to save the graph under. (Default is "figure.png")
     """
 
-    def __init__(self, figures = [], data = [], shape = (1, 1), size = None, title = "", saveName = "figure.png", axisAlocationOveride = {}):
+    def __init__(self, figures = [], data = [], shape = (1, 1), size = None, title = "", saveName = "figure.png"):
         self.title = title
         self.saveName = saveName
-        self.size = figsize = size if size is not None else [6.4, 4.8]# This is the deafult as documented by https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.figure.html
+        self.size = size if size is not None else [6.4, 4.8]# This is the deafult as documented by https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.figure.html
 
         self.__shape = shape if len(shape) > 1 else (shape[0], 1)
         self.figure, self.axes = plt.subplots(ncols = self.__shape[0], nrows = self.__shape[1])
@@ -38,7 +52,17 @@ class Graph(object):
 
     def plot(self, options = None):
         """
-        options as dict to apply to all or as list of dict to apply to in order
+        Draws the figure onto an axis.
+
+        Arguments:
+            matplotlib.axes._subplots.AxesSubplot axisOveride -> an alternitive axis to draw on.
+
+            dict options -> Named arguments to be passed to all the plot methods of the contained figure objects.
+                            Argument names should be strings. (Default is None)
+
+            OR
+
+            list[dict] options -> A list of dicts - one for each figure for the same purpose as the above. (Default is None)
         """
         for i in range(self.numberOfFigures):
             axis = self.axes[i // self.__shape[0]][i - (i // self.__shape[1]) * self.__shape[0]]
@@ -49,10 +73,19 @@ class Graph(object):
         self.figure.set_figheight(self.size[1])
             
     def save(self, nameOveride = None):
+        """
+        Saves the graph in its current state as a png using the current save name.
+
+        Arguments:
+            string nameOveride -> The filename or filepath to use instead of the one stored by the object.
+        """
         if nameOveride is not None and nameOveride != "":
             self.figure.savefig(nameOveride)
         elif self.saveName is not None and self.saveName != "":
             self.figure.savefig(self.saveName)
 
     def show(self):
+        """
+        Show the figure(s) in a window.
+        """
         self.figure.show()

@@ -370,7 +370,7 @@ class Figure(IAutomaticFigure):
 
 
     # Property Accessors
-
+    
     def setXRange(self, value: tuple):
         """
         Sets the range ov values on the x-axis
