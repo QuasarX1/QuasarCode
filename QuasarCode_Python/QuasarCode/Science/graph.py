@@ -1,81 +1,58 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from QuasarCode.Science.fitline import LineOfBestFit, LineType
+from QuasarCode.Science.figure import Figure
 
-class Figure(object):
+class Graph(object):
     """
     """
 
-    def __init__(self, x, y, xError, yError, size = None, title = "", xLabel = "", yLabel = "", saveName = "figure.png"):
-        self.figure = plt.figure(figsize = size if size is not None else None)
-        self.axis = None
+    def __init__(self, figures = [], data = [], shape = (1, 1), size = None, title = "", saveName = "figure.png", axisAlocationOveride = {}):
         self.title = title
-        self.xLabel = xLabel
-        self.yLabel = yLabel
         self.saveName = saveName
+        self.size = figsize = size if size is not None else [6.4, 4.8]# This is the deafult as documented by https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.figure.html
 
-        self.x: np.ndarray = np.array(x)
-        self.y: np.ndarray = np.array(y)
+        self.__shape = shape if len(shape) > 1 else (shape[0], 1)
+        self.figure, self.axes = plt.subplots(ncols = self.__shape[0], nrows = self.__shape[1])
+        if not isinstance(self.axes, np.ndarray):
+            self.axes = [[self.axes]]
+        elif not isinstance(self.axes[0], np.ndarray):
+            self.axes = [self.axes]
 
-        self.xError: np.ndarray = np.array(xError)
-        self.yError: np.ndarray = np.array(yError)
+        self.figures = figures
 
-        self.showErrorBars = True
-        self.fit = None
+        self.data = np.array(data)
 
-        self.customXRange = False
-        self.__xRange = (None, None)
-        self.xRange = property(fget = (lambda self: self.__xRange), fset = self.setXRange)
-        
-        self.customYRange = False
-        self.__yRange = (None, None)
-        self.yRange = property(fget = lambda self: self.__yRange, fset = self.setYRange)
+        # The number of extra figures needed to hold the data provided
+        requiredFigures = np.shape(self.data)[0]#TODO: make this a more robust check
+
+        if requiredFigures + len(self.figures) > self.__shape[0] * self.__shape[1]:
+            raise ValueError("The shape provided didn't allow enough space for all of the figures provided. The shape allowed for {} but {} were avalable.".format(shape[0] * (shape[1] if len(shape) > 1 else 1), requiredFigures + len(self.figures)))
+
+        # Adds the extra figures
+        for i in range(requiredFigures):
+            self.figures.append(Figure(*self.data[i]))
+
+        self.numberOfFigures = len(self.figures)
 
         self.plot()
 
-    def plot(self):
-        self.figure.clf()
-        self.axis = self.figure.gca()
+    def plot(self, options = None):
+        """
+        options as dict to apply to all or as list of dict to apply to in order
+        """
+        for i in range(self.numberOfFigures):
+            axis = self.axes[i // self.__shape[0]][i - (i // self.__shape[1]) * self.__shape[0]]
+            axis.cla()
+            self.figures[i].plot(axis, **(options if isinstance(options, dict) else (options[i] if isinstance(options, list) and len(options) > i and isinstance(options[i], dict) else {}) ))
 
-        if self.showErrorBars and (self.xError is not None or self.yError is not None):
-            self.axis.errorbar(self.x, self.y, self.xError, self.yError, fmt='r', linestyle = '')
-
-            if not self.customXRange:# TODO: alter indexing of retrived indeces
-                #self.xRange = (min(self.x) - self.xError[self.x.index(min(self.x))], max(self.x) + self.xError[self.x.index(max(self.x))])
-                self.xRange = (min(self.x) - self.xError[np.asarray(self.x == min(self.x)).nonzero()[0]], max(self.x) + self.xError[np.asarray(self.x == max(self.x)).nonzero()[0]])
-            if not self.customYRange:
-                self.yRange = (min(self.y) - self.yError[np.asarray(self.y == min(self.y)).nonzero()[0]], max(self.y) + self.yError[np.asarray(self.y == max(self.y)).nonzero()[0]])
-        else:
-            self.axis.scatter(self.x, self.y)
-
-            if not self.customXRange:
-                self.xRange = (min(self.x), max(self.x))
-            if not self.customYRange:
-                self.yRange = (min(self.x), max(self.y))
-
-        self.axis.set_xlim([self.__xRange[0], self.__xRange[1]])
-        self.axis.set_ylim([self.__yRange[0], self.__yRange[1]])
-
-        if self.fit is not None:
-            self.axis.plot(self.x, self.fit.fit)
-
-    def createFitLine(self, type: LineType = LineType.straight):
-        self.fit = LineOfBestFit(type, self)
-
-    def save(self):
-        if self.saveName is not None and self.saveName != "":
+        self.figure.set_figwidth(self.size[0])
+        self.figure.set_figheight(self.size[1])
+            
+    def save(self, nameOveride = None):
+        if nameOveride is not None and nameOveride != "":
+            self.figure.savefig(nameOveride)
+        elif self.saveName is not None and self.saveName != "":
             self.figure.savefig(self.saveName)
 
     def show(self):
         self.figure.show()
-
-
-    # Property Accessors
-
-    def setXRange(self, value):
-        self.customXRange = True
-        self.__xRange = value
-
-    def setYRange(self, value):
-        self.customYRange = True
-        self.__yRange = value

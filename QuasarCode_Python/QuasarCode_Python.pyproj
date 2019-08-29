@@ -111,6 +111,9 @@
     <Compile Include="QuasarCode\Science\data.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="QuasarCode\Science\figure.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="QuasarCode\Science\fitline.py">
       <SubType>Code</SubType>
     </Compile>

@@ -73,8 +73,9 @@ class Test_Maths(unittest.TestCase):
 
 
 from decimal import Decimal
-from QuasarCode.Science.graph import Figure
-from QuasarCode.Science.data import errorString, sigFig
+##from QuasarCode.Science.graph import Figure
+##from QuasarCode.Science.data import errorString, sigFig
+from QuasarCode.Science import Figure, errorString, sigFig
 
 class Test_Science(unittest.TestCase):
     def test_sigFig(self):

@@ -33,15 +33,15 @@ def sigFig(num: Decimal, digits: int):
     """
     num = Decimal(num)
 
-    if num >= 1:
+    if np.abs(num) >= 1:
         power = 0
-        while num > 10:
+        while np.abs(num) > 10:
             power += 1
             num /= 10
 
     else:
         power = 0
-        while num < 1:
+        while np.abs(num) < 1:
             power -= 1
             num *= 10
 
@@ -67,8 +67,25 @@ def standardForm(num: Decimal):
         while num < 1:
             power -= 1
             num *= 10
+            if num > 1:
+                break
+        power += 1
 
     return num, power
+
+def standardFormString(num: Decimal, numberSigFig = None):
+    """
+    Determines the standard form representation of a number and represents it as a string
+    """
+    number, power = standardForm(num)
+
+    return "{} * 10^{}".format(float(sigFig(number, numberSigFig) if numberSigFig is not None else number), power) if power != 0 else str(float(sigFig(number, numberSigFig) if numberSigFig is not None else number))
+
+def standardFormStringIfNessessary(num: Decimal, numberSigFig = None):
+    if np.abs(num) >= 1000 or np.abs(num) < 0.001:
+        return standardFormString
+    else:
+        return str(float(sigFig(num, numberSigFig) if numberSigFig is not None else num))
 
 def trueRound(number: Decimal, nDigits: int = None):
     """
