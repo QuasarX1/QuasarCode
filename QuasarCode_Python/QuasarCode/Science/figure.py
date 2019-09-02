@@ -44,6 +44,22 @@ class DrawInstruction(object):
         """
         axis.scatter(*args, **kwargs)
 
+class IAutomaticFigure(object):
+    """
+    Interface for the Figure object.
+    Any object that inherits this and defines "x", "y", "xError" and "yError" members
+    that are publicly avalable will be treated as a valid object for use with the LineOfBestFit constructor.
+    """
+
+    def get_x(self):
+        return self.x
+    def get_y(self):
+        return self.y
+    def get_xError(self):
+        return self.xError
+    def get_yError(self):
+        return self.yError
+
 class ManualFigure(object):
     """
     A figure compatable with the QuasarCode.Science.Graph object that allows
@@ -176,22 +192,6 @@ class ManualFigure(object):
             self.y = y
             self.xError = dx
             self.yError = dy
-
-class IAutomaticFigure(object):
-    """
-    Interface for the Figure object.
-    Any object that inherits this and defines "x", "y", "xError" and "yError" members
-    that are publicly avalable will be treated as a valid object for use with the LineOfBestFit constructor.
-    """
-
-    def get_x(self):
-        return self.x
-    def get_y(self):
-        return self.y
-    def get_xError(self):
-        return self.xError
-    def get_yError(self):
-        return self.yError
 
 class Figure(IAutomaticFigure):
     """
