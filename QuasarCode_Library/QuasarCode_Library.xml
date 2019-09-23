@@ -833,7 +833,7 @@
             Outputs text to the console. Prints only a new line.
             </summary>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.IO.StreamWriter@)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.IO.TextWriter@)">
             <summary>
             Outputs text to the console. Prints only a new line.
             <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
@@ -847,7 +847,7 @@
             <param name="end">String added to the end of the output.</param>
             <param name="moreText">List of any other strings to output.</param>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.String,System.IO.StreamWriter@,System.String,System.String[])">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.String,System.IO.TextWriter@,System.String,System.String[])">
             <summary>
             Outputs text to the console.
             </summary>
@@ -864,7 +864,7 @@
             <param name="end">String added to the end of the output.</param>
             <param name="moreText">List of any other strings to output. Must be able to be implicitly converted to a string.</param>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.Object,System.IO.StreamWriter@,System.String,System.Object[])">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.Object,System.IO.TextWriter@,System.String,System.Object[])">
             <summary>
             Outputs text versions of objects to the console.
             </summary>
@@ -880,7 +880,7 @@
             <param name="indicator">String to format line for input.</param>
             <returns>A line of input from the console as a string.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.IO.StreamWriter@,System.IO.StreamReader@,System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.IO.TextWriter@,System.IO.TextReader@,System.String)">
             <summary>
             Retrives an input from the console.
             </summary>
@@ -897,7 +897,7 @@
             <param name="indicator">String to format line for input.</param>
             <returns>A line of input from the console as a string.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.IO.StreamWriter@,System.IO.StreamReader@,System.String,System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.IO.TextWriter@,System.IO.TextReader@,System.String,System.String)">
             <summary>
             Retrives an input from the console with a prompt message.
             </summary>
@@ -917,7 +917,7 @@
             <param name="indicator">String to format line for input.</param>
             <returns>A line of input from the console as a string.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.IO.StreamWriter@,System.IO.StreamReader@,System.String,System.Func{System.String,System.Boolean},System.String,System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.IO.TextWriter@,System.IO.TextReader@,System.String,System.Func{System.String,System.Boolean},System.String,System.String)">
             <summary>
             Retrives an input from the console with a prompt message. Uses a method deligate to force valid input.
             </summary>
@@ -939,7 +939,7 @@
             <param name="indicator">String to format line for input.</param>
             <returns>A line of input from the console, coverted to the specified type.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.IO.StreamWriter@,System.IO.StreamReader@,System.String,System.Func{System.String,``0},System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.IO.TextWriter@,System.IO.TextReader@,System.String,System.Func{System.String,``0},System.String)">
             <summary>
             Retrives an input from the console with a prompt message. Converts the input to the given type.
             </summary>
@@ -962,7 +962,7 @@
             <param name="indicator">String to format line for input.</param>
             <returns>A line of input from the console, coverted to the specified type.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.IO.StreamWriter@,System.IO.StreamReader@,System.String,System.Func{System.String,``0},System.Func{System.Object,System.Boolean},System.String,System.String)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.IO.TextWriter@,System.IO.TextReader@,System.String,System.Func{System.String,``0},System.Func{System.Object,System.Boolean},System.String,System.String)">
             <summary>
             Retrives an input from the console with a prompt message. Uses a method deligate to force valid input. Converts the input to the given type (before validation)
             </summary>
@@ -994,7 +994,7 @@
             <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
             <returns>Index of selected option.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Option``1(``0[],System.EventHandler{System.String}@,System.IO.StreamWriter@,System.String,System.Boolean)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Option``1(``0[],System.EventHandler{System.String}@,System.IO.TextWriter@,System.String,System.Boolean)">
             <summary>
             Allows the user to select an item from an array of options. Returns the option. Uses a custom event for presenting characters for option selection.
             </summary>
@@ -1006,7 +1006,7 @@
             <param name="keyPressEvent">Event raised when an option is selected</param>
             <returns>Selected option.</returns>
         </member>
-        <member name="M:QuasarCode.Library.IO.Text.Console.Option(System.Object[],System.EventHandler{System.String}@,System.IO.StreamWriter@,System.String,System.Boolean)">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Option(System.Object[],System.EventHandler{System.String}@,System.IO.TextWriter@,System.String,System.Boolean)">
             <summary>
             Allows the user to select an item from an array of options. Returns the option's index. Uses a custom event for presenting characters for option selection.
             </summary>
