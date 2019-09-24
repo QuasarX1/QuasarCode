@@ -21,6 +21,7 @@ class LineType(Enum):
     exponential = 6,# a e^(bx) + c
     logarithmic = 7,# a e^(bx) + c where b is negitive
     sin = 8,# a sin(bx + c)
+    #gaussian = 9,# TODO: add this
     custom = 9
 
 
@@ -262,12 +263,13 @@ class LineOfBestFit(object):
             Tim Greenshaw
             Christopher Rowe
         """
-        if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(xerr, int) and yerr == 0):
-            e = (y - LineOfBestFit.fitLine_straight(p, x)) / np.sqrt(yerr**2 + p[1]**2 * xerr**2)
-        else:
-            e = y - predicted_y
+        #if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(yerr, int) and yerr == 0):
+        #    e = (y - LineOfBestFit.fitLine_straight(p, x)) / np.sqrt(yerr**2 + p[1]**2 * xerr**2)
+        #else:
+        #    e = y - predicted_y
 
-        return e
+        #return e
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_straight, p, x, y, xerr, yerr, lambda p, x, y, xerr, yerr: np.sqrt(yerr**2 + p[1]**2 * xerr**2))
 
     @staticmethod
     def fitLine_quadratic(p: list, x):
@@ -284,11 +286,11 @@ class LineOfBestFit(object):
     def fitError_quadratic(p: list, x, y, xerr, yerr):
         """
         Calculates the error for a quadratic curve
-        error = (y - y_guess) / sqrt(dy^2 + dx^2)
+        error = (y - y_guess) / sqrt(dy^2 + (ax + b) dx^2)
 
         p: [c, b, a]
         """
-        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_quadratic, p, x, y, xerr, yerr)
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_quadratic, p, x, y, xerr, yerr, lambda p, x, y, xerr, yerr: np.sqrt(yerr**2 + (p[2] * x + p[1])**2 * xerr**2))
 
     @staticmethod
     def fitLine_cubic(p: list, x):
@@ -305,11 +307,11 @@ class LineOfBestFit(object):
     def fitError_cubic(p: list, x, y, xerr, yerr):
         """
         Calculates the error for a cubic curve
-        error = (y - y_guess) / sqrt(dy^2 + dx^2)
+        error = (y - y_guess) / sqrt(dy^2 + (ax^2 + bx + c) dx^2)
 
         p: [d, c, b, a]
         """
-        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_cubic, p, x, y, xerr, yerr)
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_cubic, p, x, y, xerr, yerr, lambda p, x, y, xerr, yerr: np.sqrt(yerr**2 + (p[3] * x**2 + p[2] * x + p[1])**2 * xerr**2))
 
     @staticmethod
     def fitLine_quartic(p: list, x):
@@ -326,17 +328,17 @@ class LineOfBestFit(object):
     def fitError_quartic(p: list, x, y, xerr, yerr):
         """
         Calculates the error for a quartic curve
-        error = (y - y_guess) / sqrt(dy^2 + dx^2)
+        error = (y - y_guess) / sqrt(dy^2 + (ax^3 + bx^2 + cx + d) dx^2)
 
         p: [e, d, c, b, a]
         """
-        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_quartic, p, x, y, xerr, yerr)
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_quartic, p, x, y, xerr, yerr, lambda p, x, y, xerr, yerr: np.sqrt(yerr**2 + (p[4] * x**3 + p[3] * x**2 + p[2] * x + p[1])**2 * xerr**2))
 
     @staticmethod
     def fitLine_power(p: list, x):
         """
         Calculates a y value for a power curve
-        y_guess = ax^b + c
+        y_guess = a x^b + c
 
         p: [c, b, a]
         """
@@ -347,11 +349,11 @@ class LineOfBestFit(object):
     def fitError_power(p: list, x, y, xerr, yerr):
         """
         Calculates the error for a power curve
-        error = (y - y_guess) / sqrt(dy^2 + dx^2)
+        error = (y - y_guess) / sqrt(dy^2 + a b x^(b-1) dx^2)
 
         p: [c, b, a]
         """
-        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_power, p, x, y, xerr, yerr)
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_power, p, x, y, xerr, yerr, lambda p, x, y, xerr, yerr: np.sqrt(yerr**2 + (p[2] * p[1] * x**(p[1] - 1)) * xerr**2))
 
     @staticmethod
     def fitLine_exponential(p: list, x):
@@ -368,11 +370,11 @@ class LineOfBestFit(object):
     def fitError_exponential(p: list, x, y, xerr, yerr):
         """
         Calculates the error for an exponential curve (make b negitive for a logarithmic line)
-        error = (y - y_guess) / sqrt(dy^2 + dx^2)
+        error = (y - y_guess) / sqrt(dy^2 + a b e^(bx) dx^2)
 
         p: [c, b, a]
         """
-        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_exponential, p, x, y, xerr, yerr)
+        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_exponential, p, x, y, xerr, yerr, lambda p, x, y, xerr, yerr: np.sqrt(yerr**2 + (p[2] * p[1] * np.exp(p[1] * x)) * xerr**2))
 
     @staticmethod
     def fitLine_sin(p: list, x):
@@ -389,32 +391,36 @@ class LineOfBestFit(object):
     def fitError_sin(p: list, x, y, xerr, yerr):
         """
         Calculates the error for a sine curve
-        error = (y - y_guess) / sqrt(dy^2 + dx^2)
+        error = (y - y_guess) / sqrt(dy^2 + a b sin(bx + c) dx^2)
 
         p: [c, b, a]
         """
-        return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_sin, p, x, y, xerr, yerr)
+        #return LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_sin, p, x, y, xerr, yerr, lambda p, x, y, xerr, yerr: np.sqrt(yerr**2 + (p[2] * p[1] * np.cos(p[1] * x + p[0])) * xerr**2))
+        LineOfBestFit.__fitError_generic(LineOfBestFit.fitLine_sin, p, x, y, xerr, yerr, lambda p, x, y, xerr, yerr: np.sqrt(yerr**2 + (p[2] * p[1] * np.cos(p[1] * x + p[0])) * xerr**2))
 
     @staticmethod
-    def __fitError_generic(fitFunction, p: list, x, y, xerr, yerr):
+    def __fitError_generic(fitFunction, p: list, x, y, xerr, yerr, combineErrors = lambda p, x, y, xerr, yerr: np.sqrt(xerr**2 + yerr**2)):
         """
         Calculates the error for a specified function
-        error = (y - y_guess) / sqrt(dy^2 + dx^2)
+        error = (y - y_guess) / e where by defualt e is: sqrt(dy^2 + dx^2)
+
+        The error calculation should be e^2 = (δF/δx yerr)^2 + (δF/δy yerr)^2
+                                            = (δF/δx yerr)^2 + yerr^2           as the diferential of F(x) with respect to y is 1
         """
         predicted_y = fitFunction(p, x)
-        if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(xerr, int) and yerr == 0):
-            e = (y - predicted_y) / np.sqrt(xerr**2 + yerr**2)
+        if not (isinstance(xerr, int) and xerr == 0) and not (isinstance(yerr, int) and yerr == 0):
+            e = (y - predicted_y) / combineErrors(p, x, y, xerr, yerr)
         else:
             e = y - predicted_y
         return e
 
     @staticmethod
-    def createGenericErrorFunc(fitFunction):
+    def createGenericErrorFunc(fitFunction, combineErrors = lambda p, x, y, xerr, yerr: np.sqrt(xerr**2 + yerr**2)):
         """
         Wraps a fitting function inside the generic error function.
         Use this to utilise the generic fitting function with a custom fit.
         """
-        return lambda p, x, y, xerr, yerr: __fitError_generic(fitFunction, p, x, y, xerr, yerr)
+        return lambda p, x, y, xerr, yerr: __fitError_generic(fitFunction, p, x, y, xerr, yerr, combineErrors)
 
 
 

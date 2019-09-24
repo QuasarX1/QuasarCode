@@ -1,19 +1,32 @@
 import numpy as np
 from decimal import Decimal
 
-def consistancyTest(a, b, aErr, bErr = 0):
+#def consistancyTest(a, b, aErr, bErr = 0):
+#    """
+#    Performs a consistancy test to determine the integer number of sigma within which \
+#two values lie relitive to each other and their errors.
+#    """
+#    sigma = 0
+#    consistant = False
+#    while not consistant:
+#        sigma += 1
+#        checkValue = np.abs(b - a) - sigma * np.sqrt(bErr**2 + aErr**2)
+#        #print(checkValue)
+#        consistant = checkValue <= 0
+#    return sigma
+
+def consistancyTest(a, b, aErr, bErr = 0):#TODO: fully test this aproach
     """
     Performs a consistancy test to determine the integer number of sigma within which \
 two values lie relitive to each other and their errors.
     """
-    sigma = 0
-    consistant = False
-    while not consistant:
-        sigma += 1
-        checkValue = np.abs(b - a) - sigma * np.sqrt(bErr**2 + aErr**2)
-        #print(checkValue)
-        consistant = checkValue <= 0
-    return sigma
+    return int(np.ceil(np.abs(b - a) / np.sqrt(bErr**2 + aErr**2)))
+
+def isConsistant(a, b, aErr, bErr, sigma):
+    """
+    Convenience method for checking if two values are consistant within a given sigma value
+    """
+    return consistancyTest(a, b, aErr, bErr) <= sigma
 
 def errorString(value: float, error: float, units: str = None, normalise: bool = True):#TODO: sort normalisation for value
     """
