@@ -9,7 +9,7 @@ namespace QuasarCode.Library.Maths.Fields
 {
     public interface IVectorField<S, T> : IField<S, T> where S : ICoordinateSystem<S> where T : ILocatedVector<S>
     {
-        IScalarField<S, decimal> Grad();
+        IScalarField<S, decimal> Divergence();
 
         IVectorField<S, T> Curl();
     }

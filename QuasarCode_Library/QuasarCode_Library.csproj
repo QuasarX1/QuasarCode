@@ -27,6 +27,7 @@
   <ItemGroup>
     <Folder Include="Games\Systems\" />
     <Folder Include="IO\FileSystem\" />
+    <Folder Include="Maths\Coordinates\Systems\" />
     <Folder Include="Tools\DataStructures\" />
     <Folder Include="Tools\Exceptions\" />
     <Folder Include="Tools\Systems\" />

@@ -22,12 +22,12 @@ namespace QuasarCode.Library.Maths.Fields
             throw new NotImplementedException();
         }
 
-        IScalarField<S, decimal> IVectorField<S, T>.Grad()
+        IScalarField<S, decimal> IVectorField<S, T>.Divergence()
         {
             throw new NotImplementedException();
         }
 
-        public ScalarField<S> Grad()
+        public ScalarField<S> Divergence()
         {
             throw new NotImplementedException();
         }
