@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>QuasarCode.Library.Maths</RootNamespace>
+    <Version>0.0.0</Version>
+    <Authors>Christopher Rowe</Authors>
+    <Product>QuasarCode_Maths</Product>
+    <Copyright>Christopher Rowe</Copyright>
+    <RepositoryUrl>https://github.com/QuasarX1/QuasarCode</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Coordinates\Systems\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QuasarCode_Library_Tools\QuasarCode_Library_Tools.csproj" />
+  </ItemGroup>
+
+</Project>

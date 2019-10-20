@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>QuasarCode.Library.Tools</RootNamespace>
+    <Authors>Christopher Rowe</Authors>
+    <Company>Christopher Rowe</Company>
+    <Product>QuasarCode_Tools</Product>
+    <Version>0.0.0</Version>
+    <Copyright>Christopher Rowe</Copyright>
+    <RepositoryUrl>https://github.com/QuasarX1/QuasarCode</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Tools\DataStructures\" />
+    <Folder Include="Tools\Exceptions\" />
+    <Folder Include="Tools\Search\" />
+    <Folder Include="Tools\Sort\" />
+    <Folder Include="Tools\Systems\" />
+  </ItemGroup>
+
+</Project>

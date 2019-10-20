@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>QuasarCode.Library.Games</RootNamespace>
+    <Version>0.0.0</Version>
+    <Authors>Christopher Rowe</Authors>
+    <Company />
+    <Product>QuasarCode_Games</Product>
+    <Copyright>Christopher Rowe</Copyright>
+    <RepositoryUrl>https://github.com/QuasarX1/QuasarCode</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QuasarCode_Library_Tools\QuasarCode_Library_Tools.csproj" />
+  </ItemGroup>
+
+</Project>

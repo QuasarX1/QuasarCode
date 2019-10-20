@@ -1,17 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>QuasarCode.Library</RootNamespace>
     <AssemblyVersion>0.0.0.0</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
-    <Copyright>Christopher Rowe 2018</Copyright>
+    <Copyright>Christopher Rowe</Copyright>
     <Authors>Christopher Rowe</Authors>
     <Product>QuasarCode</Product>
     <RepositoryUrl>https://github.com/QuasarX1/QuasarCode</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <Version>0.0.0</Version>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <Company />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -21,20 +22,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Maths\Quantities\**" />
-    <EmbeddedResource Remove="Maths\Quantities\**" />
-    <None Remove="Maths\Quantities\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Games\Systems\" />
-    <Folder Include="IO\FileSystem\" />
-    <Folder Include="Maths\Coordinates\Systems\" />
-    <Folder Include="Tools\DataStructures\" />
-    <Folder Include="Tools\Exceptions\" />
-    <Folder Include="Tools\Systems\" />
-    <Folder Include="Tools\Sort\" />
-    <Folder Include="Tools\Search\" />
+    <ProjectReference Include="..\QuasarCode_Library_Games\QuasarCode_Library_Games.csproj" />
+    <ProjectReference Include="..\QuasarCode_Library_IO\QuasarCode_Library_IO.csproj" />
+    <ProjectReference Include="..\QuasarCode_Library_Maths\QuasarCode_Library_Maths.csproj" />
+    <ProjectReference Include="..\QuasarCode_Library_Symbolic\QuasarCode_Library_Symbolic.csproj" />
+    <ProjectReference Include="..\QuasarCode_Library_Tools\QuasarCode_Library_Tools.csproj" />
   </ItemGroup>
 
 </Project>
