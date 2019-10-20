@@ -12,11 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Coordinates\Systems\" />
+    <ProjectReference Include="..\QuasarCode_Library_Tools\QuasarCode_Library_Tools.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuasarCode_Library_Tools\QuasarCode_Library_Tools.csproj" />
+    <Folder Include="Coordinates\" />
+    <Folder Include="Fields\" />
+    <Folder Include="Matrices\" />
   </ItemGroup>
 
 </Project>
