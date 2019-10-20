@@ -813,9 +813,30 @@
             Provites IO methods for intervacing with a text based console.
             </summary>
         </member>
+        <member name="F:QuasarCode.Library.IO.Text.Console.DeafultOut">
+            <summary>
+            Defult text output stream. Deafults to System.Console.Out
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.IO.Text.Console.DeafultError">
+            <summary>
+            Defult error stream. Deafults to System.Console.Error
+            </summary>
+        </member>
+        <member name="F:QuasarCode.Library.IO.Text.Console.DeafultIn">
+            <summary>
+            Defult text input stream. Deafults to System.Console.In
+            </summary>
+        </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Print">
             <summary>
             Outputs text to the console. Prints only a new line.
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.IO.TextWriter@)">
+            <summary>
+            Outputs text to the console. Prints only a new line.
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
             </summary>
         </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.String,System.String,System.String[])">
@@ -826,12 +847,30 @@
             <param name="end">String added to the end of the output.</param>
             <param name="moreText">List of any other strings to output.</param>
         </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.String,System.IO.TextWriter@,System.String,System.String[])">
+            <summary>
+            Outputs text to the console.
+            </summary>
+            <param name="text">The text to output.</param>
+            <param name="end">String added to the end of the output.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="moreText">List of any other strings to output.</param>
+        </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.Object,System.String,System.Object[])">
             <summary>
             Outputs text versions of objects to the console.
             </summary>
             <param name="text">The object to output. Must be able to be implicitly converted to a string.</param>
             <param name="end">String added to the end of the output.</param>
+            <param name="moreText">List of any other strings to output. Must be able to be implicitly converted to a string.</param>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Print(System.Object,System.IO.TextWriter@,System.String,System.Object[])">
+            <summary>
+            Outputs text versions of objects to the console.
+            </summary>
+            <param name="text">The object to output. Must be able to be implicitly converted to a string.</param>
+            <param name="end">String added to the end of the output.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
             <param name="moreText">List of any other strings to output. Must be able to be implicitly converted to a string.</param>
         </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String)">
@@ -841,12 +880,31 @@
             <param name="indicator">String to format line for input.</param>
             <returns>A line of input from the console as a string.</returns>
         </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.IO.TextWriter@,System.IO.TextReader@,System.String)">
+            <summary>
+            Retrives an input from the console.
+            </summary>
+            <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
+            <returns>A line of input from the console as a string.</returns>
+        </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.String)">
             <summary>
             Retrives an input from the console with a prompt message.
             </summary>
             <param name="prompt">Message to be printed to the display to request input.</param>
             <param name="indicator">String to format line for input.</param>
+            <returns>A line of input from the console as a string.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.IO.TextWriter@,System.IO.TextReader@,System.String,System.String)">
+            <summary>
+            Retrives an input from the console with a prompt message.
+            </summary>
+            <param name="prompt">Message to be printed to the display to request input.</param>
+            <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
             <returns>A line of input from the console as a string.</returns>
         </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.String,System.Func{System.String,System.Boolean},System.String,System.String)">
@@ -859,6 +917,18 @@
             <param name="indicator">String to format line for input.</param>
             <returns>A line of input from the console as a string.</returns>
         </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input(System.IO.TextWriter@,System.IO.TextReader@,System.String,System.Func{System.String,System.Boolean},System.String,System.String)">
+            <summary>
+            Retrives an input from the console with a prompt message. Uses a method deligate to force valid input.
+            </summary>
+            <param name="prompt">Message to be printed to the display to request input.</param>
+            <param name="validator">Validator method deligate. Takes a string and returns a boolean.</param>
+            <param name="errorMessage">Message to display if validation fails before asking for the input again.</param>
+            <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
+            <returns>A line of input from the console as a string.</returns>
+        </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.String)">
             <summary>
             Retrives an input from the console with a prompt message. Converts the input to the given type.
@@ -867,6 +937,18 @@
             <param name="prompt">Message to be printed to the display to request input.</param>
             <param name="converter">Method deligate to convert the string input to the requested type.</param>
             <param name="indicator">String to format line for input.</param>
+            <returns>A line of input from the console, coverted to the specified type.</returns>
+        </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.IO.TextWriter@,System.IO.TextReader@,System.String,System.Func{System.String,``0},System.String)">
+            <summary>
+            Retrives an input from the console with a prompt message. Converts the input to the given type.
+            </summary>
+            <typeparam name="T">Return type</typeparam>
+            <param name="prompt">Message to be printed to the display to request input.</param>
+            <param name="converter">Method deligate to convert the string input to the requested type.</param>
+            <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
             <returns>A line of input from the console, coverted to the specified type.</returns>
         </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.String,System.Func{System.String,``0},System.Func{System.Object,System.Boolean},System.String,System.String)">
@@ -880,9 +962,22 @@
             <param name="indicator">String to format line for input.</param>
             <returns>A line of input from the console, coverted to the specified type.</returns>
         </member>
+        <member name="M:QuasarCode.Library.IO.Text.Console.Input``1(System.IO.TextWriter@,System.IO.TextReader@,System.String,System.Func{System.String,``0},System.Func{System.Object,System.Boolean},System.String,System.String)">
+            <summary>
+            Retrives an input from the console with a prompt message. Uses a method deligate to force valid input. Converts the input to the given type (before validation)
+            </summary>
+            <param name="prompt">Message to be printed to the display to request input.</param>
+            <param name="converter">Method deligate to convert the string input to the requested type.</param>
+            <param name="validator">Validator method deligate. Takes an object of the specified type and returns a boolean.</param>
+            <param name="errorMessage">Message to display if validation fails before asking for the input again.</param>
+            <param name="indicator">String to format line for input.</param>
+            <param name="output">Alternitive output stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultOut</param>
+            <param name="input">Alternitive input stream. Deafults to QuasarCode.Library.IO.Text.Console.DeafultIn</param>
+            <returns>A line of input from the console, coverted to the specified type.</returns>
+        </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Option``1(``0[],System.String,System.Boolean)">
             <summary>
-            Allows the user to select an item from an array of options. Returns the option.
+            Allows the user to select an item from an array of options. Returns the option. Uses the DeafultOut stream.
             </summary>
             <typeparam name="T">Type of the objects in the array.</typeparam>
             <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
@@ -892,405 +987,278 @@
         </member>
         <member name="M:QuasarCode.Library.IO.Text.Console.Option(System.Object[],System.String,System.Boolean)">
             <summary>
-            Allows the user to select an item from an array of options. Returns the option's index.
+            Allows the user to select an item from an array of options. Returns the option's index. Uses the DeafultOut stream.
             </summary>
             <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
             <param name="message">Optional message to display to the user.</param>
             <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
             <returns>Index of selected option.</returns>
         </member>
-        <member name="T:QuasarCode.Library.Maths.CompoundUnit">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Option``1(``0[],System.EventHandler{System.String}@,System.IO.TextWriter@,System.String,System.Boolean)">
             <summary>
-            Multiple base units with powers multiplied together to form a compound unit
+            Allows the user to select an item from an array of options. Returns the option. Uses a custom event for presenting characters for option selection.
             </summary>
+            <typeparam name="T">Type of the objects in the array.</typeparam>
+            <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
+            <param name="message">Optional message to display to the user.</param>
+            <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
+            <param name="output">Alternitive output stream.</param>
+            <param name="keyPressEvent">Event raised when an option is selected</param>
+            <returns>Selected option.</returns>
         </member>
-        <member name="P:QuasarCode.Library.Maths.CompoundUnit.Values">
+        <member name="M:QuasarCode.Library.IO.Text.Console.Option(System.Object[],System.EventHandler{System.String}@,System.IO.TextWriter@,System.String,System.Boolean)">
             <summary>
-            The base units and their powers
+            Allows the user to select an item from an array of options. Returns the option's index. Uses a custom event for presenting characters for option selection.
             </summary>
+            <param name="options">Array of options to be selected from. Must have a length of at least 1.</param>
+            <param name="message">Optional message to display to the user.</param>
+            <param name="displayInput">Wether or not the user's selected option will be displayed on the console.</param>
+            <param name="output">Alternitive output stream.</param>
+            <param name="keyPressEvent">Event raised when an option is selected</param>
+            <returns>Index of selected option.</returns>
         </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.#ctor(QuasarCode.Library.Maths.IGeneralUnit[])">
+        <member name="M:QuasarCode.Library.IO.Text.Console.ReadKey(System.EventHandler{System.String}@)">
             <summary>
-            Creates a new compound unit from an array of other units
+            Emulates the System.Console.ReadKey method but takes an event that provides characters returns a char.
             </summary>
-            <param name="units">The compound units to combine</param>
+            <param name="keyPressEvent">Event that provides characters</param>
+            <returns></returns>
         </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.#ctor(System.Tuple{QuasarCode.Library.Maths.Units,System.Int32}[])">
-            <summary>
-            Creates a new compound unit from an array of tuples containing units and their corisponding powers
-            </summary>
-            <param name="units">Array of units and their powers as Tuples</param>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.#ctor(QuasarCode.Library.Maths.UnitPowerPair[])">
-            <summary>
-            Creates a new compound unit from an array of UnitPowerPairs
-            </summary>
-            <param name="units">Array of units and their powers as UnitPowerPairs</param>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.GetUnitPairs">
-            <summary>
-            Allows compatibility between ordenary and compound unit types by providing common access to their data
-            </summary>
-            <returns>An array of UnitPowerPairs representing all units in the object</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.ToString">
-            <summary>
-            Provides a string representation of the unit
-            </summary>
-            <returns>The unit as a string</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.SimplifyUnits(QuasarCode.Library.Maths.UnitPowerPair[])">
-            <summary>
-            Simplifies an array of UnitPowerPairs so it contains only one instance of each unit
-            </summary>
-            <param name="units">The array of pairs to simplify</param>
-            <returns>A simplified array of UnitPowerPairs</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.Equals(System.Object)">
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Coordinate`1">
             <summary>
             
             </summary>
-            <param name="o"></param>
-            <returns></returns>
+            <typeparam name="T"></typeparam>
         </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.GetHashCode">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.op_Equality(QuasarCode.Library.Maths.CompoundUnit,QuasarCode.Library.Maths.CompoundUnit)">
-            <summary>
-            
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.op_Inequality(QuasarCode.Library.Maths.CompoundUnit,QuasarCode.Library.Maths.CompoundUnit)">
-            <summary>
-            
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.CompoundUnit.Pow(System.Int32)">
-            <summary>
-            Raises a unit to a power
-            </summary>
-            <param name="p">The power</param>
-            <returns>A new IGeneralUnit instance</returns>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.Coordinates.ICoordinate`1">
+        <member name="T:QuasarCode.Library.Maths.Coordinates.ICoordinate">
             <summary>
             
             </summary>
         </member>
-        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems._1D.Line">
-            <summary>
-            One dimentional coordinate system
-            </summary>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.ICompoundUnit">
-            <summary>
-            Multiple base units with powers multiplied together to form a compound unit
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.ICompoundUnit.Values">
-            <summary>
-            The base units and their powers
-            </summary>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.IGeneralUnit">
-            <summary>
-            Blank interface to provide a link between ordenary and compound unit types
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IGeneralUnit.GetUnitPairs">
-            <summary>
-            Allows compatibility between ordenary and compound unit types by providing common access to their data
-            </summary>
-            <returns>An array of UnitPowerPairs representing all units in the object</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IGeneralUnit.ToString">
-            <summary>
-            Provides a string representation of the unit
-            </summary>
-            <returns>The unit as a string</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IGeneralUnit.Pow(System.Int32)">
-            <summary>
-            Raises a unit to a power
-            </summary>
-            <param name="p">The power</param>
-            <returns>A new IGeneralUnit instance</returns>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.IStandardValue">
-            <summary>
-            A value in standard form associated with a unit
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.IStandardValue.StandardPower">
-            <summary>
-            The standard form power
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IStandardValue.ToString">
-            <summary>
-            Provides a string representation of the value with its unit
-            </summary>
-            <returns>The value as a string</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IStandardValue.Pow(System.Int32)">
-            <summary>
-            Raises a standard value to a power
-            </summary>
-            <param name="p">The power</param>
-            <returns>A new standard value</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IStandardValue.Round(System.Int32)">
-            <summary>
-            Rounds the value to the provided number of decimal places provided
-            </summary>
-            <param name="digits">The number of decimal places to round to.</param>
-            <returns>A new IStandardValue instance with the rounded value</returns>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.IUnit">
-            <summary>
-            A single base unit with an optional power
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.IUnit.Value">
-            <summary>
-            The base unit
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.IUnit.Power">
-            <summary>
-            The power on the unit
-            </summary>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.IValue">
-            <summary>
-            A value associated with a unit
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.IValue.Unit">
-            <summary>
-            The unit
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.IValue.Magnitude">
-            <summary>
-            The size of the value
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IValue.GetMagnitude">
-            <summary>
-            Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
-            </summary>
-            <returns>The magnitude of the value</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IValue.As(QuasarCode.Library.Maths.Units)">
-            <summary>
-            Converts the value to one with an equivilant unit
-            </summary>
-            <param name="unit">The new value's units</param>
-            <returns>The corisponding IValue object</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IValue.As(QuasarCode.Library.Maths.IGeneralUnit)">
-            <summary>
-            Converts the value to one with an equivilant unit
-            </summary>
-            <param name="unit">The new value's units</param>
-            <returns>The corisponding IValue object</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IValue.Pow(System.Int32)">
-            <summary>
-            Raises a value to a power
-            </summary>
-            <param name="p">The power</param>
-            <returns>A new value</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.IValue.Round(System.Int32)">
-            <summary>
-            Rounds the value to the provided number of decimal places provided
-            </summary>
-            <param name="digits">The number of decimal places to round to.</param>
-            <returns>A new IValue instance with the rounded value</returns>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.StandardValue">
-            <summary>
-            A value in standard form associated with a unit
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.StandardValue.StandardPower">
-            <summary>
-            The standard form power
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.StandardValue.#ctor(System.Double,QuasarCode.Library.Maths.IGeneralUnit,System.Int32)">
-            <summary>
-            Creates a new value, altering the provided value and power (if nessessary) to express the value in standard form
-            </summary>
-            <param name="size">The size of the value</param>
-            <param name="standardPower">The standard form power (for the provided value).</param>
-            <param name="unit">The unit</param>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.StandardValue.#ctor(System.Double,QuasarCode.Library.Maths.Units,System.Int32,System.Int32)">
-            <summary>
-            Creates a new value, altering the provided value and power (if nessessary) to express the value in standard form
-            </summary>
-            <param name="size">The size of the value</param>
-            <param name="standardPower">The standard form power (for the provided value)</param>
-            <param name="unit">The unit</param>
-            <param name="unitPower">The unit's power</param>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.StandardValue.NormaliseValue">
-            <summary>
-            Alter the Magnitude and Power so that the value is in standard form
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.StandardValue.GetMagnitude">
-            <summary>
-            Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
-            </summary>
-            <returns>The magnitude of the value</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.StandardValue.Pow(System.Int32)">
-            <summary>
-            Raises a standard value to a power
-            </summary>
-            <param name="p">The power</param>
-            <returns>A new standard value</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.StandardValue.Round(System.Int32)">
-            <summary>
-            Rounds the value to the provided number of decimal places provided. Uses Math.Round()
-            </summary>
-            <param name="digits">The number of decimal places to round to.</param>
-            <returns>A new StandardValue object with the rounded value</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.StandardValue.ToString">
-            <summary>
-            Provides a string representation of the value with its unit
-            </summary>
-            <returns>The value as a string</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.StandardValue.ToValue">
-            <summary>
-            Converts to a Value object without standard form
-            </summary>
-            <returns>A new Value object</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.StandardValue.op_ExclusiveOr(QuasarCode.Library.Maths.StandardValue,System.Int32)">
-            <summary>
-            Raise the standard value to an integer power
-            </summary>
-            <param name="a">The standard value</param>
-            <param name="b">Integer power</param>
-            <returns></returns>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.Unit">
-            <summary>
-            A single base unit with an optional power
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.Unit.Value">
-            <summary>
-            The base unit
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.Unit.Power">
-            <summary>
-            The power on the unit
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.#ctor(QuasarCode.Library.Maths.Units,System.Int32)">
-            <summary>
-            Creates a new base unit with an optional power
-            </summary>
-            <param name="value">The base unit</param>
-            <param name="power">The power on the unit. Deafult is 1</param>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.GetUnitPairs">
-            <summary>
-            Allows compatibility between ordenary and compound unit types by providing common access to their data
-            </summary>
-            <returns>An array of UnitPowerPairs representing all units in the object</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.ToString">
-            <summary>
-            Provides a string representation of the unit
-            </summary>
-            <returns>The unit as a string</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.Equals(System.Object)">
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.Cartesian">
             <summary>
             
             </summary>
-            <param name="o"></param>
-            <returns></returns>
         </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.GetHashCode">
+        <member name="P:QuasarCode.Library.Maths.Coordinates.Systems.Cartesian.Axis">
             <summary>
             
             </summary>
-            <returns></returns>
         </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.op_Equality(QuasarCode.Library.Maths.Unit,QuasarCode.Library.Maths.Unit)">
+        <member name="M:QuasarCode.Library.Maths.Coordinates.Systems.Cartesian.#ctor(System.Int32)">
             <summary>
             
             </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
+            <param name="dimentions"></param>
         </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.op_Inequality(QuasarCode.Library.Maths.Unit,QuasarCode.Library.Maths.Unit)">
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.CylindricalPolar">
             <summary>
             
             </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
         </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.op_Implicit(QuasarCode.Library.Maths.Units)~QuasarCode.Library.Maths.Unit">
+        <member name="P:QuasarCode.Library.Maths.Coordinates.Systems.CylindricalPolar.Axis">
             <summary>
-            Converts a single unit from the Units enum to a Unit object with a power of 1
-            </summary>
-            <param name="o"></param>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Unit.Pow(System.Int32)">
-            <summary>
-            Raises a unit to a power
-            </summary>
-            <param name="p">The power</param>
-            <returns>A new IGeneralUnit instance</returns>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.UnitPowerPair">
-            <summary>
-            A unit paired with a power
+            
             </summary>
         </member>
-        <member name="F:QuasarCode.Library.Maths.UnitPowerPair.Unit">
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.ICoordinateSystem">
             <summary>
-            The unit
+            
             </summary>
         </member>
-        <member name="F:QuasarCode.Library.Maths.UnitPowerPair.Power">
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.Polar">
             <summary>
-            The power
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Coordinates.Systems.Polar.Axis">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Coordinates.Systems.Polar.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Coordinates.Systems.SphericalPolar">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Coordinates.Systems.SphericalPolar.Axis">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1.#ctor(QuasarCode.Library.Maths.Coordinates.ICoordinate,QuasarCode.Library.Maths.Coordinates.ICoordinate)">
+            <summary>
+            
+            </summary>
+            <param name="point1">A point on the line in the direction of the vector</param>
+            <param name="point2">A point on the line in the direction of the vector</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Matrices.Vectors.UnitVector`1.#ctor(QuasarCode.Library.Maths.Matrices.Vectors.Vector{`0})">
+            <summary>
+            
+            </summary>
+            <param name="vector"></param>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Matrices.Vectors.Vector`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T">Coordinate system</typeparam>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Matrices.Vectors.Vector`1.#ctor(System.Double,QuasarCode.Library.Maths.Coordinates.ICoordinate,QuasarCode.Library.Maths.Coordinates.ICoordinate)">
+            <summary>
+            
+            </summary>
+            <param name="magnitude">The length of the vector</param>
+            <param name="point1">A point on the line in the direction of the vector</param>
+            <param name="point2">A point on the line in the direction of the vector</param>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Matrices.Vectors.Vector`1.#ctor(System.Double,QuasarCode.Library.Maths.Matrices.Vectors.UnitVector{`0})">
+            <summary>
+            
+            </summary>
+            <param name="magnitude"></param>
+            <param name="direction"></param>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.Base.Angle`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Quantities.Base.Angle`1.#ctor(System.Double,QuasarCode.Library.Maths.Units)">
+            <summary>
+            
+            </summary>
+            <param name="magnitude">The size of the mass</param>
+            <param name="unit">The unit of mass</param>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.Magnitude">
+            <summary>
+            The size of the mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.Unit">
+            <summary>
+            The unit of mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.SIUnit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Angle`1.Direction">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.Base.Length`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Quantities.Base.Length`1.#ctor(System.Double,`0,QuasarCode.Library.Maths.Units)">
+            <summary>
+            
+            </summary>
+            <param name="magnitude">The size of the mass</param>
+            /// <param name="direction">    </param>
+            <param name="unit">The unit of mass</param>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.Magnitude">
+            <summary>
+            The size of the mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.Unit">
+            <summary>
+            The unit of mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.SIUnit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Length`1.Direction">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.Base.Mass">
+            <summary>
+            The mesure of the matter comprising a body
+            </summary>
+        </member>
+        <member name="M:QuasarCode.Library.Maths.Quantities.Base.Mass.#ctor(System.Double,QuasarCode.Library.Maths.Units)">
+            <summary>
+            
+            </summary>
+            <param name="magnitude">The size of the mass</param>
+            <param name="unit">The unit of mass</param>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Mass.Magnitude">
+            <summary>
+            The size of the mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Mass.Unit">
+            <summary>
+            The unit of mass
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.Base.Mass.SIUnit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.IQuantity">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.IQuantity.Magnitude">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.IQuantity.Unit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.IQuantity.SIUnit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:QuasarCode.Library.Maths.Quantities.IVectorQuantity`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T">Coordinate system</typeparam>
+        </member>
+        <member name="P:QuasarCode.Library.Maths.Quantities.IVectorQuantity`1.Direction">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:QuasarCode.Library.Maths.Units">
             <summary>
-            An enumeration of units relating to physical quantities
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Units.NoUnit">
-            <summary>
-            Lack of units
+            
             </summary>
         </member>
         <member name="F:QuasarCode.Library.Maths.Units.Degrees">
@@ -1350,828 +1318,12 @@
         </member>
         <member name="F:QuasarCode.Library.Maths.Units.lb">
             <summary>
-            Unit of mass (Imperial base)
+            Unit of mass (Imperial)
             </summary>
         </member>
         <member name="F:QuasarCode.Library.Maths.Units.oz">
             <summary>
             Unit of mass (Imperial)
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Units.h">
-            <summary>
-            Unit of time (SI)
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Units.min">
-            <summary>
-            Unit of time (SI)
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Units.s">
-            <summary>
-            Unit of time (SI base)
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Units.ms">
-            <summary>
-            Unit of time (SI)
-            </summary>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.UnitsMethods">
-            <summary>
-            Extends the Units enum
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.UnitsMethods.Pow(QuasarCode.Library.Maths.Units,System.Int32)">
-            <summary>
-            Creates a Unit object with a single unit raised to a power
-            </summary>
-            <param name="unit">The unit</param>
-            <param name="power">The power to raise the unit to</param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.UnitsMethods.AsString(QuasarCode.Library.Maths.Units)">
-            <summary>
-            Gets the string representation of the unit
-            </summary>
-            <param name="unit">The unit</param>
-            <returns>String</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetBaseMultyplier(QuasarCode.Library.Maths.Units)">
-            <summary>
-            Retrives the multiplier used to convert 1 of the relivent system's base unit into the desiered unit. Use 1/return value to go the other way
-            </summary>
-            <param name="unit">The desiered unit</param>
-            <returns>Multiplier to convert the base unit into the desiered one</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetQuantity(QuasarCode.Library.Maths.Units)">
-            <summary>
-            Retrives the physical Quantity the provided unit is associated with
-            </summary>
-            <param name="unit">The unit</param>
-            <returns>An option from the Quantities enum</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetSystem(QuasarCode.Library.Maths.Units)">
-            <summary>
-            Retrives the unit System the provided unit is associated with
-            </summary>
-            <param name="unit">The unit</param>
-            <returns>An option from the UnitSystems enum</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetUnitConversion(QuasarCode.Library.Maths.Units,QuasarCode.Library.Maths.Units)">
-            <summary>
-            Calculates the conversion multiplier needed to convert between two Units
-            </summary>
-            <param name="currentUnit">The starting unit</param>
-            <param name="newUnit">The target unit</param>
-            <returns>Multyplier as a double</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.UnitsMethods.GetUnitConversion(QuasarCode.Library.Maths.IGeneralUnit,QuasarCode.Library.Maths.IGeneralUnit)">
-            <summary>
-            Gets the conversion multiplier applied to the current value needed to associate the value with a different unit
-            </summary>
-            <param name="currentUnit">The current units</param>
-            <param name="newUnit">The units to convert to</param>
-            <returns>A multiplier as a double. current * multiplier = new</returns>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.Quantities">
-            <summary>
-            Physical quantitys that have units
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Quantities.None">
-            <summary>No assigned quantity</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Quantities.Angle">
-            <summary></summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Quantities.Distance">
-            <summary></summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Quantities.Mass">
-            <summary></summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.Quantities.Time">
-            <summary></summary>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.QuantitiesMethods">
-            <summary>
-            Extends the Quantities enum
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.QuantitiesMethods.conversions">
-            <summary>
-            Array of relitive size between base quantities in a given system. The system is at the index of its enum integer value
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.QuantitiesMethods.GetSystemBaseUnit(QuasarCode.Library.Maths.Quantities,QuasarCode.Library.Maths.UnitSystems)">
-            <summary>
-            Gets the base unit for a quantity in a system
-            </summary>
-            <param name="quantity">The quantity</param>
-            /// <param name="system">The unisystemt</param>
-            <returns>The quantity's base unit in the system</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.QuantitiesMethods.GetSystemConversions(QuasarCode.Library.Maths.Quantities)">
-            <summary>
-            Gets a dictionary of relitive values for the base quantities in a unit system. The SI unit normaly takes a value of 1
-            </summary>
-            <param name="currentQuantity"></param>
-            <returns></returns>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.UnitSystems">
-            <summary>
-            The systems of mesurement with avalable units
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.UnitSystems.None">
-            <summary>No present system</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.UnitSystems.SI">
-            <summary>SI or Metric</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.UnitSystems.Imperial">
-            <summary></summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.UnitSystems.Degrees">
-            <summary></summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.UnitSystems.Radians">
-            <summary></summary>
-        </member>
-        <member name="F:QuasarCode.Library.Maths.UnitSystems.Time">
-            <summary></summary>
-        </member>
-        <member name="T:QuasarCode.Library.Maths.Value">
-            <summary>
-            A value associated with a unit
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.Value.Unit">
-            <summary>
-            The unit
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Maths.Value.Magnitude">
-            <summary>
-            The size of the value
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.#ctor(System.Double,QuasarCode.Library.Maths.IGeneralUnit)">
-            <summary>
-            Creates a new Value object
-            </summary>
-            <param name="size">The size of the value</param>
-            <param name="unit">The unit</param>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.#ctor(System.Double,QuasarCode.Library.Maths.Units,System.Int32)">
-            <summary>
-            Creates a new Value object
-            </summary>
-            <param name="size">The size of the value</param>
-            <param name="unit">The unit</param>
-            <param name="power">The unit's power</param>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.GetMagnitude">
-            <summary>
-            Returns the value's actual magnitude. This should be overrided in child classes to provide the magnitude as a single value for arithmatic operations
-            </summary>
-            <returns>The magnitude of the value</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.As(QuasarCode.Library.Maths.Units)">
-            <summary>
-            Converts the value to one with an equivilant unit
-            </summary>
-            <param name="unit">The new value's units</param>
-            <returns>The corisponding IValue object</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.As(QuasarCode.Library.Maths.IGeneralUnit)">
-            <summary>
-            Converts the value to one with an equivilant unit
-            </summary>
-            <param name="unit">The new value's units</param>
-            <returns>The corisponding IValue object</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.Pow(System.Int32)">
-            <summary>
-            Raises a value to a power
-            </summary>
-            <param name="p">The power</param>
-            <returns>A new value</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.Round(System.Int32)">
-            <summary>
-            Rounds the value to the provided number of decimal places provided. Uses Math.Round()
-            </summary>
-            <param name="digits">The number of decimal places to round to.</param>
-            <returns>A new Value object with the rounded value</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.ToString">
-            <summary>
-            Provides a string representation of the value with its unit
-            </summary>
-            <returns>The value as a string</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.ToStandardValue">
-            <summary>
-            Converts to a StandardValue object with standard form
-            </summary>
-            <returns>A new StandardValue object</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.op_Addition(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
-            <summary>
-            Adds two Value objects together provided their units are equivilant
-            </summary>
-            <param name="a">object 1</param>
-            <param name="b">object 2</param>
-            <returns>A new Value object using the unit specified by a</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.op_Subtraction(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
-            <summary>
-            Subtracts one Value object from annother provided their units are equivilant
-            </summary>
-            <param name="a">object 1</param>
-            <param name="b">object 2</param>
-            <returns>A new Value object using the unit specified by a</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.op_Multiply(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
-            <summary>
-            Multiplies two Value objects
-            </summary>
-            <param name="a">object 1</param>
-            <param name="b">object 2</param>
-            <returns>A new value object with a new unit</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.op_Division(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
-            <summary>
-            Divides one Value object by another
-            </summary>
-            <param name="a">object 1</param>
-            <param name="b">object 2</param>
-            <returns>A new value object with a new unit</returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.Equals(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="o"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.GetHashCode">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.op_Equality(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
-            <summary>
-            
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.op_Inequality(QuasarCode.Library.Maths.Value,QuasarCode.Library.Maths.Value)">
-            <summary>
-            
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Maths.Value.op_ExclusiveOr(QuasarCode.Library.Maths.Value,System.Int32)">
-            <summary>
-            Raise the value to an integer power
-            </summary>
-            <param name="a">The value</param>
-            <param name="b">Integer power</param>
-            <returns></returns>
-        </member>
-        <member name="T:QuasarCode.Library.Symbolic.Constant">
-            <summary>
-            Object representing a symbol with a constant value
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Symbolic.Constant.PI">
-            <summary>
-            The constant pi
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Symbolic.Constant.E">
-            <summary>
-            Euler's number "e"
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Symbolic.Constant.PHI">
-            <summary>
-            The golden ratio
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Constant.#ctor(System.Decimal)">
-            <summary>
-            Creates a new constant with no symbol from a number
-            </summary>
-            <param name="initialValue">The constant's value</param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Constant.#ctor(System.String,System.Decimal)">
-            <summary>
-            Creates a new constant with a symbol and number
-            </summary>
-            <param name="symbol">The algebraic letter or symbol to associate with the value</param>
-            <param name="initialValue">The constant's value</param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Constant.GetComponentString(System.Int32)">
-            <summary>
-            Gets a string containing the constant's symbol or its value if it has no symbol
-            </summary>
-            <param name="expantionDepth">The number of symbol layers to expand before just quoting symbols</param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Constant.Evaluate">
-            <summary>
-            Provides the constant's value
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:QuasarCode.Library.Symbolic.Symbol">
-            <summary>
-            Basis for symbolic objects
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Symbolic.Symbol.symbol">
-            <summary>
-            The mathmatical symbol for the value
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Symbolic.Symbol.Value">
-            <summary>
-            The value associated with the symbol
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Symbolic.Symbol.Operators">
-            <summary>
-            Array of all valid operators as strings
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Symbol.GetComponentString(System.Int32)">
-            <summary>
-            Gets a string containing the components that produce the value
-            </summary>
-            <param name="expantionDepth">The number of symbol layers to expand before just quoting symbols</param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Symbol.Evaluate">
-            <summary>
-            Attempts to evaluate the expression to provide a value
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:QuasarCode.Library.Symbolic.Variable">
-            <summary>
-            Object representing a symbol with an equivalant expression which can be evaluated or displayed
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Symbolic.Variable.operations">
-            <summary>
-            A list of symbolic operators and operands to be evaluated in order
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Symbolic.Variable.Initialised">
-            <summary>
-            Boolean swich indicating whether or not the variable has been asigned an expression to evaluate
-            </summary>
-        </member>
-        <member name="P:QuasarCode.Library.Symbolic.Variable.Value">
-            <summary>
-            The value associated with the symbol. This attempts to evaluate the variable's expression or overites it with a constant
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.SetValue(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Assignes the variable an expression taken from the provided symbol. Overites any current expression
-            </summary>
-            <param name="value">The variable or constant to set the variable's expression to</param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.#ctor(System.String)">
-            <summary>
-            Creates an un-initialised variable with a symbol
-            </summary>
-            <param name="symbol"></param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.#ctor(System.String,System.Decimal)">
-            <summary>
-            Creates a variable and asigns it an initial value
-            </summary>
-            <param name="symbol"></param>
-            <param name="initialValue"></param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.#ctor(System.String,QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Creates a variable and asigns it an initial value
-            </summary>
-            <param name="symbol"></param>
-            <param name="initialValue"></param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.Initialise(System.Decimal)">
-            <summary>
-            Initialises an un-initialised variable with a starting value
-            </summary>
-            <param name="initialValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.Initialise(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Initialises an un-initialised variable with a starting expression
-            </summary>
-            <param name="initialValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.Evaluate">
-            <summary>
-            Attempts to evaluate the expression to provide a value
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.GetComponentString(System.Int32)">
-            <summary>
-            Gets a string containing the components that produce the value
-            </summary>
-            <param name="expantionDepth">The number of symbol layers to expand before just quoting symbols</param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.GetEquasion(System.Int32)">
-            <summary>
-            Constructs an algebraic equasion as a string representing the variable and its expression
-            </summary>
-            <param name="expantionDepth">The number of symbol layers to expand before just quoting symbols</param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.GetOperations(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Returns the contence of a symbol in the format of a variable's operations list
-            </summary>
-            <param name="s"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Adds two variables
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Ads a variable and a symbol
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Adds a symbol and a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
-            <summary>
-            Adds a variable and a constant produced from a number
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Addition(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Adds a onstant produced from a number and a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.Add(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Adds a symbol to the variable
-            </summary>
-            <param name="a"></param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Subtracts one variable from another
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Subtracts a symbol from a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Subtracts a variable from a symbol
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
-            <summary>
-            Subtracts a constant produced from a number from a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Subtraction(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Subtracts a variable from a constant produced from a number
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.Subtract(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Subtracts a symbol from the variable
-            </summary>
-            <param name="a"></param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Multiplies a variable by another
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Multiplies a variable by a symbol
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Multiplies a symbol by a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
-            <summary>
-            Multiplies a variable by a constant produced from a number
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Multiply(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Multiplies a constant produced from a number by a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.Multyply(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Multiplies the variable by a symbol
-            </summary>
-            <param name="a"></param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Divides a variable by another
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Divides a variable by a symbol
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Divides a symbol by a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
-            <summary>
-            Divides a variable by a constant produced from a number
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_Division(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Divides a constant produced from a number by a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.Divide(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Divides the variable by a symbol
-            </summary>
-            <param name="a"></param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Raises one variable to the power of another
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(QuasarCode.Library.Symbolic.Variable,QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Raises a variable to the power of a symbol
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(QuasarCode.Library.Symbolic.Symbol,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Raises a symbol to the power of a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(QuasarCode.Library.Symbolic.Variable,System.Decimal)">
-            <summary>
-            Raises a variable to the power of a constant produced from a number
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.op_ExclusiveOr(System.Decimal,QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Raises a constant produced from a number to the power of a variable
-            </summary>
-            <param name="a"></param>
-            <param name="b"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.Pow(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Raises the variable to the power of a symbol
-            </summary>
-            <param name="a"></param>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.sqrt(QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Square roots a variable
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.sqrt(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Square roots a symbol
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.sqrt(System.Decimal)">
-            <summary>
-            Square roots a constant produced from a number
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.sqrt">
-            <summary>
-            Square roots the variable
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.sin(QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Applies the sin function to a variable
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.sin(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Applies the sin function to a symbol
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.sin(System.Decimal)">
-            <summary>
-            Applies the sin function to a constant produced from a number
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.sin">
-            <summary>
-            Applies the sin function to the variable
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.cos(QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Applies the cosine function to a variable
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.cos(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Applies the cosin function to a symbol
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.cos(System.Decimal)">
-            <summary>
-            Applies the cosin function to a constant produced from a number
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.cos">
-            <summary>
-            Applies the cosin function to the variable
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.tan(QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Applies the tangent function to a variable
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.tan(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Applies the tangent function to a symbol
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.tan(System.Decimal)">
-            <summary>
-            Applies the tangent function to a constant produced from a number
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.tan">
-            <summary>
-            Applies the tangent function to the variable
-            </summary>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.abs(QuasarCode.Library.Symbolic.Variable)">
-            <summary>
-            Makes value of a variable positive
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.abs(QuasarCode.Library.Symbolic.Symbol)">
-            <summary>
-            Makes value of a symbol positive
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.abs(System.Decimal)">
-            <summary>
-            Makes value of a constant produced from a number positive
-            </summary>
-            <param name="a"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QuasarCode.Library.Symbolic.Variable.abs">
-            <summary>
-            Makes value of the variable positive
             </summary>
         </member>
         <member name="T:QuasarCode.Library.Tools.MultiItterator">
@@ -2283,49 +1435,6 @@
             <summary>
             Resets the enumeration.
             </summary>
-        </member>
-        <member name="T:QuasarCode.Library.Tools.StringLiterals">
-            <summary>
-            A collection of usefull string litterals
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_0">
-            <summary>Superscript 0</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_1">
-            <summary>Superscript 1</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_2">
-            <summary>Superscript 2</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_3">
-            <summary>Superscript 3</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_4">
-            <summary>Superscript 4</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_5">
-            <summary>Superscript 5</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_6">
-            <summary>Superscript 6</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_7">
-            <summary>Superscript 7</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_8">
-            <summary>Superscript 8</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_9">
-            <summary>Superscript 9</summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.SuperscriptInt">
-            <summary>
-            Superscript integer characters (value is the index)
-            </summary>
-        </member>
-        <member name="F:QuasarCode.Library.Tools.StringLiterals.Superscript_Minus">
-            <summary>Superscript -</summary>
         </member>
         <member name="T:QuasarCode.Library.Tools.Validators">
             <summary>
