@@ -16,12 +16,24 @@ namespace QuasarCode.Library.Maths.Units
         Angle,
 
         /// <summary>Mesurement of space</summary>
-        Distance,
+        Length,
 
         /// <summary>Mesurement of matter</summary>
         Mass,
 
         /// <summary>Mesurement of change</summary>
-        Time
+        Time,
+
+        /// <summary>Mesurement of electricity</summary>
+        ElectricCurrent,
+
+        /// <summary>Mesurement of thermal energy</summary>
+        Temperature,
+
+        /// <summary>Mesurement of quantity</summary>
+        Quantity,
+
+        /// <summary>Mesurement of change</summary>
+        LuminousIntensity
     }
 }

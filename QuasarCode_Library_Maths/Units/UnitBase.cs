@@ -6,8 +6,10 @@ namespace QuasarCode.Library.Maths.Units
 {
     public abstract class UnitBase : IUnit
     {
+        public abstract FundamentalUnitPowerPair[] GetFundamentalUnitPairs();
         public abstract UnitPowerPair[] GetUnitPairs();
         public abstract IUnit Pow(int p);
+        public abstract object Clone();
 
         public IUnit Mult(IUnit u)
         {
@@ -43,7 +45,7 @@ namespace QuasarCode.Library.Maths.Units
         {
             string result = "";
 
-            foreach (UnitPowerPair pair in GetUnitPairs())
+            foreach (FundamentalUnitPowerPair pair in GetFundamentalUnitPairs())
             {
                 result += pair.Unit.ToString();
                 foreach (char character in pair.Power.ToString())

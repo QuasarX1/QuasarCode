@@ -4,11 +4,12 @@ using System.Text;
 
 namespace QuasarCode.Library.Maths.Units
 {
-    public interface ISingleUnit : IUnit
+    public interface ISingleUnit : IUnit, ISymbolUnit
     {
         Quantities Quantity { get; }
         Systems System { get; }
-        double SystemBaseMultyplier { get; }
-        string Text { get; }
+
+        double ConvertToSystemBase(double value);
+        double ConvertFromSystemBase(double value);
     }
 }

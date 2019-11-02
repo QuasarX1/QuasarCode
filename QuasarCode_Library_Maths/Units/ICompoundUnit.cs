@@ -8,6 +8,6 @@ namespace QuasarCode.Library.Maths.Units
     {
         UnitPowerPair[] UnitPowerPairs { get; }
 
-        IUnit Simplify();
+        IUnit Simplify(bool simplyfyNamedUnits = false);
     }
 }

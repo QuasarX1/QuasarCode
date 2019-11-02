@@ -7,8 +7,14 @@ namespace QuasarCode.Library.Maths.Units
     /// <summary>
     /// Provides a link between ordenary and compound unit types
     /// </summary>
-    public partial interface IUnit
+    public partial interface IUnit : ICloneable
     {
+        /// <summary>
+        /// Allows compatibility between ordenary and compound unit types by providing common access to their data
+        /// </summary>
+        /// <returns>An array of FundamentalUnitPowerPair representing all units in the object</returns>
+        FundamentalUnitPowerPair[] GetFundamentalUnitPairs();
+
         /// <summary>
         /// Allows compatibility between ordenary and compound unit types by providing common access to their data
         /// </summary>

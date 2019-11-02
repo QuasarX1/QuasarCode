@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 using QuasarCode.Library.Maths.Units.Common;
 
@@ -20,17 +21,45 @@ namespace QuasarCode.Library.Maths.Units
             return new CompoundUnit(pairs).Simplify();
         }
 
+        public override FundamentalUnitPowerPair[] GetFundamentalUnitPairs()
+        {
+            List<FundamentalUnitPowerPair> items = new List<FundamentalUnitPowerPair>();
+            foreach (UnitPowerPair item in UnitPowerPairs)
+            {
+                items.AddRange(item.Unit.GetFundamentalUnitPairs());
+            }
+
+            return items.ToArray();
+        }
+
         public override UnitPowerPair[] GetUnitPairs()
         {
             return UnitPowerPairs;
         }
 
-        public IUnit Simplify()
+        public IUnit Simplify(bool simplyfyNamedUnits = false)
         {
-            List<UnitPowerPair> items = new List<UnitPowerPair>(this.GetUnitPairs());
+            List<UnitPowerPair> items = new List<UnitPowerPair>();
+            if (simplyfyNamedUnits)
+            {
+                foreach (FundamentalUnitPowerPair pair in this.GetFundamentalUnitPairs())
+                {
+                    items.Add(pair);
+                }
+            }
+            else
+            {
+                items.AddRange(this.GetUnitPairs());
+            }
 
             for (int i = items.Count; i < 0; i--)
             {
+                if (items[i].Unit.GetType() == typeof(None))
+                {
+                    items.RemoveAt(i);
+                    continue;
+                }
+
                 for (int j = 0; j < i; j++)
                 {
                     if (items[i].Unit == items[j].Unit)
@@ -42,19 +71,21 @@ namespace QuasarCode.Library.Maths.Units
                 }
             }
 
-            this.UnitPowerPairs = items.ToArray();
+            UnitPowerPair[] newUnitPowerPairs = items.ToArray();
 
-            if (UnitPowerPairs.Length == 1 && (UnitPowerPairs[0].Power == 1))
+            if (newUnitPowerPairs.Length == 1 && (newUnitPowerPairs[0].Power == 1))
             {
-                return UnitPowerPairs[0].Unit;
+                return (IUnit)newUnitPowerPairs[0].Unit.Clone();
             }
-            else if (UnitPowerPairs.Length == 0)
+            else if (newUnitPowerPairs.Length == 0)
             {
                 return new None();
             }
             else
             {
-                return this;
+                CompoundUnit newInstance = (CompoundUnit)this.Clone();
+                newInstance.UnitPowerPairs = newUnitPowerPairs;
+                return (IUnit)newInstance;
             }
         }
 
@@ -68,6 +99,21 @@ namespace QuasarCode.Library.Maths.Units
             }
 
             return NewCompoundUnit(terms);
+        }
+
+        public override object Clone()
+        {
+            try
+            {
+                return Activator.CreateInstance(this.GetType(), this.UnitPowerPairs);
+            }
+            catch (MissingMemberException e)
+            {
+                throw new InvalidOperationException("The object could not be cloned as the unit object type " +
+                    "did not declare a public constructor with the arguments for the type \"CompoundUnit\" " +
+                    "arguments.\nIn order to clone this object, the \"Clone\" method should be overriden " +
+                    "in a child class.", e);
+            }
         }
     }
 }
