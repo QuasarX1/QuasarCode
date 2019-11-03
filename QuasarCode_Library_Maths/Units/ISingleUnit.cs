@@ -6,8 +6,8 @@ namespace QuasarCode.Library.Maths.Units
 {
     public interface ISingleUnit : IUnit, ISymbolUnit
     {
-        Quantities Quantity { get; }
-        Systems System { get; }
+        IQuantity Quantity { get; }
+        ISystem System { get; }
 
         double ConvertToSystemBase(double value);
         double ConvertFromSystemBase(double value);

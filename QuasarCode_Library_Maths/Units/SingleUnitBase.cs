@@ -6,14 +6,124 @@ namespace QuasarCode.Library.Maths.Units
 {
     public abstract class SingleUnitBase : UnitBase, ISingleUnit
     {
-        public Quantities Quantity { get; protected set; }
-        public Systems System { get; protected set; }
+        public IQuantity Quantity { get; protected set; }
+        public ISystem System { get; protected set; }
         public string Text { get; protected set; }
 
         private Func<double, double> UnderlyingConvertToSystemBase;
         private Func<double, double> UnderlyingConvertFromSystemBase;
 
         protected SingleUnitBase(Quantities quantity, Systems system, double systemBaseMultyplier, string text)
+        {
+            switch (quantity)
+            {
+                case Quantities.None:
+                    this.Quantity = new NoneQuantity();
+                    break;
+                case Quantities.Angle:
+                    this.Quantity = new Angle();
+                    break;
+                case Quantities.Length:
+                    this.Quantity = new Length();
+                    break;
+                case Quantities.Mass:
+                    this.Quantity = new Mass();
+                    break;
+                case Quantities.Time:
+                    this.Quantity = new Time();
+                    break;
+                case Quantities.ElectricCurrent:
+                    this.Quantity = new ElectricCurrent();
+                    break;
+                case Quantities.Temperature:
+                    this.Quantity = new Temperature();
+                    break;
+                case Quantities.Quantity:
+                    this.Quantity = new Quantity();
+                    break;
+                case Quantities.LuminousIntensity:
+                    this.Quantity = new LuminousIntensity();
+                    break;
+                default:
+                    break;
+            }
+
+            switch (system)
+            {
+                case Systems.None:
+                    this.System = new NoneSystem();
+                    break;
+                case Systems.SI:
+                    this.System = new SI();
+                    break;
+                case Systems.Imperial:
+                    this.System = new Imperial();
+                    break;
+                default:
+                    break;
+            }
+
+            this.UnderlyingConvertToSystemBase = (double value) => value / systemBaseMultyplier;
+            this.UnderlyingConvertFromSystemBase = (double value) => value * systemBaseMultyplier;
+            this.Text = text;
+        }
+
+        protected SingleUnitBase(Quantities quantity, Systems system, Func<double, double> toBaseDeligate, Func<double, double> fromBaseDeligate, string text)
+        {
+            switch (quantity)
+            {
+                case Quantities.None:
+                    this.Quantity = new NoneQuantity();
+                    break;
+                case Quantities.Angle:
+                    this.Quantity = new Angle();
+                    break;
+                case Quantities.Length:
+                    this.Quantity = new Length();
+                    break;
+                case Quantities.Mass:
+                    this.Quantity = new Mass();
+                    break;
+                case Quantities.Time:
+                    this.Quantity = new Time();
+                    break;
+                case Quantities.ElectricCurrent:
+                    this.Quantity = new ElectricCurrent();
+                    break;
+                case Quantities.Temperature:
+                    this.Quantity = new Temperature();
+                    break;
+                case Quantities.Quantity:
+                    this.Quantity = new Quantity();
+                    break;
+                case Quantities.LuminousIntensity:
+                    this.Quantity = new LuminousIntensity();
+                    break;
+                default:
+                    break;
+            }
+
+            switch (system)
+            {
+                case Systems.None:
+                    this.System = new NoneSystem();
+                    break;
+                case Systems.SI:
+                    this.System = new SI();
+                    break;
+                case Systems.Imperial:
+                    this.System = new Imperial();
+                    break;
+                default:
+                    break;
+            }
+
+            this.UnderlyingConvertToSystemBase = toBaseDeligate;
+            this.UnderlyingConvertFromSystemBase = fromBaseDeligate;
+            this.Text = text;
+        }
+
+        protected SingleUnitBase(IQuantity quantity, ISystem system, double systemBaseMultyplier, string text)
         {
             this.Quantity = quantity;
             this.System = system;
@@ -22,7 +132,7 @@ namespace QuasarCode.Library.Maths.Units
             this.Text = text;
         }
 
-        protected SingleUnitBase(Quantities quantity, Systems system, Func<double, double> toBaseDeligate, Func<double, double> fromBaseDeligate, string text)
+        protected SingleUnitBase(IQuantity quantity, ISystem system, Func<double, double> toBaseDeligate, Func<double, double> fromBaseDeligate, string text)
         {
             this.Quantity = quantity;
             this.System = system;
