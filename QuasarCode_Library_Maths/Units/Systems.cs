@@ -83,7 +83,7 @@ namespace QuasarCode.Library.Maths.Units
     public sealed class SI : SystemBase//TODO: add imperial conversions
     {
         public SI() : base("SI",
-            new ISingleUnit[] { new Radian(), new m(), new Kg(), new s(), new A(), new K(), new mol(), new cd() }) { }
+            new ISingleUnit[] { new Radian(), new Meter(), new Kilogram(), new Second(), new Ampere(), new Kelvin(), new Moles(), new Candela() }) { }
     }
 
     public sealed class Imperial : SystemBase//TODO: add imperial units and conversions

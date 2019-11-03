@@ -11,151 +11,151 @@ namespace QuasarCode.Library.Maths.Units.Common
     }
 
     /// <summary> Frequency </summary>
-    public sealed class Hz : NamedCompoundUnit
+    public sealed class Hertz : NamedCompoundUnit
     {
-        public Hz() : base("Hz", new UnitPowerPair[] { new UnitPowerPair { Unit = new s(), Power = -1 } }) { }
+        public Hertz() : base("Hz", new UnitPowerPair[] { new UnitPowerPair { Unit = new Second(), Power = -1 } }) { }
     }
 
     /// <summary> Force </summary>
-    public sealed class N : NamedCompoundUnit
+    public sealed class Newton : NamedCompoundUnit
     {
-        public N() : base("N", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = 1 },
-                                                     new UnitPowerPair { Unit = new Kg(), Power = 1 },
-                                                     new UnitPowerPair { Unit = new s(), Power = -2 } }) { }
+        public Newton() : base("N", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = 1 },
+                                                     new UnitPowerPair { Unit = new Kilogram(), Power = 1 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = -2 } }) { }
     }
 
     /// <summary> Pressure </summary>
-    public sealed class Pa : NamedCompoundUnit
+    public sealed class Pascal : NamedCompoundUnit
     {
-        public Pa() : base("Pa", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = -1 },
-                                                       new UnitPowerPair { Unit = new Kg(), Power = 1 },
-                                                       new UnitPowerPair { Unit = new s(), Power = -2 } }) { }
+        public Pascal() : base("Pa", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = -1 },
+                                                       new UnitPowerPair { Unit = new Kilogram(), Power = 1 },
+                                                       new UnitPowerPair { Unit = new Second(), Power = -2 } }) { }
     }
 
     /// <summary> Energy </summary>
-    public sealed class J : NamedCompoundUnit
+    public sealed class Joule : NamedCompoundUnit
     {
-        public J() : base("J", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = 2 },
-                                                     new UnitPowerPair { Unit = new Kg(), Power = 1 },
-                                                     new UnitPowerPair { Unit = new s(), Power = -2 } }) { }
+        public Joule() : base("J", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = 2 },
+                                                     new UnitPowerPair { Unit = new Kilogram(), Power = 1 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = -2 } }) { }
     }
 
     /// <summary> Power / EM Flux </summary>
-    public sealed class W : NamedCompoundUnit
+    public sealed class Watt : NamedCompoundUnit
     {
-        public W() : base("W", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = 2 },
-                                                     new UnitPowerPair { Unit = new Kg(), Power = 1 },
-                                                     new UnitPowerPair { Unit = new s(), Power = -3 } }) { }
+        public Watt() : base("W", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = 2 },
+                                                     new UnitPowerPair { Unit = new Kilogram(), Power = 1 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = -3 } }) { }
     }
 
     /// <summary> Electric Charge </summary>
-    public sealed class C : NamedCompoundUnit
+    public sealed class Coulomb : NamedCompoundUnit
     {
-        public C() : base("C", new UnitPowerPair[] { new UnitPowerPair { Unit = new A(), Power = 1 },
-                                                     new UnitPowerPair { Unit = new s(), Power = 1 } }) { }
+        public Coulomb() : base("C", new UnitPowerPair[] { new UnitPowerPair { Unit = new Ampere(), Power = 1 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = 1 } }) { }
     }
 
     /// <summary> Electric Potential (Voltage) </summary>
-    public sealed class V : NamedCompoundUnit
+    public sealed class Volt : NamedCompoundUnit
     {
-        public V() : base("V", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = 2 },
-                                                     new UnitPowerPair { Unit = new Kg(), Power = 1 },
-                                                     new UnitPowerPair { Unit = new s(), Power = -3 },
-                                                     new UnitPowerPair { Unit = new A(), Power = -1 } }) { }
+        public Volt() : base("V", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = 2 },
+                                                     new UnitPowerPair { Unit = new Kilogram(), Power = 1 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = -3 },
+                                                     new UnitPowerPair { Unit = new Ampere(), Power = -1 } }) { }
     }
 
-    /// <summary> Capacitance (farad) </summary>
-    public sealed class F : NamedCompoundUnit
+    /// <summary> Capacitance </summary>
+    public sealed class Farad : NamedCompoundUnit
     {
-        public F() : base("F", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = -2 },
-                                                     new UnitPowerPair { Unit = new Kg(), Power = -1 },
-                                                     new UnitPowerPair { Unit = new s(), Power = 4 },
-                                                     new UnitPowerPair { Unit = new A(), Power = 2 } }) { }
+        public Farad() : base("F", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = -2 },
+                                                     new UnitPowerPair { Unit = new Kilogram(), Power = -1 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = 4 },
+                                                     new UnitPowerPair { Unit = new Ampere(), Power = 2 } }) { }
     }
 
     /// <summary> Resistance </summary>
     public sealed class Ohm : NamedCompoundUnit
     {
-        public Ohm() : base("\u03A9", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = 2 },
-                                                            new UnitPowerPair { Unit = new Kg(), Power = 1 },
-                                                            new UnitPowerPair { Unit = new s(), Power = -3 },
-                                                            new UnitPowerPair { Unit = new A(), Power = -2 } }) { }
+        public Ohm() : base("\u03A9", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = 2 },
+                                                            new UnitPowerPair { Unit = new Kilogram(), Power = 1 },
+                                                            new UnitPowerPair { Unit = new Second(), Power = -3 },
+                                                            new UnitPowerPair { Unit = new Ampere(), Power = -2 } }) { }
     }
 
-    /// <summary> Conductance (siemens) </summary>
-    public sealed class S : NamedCompoundUnit
+    /// <summary> Conductance </summary>
+    public sealed class Siemens : NamedCompoundUnit
     {
-        public S() : base("S", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = -2 },
-                                                     new UnitPowerPair { Unit = new Kg(), Power = -1 },
-                                                     new UnitPowerPair { Unit = new s(), Power = 3 },
-                                                     new UnitPowerPair { Unit = new A(), Power = 2 } }) { }
+        public Siemens() : base("S", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = -2 },
+                                                     new UnitPowerPair { Unit = new Kilogram(), Power = -1 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = 3 },
+                                                     new UnitPowerPair { Unit = new Ampere(), Power = 2 } }) { }
     }
 
-    /// <summary> Magnetic Flux (webber) </summary>
-    public sealed class Wb : NamedCompoundUnit
+    /// <summary> Magnetic Flux </summary>
+    public sealed class Webber : NamedCompoundUnit
     {
-        public Wb() : base("Wb", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = 2 },
-                                                       new UnitPowerPair { Unit = new Kg(), Power = 1 },
-                                                       new UnitPowerPair { Unit = new s(), Power = -2 },
-                                                       new UnitPowerPair { Unit = new A(), Power = -1 } }) { }
+        public Webber() : base("Wb", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = 2 },
+                                                       new UnitPowerPair { Unit = new Kilogram(), Power = 1 },
+                                                       new UnitPowerPair { Unit = new Second(), Power = -2 },
+                                                       new UnitPowerPair { Unit = new Ampere(), Power = -1 } }) { }
     }
 
-    /// <summary> Magnetic Flux Density (tesla) </summary>
-    public sealed class T : NamedCompoundUnit
+    /// <summary> Magnetic Flux Density </summary>
+    public sealed class Tesla : NamedCompoundUnit
     {
-        public T() : base("T", new UnitPowerPair[] { new UnitPowerPair { Unit = new Kg(), Power = 1 },
-                                                     new UnitPowerPair { Unit = new s(), Power = -2 },
-                                                     new UnitPowerPair { Unit = new A(), Power = -1 } }) { }
+        public Tesla() : base("T", new UnitPowerPair[] { new UnitPowerPair { Unit = new Kilogram(), Power = 1 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = -2 },
+                                                     new UnitPowerPair { Unit = new Ampere(), Power = -1 } }) { }
     }
 
-    /// <summary> Inductance (henry) </summary>
-    public sealed class H : NamedCompoundUnit
+    /// <summary> Inductance </summary>
+    public sealed class Henry : NamedCompoundUnit
     {
-        public H() : base("H", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = 2 },
-                                                     new UnitPowerPair { Unit = new Kg(), Power = 1 },
-                                                     new UnitPowerPair { Unit = new s(), Power = -2 },
-                                                     new UnitPowerPair { Unit = new A(), Power = -2 } }) { }
+        public Henry() : base("H", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = 2 },
+                                                     new UnitPowerPair { Unit = new Kilogram(), Power = 1 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = -2 },
+                                                     new UnitPowerPair { Unit = new Ampere(), Power = -2 } }) { }
     }
 
-    /// <summary> Luminous Flux (lumen) </summary>
-    public sealed class lm : NamedCompoundUnit
+    /// <summary> Luminous Flux </summary>
+    public sealed class Lumen : NamedCompoundUnit
     {
-        public lm() : base("lm", new UnitPowerPair[] { new UnitPowerPair { Unit = new cd(), Power = 1 },
+        public Lumen() : base("lm", new UnitPowerPair[] { new UnitPowerPair { Unit = new Candela(), Power = 1 },
                                                      new UnitPowerPair { Unit = new Radian(), Power = 2 } }) { }
     }
 
-    /// <summary> Illuminance (lux) </summary>
-    public sealed class lx : NamedCompoundUnit
+    /// <summary> Illuminance </summary>
+    public sealed class Lux : NamedCompoundUnit
     {
-        public lx() : base("lx", new UnitPowerPair[] { new UnitPowerPair { Unit = new cd(), Power = 1 },
+        public Lux() : base("lx", new UnitPowerPair[] { new UnitPowerPair { Unit = new Candela(), Power = 1 },
                                                      new UnitPowerPair { Unit = new Radian(), Power = 2 },
-                                                     new UnitPowerPair { Unit = new m(), Power = -2 } }) { }
+                                                     new UnitPowerPair { Unit = new Meter(), Power = -2 } }) { }
     }
 
-    /// <summary> Radiation Activity (descreat instances) (Becquerel) </summary>
-    public sealed class Bq : NamedCompoundUnit
+    /// <summary> Radiation Activity (descreat instances) </summary>
+    public sealed class Becquerel : NamedCompoundUnit
     {
-        public Bq() : base("Bq", new UnitPowerPair[] { new UnitPowerPair { Unit = new s(), Power = -1 } }) { }
+        public Becquerel() : base("Bq", new UnitPowerPair[] { new UnitPowerPair { Unit = new Second(), Power = -1 } }) { }
     }
 
-    /// <summary> Absorbed Dose / Specific Energy (gray) </summary>
-    public sealed class Gy : NamedCompoundUnit
+    /// <summary> Absorbed Dose / Specific Energy </summary>
+    public sealed class Gray : NamedCompoundUnit
     {
-        public Gy() : base("Gy", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = 2 },
-                                                     new UnitPowerPair { Unit = new s(), Power = -2 } }) { }
+        public Gray() : base("Gy", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = 2 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = -2 } }) { }
     }
 
-    /// <summary> Dose Equivilant (sievert) </summary>
-    public sealed class Sv : NamedCompoundUnit
+    /// <summary> Dose Equivilant </summary>
+    public sealed class Sievert : NamedCompoundUnit
     {
-        public Sv() : base("Sv", new UnitPowerPair[] { new UnitPowerPair { Unit = new m(), Power = 2 },
-                                                     new UnitPowerPair { Unit = new s(), Power = -2 } }) { }
+        public Sievert() : base("Sv", new UnitPowerPair[] { new UnitPowerPair { Unit = new Meter(), Power = 2 },
+                                                     new UnitPowerPair { Unit = new Second(), Power = -2 } }) { }
     }
 
-    /// <summary> Catalitic Activity (katal) </summary>
-    public sealed class kat : NamedCompoundUnit
+    /// <summary> Catalitic Activity </summary>
+    public sealed class Katal : NamedCompoundUnit
     {
-        public kat() : base("kat", new UnitPowerPair[] { new UnitPowerPair { Unit = new mol(), Power = 1 },
-                                                         new UnitPowerPair { Unit = new s(), Power = -1 } }) { }
+        public Katal() : base("kat", new UnitPowerPair[] { new UnitPowerPair { Unit = new Moles(), Power = 1 },
+                                                         new UnitPowerPair { Unit = new Second(), Power = -1 } }) { }
     }
 }

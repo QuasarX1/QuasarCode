@@ -17,57 +17,57 @@ namespace QuasarCode.Library.Maths.Units.Common
     }
 
     /// <summary> Kilogram </summary>
-    public sealed class Kg : SingleUnitBase
+    public sealed class Kilogram : SingleUnitBase
     {
-        public Kg() : base(Quantities.Mass, Systems.SI, 1, "Kg") { }
+        public Kilogram() : base(Quantities.Mass, Systems.SI, 1, "Kg") { }
     }
 
     /// <summary> Gram </summary>
-    public sealed class g : SingleUnitBase
+    public sealed class Gram : SingleUnitBase
     {
-        public g() : base(Quantities.Mass, Systems.SI, 1000, "g") { }
+        public Gram() : base(Quantities.Mass, Systems.SI, 1000, "g") { }
     }
 
     /// <summary> Milligram </summary>
-    public sealed class mg : SingleUnitBase
+    public sealed class Milligram : SingleUnitBase
     {
-        public mg() : base(Quantities.Mass, Systems.SI, 1000000, "mg") { }
+        public Milligram() : base(Quantities.Mass, Systems.SI, 1000000, "mg") { }
     }
 
     /// <summary> Kilometer </summary>
-    public sealed class km : SingleUnitBase
+    public sealed class Kilometer : SingleUnitBase
     {
-        public km() : base(Quantities.Length, Systems.SI, 0.001, "km") { }
+        public Kilometer() : base(Quantities.Length, Systems.SI, 0.001, "km") { }
     }
 
     /// <summary> Metrer </summary>
-    public sealed class m : SingleUnitBase
+    public sealed class Meter : SingleUnitBase
     {
-        public m() : base(Quantities.Length, Systems.SI, 1, "m") { }
+        public Meter() : base(Quantities.Length, Systems.SI, 1, "m") { }
     }
 
     /// <summary> Centimeter </summary>
-    public sealed class cm : SingleUnitBase
+    public sealed class Centimeter : SingleUnitBase
     {
-        public cm() : base(Quantities.Length, Systems.SI, 100, "cm") { }
+        public Centimeter() : base(Quantities.Length, Systems.SI, 100, "cm") { }
     }
 
     /// <summary> Millimeter </summary>
-    public sealed class mm : SingleUnitBase
+    public sealed class Millimeter : SingleUnitBase
     {
-        public mm() : base(Quantities.Length, Systems.SI, 1000, "mm") { }
+        public Millimeter() : base(Quantities.Length, Systems.SI, 1000, "mm") { }
     }
 
     /// <summary> Micrometer </summary>
-    public sealed class micron : SingleUnitBase
+    public sealed class Micrometer : SingleUnitBase
     {
-        public micron() : base(Quantities.Length, Systems.SI, 1000000, "\u00B5m") { }
+        public Micrometer() : base(Quantities.Length, Systems.SI, 1000000, "\u00B5m") { }
     }
 
     /// <summary> Nanometer </summary>
-    public sealed class nm : SingleUnitBase
+    public sealed class Nanometer : SingleUnitBase
     {
-        public nm() : base(Quantities.Length, Systems.SI, 1000000000, "nm") { }
+        public Nanometer() : base(Quantities.Length, Systems.SI, 1000000000, "nm") { }
     }
 
     /// <summary> Nanometer </summary>
@@ -77,9 +77,9 @@ namespace QuasarCode.Library.Maths.Units.Common
     }
 
     /// <summary> Hour </summary>
-    public sealed class h : SingleUnitBase
+    public sealed class Hour : SingleUnitBase
     {
-        public h() : base(Quantities.Time, Systems.SI, 3600, "h") { }
+        public Hour() : base(Quantities.Time, Systems.SI, 3600, "h") { }
     }
 
     /// <summary> Minute </summary>
@@ -89,15 +89,15 @@ namespace QuasarCode.Library.Maths.Units.Common
     }
 
     /// <summary> Second </summary>
-    public sealed class s : SingleUnitBase
+    public sealed class Second : SingleUnitBase
     {
-        public s() : base(Quantities.Time, Systems.SI, 1, "s") { }
+        public Second() : base(Quantities.Time, Systems.SI, 1, "s") { }
     }
 
     /// <summary> Degree </summary>
-    public sealed class Degrees : SingleUnitBase
+    public sealed class Degree : SingleUnitBase
     {
-        public Degrees() : base(Quantities.Angle, Systems.SI, Math.PI / 180, "\u00B0") { }
+        public Degree() : base(Quantities.Angle, Systems.SI, Math.PI / 180, "\u00B0") { }
     }
 
     /// <summary> Radian </summary>
@@ -107,15 +107,15 @@ namespace QuasarCode.Library.Maths.Units.Common
     }
 
     /// <summary> Ampere (Amp) </summary>
-    public sealed class A : SingleUnitBase
+    public sealed class Ampere : SingleUnitBase
     {
-        public A() : base(Quantities.ElectricCurrent, Systems.SI, 1, "A") { }
+        public Ampere() : base(Quantities.ElectricCurrent, Systems.SI, 1, "A") { }
     }
 
     /// <summary> Kelvin </summary>
-    public sealed class K : SingleUnitBase
+    public sealed class Kelvin : SingleUnitBase
     {
-        public K() : base(Quantities.Temperature, Systems.SI, 1, "K") { }
+        public Kelvin() : base(Quantities.Temperature, Systems.SI, 1, "K") { }
     }
 
     /// <summary> Celcius </summary>
@@ -125,14 +125,14 @@ namespace QuasarCode.Library.Maths.Units.Common
     }
 
     /// <summary> Mole </summary>
-    public sealed class mol : SingleUnitBase
+    public sealed class Moles : SingleUnitBase
     {
-        public mol() : base(Quantities.Quantity, Systems.SI, 1, "mol") { }
+        public Moles() : base(Quantities.Quantity, Systems.SI, 1, "mol") { }
     }
 
     /// <summary> Candela </summary>
-    public sealed class cd : SingleUnitBase
+    public sealed class Candela : SingleUnitBase
     {
-        public cd() : base(Quantities.LuminousIntensity, Systems.SI, 1, "cd") { }
+        public Candela() : base(Quantities.LuminousIntensity, Systems.SI, 1, "cd") { }
     }
 }
