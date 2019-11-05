@@ -119,9 +119,9 @@ namespace QuasarCode.Library.Maths.Units.Common
     }
 
     /// <summary> Celcius </summary>
-    public sealed class Celcius : SingleUnitBase
+    public sealed class Celcius : SingleUnitBase//TODO: is this conversion correct???
     {
-        public Celcius() : base(Quantities.Temperature, Systems.SI, (double value) => value + 273.25, (double value) => value - 273.25, "K") { }
+        public Celcius() : base(Quantities.Temperature, Systems.SI, (double value, int power) => (power == 1) ? value + 273.25 : value, (double value, int power) => (power == 1) ? value - 273.25 : value, "K") { }
     }
 
     /// <summary> Mole </summary>

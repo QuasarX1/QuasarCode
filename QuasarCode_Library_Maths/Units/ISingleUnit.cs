@@ -9,7 +9,7 @@ namespace QuasarCode.Library.Maths.Units
         IQuantity Quantity { get; }
         ISystem System { get; }
 
-        double ConvertToSystemBase(double value);
-        double ConvertFromSystemBase(double value);
+        double ConvertToSystemBase(double value, int power = 1);
+        double ConvertFromSystemBase(double value, int power = 1);
     }
 }

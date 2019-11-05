@@ -16,7 +16,7 @@ namespace QuasarCode.Library.Maths.Units
             UnitPowerPairs = pairs;
         }
 
-        public static IUnit NewCompoundUnit(UnitPowerPair[] pairs)
+        public static IUnit NewCompoundUnit(params UnitPowerPair[] pairs)
         {
             return new CompoundUnit(pairs).Simplify();
         }

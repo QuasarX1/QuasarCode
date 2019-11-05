@@ -10,8 +10,8 @@ namespace QuasarCode.Library.Maths.Units
         public ISystem System { get; protected set; }
         public string Text { get; protected set; }
 
-        private Func<double, double> UnderlyingConvertToSystemBase;
-        private Func<double, double> UnderlyingConvertFromSystemBase;
+        private Func<double, int, double> UnderlyingConvertToSystemBase;
+        private Func<double, int, double> UnderlyingConvertFromSystemBase;
 
         protected SingleUnitBase(Quantities quantity, Systems system, double systemBaseMultyplier, string text)
         {
@@ -63,12 +63,12 @@ namespace QuasarCode.Library.Maths.Units
                     break;
             }
 
-            this.UnderlyingConvertToSystemBase = (double value) => value / systemBaseMultyplier;
-            this.UnderlyingConvertFromSystemBase = (double value) => value * systemBaseMultyplier;
+            this.UnderlyingConvertToSystemBase = (double value, int power) => value / Math.Pow(systemBaseMultyplier, power);
+            this.UnderlyingConvertFromSystemBase = (double value, int power) => value * Math.Pow(systemBaseMultyplier, power);
             this.Text = text;
         }
 
-        protected SingleUnitBase(Quantities quantity, Systems system, Func<double, double> toBaseDeligate, Func<double, double> fromBaseDeligate, string text)
+        protected SingleUnitBase(Quantities quantity, Systems system, Func<double, int, double> toBaseDeligate, Func<double, int, double> fromBaseDeligate, string text)
         {
             switch (quantity)
             {
@@ -127,12 +127,12 @@ namespace QuasarCode.Library.Maths.Units
         {
             this.Quantity = quantity;
             this.System = system;
-            this.UnderlyingConvertToSystemBase = (double value) => value / systemBaseMultyplier;
-            this.UnderlyingConvertFromSystemBase = (double value) => value * systemBaseMultyplier;
+            this.UnderlyingConvertToSystemBase = (double value, int power) => value / Math.Pow(systemBaseMultyplier, power);
+            this.UnderlyingConvertFromSystemBase = (double value, int power) => value * Math.Pow(systemBaseMultyplier, power);
             this.Text = text;
         }
 
-        protected SingleUnitBase(IQuantity quantity, ISystem system, Func<double, double> toBaseDeligate, Func<double, double> fromBaseDeligate, string text)
+        protected SingleUnitBase(IQuantity quantity, ISystem system, Func<double, int, double> toBaseDeligate, Func<double, int, double> fromBaseDeligate, string text)
         {
             this.Quantity = quantity;
             this.System = system;
@@ -151,14 +151,14 @@ namespace QuasarCode.Library.Maths.Units
             return new UnitPowerPair[] { new UnitPowerPair { Unit = this, Power = 1 } };
         }
 
-        public double ConvertToSystemBase(double value)
+        public double ConvertToSystemBase(double value, int power = 1)
         {
-            return UnderlyingConvertToSystemBase(value);
+            return UnderlyingConvertToSystemBase(value, power);
         }
 
-        public double ConvertFromSystemBase(double value)
+        public double ConvertFromSystemBase(double value, int power = 1)
         {
-            return UnderlyingConvertFromSystemBase(value);
+            return UnderlyingConvertFromSystemBase(value, power);
         }
 
         public override IUnit Pow(int p)

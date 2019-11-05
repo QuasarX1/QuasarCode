@@ -38,14 +38,28 @@ namespace QuasarCode.Library.Maths.Units
         /// </summary>
         /// <param name="v">The value to multyply by</param>
         /// <returns>IUnit</returns>
-        IUnit Mult(IValue v);
+        IValue Mult(IValue v);
 
         /// <summary>
-        /// Divides a unit by annother
+        /// Multiplies a value by a double
+        /// </summary>
+        /// <param name="v">The double to multyply by</param>
+        /// <returns>IUnit</returns>
+        IValue Mult(double v);
+
+        /// <summary>
+        /// Divides a value by annother
         /// </summary>
         /// <param name="v">The value to divide this by</param>
         /// <returns>IUnit</returns>
-        IUnit Div(IValue v);
+        IValue Div(IValue v);
+
+        /// <summary>
+        /// Divides a value by a double
+        /// </summary>
+        /// <param name="v">The double to divide this by</param>
+        /// <returns>IUnit</returns>
+        IValue Div(double v);
 
         /// <summary>
         /// Rounds the value to the provided number of decimal places provided
