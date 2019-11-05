@@ -10,8 +10,8 @@ namespace QuasarCode.Library.Maths.Units
         public ISystem System { get; protected set; }
         public string Text { get; protected set; }
 
-        private Func<double, int, double> UnderlyingConvertToSystemBase;
-        private Func<double, int, double> UnderlyingConvertFromSystemBase;
+        private readonly Func<double, int, double> UnderlyingConvertToSystemBase;
+        private readonly Func<double, int, double> UnderlyingConvertFromSystemBase;
 
         protected SingleUnitBase(Quantities quantity, Systems system, double systemBaseMultyplier, string text)
         {
