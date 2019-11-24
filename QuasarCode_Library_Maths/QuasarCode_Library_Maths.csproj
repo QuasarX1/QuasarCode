@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="Coordinates\" />
     <Folder Include="Fields\" />
-    <Folder Include="Matrices\" />
   </ItemGroup>
 
 </Project>
