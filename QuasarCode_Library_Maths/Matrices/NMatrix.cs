@@ -9,7 +9,7 @@ namespace QuasarCode.Library.Maths.Matrices
     /// </summary>
     public sealed class NMatrix : Matrix<double>
     {
-        public NMatrix(double[,] data, bool enableCasching = true) : base(data, enableCasching) { }
+        public NMatrix(double[,] data, bool enableCasching = true) : base(data, (double a, double b) => a + b, (double a, double b) => a - b, (double a, double b) => a * b, (double a, double b) => a / b, (double a, double b) => a * b, enableCasching) { }
 
         public NMatrix(IMatrix<double> matrix, bool enableCasching = true) : base(matrix, enableCasching) { }
     }

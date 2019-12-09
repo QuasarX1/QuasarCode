@@ -14,6 +14,12 @@ namespace QuasarCode.Library.Maths.Matrices
         private Matrix<T> CofactorsCasche = null;
         private Matrix<T> AdjointCasche = null;
 
+        public Func<T, T, T> AddItems { get; }
+        public Func<T, T, T> SubtractItems { get; }
+        public Func<T, T, T> MultiplyItems { get; }
+        public Func<T, T, T> DivideItems { get; }
+        public Func<T, double, T> MultiplyByDouble { get; }
+
         public readonly bool CaschingEnabled;
 
         object IMatrix.this[int row, int column]
@@ -33,16 +39,37 @@ namespace QuasarCode.Library.Maths.Matrices
 
         public int[] Shape { get { return new int[] { this.Rows, this.Columns }; } }
 
-        public Matrix(T[,] data, bool enableCasching = true)
+        public Matrix(T[,] data, Func<T, T, T> addItems, Func<T, T, T> subtractItems, Func<T, T, T> multiplyItems, Func<T, T, T> divideItems, Func<T, double, T> multiplyByDouble, bool enableCasching = true)
         {
             this.Data = data;
             this.CaschingEnabled = enableCasching;
+            this.AddItems = addItems;
+            this.SubtractItems = subtractItems;
+            this.MultiplyItems = multiplyItems;
+            this.DivideItems = divideItems;
+            this.MultiplyByDouble = multiplyByDouble;
         }
 
         public Matrix(IMatrix<T> matrix, bool enableCasching = true)
         {
             this.Data = (T[,])matrix.GetData().Clone();
             this.CaschingEnabled = enableCasching;
+            this.AddItems = matrix.AddItems;
+            this.SubtractItems = matrix.SubtractItems;
+            this.MultiplyItems = matrix.MultiplyItems;
+            this.DivideItems = matrix.DivideItems;
+            this.MultiplyByDouble = matrix.MultiplyByDouble;
+        }
+
+        protected Matrix(T[,] data, IMatrix<T> matrix, bool enableCasching = true)
+        {
+            this.Data = data;
+            this.CaschingEnabled = enableCasching;
+            this.AddItems = matrix.AddItems;
+            this.SubtractItems = matrix.SubtractItems;
+            this.MultiplyItems = matrix.MultiplyItems;
+            this.DivideItems = matrix.DivideItems;
+            this.MultiplyByDouble = matrix.MultiplyByDouble;
         }
 
         object[,] IMatrix.GetData()
@@ -55,7 +82,12 @@ namespace QuasarCode.Library.Maths.Matrices
             return (T[,])this.Data.Clone();
         }
 
-        public IMatrix<double> Identity()
+        IMatrix<double> IMatrix.Identity()
+        {
+            return IdentityMatrix.CreateNew(this.Rows);
+        }
+
+        public IdentityMatrix Identity()
         {
             return IdentityMatrix.CreateNew(this.Rows);
         }
@@ -65,7 +97,12 @@ namespace QuasarCode.Library.Maths.Matrices
             return this.Transpose();
         }
 
-        public IMatrix<T> Transpose()
+        IMatrix<T> IMatrix<T>.Transpose()
+        {
+            return this.Transpose();
+        }
+
+        public Matrix<T> Transpose()
         {
             T[,] items = new T[this.Rows, this.Columns];
 
@@ -77,7 +114,7 @@ namespace QuasarCode.Library.Maths.Matrices
                 }
             }
 
-            return new Matrix<T>(items);
+            return new Matrix<T>(items, this);
         }
 
         IMatrix IMatrix.Minors()
@@ -85,43 +122,63 @@ namespace QuasarCode.Library.Maths.Matrices
             return this.Minors();
         }
 
-        public IMatrix<T> Minors()
+        IMatrix<T> IMatrix<T>.Minors()
         {
-            T[,] minors = new T[this.Rows, this.Columns];
+            return this.Minors();
+        }
 
-            for (int i = 0; i < this.Rows; i++)
+        public Matrix<T> Minors()
+        {
+            if (this.CaschingEnabled && !(this.MinorsCasche is null))
             {
-                for (int j = 0; j < this.Columns; j++)
+                return this.MinorsCasche.Clone();
+            }
+            else
+            {
+                T[,] minors = new T[this.Rows, this.Columns];
+
+                for (int i = 0; i < this.Rows; i++)
                 {
-                    T[,] componentItems = new T[this.Rows - 1, this.Columns - 1];
-
-                    int kCorrection = 0;
-                    for (int k = 0; k < this.Rows; k++)
+                    for (int j = 0; j < this.Columns; j++)
                     {
-                        if (k == i)
-                        {
-                            kCorrection = -1;
-                            continue;
-                        }
+                        T[,] componentItems = new T[this.Rows - 1, this.Columns - 1];
 
-                        int lCorrection = 0;
-                        for (int l = 0; l < this.Columns; l++)
+                        int kCorrection = 0;
+                        for (int k = 0; k < this.Rows; k++)
                         {
-                            if (l == j)
+                            if (k == i)
                             {
-                                lCorrection = -1;
+                                kCorrection = -1;
                                 continue;
                             }
 
-                            componentItems[k + kCorrection, l + lCorrection] = this.Data[k, l];
-                        }
-                    }
+                            int lCorrection = 0;
+                            for (int l = 0; l < this.Columns; l++)
+                            {
+                                if (l == j)
+                                {
+                                    lCorrection = -1;
+                                    continue;
+                                }
 
-                    minors[i, j] = new Matrix<T>(componentItems).Determinant();
+                                componentItems[k + kCorrection, l + lCorrection] = this.Data[k, l];
+                            }
+                        }
+
+                        minors[i, j] = new Matrix<T>(componentItems, this).Determinant();
+                    }
+                }
+
+                if (this.CaschingEnabled)
+                {
+                    this.MinorsCasche = new Matrix<T>(minors, this);
+                    return this.MinorsCasche.Clone();
+                }
+                else
+                {
+                    return new Matrix<T>(minors, this);
                 }
             }
-
-            return new Matrix<T>(minors);
         }
 
         public T Minor(int row, int column)
@@ -146,15 +203,45 @@ namespace QuasarCode.Library.Maths.Matrices
             return this.Cofactors();
         }
 
-        public IMatrix<T> Cofactors()
+        IMatrix<T> IMatrix<T>.Cofactors()
         {
-            try
+            return this.Cofactors();
+        }
+
+        public Matrix<T> Cofactors()
+        {
+            if (this.CaschingEnabled && !(this.CofactorsCasche is null))
             {
-                return this.Minors().ElementwiseOperation<T, double>((T a, double b) => (dynamic)a * b, Matrix<double>.SignMatrix(this.Rows, this.Columns));
+                return this.CofactorsCasche.Clone();
             }
-            catch (ArithmeticException e)//TODO: check the type of exception for invalid type for a * b
+            else
             {
-                throw new InvalidOperationException("The data type of the matrix was incompatable with multiplication with doubles and therfore cofactors can't be calculated.", e);
+                if (this.CaschingEnabled)
+                {
+                    this.CofactorsCasche = this.Minors().ElementwiseOperation(this.MultiplyByDouble, Matrix<double>.SignMatrix(this.Rows, this.Columns));
+                    return this.CofactorsCasche.Clone();
+                }
+                else
+                {
+                    return this.Minors().ElementwiseOperation(this.MultiplyByDouble, Matrix<double>.SignMatrix(this.Rows, this.Columns));
+                }
+
+                //try
+                //{
+                //    if (this.CaschingEnabled)
+                //    {
+                //        this.CofactorsCasche = this.Minors().ElementwiseOperation<T, double>((T a, double b) => (dynamic)a * b, Matrix<double>.SignMatrix(this.Rows, this.Columns));
+                //        return this.CofactorsCasche.Clone();
+                //    }
+                //    else
+                //    {
+                //        return this.Minors().ElementwiseOperation<T, double>((T a, double b) => (dynamic)a * b, Matrix<double>.SignMatrix(this.Rows, this.Columns));
+                //    }
+                //}
+                //catch (ArithmeticException e)//TODO: check the type of exception for invalid type for a * b
+                //{
+                //    throw new InvalidOperationException("The data type of the matrix was incompatable with multiplication with doubles and therfore cofactors can't be calculated.", e);
+                //}
             }
         }
 
@@ -199,10 +286,10 @@ namespace QuasarCode.Library.Maths.Matrices
                     getCofactor = (int row, int col) => cofactors[row, col];
                 }
 
-                T sum = (dynamic)this.Data[0, 0] * getCofactor(0, 0);//TODO: catch type
+                T sum = this.MultiplyItems(this.Data[0, 0], getCofactor(0, 0));
                 for (int i = 0; i < this.Columns; i++)
                 {
-                    sum += (dynamic)this.Data[0, i] * getCofactor(0, i);//TODO: catch type
+                    sum = this.AddItems(sum, this.MultiplyItems(this.Data[0, i], getCofactor(0, i)));
                 }
 
                 return sum;
@@ -214,9 +301,29 @@ namespace QuasarCode.Library.Maths.Matrices
             return this.Adjoint();
         }
 
-        public IMatrix<T> Adjoint()
+        IMatrix<T> IMatrix<T>.Adjoint()
         {
-            return this.Cofactors().Transpose();
+            return this.Adjoint();
+        }
+
+        public Matrix<T> Adjoint()
+        {
+            if (this.CaschingEnabled && !(this.AdjointCasche is null))
+            {
+                return this.AdjointCasche.Clone();
+            }
+            else
+            {
+                if (this.CaschingEnabled)
+                {
+                    this.AdjointCasche = this.Cofactors().Transpose();
+                    return this.AdjointCasche.Clone();
+                }
+                else
+                {
+                    return this.Cofactors().Transpose();
+                }
+            }
         }
 
         object IMatrix.Trace()
@@ -231,7 +338,7 @@ namespace QuasarCode.Library.Maths.Matrices
             T sum = this.Data[0, 0];
             for (int i = 1; i < this.Rows; i++)
             {
-                sum += (dynamic)this.Data[i, i];//TODO: catch type
+                sum = this.AddItems(sum, this.Data[i, i]);
             }
 
             return sum;
@@ -242,9 +349,14 @@ namespace QuasarCode.Library.Maths.Matrices
             return this.Inverse();
         }
 
-        public IMatrix<T> Inverse()
+        IMatrix<T> IMatrix<T>.Inverse()
         {
-            return this.Adjoint().Divide(this.Determinant());
+            return this.Inverse();
+        }
+
+        public Matrix<T> Inverse()
+        {
+            return this.Adjoint() / this.Determinant();
         }
 
 
@@ -255,7 +367,7 @@ namespace QuasarCode.Library.Maths.Matrices
 
         IMatrix IMatrix.Add(IMatrix matrix)
         {
-            return ((IMatrix)this).ElementwiseOperation((object a, object b) => (dynamic)a + b, matrix);
+            return ((IMatrix)this).ElementwiseOperation((object a, object b) => (dynamic)a + b, matrix);//TODO: catch type? error
         }
 
         public static IMatrix operator +(Matrix<T> a, IMatrix b)
@@ -265,7 +377,7 @@ namespace QuasarCode.Library.Maths.Matrices
 
         public IMatrix<T> Add(IMatrix<T> matrix)
         {
-            return this.ElementwiseOperation<T, T>((T a, T b) => (dynamic)a + b, matrix);
+            return this.ElementwiseOperation(this.AddItems, matrix);//TODO: catch type? error
         }
 
         public static Matrix<T> operator +(Matrix<T> a, IMatrix<T> b)
@@ -275,7 +387,7 @@ namespace QuasarCode.Library.Maths.Matrices
 
         public IMatrix<T> Add(T value)
         {
-            return this.ElementwiseOperation<T, T>((T a, T b) => (dynamic)a + b, value);
+            return this.ElementwiseOperation(this.AddItems, value);//TODO: catch type? error
         }
 
         public static Matrix<T> operator +(Matrix<T> a, T b)
@@ -287,7 +399,7 @@ namespace QuasarCode.Library.Maths.Matrices
 
         IMatrix IMatrix.Subtract(IMatrix matrix)
         {
-            return ((IMatrix)this).ElementwiseOperation((object a, object b) => (dynamic)a - b, matrix);
+            return ((IMatrix)this).ElementwiseOperation((object a, object b) => (dynamic)a - b, matrix);//TODO: catch type? error
         }
 
         public static IMatrix operator -(Matrix<T> a, IMatrix b)
@@ -297,7 +409,7 @@ namespace QuasarCode.Library.Maths.Matrices
 
         public IMatrix<T> Subtract(IMatrix<T> matrix)
         {
-            return this.ElementwiseOperation<T, T>((T a, T b) => (dynamic)a - b, matrix);
+            return this.ElementwiseOperation(this.SubtractItems, matrix);//TODO: catch type? error
         }
 
         public static Matrix<T> operator -(Matrix<T> a, IMatrix<T> b)
@@ -307,7 +419,7 @@ namespace QuasarCode.Library.Maths.Matrices
 
         public IMatrix<T> Subtract(T value)
         {
-            return this.ElementwiseOperation<T, T>((T a, T b) => (dynamic)a - b, value);
+            return this.ElementwiseOperation(this.SubtractItems, value);//TODO: catch type? error
         }
 
         public static Matrix<T> operator -(Matrix<T> a, T b)
@@ -335,7 +447,7 @@ namespace QuasarCode.Library.Maths.Matrices
                 }
             }
 
-            return new Matrix<object>(items);
+            return new OMatrix(items);
         }
 
         public static IMatrix operator *(Matrix<T> a, IMatrix b)
@@ -353,15 +465,15 @@ namespace QuasarCode.Library.Maths.Matrices
             {
                 for (int j = 0; j < matrix.Columns; j++)
                 {
-                    items[i, j] = (dynamic)this.Data[i, 0] * matrix[0, j];//TODO: catch type
+                    items[i, j] = this.MultiplyItems(this.Data[i, 0], matrix[0, j]);//TODO: catch type
                     for (int l = 1; l < this.Columns; l++)
                     {
-                        items[i, j] = (dynamic)this.Data[i, l] * matrix[l, j];//TODO: catch type
+                        items[i, j] = this.AddItems(items[i, j], this.MultiplyItems(this.Data[i, l], matrix[l, j]));//TODO: catch type
                     }
                 }
             }
 
-            return new Matrix<T>(items);
+            return new Matrix<T>(items, this);
         }
 
         public static Matrix<T> operator *(Matrix<T> a, IMatrix<T> b)
@@ -371,7 +483,7 @@ namespace QuasarCode.Library.Maths.Matrices
 
         public IMatrix<T> Multiply(T value)
         {
-            return this.ElementwiseOperation<T, T>((T a, T b) => (dynamic)a * b, value);
+            return this.ElementwiseOperation(this.MultiplyItems, value);//TODO: catch type? error
         }
 
         public static Matrix<T> operator *(Matrix<T> a, T b)
@@ -403,7 +515,7 @@ namespace QuasarCode.Library.Maths.Matrices
 
         public IMatrix<T> Divide(T value)
         {
-            return this.ElementwiseOperation<T, T>((T a, T b) => (dynamic)a / b, value);
+            return this.ElementwiseOperation(this.DivideItems, value);
         }
 
         public static Matrix<T> operator /(Matrix<T> a, T b)
@@ -422,12 +534,16 @@ namespace QuasarCode.Library.Maths.Matrices
 
 
 
-        public object Clone()
+        object ICloneable.Clone()
         {
-            return new Matrix<T>((T[,])this.Data.Clone());
+            return this.Clone();
         }
 
-        //TODO: catch type? error
+        public Matrix<T> Clone()
+        {
+            return new Matrix<T>((T[,])this.Data.Clone(), this);
+        }
+
         IMatrix IMatrix.ElementwiseOperation(Func<object, object, object> operation, IMatrix matrix)
         {
             //TODO: Check matching shape
@@ -441,7 +557,7 @@ namespace QuasarCode.Library.Maths.Matrices
                 }
             }
 
-            return new Matrix<object>(items);
+            return new OMatrix(items);
         }
 
         IMatrix IMatrix.ElementwiseOperation(Func<object, object, object> operation, object value)
@@ -456,10 +572,30 @@ namespace QuasarCode.Library.Maths.Matrices
                 }
             }
 
-            return new Matrix<object>(items);
+            return new OMatrix(items);
         }
 
-        public IMatrix<U> ElementwiseOperation<U, V>(Func<T, V, U> operation, IMatrix<V> matrix)
+        IMatrix<U> IMatrix<T>.ElementwiseOperation<U, V>(Func<T, V, U> operation, IMatrix<V> matrix, Func<U, U, U> addItems, Func<U, U, U> subtractItems, Func<U, U, U> multiplyItems, Func<U, U, U> divideItems, Func<U, double, U> multiplyByDouble)
+        {
+            return this.ElementwiseOperation(operation, matrix, addItems, subtractItems, multiplyItems, divideItems, multiplyByDouble);
+        }
+
+        IMatrix<U> IMatrix<T>.ElementwiseOperation<U, V>(Func<T, V, U> operation, V value, Func<U, U, U> addItems, Func<U, U, U> subtractItems, Func<U, U, U> multiplyItems, Func<U, U, U> divideItems, Func<U, double, U> multiplyByDouble)
+        {
+            return this.ElementwiseOperation(operation, value, addItems, subtractItems, multiplyItems, divideItems, multiplyByDouble);
+        }
+
+        IMatrix<T> IMatrix<T>.ElementwiseOperation<V>(Func<T, V, T> operation, IMatrix<V> matrix)
+        {
+            return this.ElementwiseOperation(operation, matrix);
+        }
+
+        IMatrix<T> IMatrix<T>.ElementwiseOperation<V>(Func<T, V, T> operation, V value)
+        {
+            return this.ElementwiseOperation(operation, value);
+        }
+
+        public Matrix<U> ElementwiseOperation<U, V>(Func<T, V, U> operation, IMatrix<V> matrix, Func<U, U, U> addItems, Func<U, U, U> subtractItems, Func<U, U, U> multiplyItems, Func<U, U, U> divideItems, Func<U, double, U> multiplyByDouble)
         {
             //TODO: Check matching shape
             U[,] items = new U[this.Rows, this.Columns];
@@ -472,10 +608,10 @@ namespace QuasarCode.Library.Maths.Matrices
                 }
             }
 
-            return new Matrix<U>(items);
+            return new Matrix<U>(items, addItems, subtractItems, multiplyItems, divideItems, multiplyByDouble);
         }
 
-        public IMatrix<U> ElementwiseOperation<U, V>(Func<T, V, U> operation, V value)
+        public Matrix<U> ElementwiseOperation<U, V>(Func<T, V, U> operation, V value, Func<U, U, U> addItems, Func<U, U, U> subtractItems, Func<U, U, U> multiplyItems, Func<U, U, U> divideItems, Func<U, double, U> multiplyByDouble)
         {
             U[,] items = new U[this.Rows, this.Columns];
 
@@ -487,7 +623,38 @@ namespace QuasarCode.Library.Maths.Matrices
                 }
             }
 
-            return new Matrix<U>(items);
+            return new Matrix<U>(items, addItems, subtractItems, multiplyItems, divideItems, multiplyByDouble);
+        }
+
+        public Matrix<T> ElementwiseOperation<V>(Func<T, V, T> operation, IMatrix<V> matrix)
+        {
+            //TODO: Check matching shape
+            T[,] items = new T[this.Rows, this.Columns];
+
+            for (int i = 0; i < this.Rows; i++)
+            {
+                for (int j = 0; j < this.Columns; j++)
+                {
+                    items[i, j] = operation(this.Data[i, j], matrix[i, j]);
+                }
+            }
+
+            return new Matrix<T>(items, this);
+        }
+
+        public Matrix<T> ElementwiseOperation<V>(Func<T, V, T> operation, V value)
+        {
+            T[,] items = new T[this.Rows, this.Columns];
+
+            for (int i = 0; i < this.Rows; i++)
+            {
+                for (int j = 0; j < this.Columns; j++)
+                {
+                    items[i, j] = operation(this.Data[i, j], value);
+                }
+            }
+
+            return new Matrix<T>(items, this);
         }
 
         public static Matrix<double> SignMatrix(int rows, int cols)
@@ -501,7 +668,247 @@ namespace QuasarCode.Library.Maths.Matrices
                 }
             }
 
-            return new Matrix<double>(items, enableCasching: false);
+            return new NMatrix(items, enableCasching: false);
+        }
+
+
+
+        IMatrix IMatrix.RowSwap(int row1, int row2)
+        {
+            return this.RowSwap(row1, row2);
+        }
+
+        IMatrix<T> IMatrix<T>.RowSwap(int row1, int row2)
+        {
+            return this.RowSwap(row1, row2);
+        }
+
+        public Matrix<T> RowSwap(int row1, int row2)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Columns; i++)
+            {
+                result[row1, i] = this.Data[row2, i];
+                result[row2, i] = this.Data[row1, i];
+            }
+
+            return result;
+        }
+
+        IMatrix IMatrix.ColumnSwap(int column1, int column2)
+        {
+            return this.ColumnSwap(column1, column2);
+        }
+
+        IMatrix<T> IMatrix<T>.ColumnSwap(int column1, int column2)
+        {
+            return this.ColumnSwap(column1, column2);
+        }
+
+        public Matrix<T> ColumnSwap(int column1, int column2)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Rows; i++)
+            {
+                result[i, column1] = this.Data[i, column2];
+                result[i, column2] = this.Data[i, column1];
+            }
+
+            return result;
+        }
+
+        IMatrix IMatrix.RowMultiply(int targetRow, object multiplier)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Columns; i++)
+            {
+                result[targetRow, i] = (dynamic)this.Data[targetRow, i] * multiplier;//TODO: type check
+            }
+
+            return result;
+        }
+
+        IMatrix<T> IMatrix<T>.RowMultiply(int targetRow, T multiplier)
+        {
+            return this.RowMultiply(targetRow, multiplier);
+        }
+
+        public Matrix<T> RowMultiply(int targetRow, T multiplier)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Columns; i++)
+            {
+                result[targetRow, i] = this.MultiplyItems(this.Data[targetRow, i], multiplier);
+            }
+
+            return result;
+        }
+
+        IMatrix IMatrix.ColumnMultiply(int targetColumn, object multiplier)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Rows; i++)
+            {
+                result[i, targetColumn] = (dynamic)this.Data[i, targetColumn] * multiplier;//TODO: type check
+            }
+
+            return result;
+        }
+
+        IMatrix<T> IMatrix<T>.ColumnMultiply(int targetColumn, T multiplier)
+        {
+            return this.ColumnMultiply(targetColumn, multiplier);
+        }
+
+        public Matrix<T> ColumnMultiply(int targetColumn, T multiplier)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Rows; i++)
+            {
+                result[i, targetColumn] = this.MultiplyItems(this.Data[i, targetColumn], multiplier);
+            }
+
+            return result;
+        }
+
+        IMatrix IMatrix.RowSum(int targetRow, int operandRow, object multiplier)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Columns; i++)
+            {
+                result[targetRow, i] = (dynamic)this.Data[targetRow, i] + (dynamic)this.Data[operandRow, i] * multiplier;//TODO: type check
+            }
+
+            return result;
+        }
+
+        IMatrix<T> IMatrix<T>.RowSum(int targetRow, int operandRow, T multiplier)
+        {
+            return this.RowSum(targetRow, operandRow, multiplier);
+        }
+
+        public Matrix<T> RowSum(int targetRow, int operandRow, T multiplier)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Columns; i++)
+            {
+                result[targetRow, i] = this.AddItems(result[targetRow, i], this.MultiplyItems(this.Data[operandRow, i], multiplier));
+            }
+
+            return result;
+        }
+
+        IMatrix IMatrix.ColumnSum(int targetColumn, int operandColumn, object multiplier)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Rows; i++)
+            {
+                result[i, targetColumn] += (dynamic)this.Data[i, operandColumn] * multiplier;//TODO: type check
+            }
+
+            return result;
+        }
+
+        IMatrix<T> IMatrix<T>.ColumnSum(int targetColumn, int operandColumn, T multiplier)
+        {
+            return this.ColumnSum(targetColumn, operandColumn, multiplier);
+        }
+
+        public Matrix<T> ColumnSum(int targetColumn, int operandColumn, T multiplier)
+        {
+            Matrix<T> result = this.Clone();
+
+            for (int i = 0; i < this.Rows; i++)
+            {
+                result[i, targetColumn] = this.AddItems(result[i, targetColumn], this.MultiplyItems(this.Data[i, operandColumn], multiplier));
+            }
+
+            return result;
+        }
+
+
+
+
+        public override string ToString()
+        {
+            string[,] itemStrings = new string[this.Rows, this.Columns];
+            int maxLength = 0;
+            for (int i = 0; i < this.Rows; i++)
+            {
+                for (int j = 0; j < this.Columns; j++)
+                {
+                    itemStrings[i, j] += this.Data[i, j].ToString();
+
+                    if (itemStrings[i, j].Length > maxLength)
+                    {
+                        maxLength = itemStrings[i, j].Length;
+                    }
+                }
+            }
+
+            string result = "";
+            int width = (maxLength + 1) * this.Columns + 1;
+
+            for (int i = 0; i < width; i++)
+            {
+                if (i == 0 || i == 1 || i == width - 2 || i == width - 1)
+                {
+                    result += "-";
+                }
+                else
+                {
+                    result += " ";
+                }
+            }
+            result += "\n";
+
+            for (int i = 0; i < this.Rows; i++)
+            {
+                result += "|";
+                for (int j = 0; j < this.Columns; j++)
+                {
+                    result += itemStrings[i, j];
+
+                    for (int counter = 0; counter < maxLength - itemStrings[i, j].Length; counter++)
+                    {
+                        result += " ";
+                    }
+
+                    if (j != this.Columns - 1)
+                    {
+                        result += " ";
+                    }
+                    else
+                    {
+                        result += "|";
+                    }
+                }
+
+                result += "\n";
+            }
+
+            for (int i = 0; i < width; i++)
+            {
+                if (i == 0 || i == 1 || i == width - 2 || i == width - 1)
+                {
+                    result += "-";
+                }
+                else
+                {
+                    result += " ";
+                }
+            }
+
+            return result;
         }
     }
 }

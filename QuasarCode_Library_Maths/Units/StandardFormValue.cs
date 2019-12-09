@@ -110,6 +110,46 @@ namespace QuasarCode.Library.Maths.Units
             return new StandardFormValue(Math.Round(this.Magnitude, MidpointRounding.AwayFromZero), this.Unit);
         }
 
+        public IValue Add(IValue v)
+        {
+            if (this.Unit != v.Unit)
+            {
+                throw new ArgumentException("The values did not have the same units.");
+            }
+
+            return new StandardFormValue(this.Magnitude + v.Magnitude, this.Unit);
+        }
+
+        public IValue Add(double v)
+        {
+            return new StandardFormValue(this.Magnitude + v, this.Unit);
+        }
+
+        public IValue Sub(IValue v)
+        {
+            if (this.Unit != v.Unit)
+            {
+                throw new ArgumentException("The values did not have the same units.");
+            }
+
+            return new StandardFormValue(this.Magnitude - v.Magnitude, this.Unit);
+        }
+
+        public IValue Sub(double v)
+        {
+            return new StandardFormValue(this.Magnitude - v, this.Unit);
+        }
+
+        public static StandardFormValue operator +(StandardFormValue a, IValue b)
+        {
+            return (StandardFormValue)a.Add(b);
+        }
+
+        public static StandardFormValue operator -(StandardFormValue a, IValue b)
+        {
+            return (StandardFormValue)a.Sub(b);
+        }
+
         public static StandardFormValue operator *(StandardFormValue a, IValue b)
         {
             return (StandardFormValue)a.Mult(b);

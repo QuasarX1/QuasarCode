@@ -53,13 +53,33 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\QuasarCode_Library\QuasarCode_Library.csproj">
       <Project>{580be906-a8dd-480f-8e23-aa155e175d4d}</Project>
       <Name>QuasarCode_Library</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\QuasarCode_Library_Games\QuasarCode_Library_Games.csproj">
+      <Project>{9d794b22-79c9-4959-8bed-300bb2872d3a}</Project>
+      <Name>QuasarCode_Library_Games</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QuasarCode_Library_IO\QuasarCode_Library_IO.csproj">
+      <Project>{7f267b1b-6daa-4408-a094-04df9a0fe303}</Project>
+      <Name>QuasarCode_Library_IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QuasarCode_Library_Maths\QuasarCode_Library_Maths.csproj">
+      <Project>{c995f911-4a05-4fc6-b612-615656137170}</Project>
+      <Name>QuasarCode_Library_Maths</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QuasarCode_Library_Symbolic\QuasarCode_Library_Symbolic.csproj">
+      <Project>{481d0961-d5c5-4521-9c27-4530542e4b22}</Project>
+      <Name>QuasarCode_Library_Symbolic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QuasarCode_Library_Tools\QuasarCode_Library_Tools.csproj">
+      <Project>{05a7794d-efe5-4c04-aecc-20a45b21a71a}</Project>
+      <Name>QuasarCode_Library_Tools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

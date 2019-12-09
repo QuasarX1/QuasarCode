@@ -68,6 +68,46 @@ namespace QuasarCode.Library.Maths.Units
             return new Value(Math.Round(this.Magnitude, MidpointRounding.AwayFromZero), this.Unit);
         }
 
+        public IValue Add(IValue v)
+        {
+            if (this.Unit != v.Unit)
+            {
+                throw new ArgumentException("The values did not have the same units.");
+            }
+
+            return new Value(this.Magnitude + v.Magnitude, this.Unit);
+        }
+
+        public IValue Add(double v)
+        {
+            return new Value(this.Magnitude + v, this.Unit);
+        }
+
+        public IValue Sub(IValue v)
+        {
+            if (this.Unit != v.Unit)
+            {
+                throw new ArgumentException("The values did not have the same units.");
+            }
+
+            return new Value(this.Magnitude - v.Magnitude, this.Unit);
+        }
+
+        public IValue Sub(double v)
+        {
+            return new Value(this.Magnitude - v, this.Unit);
+        }
+
+        public static Value operator +(Value a, IValue b)
+        {
+            return (Value)a.Add(b);
+        }
+
+        public static Value operator -(Value a, IValue b)
+        {
+            return (Value)a.Sub(b);
+        }
+
         public static Value operator *(Value a, IValue b)
         {
             return (Value)a.Mult(b);

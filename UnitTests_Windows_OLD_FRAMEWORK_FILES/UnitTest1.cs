@@ -796,5 +796,11 @@ namespace UnitTests_Windows
 
             Print(Constant.PHI.symbol + " = " + Constant.PHI.Value);
         }
+
+        [TestMethod]
+        public void Deleteme_Test()
+        {
+            //QuasarCode.Library.Maths.Matrices.
+        }
     }
 }

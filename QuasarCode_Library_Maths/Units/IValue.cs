@@ -34,6 +34,34 @@ namespace QuasarCode.Library.Maths.Units
         IValue Pow(int p);
 
         /// <summary>
+        /// Adds two values
+        /// </summary>
+        /// <param name="v">The value to add</param>
+        /// <returns>IUnit</returns>
+        IValue Add(IValue v);
+
+        /// <summary>
+        /// Adds a value and a double
+        /// </summary>
+        /// <param name="v">The double to add</param>
+        /// <returns>IUnit</returns>
+        IValue Add(double v);
+
+        /// <summary>
+        /// Subtracts one value from annother
+        /// </summary>
+        /// <param name="v">The value to subtract</param>
+        /// <returns>IUnit</returns>
+        IValue Sub(IValue v);
+
+        /// <summary>
+        ///Subtracts a double from a value
+        /// </summary>
+        /// <param name="v">The double to subtract</param>
+        /// <returns>IUnit</returns>
+        IValue Sub(double v);
+
+        /// <summary>
         /// Multiplies a value by annother
         /// </summary>
         /// <param name="v">The value to multyply by</param>
