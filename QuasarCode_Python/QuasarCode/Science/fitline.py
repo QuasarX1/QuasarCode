@@ -232,7 +232,7 @@ class LineOfBestFit(object):
         output += "\n\nParameters returned by fit:"
 
         for key in self.fitVariables:
-            output += "\n    " + str(key) + " = " + errorString(self.fitVariables[key][0], standardFormStringIfNessessary(self.fitVariables[key][1]))
+            output += "\n    " + str(key) + " = " + errorString(self.fitVariables[key][0], self.fitVariables[key][1])
 
         self.fittingOutput = output
 

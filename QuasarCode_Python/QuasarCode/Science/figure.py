@@ -154,7 +154,7 @@ class ManualFigure(object):
         """
         self.instructions = []
 
-    def addFit(x, y, xError, yError, lineType: LineType = LineType.straight, initialFitVariables: dict = None, customFitMethods: list = None, **kwargs):
+    def addFit(self, x, y, xError = None, yError = None, lineType: LineType = LineType.straight, initialFitVariables: dict = None, customFitMethods: list = None, **kwargs):
         """
         Adds an instruction to draw a fit line using the data provided.
 
@@ -177,10 +177,14 @@ class ManualFigure(object):
 
             All other named arguments will be passed to the plot function used to draw the line.
         """
-        fit = LineOfBestFit(__FigureSpoofer(np.array(x), np.array(y), np.array(xError), np.array(yError)), lineType, initialFitVariables, customFitMethods)
+        if xError is not None:
+            xError = np.array(xError)
+        if yError is not None:
+            yError = np.array(yError)
+        fit = LineOfBestFit(ManualFigure.__FigureSpoofer(np.array(x), np.array(y), xError, yError), lineType, initialFitVariables, customFitMethods)
 
         if fit.fit_Y is not None:
-            self.addInstruction(DrawInstruction.plot, [fit.fit_X, fit.fit_Y], kwargs)
+            self.addInstruction(DrawInstruction.plot, [fit.fit_X, fit.fit_Y], *kwargs)
 
     class __FigureSpoofer(IAutomaticFigure):
         """
@@ -282,7 +286,7 @@ class Figure(IAutomaticFigure):
                 self.__dataPlotKwargs["linestyle"] = ""
 
             # Plot the data with avalable errorbars
-            self.axis.errorbar(self.x, self.y, self.xError, self.yError, **self.__dataPlotKwargs)
+            self.axis.errorbar(self.x, self.y, self.yError, self.xError, **self.__dataPlotKwargs)
 
             # Ajust the x range
             if not self.customXRange:

@@ -96,7 +96,7 @@ def standardFormString(num: Decimal, numberSigFig = None):
 
 def standardFormStringIfNessessary(num: Decimal, numberSigFig = None):
     if np.abs(num) >= 1000 or np.abs(num) < 0.001:
-        return standardFormString
+        return standardFormString(num, numberSigFig)
     else:
         return str(float(sigFig(num, numberSigFig) if numberSigFig is not None else num))
 
