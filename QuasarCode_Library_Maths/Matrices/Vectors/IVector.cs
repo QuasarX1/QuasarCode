@@ -7,26 +7,27 @@ using QuasarCode.Library.Maths.Units.Common;
 
 namespace QuasarCode.Library.Maths.Matrices.Vectors
 {
-    public interface IVector : IMatrix
+    public interface IVector<T> : IMatrix<T>
     {
-        IUnit Unit { get; }
+        int Length { get; }
         bool ColumnFormat { get; }
-        double this[int index] { get; }
+        T this[int index] { get; }
 
-        double[,] GetVectorData();
+        T[] GetVectorData();
 
-        new IVector Transpose();
+        new IVector<T> Transpose();
 
-        double ScalarProduct(IVector vector);
+        T ScalarProduct(IVector<T> vector);
 
-        double VectorProduct(IVector vector);
+        T VectorProduct(IVector<T> vector);
 
-        IVector Add(IVector matrix);
+        IVector<T> Add(IVector<T> vector);
 
-        IVector Subtract(IVector matrix);
+        IVector<T> Subtract(IVector<T> vector);
 
-        IVector Multiply(IVector matrix);//TODO: HOW?!
-
-        IVector Divide(IVector matrix);//TODO: HOW?!
+        IVector<U> ElementwiseOperation<U, V>(Func<T, V, U> operation, IVector<V> vector, Func<U, U, U> addItems, Func<U, U, U> subtractItems, Func<U, U, U> multiplyItems, Func<U, U, U> divideItems, Func<U, double, U> multiplyByDouble);
+        new IVector<U> ElementwiseOperation<U, V>(Func<T, V, U> operation, V value, Func<U, U, U> addItems, Func<U, U, U> subtractItems, Func<U, U, U> multiplyItems, Func<U, U, U> divideItems, Func<U, double, U> multiplyByDouble);
+        IVector<T> ElementwiseOperation<V>(Func<T, V, T> operation, IVector<V> vector);
+        new IVector<T> ElementwiseOperation<V>(Func<T, V, T> operation, V value);
     }
 }
