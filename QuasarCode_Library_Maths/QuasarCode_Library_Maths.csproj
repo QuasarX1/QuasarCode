@@ -64,11 +64,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Coordinates\" />
-    <Folder Include="Fields\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="old\CompoundUnit.cs" />
     <None Include="old\Coordinates\1D\LineCoordinate.cs" />
     <None Include="old\Coordinates\2D\Cartesian_2D_Coordinate.cs" />
