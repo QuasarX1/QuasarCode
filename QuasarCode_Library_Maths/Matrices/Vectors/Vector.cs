@@ -29,9 +29,9 @@ namespace QuasarCode.Library.Maths.Matrices.Vectors
             return formattedData;
         }
 
-        public static Vector<T> NewVector(T[] data, Func<T, T, T> addItems, Func<T, T, T> subtractItems, Func<T, T, T> multiplyItems, Func<T, T, T> divideItems, Func<T, double, T> multiplyByDouble, bool enableCasching = true)
+        public static Vector<T> NewVector(T[] data, bool useColumnFormat, Func<T, T, T> addItems, Func<T, T, T> subtractItems, Func<T, T, T> multiplyItems, Func<T, T, T> divideItems, Func<T, double, T> multiplyByDouble, bool enableCasching = true)
         {
-            return new Vector<T>(Vector<T>.FormatVectorData(data, ), addItems, subtractItems, multiplyItems, divideItems, multiplyByDouble, enableCasching);
+            return new Vector<T>(Vector<T>.FormatVectorData(data, useColumnFormat), addItems, subtractItems, multiplyItems, divideItems, multiplyByDouble, enableCasching);
         }
 
         protected Vector(T[,] data, Func<T, T, T> addItems, Func<T, T, T> subtractItems, Func<T, T, T> multiplyItems, Func<T, T, T> divideItems, Func<T, double, T> multiplyByDouble, bool enableCasching = true) : base(data, addItems, subtractItems, multiplyItems, divideItems, multiplyByDouble, enableCasching) { }
