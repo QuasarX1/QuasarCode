@@ -9,7 +9,7 @@ namespace QuasarCode.Library.Maths.Matrices
     /// </summary>
     public sealed class IdentityMatrix : Matrix<double>
     {
-        private IdentityMatrix(double[,] data, bool enableCasching = true) : base(data, enableCasching) { }
+        private IdentityMatrix(double[,] data, bool enableCasching = true) : base(data, (double a, double b) => a + b, (double a, double b) => a - b, (double a, double b) => a * b, (double a, double b) => a / b, (double a, double b) => a * b, enableCasching) { }
 
         public static IdentityMatrix CreateNew(int rank, bool enableCasching = false)
         {

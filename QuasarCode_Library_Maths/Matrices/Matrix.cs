@@ -856,20 +856,23 @@ namespace QuasarCode.Library.Maths.Matrices
             }
 
             string result = "";
-            int width = (maxLength + 1) * this.Columns + 1;
 
+            int width = (maxLength + 1) * this.Columns + 1;
+            string topAndBottomLines = "";
             for (int i = 0; i < width; i++)
             {
                 if (i == 0 || i == 1 || i == width - 2 || i == width - 1)
                 {
-                    result += "-";
+                    topAndBottomLines += "-";
                 }
                 else
                 {
-                    result += " ";
+                    topAndBottomLines += " ";
                 }
             }
-            result += "\n";
+
+
+            result += topAndBottomLines + "\n";
 
             for (int i = 0; i < this.Rows; i++)
             {
@@ -896,17 +899,7 @@ namespace QuasarCode.Library.Maths.Matrices
                 result += "\n";
             }
 
-            for (int i = 0; i < width; i++)
-            {
-                if (i == 0 || i == 1 || i == width - 2 || i == width - 1)
-                {
-                    result += "-";
-                }
-                else
-                {
-                    result += " ";
-                }
-            }
+            result += topAndBottomLines;
 
             return result;
         }
