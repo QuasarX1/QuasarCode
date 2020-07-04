@@ -21,11 +21,13 @@ namespace UnitTests_Windows_CSharp
             //IMatrix<double> mat2 = mat.Multiply(IdentityMatrix.CreateNew(3));
             IMatrix<double> mat2 = mat.Multiply(mat);
 
-            //mat2.Add(10);
+            IMatrix<double> mat3 = mat2.Add(10);
 
             System.Console.WriteLine(mat);
             System.Console.WriteLine();
             System.Console.WriteLine(mat2);
+            System.Console.WriteLine();
+            System.Console.WriteLine(mat3);
         }
 
         [TestMethod]
