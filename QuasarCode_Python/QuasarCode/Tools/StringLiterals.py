@@ -33,5 +33,14 @@ SuperscriptInt = (Superscript_0, Superscript_1, Superscript_2,
                   Superscript_3, Superscript_4, Superscript_5,
                   Superscript_6, Superscript_7, Superscript_8, Superscript_9)
 
+# Integer characters (value is the index) corisponding to the SuperscriptInt values
+NonSuperscriptInt = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+
+def superscriptFromNormal(digit):
+    try:
+        return SuperscriptInt[NonSuperscriptInt.index(digit)]
+    except ValueError:
+        raise ValueError("The string provided was not a single, positive, integer digit.")
+
 # Superscript -
 Superscript_Minus = "\u02C9"
