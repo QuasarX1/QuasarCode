@@ -128,7 +128,10 @@
     <Compile Include="QuasarCode\Science\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuasarCode\Tools\networking.py">
+    <Compile Include="QuasarCode\Tools\_multiItterator.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Tools\_networking.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Tools\StringLiterals.py">

@@ -20,4 +20,7 @@ import QuasarCode.Maths
 
 import QuasarCode.Science
 
+import QuasarCode.Tools
+
+
 from QuasarCode.IO.Text.console import pause

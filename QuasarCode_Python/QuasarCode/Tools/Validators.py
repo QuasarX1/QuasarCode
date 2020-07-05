@@ -1,9 +1,8 @@
 import re
-from QuasarCode.Tools.networking import URI, URL
 
 # No "isBool" exists as any object can be converted to a boolean
 
-def isCharacter(testCase):
+def isChar(testCase):
     return isString(testCase) and len(str(testCase)) == 1
 
 def isString(testCase):
@@ -65,13 +64,13 @@ def isURIScheme(testCase):
     isString(testCase) and re.match("^[a-z][a-z1-9\+\.\-]*:", str(testCase)) is not None
 
 def isURIAuthority(testCase):
-    pass
+    raise NotImplementedError("This method has not yet been implemented.")
 
 def isURIPath(testCase):
-    pass
+    raise NotImplementedError("This method has not yet been implemented.")
 
 def isURIQuery(testCase):
-    pass
+    raise NotImplementedError("This method has not yet been implemented.")
 
 def isURIFragment(testCase):
-    pass
+    raise NotImplementedError("This method has not yet been implemented.")
