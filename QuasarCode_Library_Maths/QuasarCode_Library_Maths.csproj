@@ -1,0 +1,118 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>QuasarCode.Library.Maths</RootNamespace>
+    <Version>0.0.0</Version>
+    <Authors>Christopher Rowe</Authors>
+    <Product>QuasarCode_Maths</Product>
+    <Copyright>Christopher Rowe</Copyright>
+    <RepositoryUrl>https://github.com/QuasarX1/QuasarCode</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="old\CompoundUnit.cs" />
+    <Compile Remove="old\Coordinates\1D\LineCoordinate.cs" />
+    <Compile Remove="old\Coordinates\2D\Cartesian_2D_Coordinate.cs" />
+    <Compile Remove="old\Coordinates\2D\PolarCoordinate.cs" />
+    <Compile Remove="old\Coordinates\3D\Cartesian_3D_Coordinate.cs" />
+    <Compile Remove="old\Coordinates\3D\CylindricalPolarCoordinate.cs" />
+    <Compile Remove="old\Coordinates\3D\SphericalPolarCoordinate.cs" />
+    <Compile Remove="old\Coordinates\ICoordinate.cs" />
+    <Compile Remove="old\Coordinates\ND\Cartesian_ND_Coordinate.cs" />
+    <Compile Remove="old\Coordinates\Systems\1D\Line.cs" />
+    <Compile Remove="old\Coordinates\Systems\2D\Cartesian_2D.cs" />
+    <Compile Remove="old\Coordinates\Systems\2D\Polar.cs" />
+    <Compile Remove="old\Coordinates\Systems\3D\Cartesian_3D.cs" />
+    <Compile Remove="old\Coordinates\Systems\3D\CylindricalPolar.cs" />
+    <Compile Remove="old\Coordinates\Systems\3D\SphericalPolar.cs" />
+    <Compile Remove="old\Coordinates\Systems\ICartesianBase.cs" />
+    <Compile Remove="old\Coordinates\Systems\ICoordinateSystem.cs" />
+    <Compile Remove="old\Coordinates\Systems\IPolarBase.cs" />
+    <Compile Remove="old\Coordinates\Systems\ND\Cartesian_ND.cs" />
+    <Compile Remove="old\Fields\FieldBase.cs" />
+    <Compile Remove="old\Fields\IField.cs" />
+    <Compile Remove="old\Fields\IScalarField.cs" />
+    <Compile Remove="old\Fields\IVectorField.cs" />
+    <Compile Remove="old\Fields\ScalarField.cs" />
+    <Compile Remove="old\Fields\VectorField.cs" />
+    <Compile Remove="old\ICompoundUnit.cs" />
+    <Compile Remove="old\IGeneralUnit.cs" />
+    <Compile Remove="old\IStandardValue.cs" />
+    <Compile Remove="old\IUnit.cs" />
+    <Compile Remove="old\IValue.cs" />
+    <Compile Remove="old\Matrices\IMatrix.cs" />
+    <Compile Remove="old\Matrices\NMatrix.cs" />
+    <Compile Remove="old\Matrices\UndefinedOperationError.cs" />
+    <Compile Remove="old\Matrices\Vectors\CartesianVector.cs" />
+    <Compile Remove="old\Matrices\Vectors\ILocatedVector.cs" />
+    <Compile Remove="old\Matrices\Vectors\IVector.cs" />
+    <Compile Remove="old\Matrices\Vectors\LocatedCartesianVector.cs" />
+    <Compile Remove="old\Matrices\Vectors\LocatedPolarVector.cs" />
+    <Compile Remove="old\Matrices\Vectors\LocatedVector.cs" />
+    <Compile Remove="old\Matrices\Vectors\PolarVector.cs" />
+    <Compile Remove="old\StandardValue.cs" />
+    <Compile Remove="old\Unit.cs" />
+    <Compile Remove="old\UnitPowerPair.cs" />
+    <Compile Remove="old\Units.cs" />
+    <Compile Remove="old\Value.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QuasarCode_Library_Tools\QuasarCode_Library_Tools.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="old\CompoundUnit.cs" />
+    <None Include="old\Coordinates\1D\LineCoordinate.cs" />
+    <None Include="old\Coordinates\2D\Cartesian_2D_Coordinate.cs" />
+    <None Include="old\Coordinates\2D\PolarCoordinate.cs" />
+    <None Include="old\Coordinates\3D\Cartesian_3D_Coordinate.cs" />
+    <None Include="old\Coordinates\3D\CylindricalPolarCoordinate.cs" />
+    <None Include="old\Coordinates\3D\SphericalPolarCoordinate.cs" />
+    <None Include="old\Coordinates\ICoordinate.cs" />
+    <None Include="old\Coordinates\ND\Cartesian_ND_Coordinate.cs" />
+    <None Include="old\Coordinates\Systems\1D\Line.cs" />
+    <None Include="old\Coordinates\Systems\2D\Cartesian_2D.cs" />
+    <None Include="old\Coordinates\Systems\2D\Polar.cs" />
+    <None Include="old\Coordinates\Systems\3D\Cartesian_3D.cs" />
+    <None Include="old\Coordinates\Systems\3D\CylindricalPolar.cs" />
+    <None Include="old\Coordinates\Systems\3D\SphericalPolar.cs" />
+    <None Include="old\Coordinates\Systems\ICartesianBase.cs" />
+    <None Include="old\Coordinates\Systems\ICoordinateSystem.cs" />
+    <None Include="old\Coordinates\Systems\IPolarBase.cs" />
+    <None Include="old\Coordinates\Systems\ND\Cartesian_ND.cs" />
+    <None Include="old\Fields\FieldBase.cs" />
+    <None Include="old\Fields\IField.cs" />
+    <None Include="old\Fields\IScalarField.cs" />
+    <None Include="old\Fields\IVectorField.cs" />
+    <None Include="old\Fields\ScalarField.cs" />
+    <None Include="old\Fields\VectorField.cs" />
+    <None Include="old\ICompoundUnit.cs" />
+    <None Include="old\IGeneralUnit.cs" />
+    <None Include="old\IStandardValue.cs" />
+    <None Include="old\IUnit.cs" />
+    <None Include="old\IValue.cs" />
+    <None Include="old\Matrices\IMatrix.cs" />
+    <None Include="old\Matrices\NMatrix.cs" />
+    <None Include="old\Matrices\UndefinedOperationError.cs" />
+    <None Include="old\Matrices\Vectors\CartesianVector.cs" />
+    <None Include="old\Matrices\Vectors\ILocatedVector.cs" />
+    <None Include="old\Matrices\Vectors\IVector.cs" />
+    <None Include="old\Matrices\Vectors\LocatedCartesianVector.cs" />
+    <None Include="old\Matrices\Vectors\LocatedPolarVector.cs" />
+    <None Include="old\Matrices\Vectors\LocatedVector.cs" />
+    <None Include="old\Matrices\Vectors\PolarVector.cs" />
+    <None Include="old\StandardValue.cs" />
+    <None Include="old\Unit.cs" />
+    <None Include="old\UnitPowerPair.cs" />
+    <None Include="old\Units.cs" />
+    <None Include="old\Value.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0-preview3.19551.4" />
+  </ItemGroup>
+
+</Project>
