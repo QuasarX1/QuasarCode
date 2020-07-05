@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name = "QuasarCode",
-    version = "0.4.0",
+    version = "0.5.0",
     author = "Christopher Rowe",
     author_email = "thequasarx1@gmail.com",
     description = "A general purpose library for Python applications.",
