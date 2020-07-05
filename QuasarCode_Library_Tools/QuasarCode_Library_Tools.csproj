@@ -13,11 +13,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Tools\DataStructures\" />
-    <Folder Include="Tools\Exceptions\" />
-    <Folder Include="Tools\Search\" />
-    <Folder Include="Tools\Sort\" />
-    <Folder Include="Tools\Systems\" />
+    <Compile Remove="Tools\DataStructures\**" />
+    <Compile Remove="Tools\Exceptions\**" />
+    <Compile Remove="Tools\Search\**" />
+    <Compile Remove="Tools\Sort\**" />
+    <Compile Remove="Tools\Systems\**" />
+    <EmbeddedResource Remove="Tools\DataStructures\**" />
+    <EmbeddedResource Remove="Tools\Exceptions\**" />
+    <EmbeddedResource Remove="Tools\Search\**" />
+    <EmbeddedResource Remove="Tools\Sort\**" />
+    <EmbeddedResource Remove="Tools\Systems\**" />
+    <None Remove="Tools\DataStructures\**" />
+    <None Remove="Tools\Exceptions\**" />
+    <None Remove="Tools\Search\**" />
+    <None Remove="Tools\Sort\**" />
+    <None Remove="Tools\Systems\**" />
   </ItemGroup>
 
 </Project>
