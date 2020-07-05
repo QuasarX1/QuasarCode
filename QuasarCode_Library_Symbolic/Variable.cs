@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Linq;
 
 namespace QuasarCode.Library.Symbolic
 {
@@ -13,7 +14,7 @@ namespace QuasarCode.Library.Symbolic
         /// <summary>
         /// A list of symbolic operators and operands to be evaluated in order
         /// </summary>
-        private List<Tuple<string, Symbol>> operations;
+        public List<Tuple<string, Symbol>> Operations { get; private set; }
 
         /// <summary>
         /// Boolean swich indicating whether or not the variable has been asigned an expression to evaluate
@@ -36,8 +37,8 @@ namespace QuasarCode.Library.Symbolic
                 }
                 else
                 {
-                    operations.Clear();
-                    operations.Add(new Tuple<string, Symbol>("", new Constant(value)));
+                    Operations.Clear();
+                    Operations.Add(new Tuple<string, Symbol>("", new Constant(value)));
                 }
             }
         }
@@ -47,8 +48,8 @@ namespace QuasarCode.Library.Symbolic
         /// <param name="value">The variable or constant to set the variable's expression to</param>
         public void SetValue(Symbol value)
         {
-            operations.Clear();
-            operations = GetOperations(value);
+            Operations.Clear();
+            Operations = GetOperations(value);
             Initialised = true;
         }
 
@@ -60,7 +61,7 @@ namespace QuasarCode.Library.Symbolic
         public Variable(string symbol)
         {
             this.symbol = symbol;
-            this.operations = new List<Tuple<string, Symbol>>();
+            this.Operations = new List<Tuple<string, Symbol>>();
             Initialised = false;
         }
 
@@ -72,7 +73,7 @@ namespace QuasarCode.Library.Symbolic
         public Variable(string symbol, decimal initialValue)
         {
             this.symbol = symbol;
-            this.operations = new List<Tuple<string, Symbol>>();
+            this.Operations = new List<Tuple<string, Symbol>>();
             this.Value = initialValue;
             this.Initialised = true;
         }
@@ -87,12 +88,12 @@ namespace QuasarCode.Library.Symbolic
             this.symbol = symbol;
             if (initialValue is Variable && initialValue.symbol != null && GetOperations(initialValue).Count > 0)
             {
-                this.operations = GetOperations((Variable)initialValue);
+                this.Operations = GetOperations((Variable)initialValue);
             }
             else
             {
-                this.operations = new List<Tuple<string, Symbol>>();
-                operations.Add(new Tuple<string, Symbol>("", initialValue));
+                this.Operations = new List<Tuple<string, Symbol>>();
+                Operations.Add(new Tuple<string, Symbol>("", initialValue));
             }
 
             Initialised = true;
@@ -110,7 +111,7 @@ namespace QuasarCode.Library.Symbolic
             if (!this.Initialised)
             {
                 Initialised = true;
-                operations.Add(new Tuple<string, Symbol>("", new Constant(initialValue)));
+                Operations.Add(new Tuple<string, Symbol>("", new Constant(initialValue)));
                 Initialised = true;
                 return this;
             }
@@ -131,12 +132,12 @@ namespace QuasarCode.Library.Symbolic
             {
                 if (initialValue is Variable && initialValue.symbol != null)
                 {
-                this.operations = GetOperations((Variable)initialValue);
+                this.Operations = GetOperations((Variable)initialValue);
                 }
                 else
                 {
-                    this.operations = new List<Tuple<string, Symbol>>();
-                    operations.Add(new Tuple<string, Symbol>("", initialValue));
+                    this.Operations = new List<Tuple<string, Symbol>>();
+                    Operations.Add(new Tuple<string, Symbol>("", initialValue));
                 }
 
                 Initialised = true;
@@ -158,7 +159,7 @@ namespace QuasarCode.Library.Symbolic
             decimal result = 0;
             if (this.Initialised)
             {
-                foreach (Tuple<string, Symbol> operation in operations)
+                foreach (Tuple<string, Symbol> operation in Operations)
                 {
                     switch (operation.Item1)
                     {
@@ -177,6 +178,15 @@ namespace QuasarCode.Library.Symbolic
                             break;
                         case "tan(":
                             result = (decimal)Math.Tan((double)operation.Item2.Evaluate());
+                            break;
+                        case "sin-1(":
+                            result = (decimal)Math.Asin((double)operation.Item2.Evaluate());
+                            break;
+                        case "cos-1(":
+                            result = (decimal)Math.Acos((double)operation.Item2.Evaluate());
+                            break;
+                        case "tan-1(":
+                            result = (decimal)Math.Atan((double)operation.Item2.Evaluate());
                             break;
                         case "abs(":
                             result = (decimal)Math.Abs((double)operation.Item2.Evaluate());
@@ -223,9 +233,9 @@ namespace QuasarCode.Library.Symbolic
         {
             string result = "";
 
-            if (expantionDepth > 0 && operations.Count > 0 && !(operations.Count == 1 && operations[0].Item2 is Constant && operations[0].Item2.symbol == null))
+            if (expantionDepth > 0 && Operations.Count > 0 && !(Operations.Count == 1 && Operations[0].Item2 is Constant && Operations[0].Item2.symbol == null))
             {
-                foreach (Tuple<string, Symbol> operation in operations)
+                foreach (Tuple<string, Symbol> operation in Operations)
                 {
                     switch (operation.Item1)
                     {
@@ -242,6 +252,15 @@ namespace QuasarCode.Library.Symbolic
                             result = operation.Item1 + " " + operation.Item2.GetComponentString(expantionDepth - 1);
                             break;
                         case "tan(":
+                            result = operation.Item1 + " " + operation.Item2.GetComponentString(expantionDepth - 1);
+                            break;
+                        case "sin-1(":
+                            result = operation.Item1 + " " + operation.Item2.GetComponentString(expantionDepth - 1);
+                            break;
+                        case "cos-1(":
+                            result = operation.Item1 + " " + operation.Item2.GetComponentString(expantionDepth - 1);
+                            break;
+                        case "tan-1(":
                             result = operation.Item1 + " " + operation.Item2.GetComponentString(expantionDepth - 1);
                             break;
                         case "abs(":
@@ -276,7 +295,7 @@ namespace QuasarCode.Library.Symbolic
         /// </summary>
         /// <param name="expantionDepth">The number of symbol layers to expand before just quoting symbols</param>
         /// <returns></returns>
-        public string GetEquasion(int expantionDepth = 1)
+        public string GetEquasionString(int expantionDepth = 1)
         {
             if (this.symbol != null)
             {
@@ -288,6 +307,11 @@ namespace QuasarCode.Library.Symbolic
             }
         }
 
+        public override string ToString()
+        {
+            return this.GetComponentString();
+        }
+
         /// <summary>
         /// Returns the contence of a symbol in the format of a variable's operations list
         /// </summary>
@@ -297,11 +321,39 @@ namespace QuasarCode.Library.Symbolic
         {
             if (s is Variable)
             {
-                return ((Variable)s).operations;
+                return ((Variable)s).Operations;
             }
             else
             {
                 return new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("", s) };
+            }
+        }
+
+        public bool ContainsSymbol(Symbol target)
+        {
+            return (from operation in this.Operations select operation.Item2.GetType() == typeof(Variable) && ((Variable)operation.Item2).ContainsSymbol(target)).Sum((bool result) => { return (result) ? 1 : 0; }) > 0;
+        }
+
+        public bool[] OperationsContainingSymbol(Symbol target)
+        {
+            return (from operation in this.Operations select operation.Item2.GetType() == typeof(Variable) && ((Variable)operation.Item2).ContainsSymbol(target)).ToArray();
+        }
+
+        public void SimplifyAndExpandTerms()
+        {
+            decimal valueTotal = 0;
+            for (int i = 0; i < this.Operations.Count; i++)
+            {
+                try
+                {
+                    valueTotal += this.Operations[i].Item2.Evaluate();
+                    //TODO: THIS WON'T WORK - the whole approach is flawed!
+                }
+                catch (InvalidOperationException)
+                {
+
+                    throw;
+                }
             }
         }
 
@@ -405,7 +457,7 @@ namespace QuasarCode.Library.Symbolic
         /// <param name="a"></param>
         private void Add(Symbol a)
         {
-            this.operations.Add(new Tuple<string, Symbol>("+", a));
+            this.Operations.Add(new Tuple<string, Symbol>("+", a));
         }
 
 
@@ -508,7 +560,7 @@ namespace QuasarCode.Library.Symbolic
         /// <param name="a"></param>
         private void Subtract(Symbol a)
         {
-            this.operations.Add(new Tuple<string, Symbol>("-", a));
+            this.Operations.Add(new Tuple<string, Symbol>("-", a));
         }
 
 
@@ -611,7 +663,7 @@ namespace QuasarCode.Library.Symbolic
         /// <param name="a"></param>
         private void Multyply(Symbol a)
         {
-            this.operations.Add(new Tuple<string, Symbol>("*", a));
+            this.Operations.Add(new Tuple<string, Symbol>("*", a));
         }
 
 
@@ -714,7 +766,7 @@ namespace QuasarCode.Library.Symbolic
         /// <param name="a"></param>
         private void Divide(Symbol a)
         {
-            this.operations.Add(new Tuple<string, Symbol>("/", a));
+            this.Operations.Add(new Tuple<string, Symbol>("/", a));
         }
 
 
@@ -817,7 +869,7 @@ namespace QuasarCode.Library.Symbolic
         /// <param name="a"></param>
         private void Pow(Symbol a)
         {
-            this.operations.Add(new Tuple<string, Symbol>("^", a));
+            this.Operations.Add(new Tuple<string, Symbol>("^", a));
         }
 
 
@@ -838,8 +890,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("sqrt(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("sqrt(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -861,8 +913,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("sqrt(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("sqrt(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -884,9 +936,9 @@ namespace QuasarCode.Library.Symbolic
         {
             Variable inside = new Variable(null);
             inside.Initialised = true;
-            inside.operations = this.operations;
-            this.operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("sqrt(", inside) };
-            operations.Add(new Tuple<string, Symbol>(")", null));
+            inside.Operations = this.Operations;
+            this.Operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("sqrt(", inside) };
+            Operations.Add(new Tuple<string, Symbol>(")", null));
         }
 
 
@@ -907,8 +959,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("sin(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("sin(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -930,8 +982,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("sin(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("sin(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -953,9 +1005,9 @@ namespace QuasarCode.Library.Symbolic
         {
             Variable inside = new Variable(null);
             inside.Initialised = true;
-            inside.operations = this.operations;
-            this.operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("sin(", inside) };
-            operations.Add(new Tuple<string, Symbol>(")", null));
+            inside.Operations = this.Operations;
+            this.Operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("sin(", inside) };
+            Operations.Add(new Tuple<string, Symbol>(")", null));
         }
 
 
@@ -976,8 +1028,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("cos(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("cos(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -999,8 +1051,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("cos(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("cos(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -1022,9 +1074,9 @@ namespace QuasarCode.Library.Symbolic
         {
             Variable inside = new Variable(null);
             inside.Initialised = true;
-            inside.operations = this.operations;
-            this.operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("sqrt(", inside) };
-            operations.Add(new Tuple<string, Symbol>(")", null));
+            inside.Operations = this.Operations;
+            this.Operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("sqrt(", inside) };
+            Operations.Add(new Tuple<string, Symbol>(")", null));
         }
 
 
@@ -1045,8 +1097,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("tan(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("tan(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -1068,8 +1120,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("tan(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("tan(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -1091,9 +1143,9 @@ namespace QuasarCode.Library.Symbolic
         {
             Variable inside = new Variable(null);
             inside.Initialised = true;
-            inside.operations = this.operations;
-            this.operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("tan(", inside) };
-            operations.Add(new Tuple<string, Symbol>(")", null));
+            inside.Operations = this.Operations;
+            this.Operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("tan(", inside) };
+            Operations.Add(new Tuple<string, Symbol>(")", null));
         }
 
 
@@ -1114,8 +1166,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("abs(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("abs(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -1137,8 +1189,8 @@ namespace QuasarCode.Library.Symbolic
                 Variable result = new Variable(null);
                 result.Initialised = true;
 
-                result.operations.Add(new Tuple<string, Symbol>("abs(", a));
-                result.operations.Add(new Tuple<string, Symbol>(")", null));
+                result.Operations.Add(new Tuple<string, Symbol>("abs(", a));
+                result.Operations.Add(new Tuple<string, Symbol>(")", null));
 
                 return result;
             }
@@ -1160,10 +1212,15 @@ namespace QuasarCode.Library.Symbolic
         {
             Variable inside = new Variable(null);
             inside.Initialised = true;
-            inside.operations = this.operations;
-            this.operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("abs(", inside) };
-            operations.Add(new Tuple<string, Symbol>(")", null));
+            inside.Operations = this.Operations;
+            this.Operations = new List<Tuple<string, Symbol>>() { new Tuple<string, Symbol>("abs(", inside) };
+            Operations.Add(new Tuple<string, Symbol>(")", null));
         }
         #endregion
+
+        public static implicit operator Variable(decimal value)
+        {
+            return new Variable(null, value);
+        }
     }
 }

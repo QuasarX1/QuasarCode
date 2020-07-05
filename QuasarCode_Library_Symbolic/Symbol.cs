@@ -22,7 +22,12 @@ namespace QuasarCode.Library.Symbolic
         /// <summary>
         /// Array of all valid operators as strings
         /// </summary>
-        public static readonly string[] Operators = new string[] { "+", "-", "*", "/", "^", "sqrt(", ")", "sin(", "cos(", "tan(", "abs("};
+        public static readonly string[] Operators = new string[] { "+", "-", "*", "/", "^", "sqrt(", ")", "sin(", "cos(", "tan(", "sin-1(", "cos-1(", "tan-1(", "abs(" };
+
+        /// <summary>
+        /// Array of all valid operators as strings
+        /// </summary>
+        public static readonly string[] InverseOperators = new string[] { "-", "+", "/", "*", "sqrt(", "^", null, "sin-1(", "cos-1(", "tan-1(", "sin(", "cos(", "tan(", null };
 
         /// <summary>
         /// Gets a string containing the components that produce the value
