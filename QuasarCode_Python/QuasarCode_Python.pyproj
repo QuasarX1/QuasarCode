@@ -134,7 +134,7 @@
     <Compile Include="QuasarCode\Tools\StringLiterals.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuasarCode\Tools\Validators_temp.py">
+    <Compile Include="QuasarCode\Tools\Validators.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Tools\__init__.py">

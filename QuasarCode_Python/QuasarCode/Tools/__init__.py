@@ -1,1 +1,0 @@
-from QuasarCode.Tools.validators import isCharacter, isString, isAlpha, isInt, isFloat, inRange, isEven, isOdd, isFactor, isMultiple, isEmail, isURL, isURI
