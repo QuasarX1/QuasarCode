@@ -2,15 +2,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>aaf071cc-271b-4e5a-a851-000687430a5b</ProjectGuid>
+    <ProjectGuid>bcad998c-0acc-456b-9e63-4148b52d092f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>QuasarCode_Python.py</StartupFile>
+    <StartupFile>testing.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>QuasarCode_Python</Name>
     <RootNamespace>QuasarCode_Python</RootNamespace>
+    <PublishUrl>C:\Users\chris\OneDrive\Documents\All Documents\Programming\Code\C#\QuasarCode\QuasarCode\QuasarCode_Python\bin\Publish\LatestVersion</PublishUrl>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>CondaEnv|CondaEnv|QuasarCode_env</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +24,136 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="QuasarCode_Python.py" />
+    <!--<Compile Include="QuasarCode_Python.py" />-->
+    <Folder Include="tests\" />
+    <Folder Include="QuasarCode\" />
+    <Folder Include="QuasarCode\edp\" />
+    <Folder Include="QuasarCode\Games\" />
+    <Folder Include="QuasarCode\Games\Cards\" />
+    <Folder Include="QuasarCode\Games\Dice\" />
+    <Folder Include="QuasarCode\Games\Spinners\" />
+    <Folder Include="QuasarCode\IO\" />
+    <Folder Include="QuasarCode\IO\Text\" />
+    <Folder Include="QuasarCode\Maths\" />
+    <Folder Include="QuasarCode\Science\" />
+    <Folder Include="QuasarCode\Tools\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="build.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\edp\_Event.py" />
+    <Compile Include="QuasarCode\edp\_NotEnoughArgumentsError.py" />
+    <Compile Include="QuasarCode\edp\_SubscriberNotPresentError.py" />
+    <Compile Include="QuasarCode\edp\_UndersubscribedEventError.py" />
+    <Compile Include="QuasarCode\edp\__init__.py" />
+    <Compile Include="QuasarCode\Games\Cards\_CardQueue.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Cards\_CardStack.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Cards\_CardGroup.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Cards\_Deck.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Cards\_IPlayingCard.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Cards\_PlayingCard.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Cards\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Dice\_Dice12.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Dice\_Dice6.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Dice\_Dice8.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Dice\_DiceCup.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Dice\_IDice.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Dice\_NDice.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Dice\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Spinners\_ISpinner.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Spinners\_Spinner.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\Spinners\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Games\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\IO\Text\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\IO\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Maths\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Science\data.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Science\figure.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Science\fitline.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Science\graph.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\IO\Text\console.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Science\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Tools\networking.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Tools\validators.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Tools\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="setup.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="testing.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="CondaEnv|CondaEnv|QuasarCode_env" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LICENSE.txt" />
+    <Content Include="README.md" />
+    <Content Include="requirements.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
@@ -31,5 +163,28 @@
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
+  </Target>
+  <PropertyGroup>
+    <PythonCommands>
+      $(PythonCommands);
+      Custom Build;
+      Custom Optimize Build;
+      Custom Optimize Build 2;
+    </PythonCommands>
+  </PropertyGroup>
+  <Target Name="Custom Build" Label="Build" Returns="@(Commands)">
+    <CreatePythonCommandItem TargetType="script" Target="build.py" Arguments="QuasarCode $(Configuration) STANDARD QuasarX1" WorkingDirectory="$(MSBuildProjectDirectory)" ExecuteIn="consolepause">
+      <Output TaskParameter="Command" ItemName="Commands" />
+    </CreatePythonCommandItem>
+  </Target>
+  <Target Name="Custom Optimize Build" Label="Build and Optimize" Returns="@(Commands)">
+    <CreatePythonCommandItem TargetType="script" Target="build.py" Arguments="QuasarCode $(Configuration) OPTIMIZE QuasarX1" WorkingDirectory="$(MSBuildProjectDirectory)" ExecuteIn="consolepause">
+      <Output TaskParameter="Command" ItemName="Commands" />
+    </CreatePythonCommandItem>
+  </Target>
+  <Target Name="Custom Optimize Build 2" Label="Build and Optimize v2" Returns="@(Commands)">
+    <CreatePythonCommandItem TargetType="script" Target="build.py" Arguments="QuasarCode $(Configuration) OPTIMIZE2 QuasarX1" WorkingDirectory="$(MSBuildProjectDirectory)" ExecuteIn="consolepause">
+      <Output TaskParameter="Command" ItemName="Commands" />
+    </CreatePythonCommandItem>
   </Target>
 </Project>
