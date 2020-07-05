@@ -24,6 +24,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <!--<Compile Include="QuasarCode_Python.py" />-->
     <Folder Include="tests\" />
     <Folder Include="QuasarCode\" />
     <Folder Include="QuasarCode\edp\" />

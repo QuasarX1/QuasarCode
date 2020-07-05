@@ -5,7 +5,17 @@ VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuasarCode_Library", "QuasarCode_Library\QuasarCode_Library.csproj", "{580BE906-A8DD-480F-8E23-AA155E175D4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests_Windows", "UnitTests_Windows\UnitTests_Windows.csproj", "{AB2099B9-CC99-4915-8E81-743CBA12FB24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuasarCode_Library_Games", "QuasarCode_Library_Games\QuasarCode_Library_Games.csproj", "{9D794B22-79C9-4959-8BED-300BB2872D3A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuasarCode_Library_Tools", "QuasarCode_Library_Tools\QuasarCode_Library_Tools.csproj", "{05A7794D-EFE5-4C04-AECC-20A45B21A71A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuasarCode_Library_IO", "QuasarCode_Library_IO\QuasarCode_Library_IO.csproj", "{7F267B1B-6DAA-4408-A094-04DF9A0FE303}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuasarCode_Library_Maths", "QuasarCode_Library_Maths\QuasarCode_Library_Maths.csproj", "{C995F911-4A05-4FC6-B612-615656137170}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuasarCode_Library_Symbolic", "QuasarCode_Library_Symbolic\QuasarCode_Library_Symbolic.csproj", "{481D0961-D5C5-4521-9C27-4530542E4B22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests_Windows_CSharp", "UnitTests_Windows_CSharp\UnitTests_Windows_CSharp.csproj", "{14EBA1A3-7E16-4F3C-8A8B-4C634A595E64}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "QuasarCode_Python", "QuasarCode_Python\QuasarCode_Python.pyproj", "{BCAD998C-0ACC-456B-9E63-4148B52D092F}"
 EndProject
@@ -21,6 +31,30 @@ Global
 		{580BE906-A8DD-480F-8E23-AA155E175D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{580BE906-A8DD-480F-8E23-AA155E175D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{580BE906-A8DD-480F-8E23-AA155E175D4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D794B22-79C9-4959-8BED-300BB2872D3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D794B22-79C9-4959-8BED-300BB2872D3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D794B22-79C9-4959-8BED-300BB2872D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D794B22-79C9-4959-8BED-300BB2872D3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A7794D-EFE5-4C04-AECC-20A45B21A71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A7794D-EFE5-4C04-AECC-20A45B21A71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A7794D-EFE5-4C04-AECC-20A45B21A71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A7794D-EFE5-4C04-AECC-20A45B21A71A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F267B1B-6DAA-4408-A094-04DF9A0FE303}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F267B1B-6DAA-4408-A094-04DF9A0FE303}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F267B1B-6DAA-4408-A094-04DF9A0FE303}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F267B1B-6DAA-4408-A094-04DF9A0FE303}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C995F911-4A05-4FC6-B612-615656137170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C995F911-4A05-4FC6-B612-615656137170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C995F911-4A05-4FC6-B612-615656137170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C995F911-4A05-4FC6-B612-615656137170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{481D0961-D5C5-4521-9C27-4530542E4B22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{481D0961-D5C5-4521-9C27-4530542E4B22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{481D0961-D5C5-4521-9C27-4530542E4B22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{481D0961-D5C5-4521-9C27-4530542E4B22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14EBA1A3-7E16-4F3C-8A8B-4C634A595E64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14EBA1A3-7E16-4F3C-8A8B-4C634A595E64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14EBA1A3-7E16-4F3C-8A8B-4C634A595E64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14EBA1A3-7E16-4F3C-8A8B-4C634A595E64}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Release|Any CPU.ActiveCfg = Release|Any CPU
