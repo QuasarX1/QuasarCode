@@ -34,6 +34,8 @@
     <Folder Include="QuasarCode\IO\" />
     <Folder Include="QuasarCode\IO\Text\" />
     <Folder Include="QuasarCode\Maths\" />
+    <Folder Include="QuasarCode\Maths\Matrices\" />
+    <Folder Include="QuasarCode\Maths\Units\" />
     <Folder Include="QuasarCode\Science\" />
     <Folder Include="QuasarCode\Tools\" />
   </ItemGroup>
@@ -104,6 +106,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\IO\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Maths\Matrices\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Maths\Units\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Maths\__init__.py">
