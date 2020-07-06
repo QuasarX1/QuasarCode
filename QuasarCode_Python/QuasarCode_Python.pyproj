@@ -111,7 +111,22 @@
     <Compile Include="QuasarCode\Maths\Matrices\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="QuasarCode\Maths\Units\Quantities.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Maths\Units\Systems.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Maths\Units\_ISingleUnit.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Maths\Units\_ISymbolUnit.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="QuasarCode\Maths\Units\_IUnit.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Maths\Units\_SingleUnitBase.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Maths\Units\_UnitBase.py">
@@ -139,6 +154,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Science\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Maths\Units\_IQuantity.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuasarCode\Maths\Units\_ISystem.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Tools\_multiItterator.py">
