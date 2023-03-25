@@ -1,4 +1,5 @@
-from QuasarCode.Games.Cards import CardGroup, IPlayingCard
+from ._CardGroup import CardGroup
+from ._IPlayingCard import IPlayingCard
 
 class CardQueue(CardGroup):
     """

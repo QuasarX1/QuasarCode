@@ -1,4 +1,4 @@
-from QuasarCode.Games.Dice import NDice
+from ._NDice import NDice
 
 class Dice8(NDice):
     """

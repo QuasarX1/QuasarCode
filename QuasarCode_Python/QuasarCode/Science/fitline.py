@@ -4,8 +4,9 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 from enum import Enum
+
 IAutomaticFigure = object# Partial initialisation to allow circular reference for type hints. See EOF for import
-from QuasarCode.Science.data import errorString, standardFormStringIfNessessary
+from .data import error_string, standard_form_string_if_nessessary
 
 class LineType(Enum):
     """
@@ -195,8 +196,8 @@ class LineOfBestFit(object):
 
         output += "\nFit quality:" \
                 + "\n    chi Squared per point:\n        " + str(chiList) \
-                + "\n\n    chi Squared = {}".format(standardFormStringIfNessessary(chiSquared, 5)) \
-                + "\n    chi Squared / NDF = {}".format(standardFormStringIfNessessary(reducedChiSquared, 5)) \
+                + "\n\n    chi Squared = {}".format(standard_form_string_if_nessessary(chiSquared, 5)) \
+                + "\n    chi Squared / NDF = {}".format(standard_form_string_if_nessessary(reducedChiSquared, 5)) \
                 + "\n\n    Final Fit Variables:\n        " + str(finalValues) \
                 + "\n\n    y:\n        " + str(self.figure.get_y()) \
                 + "\n\n    dx:\n        " + str(self.figure.get_xError()) \
@@ -232,7 +233,7 @@ class LineOfBestFit(object):
         output += "\n\nParameters returned by fit:"
 
         for key in self.fitVariables:
-            output += "\n    " + str(key) + " = " + errorString(self.fitVariables[key][0], self.fitVariables[key][1])
+            output += "\n    " + str(key) + " = " + error_string(self.fitVariables[key][0], self.fitVariables[key][1])
 
         self.fittingOutput = output
 
@@ -538,4 +539,4 @@ class LineOfBestFit(object):
     
 #    return fitData, output, (mVal, mErr), (cVal, cErr), redchisq
 
-from QuasarCode.Science.figure import IAutomaticFigure
+from .figure import IAutomaticFigure

@@ -1,6 +1,6 @@
-from QuasarCode.edp._UndersubscribedEventError import UndersubscribedEventError
-from QuasarCode.edp._SubscriberNotPresentError import SubscriberNotPresentError
-from QuasarCode.edp._NotEnoughArgumentsError import NotEnoughArgumentsError
+from ._UndersubscribedEventError import UndersubscribedEventError
+from ._SubscriberNotPresentError import SubscriberNotPresentError
+from ._NotEnoughArgumentsError import NotEnoughArgumentsError
 
 class Event(object):
     """

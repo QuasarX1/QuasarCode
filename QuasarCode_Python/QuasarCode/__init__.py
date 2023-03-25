@@ -4,23 +4,28 @@
 Adds functionality to Python along with wrapers for existing modules for ease of use
 
 Credits:
-    Written by Christopher Rowe 04/2019
-    Notable contribusions from Tim Greenshaw 10/2018
+    Written by Christopher Rowe
+    Notable contribusions taken from code written by Tim Greenshaw 10/2018
 
-Version: 0.4
+Version: 0.6
 """
 
-import QuasarCode.edp
+from ._global_settings import settings_object as Settings
 
-import QuasarCode.Games
+from . import edp
 
-import QuasarCode.IO
+from . import Games
 
-import QuasarCode.Maths
+from . import IO
 
-import QuasarCode.Science
+from . import MPI
 
-import QuasarCode.Tools
+from . import Science
 
+from . import Tools
 
-from QuasarCode.IO.Text.console import pause
+from .Tools._directorys_and_imports import source_file_relitive_add_to_path
+from .IO.Text.console import pause as console_pause
+from .IO.Text import console
+from .edp import Event
+from .Tools._async import start_main_async

@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from QuasarCode.Science.fitline import LineOfBestFit, LineType
+from .fitline import LineOfBestFit, LineType
 
 class DrawInstruction(object):
     """

@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from QuasarCode.Science.figure import Figure
+
+from .figure import Figure
 
 class Graph(object):
     """

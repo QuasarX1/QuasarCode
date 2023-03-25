@@ -1,5 +1,6 @@
 from QuasarCode.edp import Event
-from QuasarCode.Games.Cards import CardGroup, PlayingCard
+from ._CardGroup import CardGroup
+from ._PlayingCard import PlayingCard
 from random import Random
 
 class Deck(CardGroup):

@@ -1,4 +1,4 @@
-from QuasarCode.Games.Cards import IPlayingCard
+from ._IPlayingCard import IPlayingCard
 from enum import Enum
 
 class PlayingCard(IPlayingCard):

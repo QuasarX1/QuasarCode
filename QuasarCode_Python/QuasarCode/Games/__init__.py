@@ -1,3 +1,3 @@
-import QuasarCode.Games.Cards
-import QuasarCode.Games.Dice
-import QuasarCode.Games.Spinners
+from . import Cards
+from . import Dice
+from . import Spinners

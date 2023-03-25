@@ -1,5 +1,5 @@
 from collections.abc import MutableSequence
-from QuasarCode.Games.Dice import NDice
+from ._NDice import NDice
 
 class DiceCup(MutableSequence):
     """

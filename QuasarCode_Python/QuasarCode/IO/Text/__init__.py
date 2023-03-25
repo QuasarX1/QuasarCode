@@ -1,1 +1,1 @@
-import QuasarCode.IO.Text.console
+from . import console

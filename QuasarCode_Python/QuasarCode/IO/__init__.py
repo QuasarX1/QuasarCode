@@ -1,1 +1,1 @@
-import QuasarCode.IO.Text
+from . import Text

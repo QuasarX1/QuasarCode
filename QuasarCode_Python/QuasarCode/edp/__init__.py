@@ -9,7 +9,7 @@ Credits:
 Version: 1.1
 """
 
-from QuasarCode.edp._Event import Event
-from QuasarCode.edp._UndersubscribedEventError import UndersubscribedEventError
-from QuasarCode.edp._SubscriberNotPresentError import SubscriberNotPresentError
-from QuasarCode.edp._NotEnoughArgumentsError import NotEnoughArgumentsError
+from ._Event import Event
+from ._UndersubscribedEventError import UndersubscribedEventError
+from ._SubscriberNotPresentError import SubscriberNotPresentError
+from ._NotEnoughArgumentsError import NotEnoughArgumentsError
