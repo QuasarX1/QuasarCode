@@ -128,6 +128,8 @@
     <Compile Include="QuasarCode\Science\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="QuasarCode\Tools\_async.py" />
+    <Compile Include="QuasarCode\Tools\_directorys_and_imports.py" />
     <Compile Include="QuasarCode\Tools\_multiItterator.py">
       <SubType>Code</SubType>
     </Compile>
