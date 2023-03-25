@@ -10,15 +10,20 @@ Credits:
 Version: 0.6
 """
 
+from ._global_settings import settings_object as Settings
+
 from . import edp
 
 from . import Games
 
 from . import IO
 
+from . import MPI
+
 from . import Science
 
 from . import Tools
 
-
 from .IO.Text.console import pause as console_pause
+from .IO.Text import console
+from .edp import Event
