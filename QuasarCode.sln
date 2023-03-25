@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuasarCode_Library_Symbolic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests_Windows_CSharp", "UnitTests_Windows_CSharp\UnitTests_Windows_CSharp.csproj", "{14EBA1A3-7E16-4F3C-8A8B-4C634A595E64}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "QuasarCode_Python", "QuasarCode_Python\QuasarCode_Python.pyproj", "{BCAD998C-0ACC-456B-9E63-4148B52D092F}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "UnitTests_Python", "UnitTests_Python\UnitTests_Python.pyproj", "{8DBBFDCB-E45A-45C1-9032-D86405ED61DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{14EBA1A3-7E16-4F3C-8A8B-4C634A595E64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14EBA1A3-7E16-4F3C-8A8B-4C634A595E64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14EBA1A3-7E16-4F3C-8A8B-4C634A595E64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB2099B9-CC99-4915-8E81-743CBA12FB24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCAD998C-0ACC-456B-9E63-4148B52D092F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCAD998C-0ACC-456B-9E63-4148B52D092F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DBBFDCB-E45A-45C1-9032-D86405ED61DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DBBFDCB-E45A-45C1-9032-D86405ED61DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
