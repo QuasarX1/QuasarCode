@@ -1,4 +1,4 @@
-from QuasarCode.Games.Dice import IDice
+from ._IDice import IDice
 import random
 
 class NDice(IDice):

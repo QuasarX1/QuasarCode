@@ -4,23 +4,21 @@
 Adds functionality to Python along with wrapers for existing modules for ease of use
 
 Credits:
-    Written by Christopher Rowe 04/2019
-    Notable contribusions from Tim Greenshaw 10/2018
+    Written by Christopher Rowe
+    Notable contribusions taken from code written by Tim Greenshaw 10/2018
 
-Version: 0.4
+Version: 0.6
 """
 
-import QuasarCode.edp
+from . import edp
 
-import QuasarCode.Games
+from . import Games
 
-import QuasarCode.IO
+from . import IO
 
-import QuasarCode.Maths
+from . import Science
 
-import QuasarCode.Science
-
-import QuasarCode.Tools
+from . import Tools
 
 
-from QuasarCode.IO.Text.console import pause
+from .IO.Text.console import pause as console_pause

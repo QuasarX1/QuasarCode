@@ -1,4 +1,4 @@
-from QuasarCode.Games.Spinners import ISpinner
+from ._ISpinner import ISpinner
 import random
 
 class Spinner(ISpinner):

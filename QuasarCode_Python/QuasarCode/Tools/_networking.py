@@ -1,4 +1,4 @@
-from QuasarCode.Tools.Validators import isURI, isURL, isURIScheme, isURIAuthority, isURIPath, isURIQuery, isURIFragment
+from .Validators import isURI, isURL, isURIScheme, isURIAuthority, isURIPath, isURIQuery, isURIFragment
 
 class URI(object):
     """

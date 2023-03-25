@@ -1,4 +1,4 @@
-from QuasarCode.Science.fitline import LineType, LineOfBestFit
-from QuasarCode.Science.graph import Graph
-from QuasarCode.Science.figure import ManualFigure, Figure, DrawInstruction
-from QuasarCode.Science.data import consistancyTest, isConsistant, errorString, sigFig, standardForm, standardFormString, standardFormStringIfNessessary, trueRound
+from .fitline import LineType, LineOfBestFit
+from .graph import Graph
+from .figure import ManualFigure, Figure, DrawInstruction
+from .data import consistancy_test, is_consistant, error_string, sig_fig, standard_form, standard_form_string, standard_form_string_if_nessessary, true_round

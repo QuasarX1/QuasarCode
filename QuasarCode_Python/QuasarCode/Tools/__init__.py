@@ -1,2 +1,2 @@
-from QuasarCode.Tools._multiItterator import MultiItterator
-import QuasarCode.Tools.Validators
+from ._multiItterator import MultiItterator
+from . import Validators

@@ -33,9 +33,6 @@
     <Folder Include="QuasarCode\Games\Spinners\" />
     <Folder Include="QuasarCode\IO\" />
     <Folder Include="QuasarCode\IO\Text\" />
-    <Folder Include="QuasarCode\Maths\" />
-    <Folder Include="QuasarCode\Maths\Matrices\" />
-    <Folder Include="QuasarCode\Maths\Units\" />
     <Folder Include="QuasarCode\Science\" />
     <Folder Include="QuasarCode\Tools\" />
   </ItemGroup>
@@ -108,36 +105,6 @@
     <Compile Include="QuasarCode\IO\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QuasarCode\Maths\Matrices\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\Quantities.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\Systems.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\_ISingleUnit.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\_ISymbolUnit.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\_IUnit.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\_SingleUnitBase.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\_UnitBase.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="QuasarCode\Science\data.py">
       <SubType>Code</SubType>
     </Compile>
@@ -154,12 +121,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Science\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\_IQuantity.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QuasarCode\Maths\Units\_ISystem.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="QuasarCode\Tools\_multiItterator.py">

@@ -1,5 +1,5 @@
 from random import Random
-from QuasarCode.Games.Cards import IPlayingCard
+from ._IPlayingCard import IPlayingCard
 
 class CardGroup(list):
     """
