@@ -1,7 +1,7 @@
-from abc import ABC, abstractmethod, abstr
+from abc import ABC, abstractmethod
 from typing import List, Tuple, Dict, Union
 
-def _Mapping(object):
+class _Mapping(object):
     def __init__(self):
         self.__wratable = True
         self.__data = {}

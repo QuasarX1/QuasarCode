@@ -12,7 +12,7 @@
     <OutputPath>.</OutputPath>
     <Name>UnitTests_Python</Name>
     <RootNamespace>UnitTests_Python</RootNamespace>
-    <InterpreterId>Global|ContinuumAnalytics|Anaconda37-64</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|QuasarCode_env</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,9 +23,15 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="edp.py" />
+    <Compile Include="games.py" />
+    <Compile Include="q_io.py" />
+    <Compile Include="mpi.py" />
     <Compile Include="PythonTests.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="science.py" />
+    <Compile Include="tools.py" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuasarCode_Python\QuasarCode_Python.pyproj">
@@ -35,7 +41,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda37-64" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|QuasarCode_env" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

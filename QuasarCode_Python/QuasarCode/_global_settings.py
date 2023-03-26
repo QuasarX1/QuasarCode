@@ -1,13 +1,13 @@
-class __Settings(object):
+class _Settings(object):
     __singleton = None
 
     @staticmethod
     def _is_singleton_avalible():
-        return __Settings.__singleton is not None
+        return _Settings.__singleton is not None
 
     @staticmethod
     def _get_singleton():
-        return __Settings.__singleton
+        return _Settings.__singleton
 
     __attribute_initial_values = {
         "verbose": False,
@@ -17,9 +17,9 @@ class __Settings(object):
     }
 
     def __init__(self):
-        if not __Settings._is_singleton_avalible():
-            __Settings.__singleton = self
-            self.__setting_values = __Settings.__attribute_initial_values.copy()
+        if not _Settings._is_singleton_avalible():
+            _Settings.__singleton = self
+            self.__setting_values = _Settings.__attribute_initial_values.copy()
 
         else:
             raise RuntimeError("Only one instance of the __Settings object may exist.")
@@ -50,7 +50,7 @@ class __Settings(object):
     def set_cuda_threads_per_block(self, value: int):
         self.__setting_values["cuda_threads_per_block"] = value
 
-if not __Settings._is_singleton_avalible():
-    __Settings()
+if not _Settings._is_singleton_avalible():
+    _Settings()
 
-settings_object = __Settings._get_singleton()
+settings_object = _Settings._get_singleton()

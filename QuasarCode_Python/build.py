@@ -98,6 +98,7 @@ elif optimization == "OPTIMIZE2":
 # Delete old build
 deleteDirectory(buildRoot)
 # Re-creates buildRoot
+print(buildRoot)
 os.mkdir(buildRoot)
 
 # Copy all of the files to the build directory
