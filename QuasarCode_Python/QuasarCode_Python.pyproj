@@ -103,7 +103,7 @@
     </Compile>
     <Compile Include="QuasarCode\IO\Configurations\_ConfigsBase.py" />
     <Compile Include="QuasarCode\IO\Configurations\_json.py" />
-    <Compile Include="QuasarCode\IO\Configurations\_Properties.py" />
+    <Compile Include="QuasarCode\IO\Configurations\_properties.py" />
     <Compile Include="QuasarCode\IO\Configurations\_yaml.py" />
     <Compile Include="QuasarCode\IO\Configurations\__init__.py" />
     <Compile Include="QuasarCode\IO\Text\__init__.py">
