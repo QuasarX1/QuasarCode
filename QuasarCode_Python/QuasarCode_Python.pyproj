@@ -33,6 +33,7 @@
     <Folder Include="QuasarCode\Games\Spinners\" />
     <Folder Include="QuasarCode\IO\" />
     <Folder Include="QuasarCode\IO\Text\" />
+    <Folder Include="QuasarCode\IO\Configurations\" />
     <Folder Include="QuasarCode\MPI\" />
     <Folder Include="QuasarCode\Science\" />
     <Folder Include="QuasarCode\Tools\" />
@@ -100,6 +101,11 @@
     <Compile Include="QuasarCode\Games\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="QuasarCode\IO\Configurations\_ConfigsBase.py" />
+    <Compile Include="QuasarCode\IO\Configurations\_json.py" />
+    <Compile Include="QuasarCode\IO\Configurations\_Properties.py" />
+    <Compile Include="QuasarCode\IO\Configurations\_yaml.py" />
+    <Compile Include="QuasarCode\IO\Configurations\__init__.py" />
     <Compile Include="QuasarCode\IO\Text\__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -142,6 +148,7 @@
     <Compile Include="QuasarCode\Tools\Validators.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="QuasarCode\Tools\_script_wrapper.py" />
     <Compile Include="QuasarCode\Tools\__init__.py">
       <SubType>Code</SubType>
     </Compile>

@@ -30,6 +30,10 @@ class __Settings(object):
         else:
             raise AttributeError(f"{name} is not a valid attribute or setting name.")
 
+    @property
+    def setting_names(self):
+        return list(self.__setting_values.keys())
+
     def _set_verbose(self, state: bool): self.__setting_values["verbose"] = state
     def enable_verbose(self): self._set_verbose(True)
     def disable_verbose(self): self._set_verbose(False)
