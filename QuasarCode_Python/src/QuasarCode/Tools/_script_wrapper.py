@@ -2,7 +2,7 @@ import sys
 import traceback
 
 from QuasarCode.IO.Text.console import print_info, print_verbose_info, print_warning, print_verbose_warning, print_error, print_verbose_error, print_debug
-from QuasarCode._global_settings import settings_object as __settings_object
+from QuasarCode._global_settings import settings_object as _settings_object
 from QuasarCode.MPI import get_mpi_rank
 from QuasarCode.Tools._async import start_main_async
 
@@ -61,9 +61,9 @@ class ScriptWrapper(object):
         self.raw_case_args = sys.argv[1:]
         self.lowercase_args = [arg.lower() for arg in sys.argv[1:]]
         if "-d" in self.lowercase_args or "--debug" in self.lowercase_args:
-            clp.enable_debug()
+            _settings_object.enable_debug()
         if "-v" in self.lowercase_args or "--verbose" in self.lowercase_args:
-            clp.enable_verbose()
+            _settings_object.enable_verbose()
 
         rendered_dependancy_strings = "\n".join([f"    {dependancy}" for dependancy in dependancies])
 
@@ -150,7 +150,7 @@ Example Usage:
                     # Either the first MPI process or MPI isn't active
                     return func(self, *args, **kwargs)
                 else:
-                    if not __settings_object.mpi_avalible:
+                    if not _settings_object.mpi_avalible:
                         raise ImportError("MPI required but not avalible.")
 
                     # MPI active and not the first process
@@ -160,9 +160,9 @@ Example Usage:
             except Exception as e:
                 if is_root_process or self.MPI_print_non_root_process_errors:
                     has_message = e.__str__() != ""
-                    print_error(f"Execution encountered an error{(':' if has_message else ' (no details avalible).') if __settings_object.debug or __settings_object.verbose else '.'}")
+                    print_error(f"Execution encountered an error{(':' if has_message else ' (no details avalible).') if _settings_object.debug or _settings_object.verbose else '.'}")
                     print_debug("Traceback (most recent call last):\n" + "".join(traceback.format_tb(e.__traceback__)) + type(e).__name__ + (f": {e.__str__()}" if has_message else ""))
-                    if has_message and not __settings_object.debug:
+                    if has_message and not _settings_object.debug:
                         print_error(e.__str__())
                     print_info("Terminating.")
 

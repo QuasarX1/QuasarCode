@@ -37,13 +37,6 @@
     <Compile Include="test_tools.py" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QuasarCode_Python\QuasarCode_Python.pyproj">
-      <Name>QuasarCode_Python</Name>
-      <Project>{bcad998c-0acc-456b-9e63-4148b52d092f}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Interpreter Include="env\">
       <Id>env</Id>
       <Version>3.7</Version>
