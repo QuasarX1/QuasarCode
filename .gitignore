@@ -264,3 +264,5 @@ __pycache__/
 *.egg-info
 dist/
 build/
+/UnitTests_Python/env
+/QuasarCode_Python/env
