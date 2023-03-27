@@ -22,8 +22,16 @@ print("Optimization Mode: {}".format(optimization))
 author = sys.argv[4] if len(sys.argv) >= 5 else ""
 print("Author: {}".format(author))
 
-sourceRoot = os.path.abspath("./{}".format(folderName))
+sourceRoot = os.path.abspath("./src/{}".format(folderName))
 buildRoot = os.path.abspath("./bin/{}/{}".format("Debug" if configuration == "Debug" else "Publish/LatestVersion", folderName))
+
+
+
+if not os.path.exists("./bin/Debug"):
+    os.makedirs("./bin/Debug", exist_ok = True)
+if not os.path.exists("./bin/Publish/LatestVersion"):
+    os.makedirs("./bin/Publish/LatestVersion", exist_ok = True)
+
 
 
 def deleteDirectory(rootForDelete):
@@ -57,18 +65,22 @@ def recursiveCopyFiles(dir, sourceRoot, copyRoot):
         if os.path.isdir(itemPath):
             recursiveCopyFiles(itemPath, sourceRoot, copyRoot)
 
+        # Copy the file
+        else:
+            copy(itemPath, os.path.join(copyRoot, os.path.relpath(dir, start = sourceRoot), fName))
+
         ## If the item is an init file, copy the file as is
         #elif fName == "__init__.py":
         #    copy(itemPath, os.path.join(copyRoot, fName))
-
-        # If a file is present and in a __pycache__ folder, copy and rename it
-        elif os.path.split(dir)[1] == "__pycache__":
-            if fName[-1] == "o":
-                filetype = ".pyo"
-            elif fName[-1] == "c":
-                filetype = ".pyc"
-
-            copy(itemPath, os.path.join(copyRoot, os.path.split(os.path.relpath(dir, start = sourceRoot))[0], fName.split(sep = ".")[0] + filetype))
+        #
+        ## If a file is present and in a __pycache__ folder, copy and rename it
+        #elif os.path.split(dir)[1] == "__pycache__":
+        #    if fName[-1] == "o":
+        #        filetype = ".pyo"
+        #    elif fName[-1] == "c":
+        #        filetype = ".pyc"
+        #
+        #    
 
 
 # Delete all previous compilations
@@ -87,13 +99,13 @@ def recursivelyDeleteCompiled(dir):
 
 recursivelyDeleteCompiled(sourceRoot)
 
-# Compile all files in the root
-if optimization == "STANDARD":
-    os.system("python -m compileall \"{}\"".format(sourceRoot))
-elif optimization == "OPTIMIZE":
-    os.system("python -O -m compileall \"{}\"".format(sourceRoot))
-elif optimization == "OPTIMIZE2":
-    os.system("python -OO -m compileall \"{}\"".format(sourceRoot))
+## Compile all files in the root
+#if optimization == "STANDARD":
+#    os.system("python -m compileall \"{}\"".format(sourceRoot))
+#elif optimization == "OPTIMIZE":
+#    os.system("python -O -m compileall \"{}\"".format(sourceRoot))
+#elif optimization == "OPTIMIZE2":
+#    os.system("python -OO -m compileall \"{}\"".format(sourceRoot))
 
 # Delete old build
 deleteDirectory(buildRoot)
@@ -109,7 +121,7 @@ time = datetime.datetime.now()
 file = open(os.path.join(buildRoot, "configuration.txt"), "w")
 file.writelines([
     "project_name={}\n".format(folderName),
-    "version={}\n".format(0.6),
+    "version={}\n".format(0.7),
     "author={}\n".format(author),
     "configuration={}\n".format(configuration),
     "optimization={}\n".format(optimization),

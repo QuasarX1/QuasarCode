@@ -12,7 +12,10 @@
     <OutputPath>.</OutputPath>
     <Name>UnitTests_Python</Name>
     <RootNamespace>UnitTests_Python</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|QuasarCode_env</InterpreterId>
+    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <TestFramework>pytest</TestFramework>
+    <UnitTestPattern>test_QuasarCode.py</UnitTestPattern>
+    <UnitTestRootDirectory>.</UnitTestRootDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,15 +26,15 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="edp.py" />
-    <Compile Include="games.py" />
+    <Compile Include="test_edp.py" />
+    <Compile Include="test_games.py" />
     <Compile Include="q_io.py" />
-    <Compile Include="mpi.py" />
-    <Compile Include="PythonTests.py">
+    <Compile Include="test_mpi.py" />
+    <Compile Include="test_QuasarCode.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="science.py" />
-    <Compile Include="tools.py" />
+    <Compile Include="test_science.py" />
+    <Compile Include="test_tools.py" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuasarCode_Python\QuasarCode_Python.pyproj">
@@ -41,7 +44,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="CondaEnv|CondaEnv|QuasarCode_env" />
+    <Interpreter Include="env\">
+      <Id>env</Id>
+      <Version>3.7</Version>
+      <Description>env (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

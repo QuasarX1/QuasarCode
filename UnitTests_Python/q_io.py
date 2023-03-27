@@ -1,9 +1,10 @@
-import unittest
+import pytest
 
 from QuasarCode.IO.Text.console import pause
 
-class Test_IO(unittest.TestCase):
+class TestClass_IO(object):
     def test_Text(self):
+        assert False
         self.fail("Not Implemented - Sort Input")#TODO: sort inputs
         
         try:
