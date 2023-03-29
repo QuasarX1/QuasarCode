@@ -6,6 +6,8 @@ Pass first paramiter as Debug for debug configuration or as Release for publishi
 Pass second paramiter as STANDARD for ordenary bytecode compilation, OPTIMIZE for opt-1 (uses -O), or OPTIMIZE2 for opt-2 (uses -OO)
 """
 
+VERSION = "0.7.2"
+
 import os
 import sys
 import datetime
@@ -121,7 +123,7 @@ time = datetime.datetime.now()
 file = open(os.path.join(buildRoot, "configuration.txt"), "w")
 file.writelines([
     "project_name={}\n".format(folderName),
-    "version={}\n".format("0.7.1"),
+    "version={}\n".format(VERSION),
     "author={}\n".format(author),
     "configuration={}\n".format(configuration),
     "optimization={}\n".format(optimization),

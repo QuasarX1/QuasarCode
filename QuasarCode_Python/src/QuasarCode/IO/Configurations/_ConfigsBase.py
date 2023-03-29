@@ -3,11 +3,19 @@ from typing import List, Tuple, Dict, Union
 
 class _Mapping(object):
     def __init__(self):
-        self.__wratable = True
+        self.__writable = True
         self.__data = {}
         self.__sub_mapping_keys = []
 
-    def __index__(self, *keys: List[str]):
+    def __ensure_writable(func):
+        def wrapper(self, *args, **kwargs):
+            if self.__writable:
+                return func(self, *args, **kwargs)
+            else:
+                raise RuntimeError("Unable to write to a non-writable configuration map.")
+        return wrapper
+
+    def __getitem__(self, *keys: List[str]):
         if keys[0] in self.__data:
             value = self.__data[keys[0]]
             if len(keys) > 1:
@@ -20,44 +28,57 @@ class _Mapping(object):
         else:
             raise AttributeError(f"{keys[0]} is not a valid attribute or config name.")
 
-    def __getattr__(self, name: str):
-        return self[name]
+    #@__ensure_writable
+    #def __setitem__(self, key: str, value):
+    #    print("HERE")
 
-    def __ensure_writable(func):
-        def wrapper(self, *args, **kwargs):
-            if self.__wratable:
-                return func(*args, **kwargs)
-            else:
-                raise RuntimeError("Unable to write to a constructed configuration map.")
-        return wrapper
+    def __getattr__(self, key: str):
+        #print(key)
+        return self[key]
+
+    #def __setattr__(self, key: str, value):
+    #    super().__setattr__(key, value)
+    #    if key != "_Mapping__data" and key in self.__data:
+    #        self[key] = value
 
     @__ensure_writable
-    def _add_mapping(self, name: str, value):
+    def add_item(self, name: str, value):
         self.__data[name] = value
 
     @__ensure_writable
-    def _new_sub_mapping(self, name: str):
+    def add_group(self, name: str):
         self.__data[name] = _Mapping()
         self.__sub_mapping_keys.append(name)
 
-    def _lock(self):
+    def lock(self):
         self.__writable = False
         for key in self.__sub_mapping_keys:
             self.__data[key]._lock()
+
+    @property
+    def writable(self):
+        return self.__writable
 
     def _get_keys(self) -> Tuple[Union[str, Dict[str, Tuple]]]:
         ((self.__data[key]._get_keys() if key in self.__sub_mapping_keys else key) for key in self.__data)
 
 class ConfigsBase(_Mapping, ABC):
-    def __init__(self, filepath: str):
+    def __init__(self, writable: bool = True, filepath: str = None):
         super().__init__()
 
-        self.read(filepath)
+        if filepath is not None:
+            self.read(filepath)
 
-        self._lock()
+        if not writable:
+            self.lock()
 
     @abstractmethod
     def read(self, filepath: str):
+        raise NotImplementedError()
+
+    @staticmethod
+    @abstractmethod
+    def from_file(filepath: str, writable: bool = False, *args, **kwargs):
         raise NotImplementedError()
 
     def __str__(self):

@@ -1,0 +1,9 @@
+{
+  "value1": "a string of text",
+  "value2": 100,
+  "value3": "more text",
+  "value4": {
+    "sub_value1": "a nested value",
+    "sub_value2": 2.8
+  }
+}

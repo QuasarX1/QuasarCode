@@ -28,7 +28,7 @@
   <ItemGroup>
     <Compile Include="test_edp.py" />
     <Compile Include="test_games.py" />
-    <Compile Include="q_io.py" />
+    <Compile Include="test_io.py" />
     <Compile Include="test_mpi.py" />
     <Compile Include="test_QuasarCode.py">
       <SubType>Code</SubType>
@@ -46,6 +46,11 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="testconfig.yaml" />
+    <Content Include="testconfig.json" />
+    <Content Include="testconfig.properties" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

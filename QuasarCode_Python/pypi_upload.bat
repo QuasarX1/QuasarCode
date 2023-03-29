@@ -2,7 +2,7 @@
 
 call .\env\Scripts\activate.bat
 
-rm .\dist\*
+del /F /Q .\dist\*
 
 python -m build
 
