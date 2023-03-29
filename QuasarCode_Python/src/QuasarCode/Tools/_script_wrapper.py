@@ -195,7 +195,7 @@ Example Usage:
         if item_converters is None: item_converters = ScriptWrapper.passthrough_converter
         def list_converter(value: str) -> bool:
             if not isinstance(item_converters, (list, tuple)):
-                return [item_converters(item) for item in value.split(seperator)]
+                return [item_converters(item) if item != "" else None for item in value.split(seperator)]
             else:
                 strings = value.split(seperator)
                 while len(item_converters) < len(strings):
