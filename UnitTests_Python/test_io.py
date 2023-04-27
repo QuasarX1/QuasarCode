@@ -64,6 +64,8 @@ class TestClass_IO_Configurations(object):
 
     def test_PropertiesConfig(self):
         cfg = PropertiesConfig.from_file("testconfig.properties")
+        print(cfg)
+
         print(cfg.value1)
         assert cfg.value1 == "a string of text"
         print(cfg.value2)
@@ -73,6 +75,8 @@ class TestClass_IO_Configurations(object):
 
     def test_JsonConfig(self):
         cfg = JsonConfig.from_file("testconfig.json", True, -1)
+        print(cfg)
+
         print(cfg.value1)
         assert cfg.value1 == "a string of text"
         print(cfg.value2)
@@ -88,6 +92,8 @@ class TestClass_IO_Configurations(object):
 
     def test_YamlConfig(self):
         cfg = YamlConfig.from_file("testconfig.yaml", True, True, -1)
+        print(cfg)
+
         print(cfg.value1)
         assert cfg.value1 == "a string of text"
         print(cfg.value2)

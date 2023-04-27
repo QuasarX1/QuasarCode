@@ -30,14 +30,16 @@ class _Mapping(object):
             raise AttributeError(f"{keys[0]} is not a valid attribute or config name.")
 
     def __getitem__(self, *keys: List[str]):
-        return copy.copy(self.__internal_get_item(*keys))
+        #return copy.copy(self.__internal_get_item(*keys))
+        return self.__internal_get_item(*keys)
 
     #@__ensure_writable
     #def __setitem__(self, key: str, value):
     #    print("HERE")
 
     def __getattr__(self, key: str):
-        return copy.copy(self.__internal_get_item(key))
+        #return copy.copy(self.__internal_get_item(key))
+        return self.__internal_get_item(key)
 
     #def __setattr__(self, key: str, value):
     #    super().__setattr__(key, value)

@@ -7,7 +7,7 @@ Credits:
     Written by Christopher Rowe
     Notable contribusions taken from code written by Tim Greenshaw 10/2018
 
-Version: 0.7.5
+Version: 0.7.6
 """
 
 from ._global_settings import settings_object as Settings
