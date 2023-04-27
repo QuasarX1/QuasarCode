@@ -65,7 +65,8 @@ class _Mapping(object):
         return self.__writable
 
     def _get_keys(self) -> Tuple[Union[str, Dict[str, Tuple]]]:
-        return ((self.__data[key]._get_keys() if key in self.__sub_mapping_keys else key) for key in self.__data)
+        #return ((self.__data[key]._get_keys() if key in self.__sub_mapping_keys else key) for key in self.__data)
+        return list(self.__data.keys())
 
 class ConfigsBase(_Mapping, ABC):
     def __init__(self, writable: bool = True, filepath: str = None):
@@ -96,18 +97,21 @@ class ConfigsBase(_Mapping, ABC):
         self.__stringify_indent = 0
         def recursive_writer(sub_highrarchy):
             nested_item_values = []
-            for key in sub_highrarchy._get_keys():
+            all_keys = sub_highrarchy._get_keys()
+            max_key_length = max([len(key) for key in all_keys])
+            for key in all_keys:
                 value = sub_highrarchy[key]
                 if isinstance(value, _Mapping):
                     nested_item_values.append(value)
                 else:
-                    self.__stringify_storage += (" " * self.__stringify_indent) + value + "\n"
+                    insert_value = ('"'+value+'"') if isinstance(value, str) else value
+                    self.__stringify_storage += (" " * self.__stringify_indent) + f"{key}{' ' * (max_key_length - len(key))} = {insert_value}\n"
 
             for value in nested_item_values:
                 self.__stringify_storage += (" " * self.__stringify_indent) + "\n"
-                self.__stringify_storage += (" " * self.__stringify_indent) + f"{list(value.keys())[0]}:\n"
+                self.__stringify_storage += (" " * self.__stringify_indent) + f"{list(value._get_keys())[0]}:\n"
                 self.__stringify_indent += 4
-                recursive_writer(list(value.values[0]))
+                recursive_writer(value)
                 self.__stringify_indent -= 4
 
         recursive_writer(highrarchy)

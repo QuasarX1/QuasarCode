@@ -104,8 +104,8 @@ class TestClass_IO_Configurations(object):
         print(cfg.value4)
         print(cfg.value4.sub_value1)
         assert cfg.value4.sub_value1 == "a nested value"
-        print(cfg.value4.sub_value2)
-        assert cfg.value4.sub_value2 == 2.8
+        print(cfg.value4.sub_value2_longer)
+        assert cfg.value4.sub_value2_longer == 2.8
 
         print(cfg.value4.value4_1.sub_sub_value1)
         assert cfg.value4.value4_1.sub_sub_value1 == "double nest test"

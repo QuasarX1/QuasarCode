@@ -8,7 +8,7 @@ include = ["*"]
 
 [project]
 name = "QuasarCode"
-version = "0.7.6"
+version = "0.7.7"
 authors = [
   { name="Christopher Rowe", email="thequasarx1@gmail.com" },
 ]
