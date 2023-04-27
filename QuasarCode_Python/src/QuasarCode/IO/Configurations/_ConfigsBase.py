@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import copy
 from typing import List, Tuple, Dict, Union
 
 class _Mapping(object):
@@ -15,7 +16,7 @@ class _Mapping(object):
                 raise RuntimeError("Unable to write to a non-writable configuration map.")
         return wrapper
 
-    def __getitem__(self, *keys: List[str]):
+    def __internal_get_item(self, *keys: List[str]):
         if keys[0] in self.__data:
             value = self.__data[keys[0]]
             if len(keys) > 1:
@@ -28,13 +29,15 @@ class _Mapping(object):
         else:
             raise AttributeError(f"{keys[0]} is not a valid attribute or config name.")
 
+    def __getitem__(self, *keys: List[str]):
+        return copy.copy(self.__internal_get_item(*keys))
+
     #@__ensure_writable
     #def __setitem__(self, key: str, value):
     #    print("HERE")
 
     def __getattr__(self, key: str):
-        #print(key)
-        return self[key]
+        return copy.copy(self.__internal_get_item(key))
 
     #def __setattr__(self, key: str, value):
     #    super().__setattr__(key, value)
@@ -53,17 +56,20 @@ class _Mapping(object):
     def lock(self):
         self.__writable = False
         for key in self.__sub_mapping_keys:
-            self.__data[key]._lock()
+            self.__data[key].lock()
 
     @property
     def writable(self):
         return self.__writable
 
     def _get_keys(self) -> Tuple[Union[str, Dict[str, Tuple]]]:
-        ((self.__data[key]._get_keys() if key in self.__sub_mapping_keys else key) for key in self.__data)
+        return ((self.__data[key]._get_keys() if key in self.__sub_mapping_keys else key) for key in self.__data)
 
 class ConfigsBase(_Mapping, ABC):
     def __init__(self, writable: bool = True, filepath: str = None):
+        self.__stringify_storage = None
+        self.__stringify_indent = None
+
         super().__init__()
 
         if filepath is not None:
@@ -82,25 +88,28 @@ class ConfigsBase(_Mapping, ABC):
         raise NotImplementedError()
 
     def __str__(self):
-        highrarchy = self._get_keys()
+        highrarchy = self
 
-        result = ""
-        indent = 0
+        self.__stringify_storage = ""
+        self.__stringify_indent = 0
         def recursive_writer(sub_highrarchy):
-            nested_item_indexes = []
-            for index, value in enumerate(sub_highrarchy):
-                if isinstance(value, dict):
-                    nested_item_indexes.append(index)
+            nested_item_values = []
+            for key in sub_highrarchy._get_keys():
+                value = sub_highrarchy[key]
+                if isinstance(value, _Mapping):
+                    nested_item_values.append(value)
                 else:
-                    result += (" " * indent) + value + "\n"
+                    self.__stringify_storage += (" " * self.__stringify_indent) + value + "\n"
 
-            for index in nested_item_indexes:
-                value = sub_highrarchy[index]
-                result += (" " * indent) + "\n"
-                result += (" " * indent) + f"{list(value.keys())[0]}:\n"
-                indent += 4
+            for value in nested_item_values:
+                self.__stringify_storage += (" " * self.__stringify_indent) + "\n"
+                self.__stringify_storage += (" " * self.__stringify_indent) + f"{list(value.keys())[0]}:\n"
+                self.__stringify_indent += 4
                 recursive_writer(list(value.values[0]))
-                indent -= 4
+                self.__stringify_indent -= 4
+
+        recursive_writer(highrarchy)
+        return self.__stringify_storage
 
     def __repr__(self):
         return "Configuration Object. Items as follows:\n\n" + self.__str__()

@@ -6,7 +6,7 @@ Pass first paramiter as Debug for debug configuration or as Release for publishi
 Pass second paramiter as STANDARD for ordenary bytecode compilation, OPTIMIZE for opt-1 (uses -O), or OPTIMIZE2 for opt-2 (uses -OO)
 """
 
-VERSION = "0.7.4"
+VERSION = "0.7.5"
 
 import os
 import sys
