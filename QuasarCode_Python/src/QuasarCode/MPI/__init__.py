@@ -1,6 +1,6 @@
 import warnings
 
-from QuasarCode._global_settings import settings_object as __settings_object
+from .._global_settings import settings_object as __settings_object
 
 try:
     from mpi4py import MPI

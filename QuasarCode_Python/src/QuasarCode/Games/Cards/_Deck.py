@@ -1,4 +1,4 @@
-from QuasarCode.edp import Event
+from ...edp import Event
 from ._CardGroup import CardGroup
 from ._PlayingCard import PlayingCard
 from random import Random

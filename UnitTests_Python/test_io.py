@@ -109,6 +109,88 @@ class TestClass_IO_Configurations(object):
 
         print(cfg.value4.value4_1.sub_sub_value1)
         assert cfg.value4.value4_1.sub_sub_value1 == "double nest test"
+    
+    def test_YamlConfigDisplay(self):
+        cfg = YamlConfig.from_file("testconfig_2.yaml", True, True, -1)
+        print(cfg)
+        no_indent = ""
+        indent_spaces = "    "
+        assert cfg.__str__() == f"""\
+files:
+{indent_spaces}
+    input:
+        simulation_snapshots = "filepath"
+        snapshot_file        = "file.txt"
+{indent_spaces}{indent_spaces}
+        zero_metalicity_filters:
+{indent_spaces}{indent_spaces}{indent_spaces}
+            high_mass_halos:
+                field_name    = "gas.last_halo_masses"
+                min           = None
+                include_lower = True
+                max           = None
+                include_upper = True
+{indent_spaces}
+    output:
+{indent_spaces}{indent_spaces}
+        raw_data:
+            prefix                         = "SpecWizard_data"
+            sightline_locations_prefix     = "rays"
+            sightline_velocity_info_prefix = "ray_velocity_information"
+            optical_depth_prefix           = "optical_depth"
+{indent_spaces}{indent_spaces}
+        hdf5:
+            file_name = "data"
+{indent_spaces}{indent_spaces}
+        image:
+            file_prefix = "SpecWizard_pixel_optical_depths"
+            file_type   = "png"
+{indent_spaces}{indent_spaces}
+        graph:
+            file_name = "SpecWizard_ray_absorbtion"
+            file_type = "png"
+{no_indent}
+ray_properties:
+    axis                       = "z"
+    spacing_mpc                = 1.0
+    depth_fraction_start       = 0.0
+    depth_fraction_end         = 1.0
+    velocity_element_depth_kms = 1.0
+{no_indent}
+elements:
+{indent_spaces}
+    hydrogen_1:
+        element_name = "Hydrogen"
+        ion_symbol   = "H I"
+{indent_spaces}
+    carbon_3:
+        element_name = "Carbon"
+        ion_symbol   = "C III"
+{indent_spaces}
+    carbon_4:
+        element_name = "Carbon"
+        ion_symbol   = "C IV"
+{indent_spaces}
+    oxygen_6:
+        element_name = "Oxygen"
+        ion_symbol   = "O VI"
+{indent_spaces}
+    silicon_3:
+        element_name = "Silicon"
+        ion_symbol   = "Si III"
+{indent_spaces}
+    silicon_4:
+        element_name = "Silicon"
+        ion_symbol   = "Si IV"
+{indent_spaces}
+    magnesium:
+        element_name = "Magnesium"
+        ion_symbol   = "MgII"
+{no_indent}
+parallelization:
+    run_parallel = False
+    cpus         = 64
+"""
 
 
 

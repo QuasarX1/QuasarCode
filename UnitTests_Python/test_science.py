@@ -71,6 +71,6 @@ class TestClass_Science(object):
         plt.figure()
         polygon_x_error_region([-3, -1, -3, -1, -3, -1], [1, 3, 1, 3, 1, 3], [0, 1, 2, 3, 4, 5], "default", color = "red", alpha = 0.5)
         polygon_x_error_region([-1, -3, -1, -3, -1, -3], [3, 1, 3, 1, 3, 1], [0, 1, 2, 3, 4, 5], plt.gca(), color = "yellow", alpha = 0.5)
-        plt.xlim((0, 5))
-        plt.ylim((-3, 3))
+        plt.xlim((-3, 3))
+        plt.ylim((0, 5))
         plt.show()

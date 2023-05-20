@@ -1,5 +1,5 @@
-from QuasarCode._global_settings import settings_object as __settings_object
-from QuasarCode.MPI import get_mpi_rank
+from ..._global_settings import settings_object as __settings_object
+from ...MPI import get_mpi_rank
 
 def __debug_wrapper(func):
     def wrapper(*args, **kwargs):

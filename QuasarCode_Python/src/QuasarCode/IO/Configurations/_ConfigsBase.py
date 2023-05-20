@@ -65,7 +65,12 @@ class _Mapping(object):
         return self.__writable
 
     def _get_keys(self) -> Tuple[Union[str, Dict[str, Tuple]]]:
+        print("WARNING: this method is depreciated and will be removed in a future update! Use object.keys instead.")
         #return ((self.__data[key]._get_keys() if key in self.__sub_mapping_keys else key) for key in self.__data)
+        return list(self.__data.keys())
+
+    @property
+    def keys(self):
         return list(self.__data.keys())
 
 class ConfigsBase(_Mapping, ABC):
@@ -96,26 +101,35 @@ class ConfigsBase(_Mapping, ABC):
         self.__stringify_storage = ""
         self.__stringify_indent = 0
         def recursive_writer(sub_highrarchy):
-            nested_item_values = []
-            all_keys = sub_highrarchy._get_keys()
-            max_key_length = max([len(key) for key in all_keys])
-            for key in all_keys:
-                value = sub_highrarchy[key]
-                if isinstance(value, _Mapping):
-                    nested_item_values.append(value)
-                else:
+            all_keys = sub_highrarchy.keys
+
+            if len(all_keys) == 0:
+                return# There is nothing to display here
+
+            non_mapping_key_indexes = [i for i, key in enumerate(all_keys) if not isinstance(sub_highrarchy[key], _Mapping)]
+            if len(non_mapping_key_indexes) > 0:
+                max_key_length = max([len(all_keys[i]) for i in non_mapping_key_indexes])
+
+                # Display non-mapables
+                for key_index in non_mapping_key_indexes:
+                    key = all_keys[key_index]
+                    value = sub_highrarchy[key]
+
                     insert_value = ('"'+value+'"') if isinstance(value, str) else value
                     self.__stringify_storage += (" " * self.__stringify_indent) + f"{key}{' ' * (max_key_length - len(key))} = {insert_value}\n"
 
-            for value in nested_item_values:
+            # Recursivley display mappables
+            for key in (all_keys if len(non_mapping_key_indexes) == 0 else [key for i, key in enumerate(all_keys) if i not in non_mapping_key_indexes]):
+                value = sub_highrarchy[key]
+
                 self.__stringify_storage += (" " * self.__stringify_indent) + "\n"
-                self.__stringify_storage += (" " * self.__stringify_indent) + f"{list(value._get_keys())[0]}:\n"
+                self.__stringify_storage += (" " * self.__stringify_indent) + f"{key}:\n"
                 self.__stringify_indent += 4
                 recursive_writer(value)
                 self.__stringify_indent -= 4
 
         recursive_writer(highrarchy)
-        return self.__stringify_storage
+        return self.__stringify_storage.lstrip("\n")
 
     def __repr__(self):
         return "Configuration Object. Items as follows:\n\n" + self.__str__()

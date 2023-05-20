@@ -1,10 +1,10 @@
 import sys
 import traceback
 
-from QuasarCode.IO.Text.console import print_info, print_verbose_info, print_warning, print_verbose_warning, print_error, print_verbose_error, print_debug
-from QuasarCode._global_settings import settings_object as _settings_object
-from QuasarCode.MPI import get_mpi_rank
-from QuasarCode.Tools._async import start_main_async
+from ..IO.Text.console import print_info, print_verbose_info, print_warning, print_verbose_warning, print_error, print_verbose_error, print_debug
+from .._global_settings import settings_object as _settings_object
+from ..MPI import get_mpi_rank
+from ..Tools._async import start_main_async
 
 
 class ScriptWrapper(object):
