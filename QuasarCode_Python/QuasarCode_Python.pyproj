@@ -40,6 +40,7 @@
     <Folder Include="src\QuasarCode\Tools\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\QuasarCode\Science\_plotting.py" />
     <Compile Include="vs_build.py">
       <SubType>Code</SubType>
     </Compile>
