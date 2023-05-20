@@ -1,7 +1,7 @@
 import sys
 import traceback
 
-from ..IO.Text.console import print_info, print_verbose_info, print_warning, print_verbose_warning, print_error, print_verbose_error, print_debug
+from ..IO.Text._console import Console# print_info, print_verbose_info, print_warning, print_verbose_warning, print_error, print_verbose_error, print_debug
 from .._global_settings import settings_object as _settings_object
 from ..MPI import get_mpi_rank
 from ..Tools._async import start_main_async
@@ -160,11 +160,11 @@ Example Usage:
             except Exception as e:
                 if is_root_process or self.MPI_print_non_root_process_errors:
                     has_message = e.__str__() != ""
-                    print_error(f"Execution encountered an error{(':' if has_message else ' (no details avalible).') if _settings_object.debug or _settings_object.verbose else '.'}")
-                    print_debug("Traceback (most recent call last):\n" + "".join(traceback.format_tb(e.__traceback__)) + type(e).__name__ + (f": {e.__str__()}" if has_message else ""))
+                    Console.print_error(f"Execution encountered an error{(':' if has_message else ' (no details avalible).') if _settings_object.debug or _settings_object.verbose else '.'}")
+                    Console.print_debug("Traceback (most recent call last):\n" + "".join(traceback.format_tb(e.__traceback__)) + type(e).__name__ + (f": {e.__str__()}" if has_message else ""))
                     if has_message and not _settings_object.debug:
-                        print_error(e.__str__())
-                    print_info("Terminating.")
+                        Console.print_error(e.__str__())
+                    Console.print_info("Terminating.")
 
         return inner
 

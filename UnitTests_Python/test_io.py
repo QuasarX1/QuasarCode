@@ -1,7 +1,7 @@
 from copy import copy
 import pytest
 
-from QuasarCode.IO.Text.console import pause
+from QuasarCode.IO.Text import Console
 from QuasarCode.IO.Configurations import PropertiesConfig, JsonConfig, YamlConfig
 
 class TestClass_IO_Text(object):
@@ -10,8 +10,8 @@ class TestClass_IO_Text(object):
         self.fail("Not Implemented - Sort Input")#TODO: sort inputs
         
         try:
-            pause()
-            pause(exit = True)
+            Console.pause()
+            Console.pause(exit = True)
             self.assertTrue(True)#TODO: is this needed for success to be registered?
         except:
             self.fail("The output must be checked.")

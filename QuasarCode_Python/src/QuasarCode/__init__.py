@@ -25,7 +25,8 @@ from . import Science
 from . import Tools
 
 from .Tools._directorys_and_imports import source_file_relitive_add_to_path
-from .IO.Text.console import pause as console_pause
-from .IO.Text import console
+from .IO.Text import Console
+from .IO.Text import console# Depreciated!!!
+console_pause = console.pause# Depreciated!!!
 from .edp import Event
 from .Tools._async import start_main_async

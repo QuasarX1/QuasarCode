@@ -130,7 +130,7 @@
     <Compile Include="src\QuasarCode\Science\graph.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\QuasarCode\IO\Text\console.py">
+    <Compile Include="src\QuasarCode\IO\Text\_console.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\QuasarCode\Science\__init__.py">
