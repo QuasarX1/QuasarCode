@@ -7,9 +7,9 @@ from matplotlib import pyplot as plt
 ##from QuasarCode.Science.data import errorString, sigFig
 #from QuasarCode.Science import Figure, error_string, sig_fig
 
-from QuasarCode.Science import error_string, sig_fig, polygon_y_error_region, polygon_x_error_region
+from QuasarCode.Science import error_string, is_consistant, sig_fig, standard_form, standard_form_string, standard_form_string_if_nessessary, polygon_y_error_region, polygon_x_error_region
 
-class TestClass_Science(object):
+class TestClass_Data(object):
     def test_sig_fig(self):
         assert "436784329.8287460000000000000" == str(sig_fig(436784329.828746, 15)), "Rounding to 15 sig fig failed."
         assert "436784329.8287500000000000000" == str(sig_fig(436784329.828746, 14)), "Rounding to 14 sig fig failed."
@@ -28,13 +28,37 @@ class TestClass_Science(object):
         assert "400000000.0000000000000000000" == str(sig_fig(436784329.828746, 1)), "Rounding to 1 sig fig failed."
 
     def test_standardForm(self):
-        pass#TODO:
+        print(standard_form_string(31415926.535, 11))
+        result_num, result_power = standard_form(31415926.535)
+        assert sig_fig(3.1415926535, 11) == sig_fig(result_num, 11)
+        assert 7 == result_power
+
+        print(standard_form_string(0.000031415926535, 11, latex = True))
+        result_num, result_power = standard_form(0.000031415926535)
+        assert sig_fig(3.1415926535, 11) == sig_fig(result_num, 11)
+        assert -5 == result_power
+
+        print(standard_form_string_if_nessessary(10543.2, 6))
+        assert standard_form_string_if_nessessary(10543.2, 6) == "1.05432 * 10^4"
+
+        print(standard_form_string_if_nessessary(1054.32, 6))
+        assert standard_form_string_if_nessessary(1054.32, 6) == "1054.32"
+
+        print(standard_form_string_if_nessessary(10.5432, 6))
+        assert standard_form_string_if_nessessary(10.5432, 6) == "10.5432"
 
     def test_trueRound(self):
-        pass#TODO:
+        pass# This is covered by the test_sig_fig function
 
     def test_consistancyTest(self):
-        pass#TODO:
+        assert not is_consistant(0.0, 5.0, 1.0, 3.0, 1)
+        assert is_consistant(0.0, 5.0, 1.0, 3.0, 2)
+        assert not is_consistant(-5.0, 5.0, 7.0, 7.0, 1)
+        assert is_consistant(-5.0, 5.0, 11.0, 11.0, 1)
+
+    def test_errorString(self):
+        assert "2.0435922040733323 \u00B1 0.7" == error_string(2.0435922040733323, 0.7)
+        assert "0.7266078556762237 \u00B1 3.0" == error_string(0.7266078556762237, 3.0)
 
  #   def test_GraphAndErrorString(self):
  #       x = np.array([1.3, 2.1, 2.8, 3.9, 5.2])
@@ -60,6 +84,8 @@ class TestClass_Science(object):
  #       assert "2.0435922040733323 \u00B1 0.7" == error_string(m[0], m[1]), "The normalised value and error calculated for the gradient does not match the expected value."
  #       assert "0.7266078556762237 \u00B1 3.0" == error_string(c[0], c[1]), "The normalised value and error calculated for the intercept does not match the expected value."
 
+
+class TestClass_Plotting(object):
     def test_plotting(self):
         plt.figure()
         polygon_y_error_region([0, 1, 2, 3, 4, 5], [1, 3, 1, 3, 1, 3], [-3, -1, -3, -1, -3, -1], "default", color = "red", alpha = 0.5)

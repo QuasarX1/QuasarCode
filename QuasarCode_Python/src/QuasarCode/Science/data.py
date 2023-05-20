@@ -68,34 +68,45 @@ def standard_form(num: Decimal):
     Determines the value and power for the standard form representation of a number
     """
     num = Decimal(num)
+    power = 0
 
     if num >= 1:
-        power = 0
+        new_num = None
+        new_power = None
         while num > 1:
-            power += 1
-            num /= 10
+            new_num = num
+            new_power = power
+
+            new_power += 1
+            new_num /= 10
+
+            if new_num < 1:
+                break
+            else:
+                num = new_num
+                power = new_power
 
     else:
-        power = 0
         while num < 1:
             power -= 1
             num *= 10
             if num > 1:
                 break
-        power += 1
 
     return num, power
 
-def standard_form_string(num: Decimal, numberSigFig = None):
+def standard_form_string(num: Decimal, numberSigFig = None, latex = False):
     """
     Determines the standard form representation of a number and represents it as a string
     """
     number, power = standard_form(num)
 
-    return "{} * 10^{}".format(float(sig_fig(number, numberSigFig) if numberSigFig is not None else number), power) if power != 0 else str(float(sig_fig(number, numberSigFig) if numberSigFig is not None else number))
+    template = "${}\\times10^{{{}}}$" if latex else "{} * 10^{}"
+
+    return template.format(float(sig_fig(number, numberSigFig) if numberSigFig is not None else number), power) if power != 0 else str(float(sig_fig(number, numberSigFig) if numberSigFig is not None else number))
 
 def standard_form_string_if_nessessary(num: Decimal, numberSigFig = None):
-    if np.abs(num) >= 1000 or np.abs(num) < 0.001:
+    if np.abs(num) >= 9999 or np.abs(num) < 0.001:
         return standard_form_string(num, numberSigFig)
     else:
         return str(float(sig_fig(num, numberSigFig) if numberSigFig is not None else num))
