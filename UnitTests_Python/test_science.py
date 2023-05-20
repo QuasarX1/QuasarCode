@@ -11,21 +11,21 @@ from QuasarCode.Science import error_string, sig_fig, polygon_y_error_region, po
 
 class TestClass_Science(object):
     def test_sig_fig(self):
-        assert Decimal(436784329.828746) == sig_fig(436784329.828746, 15), "Rounding to 15 sig fig failed."
-        assert Decimal(436784329.82874) == sig_fig(436784329.828746, 14), "Rounding to 14 sig fig failed."
-        assert Decimal(436784329.8287) == sig_fig(436784329.828746, 13), "Rounding to 13 sig fig failed."
-        assert Decimal(436784329.828) == sig_fig(436784329.828746, 12), "Rounding to 12 sig fig failed."
-        assert Decimal(436784329.82) == sig_fig(436784329.828746, 11), "Rounding to 11 sig fig failed."
-        assert Decimal(436784329.8) == sig_fig(436784329.828746, 10), "Rounding to 10 sig fig failed."
-        assert Decimal(436784329) == sig_fig(436784329.828746, 9), "Rounding to 9 sig fig failed."
-        assert Decimal(436784320) == sig_fig(436784329.828746, 8), "Rounding to 8 sig fig failed."
-        assert Decimal(436784300) == sig_fig(436784329.828746, 7), "Rounding to 7 sig fig failed."
-        assert Decimal(436784000) == sig_fig(436784329.828746, 6), "Rounding to 6 sig fig failed."
-        assert Decimal(436780000) == sig_fig(436784329.828746, 5), "Rounding to 5 sig fig failed."
-        assert Decimal(436700000) == sig_fig(436784329.828746, 4), "Rounding to 4 sig fig failed."
-        assert Decimal(436000000) == sig_fig(436784329.828746, 3), "Rounding to 3 sig fig failed."
-        assert Decimal(430000000) == sig_fig(436784329.828746, 2), "Rounding to 2 sig fig failed."
-        assert Decimal(400000000) == sig_fig(436784329.828746, 1), "Rounding to 1 sig fig failed."
+        assert "436784329.8287460000000000000" == str(sig_fig(436784329.828746, 15)), "Rounding to 15 sig fig failed."
+        assert "436784329.8287500000000000000" == str(sig_fig(436784329.828746, 14)), "Rounding to 14 sig fig failed."
+        assert "436784329.8287000000000000000" == str(sig_fig(436784329.828746, 13)), "Rounding to 13 sig fig failed."
+        assert "436784329.8290000000000000000" == str(sig_fig(436784329.828746, 12)), "Rounding to 12 sig fig failed."
+        assert "436784329.8300000000000000000" == str(sig_fig(436784329.828746, 11)), "Rounding to 11 sig fig failed."
+        assert "436784329.8000000000000000000" == str(sig_fig(436784329.828746, 10)), "Rounding to 10 sig fig failed."
+        assert "436784330.0000000000000000000" == str(sig_fig(436784329.828746, 9)), "Rounding to 9 sig fig failed."
+        assert "436784330.0000000000000000000" == str(sig_fig(436784329.828746, 8)), "Rounding to 8 sig fig failed."
+        assert "436784300.0000000000000000000" == str(sig_fig(436784329.828746, 7)), "Rounding to 7 sig fig failed."
+        assert "436784000.0000000000000000000" == str(sig_fig(436784329.828746, 6)), "Rounding to 6 sig fig failed."
+        assert "436780000.0000000000000000000" == str(sig_fig(436784329.828746, 5)), "Rounding to 5 sig fig failed."
+        assert "436800000.0000000000000000000" == str(sig_fig(436784329.828746, 4)), "Rounding to 4 sig fig failed."
+        assert "437000000.0000000000000000000" == str(sig_fig(436784329.828746, 3)), "Rounding to 3 sig fig failed."
+        assert "440000000.0000000000000000000" == str(sig_fig(436784329.828746, 2)), "Rounding to 2 sig fig failed."
+        assert "400000000.0000000000000000000" == str(sig_fig(436784329.828746, 1)), "Rounding to 1 sig fig failed."
 
     def test_standardForm(self):
         pass#TODO:
