@@ -6,22 +6,22 @@ if not __settings_object.mpi_avalible:
 
 from mpi4py import MPI
 
-class __MPI_Config(object):
+class _MPI_Config(object):
     __singleton = None
     __update = True
 
     @staticmethod
     def _is_singleton_avalible():
-        return __MPI_Config.__singleton is not None
+        return _MPI_Config.__singleton is not None
 
     @staticmethod
     def _get_singleton():
-        return __MPI_Config.__singleton
+        return _MPI_Config.__singleton
 
     def __init__(self, comm):
-        if __MPI_Config.__update:
-            __MPI_Config.__update = False
-            __MPI_Config.__singleton = self
+        if _MPI_Config.__update:
+            _MPI_Config.__update = False
+            _MPI_Config.__singleton = self
             self.__MPI_COMM = comm
             self.__MPI_COMM_SIZE = int(self.__MPI_COMM.Get_size())
             self.__MPI_RANK = self.__MPI_COMM.Get_rank()
@@ -42,14 +42,14 @@ class __MPI_Config(object):
         return self.__MPI_RANK
 
     def update(self, comm):
-        __MPI_Config.__update(comm)
+        _MPI_Config.__update(comm)
 
     @staticmethod
     def __update(comm):
-        __MPI_Config.__update = True
-        __MPI_Config(comm)
+        _MPI_Config.__update = True
+        _MPI_Config(comm)
 
-if not __MPI_Config._is_singleton_avalible():
-    __MPI_Config(MPI.COMM_WORLD)
+if not _MPI_Config._is_singleton_avalible():
+    _MPI_Config(MPI.COMM_WORLD)
 
-mpi_config = __MPI_Config._get_singleton()
+mpi_config = _MPI_Config._get_singleton()
