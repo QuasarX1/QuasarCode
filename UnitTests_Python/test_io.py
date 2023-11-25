@@ -3,6 +3,7 @@ import pytest
 
 from QuasarCode.IO.Text import Console
 from QuasarCode.IO.Configurations import PropertiesConfig, JsonConfig, YamlConfig
+from QuasarCode.IO.Checkpointing import CheckpointController, PickleCheckpoint
 
 class TestClass_IO_Text(object):
     def test_Text(self):
@@ -192,6 +193,39 @@ parallelization:
     cpus         = 64
 """
 
+
+
+class TestClass_IO_Checkpointing(object):
+    def test_PickleCheckpoint(self):
+        controller_0 = CheckpointController([], "./testcheckpointfile", PickleCheckpoint)
+        for i in range(0, 5):
+            controller_0.data.append(i**2)
+        controller_0.checkpoint()
+        del controller_0
+
+        controller_1 = CheckpointController([], "./testcheckpointfile", PickleCheckpoint)
+        for i in range(5, 7):
+            controller_1.data.append(i**2)
+        controller_1.checkpoint()
+        del controller_1
+
+        controller_2 = CheckpointController([], "./testcheckpointfile", PickleCheckpoint)
+        for i in range(7, 9):
+            controller_2.data.append(i**2)
+        controller_2.checkpoint()
+        del controller_2
+
+        controller_final = CheckpointController([], "./testcheckpointfile", PickleCheckpoint)
+        assert controller_final.state.checkpoint_index == 2
+        assert len(controller_final.data) == 9
+
+        for i in range(9, 11):
+            controller_final.data.append(i**2)
+
+        Console.print_info(controller_final.data)
+
+        controller_final.remove_checkpoint()
+        controller_final.remove_backup()
 
 
 

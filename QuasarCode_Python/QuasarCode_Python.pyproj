@@ -33,6 +33,7 @@
     <Folder Include="src\QuasarCode\Games\Dice\" />
     <Folder Include="src\QuasarCode\Games\Spinners\" />
     <Folder Include="src\QuasarCode\IO\" />
+    <Folder Include="src\QuasarCode\IO\Checkpointing\" />
     <Folder Include="src\QuasarCode\IO\Text\" />
     <Folder Include="src\QuasarCode\IO\Configurations\" />
     <Folder Include="src\QuasarCode\MPI\" />
@@ -40,6 +41,13 @@
     <Folder Include="src\QuasarCode\Tools\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\QuasarCode\IO\Checkpointing\_PickleCheckpoint.py" />
+    <Compile Include="src\QuasarCode\IO\Checkpointing\_CheckpointBase.py" />
+    <Compile Include="src\QuasarCode\IO\Checkpointing\_CheckpointController.py" />
+    <Compile Include="src\QuasarCode\IO\Checkpointing\_CheckpointState.py" />
+    <Compile Include="src\QuasarCode\IO\Checkpointing\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\QuasarCode\Science\_plotting.py" />
     <Compile Include="vs_build.py">
       <SubType>Code</SubType>
