@@ -1,4 +1,4 @@
-Copyright (c) 2024-present Christopher J. R. Rowe <contact@cjrrowe.com>
+Copyright (c) Christopher Rowe 2020
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
@@ -8,7 +8,7 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-The author (Christopher J. R. Rowe) is clearly & appropriately acknowledged and/or
+The auther (Christopher Rowe) is clearly & appropriately acnowlaged and/or
 the Software source (https://github.com/QuasarX1/QuasarCode) is referenced.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR

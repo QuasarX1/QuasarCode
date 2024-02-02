@@ -266,3 +266,4 @@ dist/
 build/
 /UnitTests_Python/env
 /QuasarCode_Python/env
+/QuasarCode_Python/old-code/env

@@ -1,37 +1,102 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["*"]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "QuasarCode"
-version = "0.9.0"
-authors = [
-  { name="Christopher Rowe", email="thequasarx1@gmail.com" },
-]
+dynamic = ["version"]
 description = "A general purpose library for Python applications."
 readme = "README.md"
 requires-python = ">=3.7"
+license = { file = "LICENSE.txt" }
+keywords = []
+authors = [
+  { name = "Christopher J. R. Rowe", email = "contact@cjrrowe.com" },
+]
 classifiers = [
-    "Programming Language :: Python :: 3.7",
-    "Operating System :: OS Independent",
-    "Development Status :: 4 - Beta",
-    "Natural Language :: English",
-    "Topic :: Software Development",
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Operating System :: OS Independent",
+  "Natural Language :: English",
+  "Topic :: Software Development",
 ]
 dependencies = [
-    "numpy",
-    "matplotlib",
-    "scipy",
-    "pyyaml",
+  "numpy",
+  "matplotlib",
+  "scipy",
+  "pyyaml",
 ]
+
+[project.urls]
+Documentation = "https://github.com/QuasarX1/QuasarCode/tree/dev-python/QuasarCode_Python/README.md"
+Issues = "https://github.com/QuasarX1/QuasarCode/issues"
+Source = "https://github.com/QuasarX1/QuasarCode"
 
 [project.scripts]
 #example-script = "QuasarCode.IO.Text.console:pause"
 
-[project.urls]
-"Homepage" = "https://github.com/QuasarX1/QuasarCode"
-"Bug Tracker" = "https://github.com/QuasarX1/QuasarCode/issues"
+[tool.hatch.version]
+path = "src/QuasarCode/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "coverage run -m pytest {args:tests}"
+cov-report = [
+  "- coverage combine",
+  "coverage report",
+]
+cov = [
+  "test-cov",
+  "cov-report",
+]
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+
+[tool.hatch.envs.types]
+dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/QuasarCode tests}"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "old-code/",
+  "QuasarCode_Python.pyproj",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/QuasarCode"]
+
+[tool.coverage.run]
+source_pkgs = ["QuasarCode", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/QuasarCode/__about__.py",
+]
+
+[tool.coverage.paths]
+QuasarCode = ["src/QuasarCode", "*/QuasarCode/src/QuasarCode"]
+tests = ["tests", "*/QuasarCode/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]

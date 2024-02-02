@@ -15,7 +15,7 @@ def get_source_file_directory(source_file_path: str) -> str:
     return source_file_path.rsplit(os.sep, 1)[0]
 
 def add_to_path(directory_path: str):
-    sys.path.append(os.path.abspath(directory_path))
+    sys.path.append(directory_path)
 
 def relitive_add_to_path(root_directory_path: str, *relitive_path_segments: List[str]):
     """
