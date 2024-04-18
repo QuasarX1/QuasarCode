@@ -1,5 +1,6 @@
 from decimal import Decimal
 import numpy as np
+#from numpy.typing import NDArray
 from typing import Generic, TypeVar, Tuple, Callable, Any
 from unyt import unyt_quantity, unyt_array
 

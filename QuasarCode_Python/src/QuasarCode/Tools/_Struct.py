@@ -10,7 +10,7 @@ class Struct(object):
         2.) super().__init__(**kwargs)
 
     To specify a human readable type name for errors, overload: _get_typename(self) -> Union[str, None]
-    To specify type casts for attributes, set fields to an instance of TypeCast_AutoProperty
+    To specify type casts for attributes, set fields to an instance of TypeCastAutoProperty
     """
     
     def __init__(self, **kwargs):
