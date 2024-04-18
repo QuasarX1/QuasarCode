@@ -1,6 +1,6 @@
 from decimal import Decimal
 import numpy as np
-from typing import Generic, TypeVar, Union, Callable, Any
+from typing import Generic, TypeVar, Callable, Any
 from unyt import unyt_quantity, unyt_array
 
 T = TypeVar("T")

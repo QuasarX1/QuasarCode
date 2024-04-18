@@ -5,10 +5,8 @@ from ._Char import Char
 # \odot
 odot: Char = Char("\u2299")
 
-"""
-Superscripts
-----------------------------------------------------------------
-"""
+# Superscripts
+#---------------------------------------------------------------
 
 # Superscript 0
 Superscript_0: Char = Char("\u2070")
@@ -102,10 +100,8 @@ def to_superscript(value: str) -> str:
 def from_superscript(value: str) -> str:
     return Char.to_string([superscripts_reverse[c] for c in Char.from_string(value)])
 
-"""
-Subscripts
-----------------------------------------------------------------
-"""
+# Subscripts
+#---------------------------------------------------------------
 
 # Subscript 0
 Subscript_0: Char = Char("\u2080")

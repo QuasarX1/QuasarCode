@@ -1,4 +1,4 @@
-from typing import Union, Dict, Any
+from typing import Union
 
 class Struct(object):
     """
