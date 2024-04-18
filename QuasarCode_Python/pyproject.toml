@@ -33,6 +33,7 @@ dependencies = [
   "matplotlib",
   "scipy",
   "pyyaml",
+  "unyt",
 ]
 
 [project.urls]
