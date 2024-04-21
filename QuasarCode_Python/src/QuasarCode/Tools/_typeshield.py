@@ -22,13 +22,20 @@ class TypeShield_Base(Generic[T], ABC):
 
     def __str__(self) -> str:
         return self.report_format_types()
+    
+    def shield_check(self, value):
+        """
+        Check a value's type.
+        """
+        
+        if self.check_type(value):
+            return value
+        raise TypeError(f"Attepted to assign value with incorrect type: {type(value).__qualname__} and any parent class(es) not in {self}.")
 
     def __call__(self, func: Callable[Concatenate[Any, P], T]):
         @wraps(func)
         def wrapper(value: Any, *args: P.args, **kwargs: P.kwargs) -> T:
-            if self.check_type(value):
-                return func(value, *args, **kwargs)
-            raise TypeError(f"Attepted to assign value with incorrect type: {type(value).__qualname__} and any parent class(es) not in {self}.")
+            return func(self.shield_check(value), *args, **kwargs)
         return wrapper
 
 class TypeShield(TypeShield_Base[T]):
@@ -100,9 +107,13 @@ class NestedTypeShield(TypeShield_Base[T]):
     def __len__(self) -> int:
          return len(self.__allowed_type_layers)
 
+#    def report_format_types(self, subset = None) -> str:
+#        if subset is None:
+#            return "TypeShield(" + " -> ".join([(t.__qualname__ if t is not None else 'None') if (isinstance(t, type) or t is None) else (t[0].__qualname__ if t[0] is not None else 'None') if len(t) == 1 else self.report_format_types(subset = t) for t in self.__allowed_type_layers]) + ")"
+#        else:
+#            return "{" + ", ".join([(t.__qualname__ if t is not None else 'None') if (isinstance(t, type) or t is None) else (t[0].__qualname__ if t[0] is not None else 'None') if len(t) == 1 else self.report_format_types(subset = t) for t in subset]) + "}"
     def report_format_types(self, subset = None) -> str:
-        chunk = f"{'(' if subset is None else '{'}{(' -> ' if subset is None else ', ').join([t.__qualname__ if len(t) == 1 else self.report_format_types(subset = t) for t in (self.__allowed_type_layers if subset is None else subset)])}{')' if subset is None else '}'}"
-        return f"TypeShield({chunk})" if subset is None else chunk
+        return f"{'TypeShield(' if subset is None else '{'}{(' -> ' if subset is None else ', ').join([(t.__qualname__ if t is not None else 'None') if (isinstance(t, type) or t is None) else (t[0].__qualname__ if t[0] is not None else 'None') if len(t) == 1 else self.report_format_types(subset = t) for t in (self.__allowed_type_layers if subset is None else subset)])}{')' if subset is None else '}'}"
 
     def check_type(self, value: Any, level = 0) -> bool:
         valid = False
@@ -111,4 +122,4 @@ class NestedTypeShield(TypeShield_Base[T]):
                 valid = True
                 break
 
-        return (self.check_type(value[tuple(value.keys())[0]] if isinstance(value, dict) else value[0], level = level) if level < len(self) - 1 else True) if valid else level
+        return (self.check_type(value[tuple(value.keys())[0]] if isinstance(value, dict) else value[0], level = level + 1) if level < len(self) - 1 else True) if valid else False

@@ -47,15 +47,16 @@ class AutoProperty(property, Generic[T]):
     def __get_storage_attribute_name(self):
         return f"_{self.__declaring_type_name}__autoprop_{self.__name}"
 
-#    def _initialise(self, instance: Any):
-#        setattr(instance, self.__get_storage_attribute_name(), None)
-
     def __get__(self, instance: Any, owner: Union[type, None] = None, /) -> Union[T, None]:
         if self.__check_uninitialised:
             if not self.is_initialised(instance):
                 raise ValueError("Attempted to access value of uninitialised AutoProperty with initialisation enforcement enabled.")
-
-        return getattr(instance, self.__get_storage_attribute_name())
+            
+        try:
+            return getattr(instance, self.__get_storage_attribute_name())
+        except AttributeError:
+            setattr(instance, self.__get_storage_attribute_name(), None)
+            return None
 
     def __set__(self, instance: Any, value: Any, /) -> None:
         setattr(instance, self.__get_storage_attribute_name(), value)
@@ -67,13 +68,28 @@ class AutoProperty(property, Generic[T]):
         if self.__check_uninitialised:
             setattr(instance, self.__get_storage_attribute_name() + "__isinit", False)
 
-#    @staticmethod
-#    def init_autoproperties(instance: Any, instance_type: type) -> None:
-#        for attribute in [vars(instance_type)[attribute_name] for attribute_name in vars(instance_type)]:
-#            if isinstance(attribute, AutoProperty):
-#                attribute._initialise(instance)
+class AutoProperty_NonNullable(AutoProperty[T]):
+    """
+    Automation of the property type that automatically handles the creation of a hidden attribute.
+    A value must be assigned before attempting to read from a property of this type.
+    Attempting to read from an uninitialised property will result in a ValueError.
 
-class TypedAutoProperty(AutoProperty[T]):
+    Syntactic sugar for AutoProperty(..., allow_uninitialised = False)
+    Also adds a more appropriate type hint for the underlying property __get__ method.
+
+    Calling the deleter will uninitialise the value making the property unreadable.
+
+    Constructor:
+        str | None doc -> Optional documentation string for the property. Defaults to None.
+    """
+
+    def __init__(self, doc: Union[str, None] = None) -> None:
+        super().__init__(doc = doc, allow_uninitialised = False)
+
+    def __get__(self, instance: Any, owner: Union[type, None] = None, /) -> T:
+        return cast(T, super().__get__(instance, owner))
+
+class TypedAutoProperty(AutoProperty_NonNullable[T]):
     """
     Automation of the property type that automatically handles the creation of a hidden attribute.
 
@@ -91,11 +107,10 @@ class TypedAutoProperty(AutoProperty[T]):
 
     def __init__(self, type_shield: TypeShield_Base, doc: Union[str, None] = None) -> None:
         self.__valid_type_definition_shield = type_shield
-        super().__init__(doc = doc, allow_uninitialised = False)
+        super().__init__(doc = doc)
 
     def __set__(self, instance: Any, value: Any, /) -> None:
-        super().__set__(instance, self.__valid_type_definition_shield(value))
-
+        super().__set__(instance, self.__valid_type_definition_shield.shield_check(value))
 class TypeCastAutoProperty(AutoProperty[T]):
     """
     Automation of the property type that automatically handles the creation of a hidden attribute.
