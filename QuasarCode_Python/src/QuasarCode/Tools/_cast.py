@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar, Callable, Any
+from typing import Union, Generic, TypeVar, Callable, Any
 from typing_extensions import ParamSpec, Concatenate
 
 P = ParamSpec("P")
@@ -14,7 +14,7 @@ class Cast(Generic[T]):
     def nullable(self) -> bool:
         return self.__nullable
 
-    def __call__(self, value: Any) -> T:
+    def __call__(self, value: Any) -> Union[T, None]:
         return None if value is None and self.__nullable else self.__target_func(value, *self.__args, **self.__kwargs)
     
     @staticmethod

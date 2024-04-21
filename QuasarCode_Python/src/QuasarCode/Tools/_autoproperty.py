@@ -1,9 +1,11 @@
-from typing import Generic, TypeVar, Union, Iterable, Callable, Any, cast as typecheck_cast
+from typing import Generic, TypeVar, Union, Iterable, Callable, Any, cast
 
 from ._cast import Cast
 from ._typeshield import TypeShield_Base
 
-class AutoProperty(property):
+T = TypeVar("T")
+
+class AutoProperty(property, Generic[T]):
     """
     Automation of the property type that automatically handles the creation of a hidden attribute.
 
@@ -34,7 +36,7 @@ class AutoProperty(property):
         if self.__check_uninitialised:
             initilised: Union[bool, None] = None
             try:
-                initilised = typecheck_cast(bool, getattr(instance, self.__get_storage_attribute_name() + "__isinit"))
+                initilised = cast(bool, getattr(instance, self.__get_storage_attribute_name() + "__isinit"))
             except AttributeError:
                 initilised = False
                 setattr(instance, self.__get_storage_attribute_name() + "__isinit", False)
@@ -48,7 +50,7 @@ class AutoProperty(property):
 #    def _initialise(self, instance: Any):
 #        setattr(instance, self.__get_storage_attribute_name(), None)
 
-    def __get__(self, instance: Any, owner: Union[type, None] = None, /) -> Any:
+    def __get__(self, instance: Any, owner: Union[type, None] = None, /) -> Union[T, None]:
         if self.__check_uninitialised:
             if not self.is_initialised(instance):
                 raise ValueError("Attempted to access value of uninitialised AutoProperty with initialisation enforcement enabled.")
@@ -71,9 +73,7 @@ class AutoProperty(property):
 #            if isinstance(attribute, AutoProperty):
 #                attribute._initialise(instance)
 
-
-T = TypeVar("T")
-class TypedAutoProperty(AutoProperty, Generic[T]):
+class TypedAutoProperty(AutoProperty[T]):
     """
     Automation of the property type that automatically handles the creation of a hidden attribute.
 
@@ -96,7 +96,7 @@ class TypedAutoProperty(AutoProperty, Generic[T]):
     def __set__(self, instance: Any, value: Any, /) -> None:
         super().__set__(instance, self.__valid_type_definition_shield(value))
 
-class TypeCastAutoProperty(AutoProperty, Generic[T]):
+class TypeCastAutoProperty(AutoProperty[T]):
     """
     Automation of the property type that automatically handles the creation of a hidden attribute.
 
