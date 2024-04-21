@@ -137,3 +137,15 @@ class Test_AutoProperty(object):
 
         t.b = 2
         assert t.b == "2", "Failed to read expected value of property."
+
+
+    def test_load(self):
+
+        class T(object):
+            a = TypeCastAutoProperty[str](NestedCast[List[np.ndarray]](list, cast_ndarray_float64))
+
+        t = T()
+
+        t.a = np.array([np.linspace(-100, 100, 100000) for _ in range(10000)], dtype = np.float32)
+
+        print(t.a)
