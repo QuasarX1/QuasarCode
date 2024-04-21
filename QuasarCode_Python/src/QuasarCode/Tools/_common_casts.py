@@ -1,14 +1,43 @@
 from decimal import Decimal
 import numpy as np
 #from numpy.typing import NDArray
-from typing import Generic, TypeVar, Tuple, Callable, Any
+from typing import Union, Generic, TypeVar, Tuple, List, Dict, Callable, Any, cast
 from unyt import unyt_quantity, unyt_array
 
-from ._cast import Cast, non_nullable_cast, nullable_cast
+from ._cast import Cast, non_nullable_cast, nullable_cast, NestedCast
+
+# Typeparam definition
+T = TypeVar("T")
+K = TypeVar("K")
+V = TypeVar("V")
 
 # Some common type casts
 
 # Non-nullables
+
+cast_bool    : Cast[bool]    = non_nullable_cast(bool)
+cast_int     : Cast[int]     = non_nullable_cast(int)
+cast_float   : Cast[float]   = non_nullable_cast(float)
+cast_Decimal : Cast[Decimal] = non_nullable_cast(Decimal)
+cast_str     : Cast[str]     = non_nullable_cast(str)
+
+cast_list  : Cast[List[Any]]  = non_nullable_cast(list)
+cast_tuple : Cast[Tuple[Any, ...]] = non_nullable_cast(tuple)
+
+def cast_typed_list(*type_casts: Cast[T]) -> NestedCast[List[T]]:
+    return NestedCast[List[T]](cast_list, *type_casts, nullable = False)
+
+def cast_typed_tuple(*type_casts: Cast[T]) -> NestedCast[Tuple[T]]:
+    return NestedCast[Tuple[T]](cast_tuple, *type_casts, nullable = False)
+
+def cast_dict(cast_keys: Union[Cast[K], None] = None, cast_values: Union[Cast[V], None] = None) -> Cast[Dict[K, V]]:
+    if cast_keys is None:
+        cast_keys = Cast.passthrough()
+    if cast_values is None:
+        cast_values = Cast.passthrough()
+    def cast_dict_obj(value: Dict[Any, Any]) -> Dict[K, V]:
+        return { cast(K, cast_keys(key)): cast(V, cast_values(value[key])) for key in value }
+    return non_nullable_cast(cast_dict_obj)
 
 def cast_ndarray(*args: Any, **kwargs: Any) -> Cast[np.ndarray]:
     """
@@ -146,8 +175,23 @@ cast_nullable_float   : Cast[float]   = nullable_cast(float)
 cast_nullable_Decimal : Cast[Decimal] = nullable_cast(Decimal)
 cast_nullable_str     : Cast[str]     = nullable_cast(str)
 
-cast_nullable_list  : Cast[list]  = nullable_cast(list)
-cast_nullable_tuple : Cast[tuple] = nullable_cast(tuple)
+cast_nullable_list  : Cast[List[Any]]  = nullable_cast(list)
+cast_nullable_tuple : Cast[Tuple[Any, ...]] = nullable_cast(tuple)
+
+def cast_nullable_typed_list(*type_casts: Cast[T]) -> NestedCast[List[T]]:
+    return NestedCast[List[T]](cast_list, *type_casts, nullable = True)
+
+def cast_nullable_typed_tuple(*type_casts: Cast[T]) -> NestedCast[Tuple[T]]:
+    return NestedCast[Tuple[T]](cast_tuple, *type_casts, nullable = True)
+
+def cast_nullable_dict(cast_keys: Union[Cast[K], None] = None, cast_values: Union[Cast[V], None] = None) -> Cast[Dict[K, V]]:
+    if cast_keys is None:
+        cast_keys = Cast.passthrough()
+    if cast_values is None:
+        cast_values = Cast.passthrough()
+    def cast_nullable_dict_obj(value: Dict[Any, Any]) -> Dict[K, V]:
+        return { cast(K, cast_keys(key)): cast(V, cast_values(value[key])) for key in value }
+    return nullable_cast(cast_nullable_dict_obj)
 
 def cast_nullable_ndarray(*args: Any, **kwargs: Any) -> Cast[np.ndarray]:
     """

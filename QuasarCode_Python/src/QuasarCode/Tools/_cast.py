@@ -20,7 +20,7 @@ class Cast(Generic[T]):
         return None if value is None and self.__nullable else self.__target_func(value, *self.__args, **self.__kwargs)
     
     @staticmethod
-    def passthrough() -> "Cast[None]":
+    def passthrough() -> "Cast[Any]":
         return Cast(lambda o, *args, **kwargs: o, nullable = True)
 
 
