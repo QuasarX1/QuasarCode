@@ -1,7 +1,7 @@
 import numpy as np
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Dict
 
-from QuasarCode.Tools import AutoProperty, TypedAutoProperty, TypeCastAutoProperty, TypeShield, NestedTypeShield, Cast, NestedCast, cast_ndarray_float64
+from QuasarCode.Tools import AutoProperty, TypedAutoProperty, TypeCastAutoProperty, TypeShield, NestedTypeShield, Cast, NestedCast, cast_ndarray_float64, cast_dict, cast_int, cast_float, cast_list
 
 class Test_AutoProperty(object):
     def test_standard(self):
@@ -99,9 +99,11 @@ class Test_AutoProperty(object):
         class T(object):
             a = TypeCastAutoProperty[np.ndarray](cast_ndarray_float64)
             b = TypeCastAutoProperty[str](Cast[str](str, nullable = True))
-            c = TypeCastAutoProperty[str](NestedCast[List[Tuple[float, ...]]](list, tuple, float))
-            d = TypeCastAutoProperty[str](NestedCast[List[np.ndarray]](list, cast_ndarray_float64))
-            e = TypeCastAutoProperty[str](NestedCast[np.ndarray](cast_ndarray_float64))
+            c = TypeCastAutoProperty[List[Tuple[float, ...]]](NestedCast[List[Tuple[float, ...]]](list, tuple, float))
+            d = TypeCastAutoProperty[List[np.ndarray]](NestedCast[List[np.ndarray]](list, cast_ndarray_float64))
+            e = TypeCastAutoProperty[np.ndarray](NestedCast[np.ndarray](cast_ndarray_float64))
+            f = TypeCastAutoProperty[Dict[int, float]](cast_dict(cast_int, cast_float))
+            g = TypeCastAutoProperty[Dict[int, List[np.ndarray]]](cast_dict(cast_int, NestedCast[List[np.ndarray]](cast_list, cast_ndarray_float64)))
 
         t = T()
 
@@ -117,10 +119,18 @@ class Test_AutoProperty(object):
         except ValueError:
             pass
 
+        try:
+            _ = t.g
+            raise AssertionError("Attempt to access uninitialised property succeeded.")
+        except ValueError:
+            pass
+
         t.a = [[1, 2, 3], [4, 5, 6]]
         t.c = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]], dtype = int)
         t.d = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
         t.e = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        t.f = { "0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5 }
+        t.g = { "0": [], "1": [(1,)], "2": [(2, 2), (2, 2)], "3": [(3, 3, 3), (3, 3, 3), (3, 3, 3)], "4": [(4, 4, 4, 4), (4, 4, 4, 4), (4, 4, 4, 4), (4, 4, 4, 4)], "5": [(5, 5, 5, 5, 5), (5, 5, 5, 5, 5), (5, 5, 5, 5, 5), (5, 5, 5, 5, 5), (5, 5, 5, 5, 5)] }
 
         assert (t.a == np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], dtype = np.float64)).all(), "Failed to read expected value of property."
         assert t.b is None, "Failed to retrive uninitialised value of None."
@@ -132,8 +142,17 @@ class Test_AutoProperty(object):
         assert (t.d[2] == np.array([7, 8, 9], dtype = np.float64)).all(), "Failed to read expected value of property."
         assert isinstance(t.d, list)
         assert (t.e == np.array([[1, 2, 3],
-                                [4, 5, 6],
-                                [7, 8, 9]], dtype = np.float64)).all(), "Failed to read expected value of property."
+                                 [4, 5, 6],
+                                 [7, 8, 9]], dtype = np.float64)).all(), "Failed to read expected value of property."
+        assert t.f == { 0: 0.0, 1: 1.0, 2: 2.0, 3: 3.0, 4: 4.0, 5: 5.0 }, "Failed to retrive uninitialised value of None."
+
+        assert np.array([np.array([(t.g[i] == np.array([i for _ in range(i)], dtype = np.float64)).all() for arr_i in range(len(t.g[i]))], dtype = bool).all() for i in t.g.keys()], dtype = bool).all()
+#        assert t.g == { 0: [],
+#                        1: [np.array([1], dtype = np.float64)],
+#                        2: [np.array([2, 2], dtype = np.float64), np.array([2, 2], dtype = np.float64)],
+#                        3: [np.array([3, 3, 3], dtype = np.float64), np.array([3, 3, 3], dtype = np.float64), np.array([3, 3, 3], dtype = np.float64)],
+#                        4: [np.array([4, 4, 4, 4], dtype = np.float64), np.array([4, 4, 4, 4], dtype = np.float64), np.array([4, 4, 4, 4], dtype = np.float64), np.array([4, 4, 4, 4], dtype = np.float64)],
+#                        5: [np.array([5, 5, 5, 5, 5], dtype = np.float64), np.array([5, 5, 5, 5, 5], dtype = np.float64), np.array([5, 5, 5, 5, 5], dtype = np.float64), np.array([5, 5, 5, 5, 5], dtype = np.float64), np.array([5, 5, 5, 5, 5], dtype = np.float64)] }, "Failed to retrive uninitialised value of None."
 
         t.b = 2
         assert t.b == "2", "Failed to read expected value of property."
