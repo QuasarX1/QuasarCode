@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import wraps
-from typing import Generic, TypeVar, Union, Tuple, Iterable, Callable, Any
+from typing import Generic, TypeVar, Union, Tuple, Iterable, Sized, Callable, Any, cast
 from typing_extensions import ParamSpec, Concatenate
 
 P = ParamSpec("P")
@@ -14,6 +14,10 @@ class TypeShield_Base(Generic[T], ABC):
 
     @abstractmethod
     def check_type(self, value: Any) -> bool:
+        raise NotImplementedError("Attempted to call abstract method.")
+
+    @abstractmethod
+    def __len__(self) -> int:
         raise NotImplementedError("Attempted to call abstract method.")
 
     def __str__(self) -> str:
@@ -40,18 +44,21 @@ class TypeShield(TypeShield_Base[T]):
     """
 
     def __init__(self, *allowed_types: type):
-        self.__allowed_types: Tuple[type] = allowed_types
+        self.__allowed_types: Tuple[type, ...] = allowed_types
 
         # If nothing specified, apply a dummy guard type
         if len(self.__allowed_types) == 0:
             self.__allowed_types = (object,)
 
     @property
-    def allowed_types(self) -> Tuple[type]:
+    def allowed_types(self) -> Tuple[type, ...]:
         """
         Types permitted by the TypeShield.
         """
         return self.__allowed_types
+    
+    def __len__(self) -> int:
+         return 1
 
     def report_format_types(self) -> str:
         return f"TypeShield({', '.join([t.__qualname__ for t in self.__allowed_types])})"
@@ -77,7 +84,7 @@ class NestedTypeShield(TypeShield_Base[T]):
     """
 
     def __init__(self, *allowed_type_layers: Union[type, Iterable[Union[type, None]], None]):
-        self.__allowed_type_layers: Tuple[Tuple[Union[type, None], ...], ...] = tuple([(None,) if v is None else (v,) if isinstance(v, type) else tuple(v) if len(v) > 0 else (object,) for v in allowed_type_layers])
+        self.__allowed_type_layers: Tuple[Tuple[Union[type, None], ...], ...] = tuple([(None,) if v is None else (v,) if isinstance(v, type) else tuple(v) if len(cast(Sized, v)) > 0 else (object,) for v in allowed_type_layers])
 
         # If nothing specified, apply a dummy guard type
         if len(self.__allowed_type_layers) == 0:
@@ -89,6 +96,9 @@ class NestedTypeShield(TypeShield_Base[T]):
         Types permitted by the TypeShield.
         """
         return self.__allowed_type_layers
+    
+    def __len__(self) -> int:
+         return len(self.__allowed_type_layers)
 
     def report_format_types(self, subset = None) -> str:
         chunk = f"{'(' if subset is None else '{'}{(' -> ' if subset is None else ', ').join([t.__qualname__ if len(t) == 1 else self.report_format_types(subset = t) for t in (self.__allowed_type_layers if subset is None else subset)])}{')' if subset is None else '}'}"
