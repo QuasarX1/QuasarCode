@@ -1,3 +1,4 @@
+from ._array_visuliser import ArrayVisuliser
 from ._autoproperty import AutoProperty, TypedAutoProperty, TypeCastAutoProperty
 from ._async import start_main_async
 from . import _directorys_and_imports as DirectoryTools
