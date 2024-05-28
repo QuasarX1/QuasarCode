@@ -18,10 +18,11 @@ class AutoProperty(property, Generic[T]):
               bool allow_uninitialised -> If the property is unititialised, should None be returned upon attempting to access the value? Default is False.
     """
     
-    def __init__(self, doc: Union[str, None] = None, allow_uninitialised: bool = False) -> None:
+    def __init__(self, default_value: Union[T, None] = None, doc: Union[str, None] = None, allow_uninitialised: bool = False) -> None:
         self.__name: Union[str, None] = None
         self.__declaring_type_name: Union[str, None] = None
         self.__check_uninitialised: bool = not allow_uninitialised
+        self.__default_value = default_value
         super().__init__(doc = doc)
 
     def __set_name__(self, owner, name):
@@ -55,8 +56,8 @@ class AutoProperty(property, Generic[T]):
         try:
             return getattr(instance, self.__get_storage_attribute_name())
         except AttributeError:
-            setattr(instance, self.__get_storage_attribute_name(), None)
-            return None
+            setattr(instance, self.__get_storage_attribute_name(), self.__default_value)
+            return getattr(instance, self.__get_storage_attribute_name())
 
     def __set__(self, instance: Any, value: Any, /) -> None:
         setattr(instance, self.__get_storage_attribute_name(), value)
@@ -83,11 +84,34 @@ class AutoProperty_NonNullable(AutoProperty[T]):
         str | None doc -> Optional documentation string for the property. Defaults to None.
     """
 
-    def __init__(self, doc: Union[str, None] = None) -> None:
-        super().__init__(doc = doc, allow_uninitialised = False)
+    def __init__(self, default_value: Union[T, None] = None, doc: Union[str, None] = None) -> None:
+        super().__init__(default_value = default_value, doc = doc, allow_uninitialised = False)
 
     def __get__(self, instance: Any, owner: Union[type, None] = None, /) -> T:
         return cast(T, super().__get__(instance, owner))
+
+class NullableTypedAutoProperty(AutoProperty[T]):
+    """
+    Automation of the property type that automatically handles the creation of a hidden attribute.
+
+    Uninitialised properties are assigned None by default.
+
+    Calling the deleter will uninitialise the value back to None.
+
+    TypeParam:
+        T -> The type of the property's value (when initialised).
+
+    Constructor:
+        TypeShield_Base type_shield -> Type objects (and None) that are considered valid types for the property's value.
+             str | None doc         -> Optional documentation string for the property. Defaults to None.
+    """
+
+    def __init__(self, type_shield: TypeShield_Base, default_value: Union[T, None] = None, doc: Union[str, None] = None) -> None:
+        self.__valid_type_definition_shield = type_shield
+        super().__init__(default_value = default_value, doc = doc, allow_uninitialised = True)
+
+    def __set__(self, instance: Any, value: Any, /) -> None:
+        super().__set__(instance, self.__valid_type_definition_shield.shield_check(value) if value is not None else None)
 
 class TypedAutoProperty(AutoProperty_NonNullable[T]):
     """
@@ -102,15 +126,16 @@ class TypedAutoProperty(AutoProperty_NonNullable[T]):
 
     Constructor:
         TypeShield_Base type_shield -> Type objects (and None) that are considered valid types for the property's value.
-            str | None doc         -> Optional documentation string for the property. Defaults to None.
+             str | None doc         -> Optional documentation string for the property. Defaults to None.
     """
 
-    def __init__(self, type_shield: TypeShield_Base, doc: Union[str, None] = None) -> None:
+    def __init__(self, type_shield: TypeShield_Base, default_value: Union[T, None] = None, doc: Union[str, None] = None) -> None:
         self.__valid_type_definition_shield = type_shield
-        super().__init__(doc = doc)
+        super().__init__(default_value = default_value, doc = doc)
 
     def __set__(self, instance: Any, value: Any, /) -> None:
         super().__set__(instance, self.__valid_type_definition_shield.shield_check(value))
+
 class TypeCastAutoProperty(AutoProperty[T]):
     """
     Automation of the property type that automatically handles the creation of a hidden attribute.
@@ -127,9 +152,9 @@ class TypeCastAutoProperty(AutoProperty[T]):
               bool allow_uninitialised -> If the property is unititialised, should None be returned upon attempting to access the value? Default is False.
     """
 
-    def __init__(self, cast: Union[Cast[T], Callable[[Any], T]], doc: Union[str, None] = None) -> None:
+    def __init__(self, cast: Union[Cast[T], Callable[[Any], T]], default_value: Union[T, None] = None, doc: Union[str, None] = None) -> None:
         self.__cast: Union[Cast[T], Callable[[Any], T]] = cast
-        super().__init__(doc, cast.nullable if isinstance(cast, Cast) else False)
+        super().__init__(default_value = default_value, doc = doc, allow_uninitialised = cast.nullable if isinstance(cast, Cast) else False)
 
     def __set__(self, instance: Any, value: Any, /) -> None:
         super().__set__(instance, self.__cast(value))

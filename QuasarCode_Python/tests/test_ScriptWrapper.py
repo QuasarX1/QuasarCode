@@ -13,6 +13,7 @@ class Test_ArrayVisuliser(object):
 
         wrapper = ScriptWrapper(
             version = "1.0.0",
+            authors = [ScriptWrapper.AuthorInfomation(given_name = "Joe", family_name = "Bloggs")],
             description = "A test function.",
             parameters = [
                 ScriptWrapper.PositionalParam[int]("test-value", None, None, int, description = "A test parameter."),

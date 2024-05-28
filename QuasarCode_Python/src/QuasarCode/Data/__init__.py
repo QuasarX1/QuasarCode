@@ -1,22 +1,22 @@
 from ..Tools._Struct import Struct
-from ..Tools._autoproperty import TypedAutoProperty
+from ..Tools._autoproperty import TypedAutoProperty, NullableTypedAutoProperty
 from ..Tools._typeshield import TypeShield, NestedTypeShield
 
 from typing import Union, Sequence
 
 class VersionInfomation_Delta(Struct):
-    major    = TypedAutoProperty[Union[int]](TypeShield[Union[int]](int))
-    minor    = TypedAutoProperty[Union[int]](TypeShield[Union[int]](int))
-    revision = TypedAutoProperty[Union[int]](TypeShield[Union[int]](int))
-    alpha    = TypedAutoProperty[Union[int]](TypeShield[Union[int]](int))
-    beta     = TypedAutoProperty[Union[int]](TypeShield[Union[int]](int))
+    major    = TypedAutoProperty[int](TypeShield[int](int))
+    minor    = TypedAutoProperty[int](TypeShield[int](int))
+    revision = TypedAutoProperty[int](TypeShield[int](int))
+    alpha    = TypedAutoProperty[int](TypeShield[int](int))
+    beta     = TypedAutoProperty[int](TypeShield[int](int))
 
 class VersionInfomation(Struct):
-    major    = TypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)))
-    minor    = TypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)))
-    revision = TypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)))
-    alpha    = TypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)))
-    beta     = TypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)))
+    major    = NullableTypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)), default_value = 0)
+    minor    = NullableTypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)), default_value = 0)
+    revision = NullableTypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)), default_value = 0)
+    alpha    = NullableTypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)), default_value = 0)
+    beta     = NullableTypedAutoProperty[Union[int, None]](TypeShield[Union[int, None]](int, type(None)), default_value = 0)
 
     @property
     def is_alpha(self) -> bool:
@@ -146,17 +146,17 @@ class VersionInfomation(Struct):
             raise TypeError(f"Unsupported operation between VersionInfomation and object of type {type(value)}.")
 
 class PersonInfomation(Struct):
-    given_name      = TypedAutoProperty[str](TypeShield[str](str))
-    family_name     = TypedAutoProperty[str](TypeShield[str](str))
-    email_addresses = TypedAutoProperty[Sequence[str]](NestedTypeShield[Sequence[str]](str))
-    website_url     = TypedAutoProperty[str](TypeShield[str](str))
+    given_name      = NullableTypedAutoProperty[str](TypeShield[str](str))
+    family_name     = NullableTypedAutoProperty[str](TypeShield[str](str))
+    email_addresses = NullableTypedAutoProperty[Sequence[str]](NestedTypeShield[Sequence[str]](str))
+    website_url     = NullableTypedAutoProperty[str](TypeShield[str](str))
     #TODO: update the type checks for email addresses and URLs
 
 class AuthorInfomation(Struct):
-    given_name    = TypedAutoProperty[str](TypeShield[str](str))
-    family_name   = TypedAutoProperty[str](TypeShield[str](str))
-    email_address = TypedAutoProperty[str](TypeShield[str](str))
-    website_url   = TypedAutoProperty[str](TypeShield[str](str))
+    given_name    = NullableTypedAutoProperty[str](TypeShield[str](str))
+    family_name   = NullableTypedAutoProperty[str](TypeShield[str](str))
+    email_address = NullableTypedAutoProperty[str](TypeShield[str](str))
+    website_url   = NullableTypedAutoProperty[str](TypeShield[str](str))
     #TODO: update the type checks for email addresses and URLs
 
     @staticmethod
