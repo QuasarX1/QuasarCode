@@ -670,14 +670,14 @@ Commandline arguments & flags ( p = required positional parameter,
                                f+ = optional parameter with an argument):"""
         name_max_width = max([len(parameter_definition.name) for parameter_definition in self.__parameters])
         short_name_max_width = max([len(parameter_definition.short_name) if parameter_definition.short_name is not None else 0 for parameter_definition in self.__parameters])
-        indent_spacing = name_max_width + ((short_name_max_width + 4) if short_name_max_width > 0 else 0) + 20
+        indent_spacing = name_max_width + ((short_name_max_width + 5) if short_name_max_width > 0 else 0) + 20
         for parameter_definition in self.__parameters:
             self.__help_string     +=  ("\n\n    ({}) --{}{}" + (" || " if short_name_max_width > 0 else "") + "{}{}{}").format(
                 (" p" if isinstance(parameter_definition, self.PositionalParam) else (" r" if isinstance(parameter_definition, self.RequiredParam) else ("f " if isinstance(parameter_definition, self.Flag) else "f+"))),
                 parameter_definition.name,
                 (name_max_width - len(parameter_definition.name)) * " ",
                 "" if parameter_definition.short_name is None else f"-{parameter_definition.short_name}",
-                " " * (short_name_max_width - (len(parameter_definition.short_name) if parameter_definition.short_name is not None else 0)),
+                " " * (short_name_max_width - (len(parameter_definition.short_name) if parameter_definition.short_name is not None else 1)),
                 (" --> " + parameter_definition.description.replace("\n", "\n" + (" " * indent_spacing))) if parameter_definition.description is not None else ""
             )
         if len(self.__import_dependancies) > 0:
