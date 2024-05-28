@@ -10,10 +10,13 @@ class _Settings(object):
         return _Settings.__singleton
 
     __attribute_initial_values = {
-        "verbose": False,
-        "debug": False,
-        "mpi_avalible": False,
-        "cuda_threads_per_block": 512,
+                       "verbose" : False,
+                         "debug" : False,
+                  "mpi_avalible" : False,
+               "datetime_format" : r"%d/%m/%Y, %H:%M:%S",
+                   "date_format" : r"%d/%m/%Y",
+                   "time_format" : r"%H:%M:%S",
+        "cuda_threads_per_block" : 512,
     }
 
     def __init__(self):
