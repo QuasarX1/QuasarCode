@@ -51,12 +51,39 @@ class ScriptWrapper_ParamSpec(List["ScriptWrapper_ParamBase"]):
     The parameters for a ScriptWrapper instance.
     """
 
-    def __init__(self, *params: "ScriptWrapper_ParamBase", common_params_have_short_names = True) -> None:
+    def __init__(
+            self,
+            *params: "ScriptWrapper_ParamBase",
+            common_params_have_short_names: bool = True,
+            custom_help_param: Union["ScriptWrapper_Flag", None] = None,
+            custom_debug_param: Union["ScriptWrapper_Flag", None] = None,
+            custom_verbose_param: Union["ScriptWrapper_Flag", None] = None
+        ) -> None:
         super().__init__()
-        self.add(   help_flag if common_params_have_short_names else    help_flag__long_name_only)
-        self.add(  debug_flag if common_params_have_short_names else   debug_flag__long_name_only)
-        self.add(verbose_flag if common_params_have_short_names else verbose_flag__long_name_only)
+        self.__help_param    = custom_help_param if custom_help_param is not None else make_help_flag(long_name_only = not common_params_have_short_names)
+        self.__debug_param   = custom_debug_param if custom_debug_param is not None else make_debug_flag(long_name_only = not common_params_have_short_names)
+        self.__verbose_param = custom_verbose_param if custom_verbose_param is not None else make_verbose_flag(long_name_only = not common_params_have_short_names)
+        self.__special_param_names = (self.__help_param.name, self.__debug_param.name, self.__verbose_param.name)
+        self.__special_param_short_names = (self.__help_param.short_name, self.__debug_param.short_name, self.__verbose_param.short_name)
+        self.add(self.__help_param   )
+        self.add(self.__debug_param  )
+        self.add(self.__verbose_param)
         self.add(*params)
+
+    @property
+    def help_param(self) -> "ScriptWrapper_Flag":
+        return self.__help_param
+    @property
+    def debug_param(self) -> "ScriptWrapper_Flag":
+        return self.__debug_param
+    @property
+    def verbose_param(self) -> "ScriptWrapper_Flag":
+        return self.__verbose_param
+    @property
+    def special_param_names(self) -> Tuple[str, str, str]:
+        return self.__special_param_names
+    def special_param_short_names(self) -> Tuple[Union[str, None], Union[str, None], Union[str, None]]:
+        return self.__special_param_short_names
 
     def add(self, *params: "ScriptWrapper_ParamBase"):
         """
@@ -69,7 +96,7 @@ class ScriptWrapper_ParamSpec(List["ScriptWrapper_ParamBase"]):
         try:
             for param in params:
                 for test_param in self:
-                    if len(self) > 0 and isinstance(param, ScriptWrapper_PositionalParam) and self[-1].name not in ("help", "verbose", "debug") and not isinstance(self[-1], ScriptWrapper_PositionalParam):
+                    if len(self) > 0 and isinstance(param, ScriptWrapper_PositionalParam) and self[-1].name not in self.__special_param_names and not isinstance(self[-1], ScriptWrapper_PositionalParam):
                         raise ScriptWrapper_ParamSpec_Error(f"Attempted to register a positional parameter ({param.name}) after registering a number of non-positional parameters.\nAll positional parameters must be registered in-order and before any non-positional parameters.")
                     if param.name == test_param.name:
                         raise ScriptWrapper_ParamSpec_Error(f"Attempted to register two parameters with the name \"{param.name}\".")
@@ -113,6 +140,8 @@ class ScriptWrapper_ParamSpec(List["ScriptWrapper_ParamBase"]):
     def get_keyword_arguments(self) -> Dict[str, Union[Any, None]]:
         kwargs: Dict[str, Union[Any, None]] = {}
         for param in self:
+            if param.name in self.special_param_names:
+                continue # Special params shouls not be passed to the target function.
             if param.target_parameter_name not in kwargs:
                 kwargs[param.target_parameter_name] = None
             if param.has_non_null_value:
@@ -488,50 +517,32 @@ class ScriptWrapper_Flag(ScriptWrapper_ParamBase[bool]):
 
 
 
-help_flag = ScriptWrapper_Flag(
-           name = "help",
-     short_name = "h",
-     sets_param = None,
-       inverted = False,
-    description = "Display this docstring."
-)
-help_flag__long_name_only = ScriptWrapper_Flag(
-           name = "help",
-     short_name = None,
-     sets_param = None,
-       inverted = False,
-    description = "Display this docstring."
-)
+def make_help_flag(name = "help", short_name = "h", long_name_only = False):
+    return ScriptWrapper_Flag(
+               name = name,
+         short_name = None if long_name_only else short_name,
+         sets_param = None,
+           inverted = False,
+        description = "Display this docstring."
+    )
+def make_debug_flag(name = "debug", short_name = "d", long_name_only = False):
+    return ScriptWrapper_Flag(
+               name = name,
+         short_name = None if long_name_only else short_name,
+         sets_param = None,
+           inverted = False,
+        description = "Display debug infomation."
+    )
+def make_verbose_flag(name = "verbose", short_name = "v", long_name_only = False):
+    return ScriptWrapper_Flag(
+               name = name,
+         short_name = None if long_name_only else short_name,
+         sets_param = None,
+           inverted = False,
+        description = "Display progression infomation."
+    )
 
-debug_flag = ScriptWrapper_Flag(
-           name = "debug",
-     short_name = "d",
-     sets_param = None,
-       inverted = False,
-    description = "Display debug infomation."
-)
-debug_flag__long_name_only = ScriptWrapper_Flag(
-           name = "debug",
-     short_name = None,
-     sets_param = None,
-       inverted = False,
-    description = "Display debug infomation."
-)
 
-verbose_flag = ScriptWrapper_Flag(
-           name = "verbose",
-     short_name = "v",
-     sets_param = None,
-       inverted = False,
-    description = "Display progression infomation."
-)
-verbose_flag__long_name_only = ScriptWrapper_Flag(
-           name = "verbose",
-     short_name = None,
-     sets_param = None,
-       inverted = False,
-    description = "Display progression infomation."
-)
 
 class ScriptWrapper(object):
 #    """
@@ -731,11 +742,13 @@ Commandline arguments & flags ( p = required positional parameter,
                     param.set_from_positional_arg(self.__raw_arguments[positional_arg_index])
                     positional_arg_index += 1
             else:
-                if param.name not in ("help", "debug", "verbose"):
+                if param.name not in self.__parameters.special_param_names:
                     break # No more positional parameters
         
-        for param in self.__parameters:
-            param.validate()
+        if not self.__parameters.help_param.value:
+            # If help flag has been set, skip validation as target function won't actually be called.
+            for param in self.__parameters:
+                param.validate()
         self.__arguments_have_been_parsed = True
 
     @staticmethod
@@ -771,38 +784,26 @@ Commandline arguments & flags ( p = required positional parameter,
 
     @__run
     def run(self, func):
+        if self.__parameters.help_param.value:
+            print(self.help_string)
+            sys.exit()
+        if self.__parameters.debug_param.value:
+            _settings_object.enable_debug()
+        if self.__parameters.verbose_param.value:
+            _settings_object.enable_verbose()
         kwargs = self.__parameters.get_keyword_arguments()
-        if "help" in kwargs:
-            if kwargs["help"]:
-                print(self.help_string)
-                sys.exit()
-            kwargs.pop("help")
-        if "debug" in kwargs:
-            if kwargs["debug"]:
-                _settings_object.enable_debug()
-            kwargs.pop("debug")
-        if "verbose" in kwargs:
-            if kwargs["verbose"]:
-                _settings_object.enable_verbose()
-            kwargs.pop("verbose")
         return func(**kwargs)
 
     @__run
     def run_with_async(self, func):
+        if self.__parameters.help_param.value:
+            print(self.help_string)
+            sys.exit()
+        if self.__parameters.debug_param.value:
+            _settings_object.enable_debug()
+        if self.__parameters.verbose_param.value:
+            _settings_object.enable_verbose()
         kwargs = self.__parameters.get_keyword_arguments()
-        if "help" in kwargs:
-            if kwargs["help"]:
-                print(self.help_string)
-                sys.exit()
-            kwargs.pop("help")
-        if "debug" in kwargs:
-            if kwargs["debug"]:
-                _settings_object.enable_debug()
-            kwargs.pop("debug")
-        if "verbose" in kwargs:
-            if kwargs["verbose"]:
-                _settings_object.enable_verbose()
-            kwargs.pop("verbose")
         return start_main_async(func, **kwargs)
 
 #    @staticmethod
