@@ -681,7 +681,7 @@ Commandline arguments & flags ( p = required positional parameter,
                 parameter_definition.name,
                 (name_max_width - len(parameter_definition.name)) * " ",
                 "" if parameter_definition.short_name is None else f"-{parameter_definition.short_name}",
-                " " * (short_name_max_width + (1 if short_name_max_width > 0 else 0) - (len(parameter_definition.short_name) if parameter_definition.short_name is not None else 0)),
+                " " * (short_name_max_width + (1 if short_name_max_width > 0 else 0) - ((len(parameter_definition.short_name) + 1) if parameter_definition.short_name is not None else 0)),
                 (" --> " + parameter_definition.description.replace("\n", "\n" + (" " * indent_spacing))) if parameter_definition.description is not None else ""
             )
         if len(self.__import_dependancies) > 0:
@@ -759,11 +759,11 @@ Commandline arguments & flags ( p = required positional parameter,
     def __run(func):
         @wraps(func)
         def inner(self, *args, **kwargs):
-            if not self.__arguments_have_been_parsed:
-                self.parse_arguments() # Automatically parse command line arguments
-
             is_root_process = True
             try:
+                if not self.__arguments_have_been_parsed:
+                    self.parse_arguments() # Automatically parse command line arguments
+
                 if not self.use_MPI or get_mpi_rank() == 0:
                     # Either the first MPI process or MPI isn't active
                     return func(self, *args, **kwargs)
