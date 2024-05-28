@@ -545,36 +545,40 @@ def make_verbose_flag(name = "verbose", short_name = "v", long_name_only = False
 
 
 class ScriptWrapper(object):
-#    """
-#    Singelton that handles command argument parsing for the currently running program.
-#    Constructor Arguments:
-#              str filename                 --> The name of the entrypoint file.
-#              str author                   --> The name(s) of the file author(s).
-#              str version_string           --> String indicating the current version of the file.
-#              str edit_date                --> String indicating the date of the last edit.
-#              str description              --> A description of the function of the script.
-#        list[str] dependancies             --> A list of dependancies of the script.
-#        list[str] usage_paramiter_examples --> A list of strings demonstrating example paramiter
-#                                                   lists (exclude the call to the script).
-#             list positional_params        --> List of paramiter information for paramiters that must
-#                                                   appear at the start of the argument list in order
-#                                                   without a flag identifier (each paramiter is a list
-#                                                   with fields as below).
-#                                                   [
-#                                                    name, description, conversion func (nullable)
-#                                                   ]
-#             list params                   --> List of paramiter information (each paramiter is a list
-#                                                   with fields as below).
-#                                                   [
-#                                                    name, short name (nullable), description,
-#                                                    required?, flag?, conversion func (nullable),
-#                                                    default value, mutually exclusive flags (list[str])
-#                                                   ]
-#    Public Methods:
-#               run
-#        static passthrough_converter
-#        static bool_converter
-#        static make_list_converter
+    """
+    Singelton that handles command argument parsing for the currently running program.
+    Constructor Arguments:
+
+               (ScriptWrapper.ParamSpec | list | None) parameters               --> Definitions for parsing arguments to the script.
+                                                                                        Use: ScriptWrapper.OptionalParam
+                                                                                             ScriptWrapper.RequiredParam
+                                                                                             ScriptWrapper.PositionalParam
+                                                                                             ScriptWrapper.Flag
+
+                                          (str | None) command                  --> Command used to execute script.
+
+                                          (str | None) filename                 --> Name of the script file.
+
+               (ScriptWrapper.AuthorInfomation | None) authors                  --> Information about the authors.
+
+        (ScriptWrapper.VersionInfomation | str | None) version                  --> Script version.
+        
+                                (datetime.date | None) edit_date                --> Date of last edit.
+
+                                          (str | None) description              --> Information about what the script does and how to use it.
+
+                 (List[types.ModuleType | str] | None) dependancies             --> Libraries needed to run the script.
+
+                                    (List[str] | None) usage_paramiter_examples --> Example argument configurations.
+
+    Public Methods:
+               parse_arguments
+               run
+               run_with_async
+        static passthrough_converter
+        static bool_converter
+        static filter_converter
+        static make_list_converter
 #    """
     
     # Convinience type aliases for accessing dependant types
