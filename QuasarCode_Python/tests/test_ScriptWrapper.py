@@ -1,5 +1,3 @@
-import numpy as np
-
 from QuasarCode.Tools import ScriptWrapper
 
 class Test_ArrayVisuliser(object):
