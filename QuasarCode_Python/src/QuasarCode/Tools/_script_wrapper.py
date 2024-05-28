@@ -69,7 +69,7 @@ class ScriptWrapper_ParamSpec(List["ScriptWrapper_ParamBase"]):
         try:
             for param in params:
                 for test_param in self:
-                    if len(self) > 0 and isinstance(param, ScriptWrapper_PositionalParam) and self[-1].name not in ("help", "verbose", "debug") and isinstance(self[-1], ScriptWrapper_PositionalParam):
+                    if len(self) > 0 and isinstance(param, ScriptWrapper_PositionalParam) and self[-1].name not in ("help", "verbose", "debug") and not isinstance(self[-1], ScriptWrapper_PositionalParam):
                         raise ScriptWrapper_ParamSpec_Error(f"Attempted to register a positional parameter ({param.name}) after registering a number of non-positional parameters.\nAll positional parameters must be registered in-order and before any non-positional parameters.")
                     if param.name == test_param.name:
                         raise ScriptWrapper_ParamSpec_Error(f"Attempted to register two parameters with the name \"{param.name}\".")
@@ -100,12 +100,14 @@ class ScriptWrapper_ParamSpec(List["ScriptWrapper_ParamBase"]):
                             raise ScriptWrapper_ParamSpec_Error(f"Attempted to register parameter {param.name} (a required parameter) but ({test_param.name}) indicates {param.name} is a conflict.\nConflicting parameters cannot be required parameters!")
                         elif param.requires(test_param):
                             raise ScriptWrapper_ParamSpec_Error(f"Attempted to register parameter {param.name} with {test_param.name} as a requirement, however {test_param.name} lists {param.name} as a conflict.\nConflicting parameters cannot also require each other!")
-                    param._regester_spec(self)
-                    self.extend(params)
+                param._regester_spec(self)
+                self.append(param)
         except Exception as e:
             for param in params:
                 param._regester_spec(None)
-                self.remove(param)
+                try:
+                    self.remove(param)
+                except: pass
             raise e
         
     def get_keyword_arguments(self) -> Dict[str, Union[Any, None]]:
@@ -664,7 +666,7 @@ Commandline arguments & flags ( p = required positional parameter,
                 parameter_definition.name,
                 (name_max_width - len(parameter_definition.name)) * " ",
                 "" if parameter_definition.short_name is None else f"-{parameter_definition.short_name}",
-                " " * (short_name_max_width - (len(parameter_definition.short_name) if parameter_definition.short_name is not None else 0))
+                " " * (short_name_max_width - (len(parameter_definition.short_name) if parameter_definition.short_name is not None else 0)),
                 (" --> " + parameter_definition.description.replace("\n", "\n" + (" " * indent_spacing))) if parameter_definition.description is not None else ""
             )
         if len(self.__import_dependancies) > 0:
@@ -729,7 +731,8 @@ Commandline arguments & flags ( p = required positional parameter,
                     param.set_from_positional_arg(self.__raw_arguments[positional_arg_index])
                     positional_arg_index += 1
             else:
-                break # No more positional parameters
+                if param.name not in ("help", "debug", "verbose"):
+                    break # No more positional parameters
         
         for param in self.__parameters:
             param.validate()
