@@ -334,7 +334,7 @@ class ScriptWrapper_ParamBase(ABC, Generic[T]):
         """
         if self.__spec is None:
             raise ScriptWrapper_Param_ValidityError(self, f"Parameter {self.name} was not assigned to a ScriptWrapper_ParamSpec object.")
-        if self.has_non_null_value:
+        if self.is_explicitly_set:
             for test_param in self.__spec:
                 if self.conflicts_with(test_param):
                     raise ScriptWrapper_Param_ConflictError(self, test_param)
