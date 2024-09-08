@@ -41,6 +41,7 @@ class Console(object):
     @staticmethod
     @_PrivateModuleFunctions._mpi_wrapper
     @_PrivateModuleFunctions._debug_wrapper
+    @_PrivateModuleFunctions._slurm_wrapper
     def print_info(mpi_rank_insert, firstValue = "", *args, **kwargs):
         print(f"--|| INFO ||--{mpi_rank_insert}  {Console.__print_custom_newline_format(mpi_rank_insert, firstValue)}", *[Console.__print_custom_newline_format(mpi_rank_insert, arg) for arg in args], **kwargs)
 
@@ -51,6 +52,7 @@ class Console(object):
     @staticmethod
     @_PrivateModuleFunctions._mpi_wrapper
     @_PrivateModuleFunctions._debug_wrapper
+    @_PrivateModuleFunctions._slurm_wrapper
     def print_warning(mpi_rank_insert, firstValue = "", *args, **kwargs):
         print(f"--\u00BF\u00BF WARN ??--{mpi_rank_insert}  {Console.__print_custom_newline_format(mpi_rank_insert, firstValue)}", *[Console.__print_custom_newline_format(mpi_rank_insert, arg) for arg in args], **kwargs)
 
@@ -62,6 +64,7 @@ class Console(object):
     @staticmethod
     @_PrivateModuleFunctions._mpi_wrapper
     @_PrivateModuleFunctions._debug_wrapper
+    @_PrivateModuleFunctions._slurm_wrapper
     def print_error(mpi_rank_insert, firstValue = "", *args, **kwargs):
         print(f"--!! ERRO !!--{mpi_rank_insert}  {Console.__print_custom_newline_format(mpi_rank_insert, firstValue)}", *[Console.__print_custom_newline_format(mpi_rank_insert, arg) for arg in args], **kwargs)
 
@@ -72,6 +75,7 @@ class Console(object):
     @staticmethod
     @_PrivateModuleFunctions._mpi_wrapper
     @_PrivateModuleFunctions._debug_wrapper
+    @_PrivateModuleFunctions._slurm_wrapper
     def print_debug(mpi_rank_insert, firstValue = "", *args, **kwargs):
         if _settings_object.debug:
             print(f"--<< DEBG >>--{mpi_rank_insert}  {Console.__print_custom_newline_format(mpi_rank_insert, firstValue)}", *[Console.__print_custom_newline_format(mpi_rank_insert, arg) for arg in args], **kwargs)
