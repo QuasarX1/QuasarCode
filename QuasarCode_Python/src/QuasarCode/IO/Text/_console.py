@@ -3,6 +3,15 @@ from ...MPI import get_mpi_rank
 
 class _PrivateModuleFunctions(object):
     @staticmethod
+    def _slurm_wrapper(func):
+        def wrapper(*args, **kwargs):
+            if _settings_object.slurm:
+                if "flush" not in kwargs:
+                    kwargs["flush"] = True
+            return func(*args, **kwargs)
+        return wrapper
+
+    @staticmethod
     def _debug_wrapper(func):
         def wrapper(*args, **kwargs):
             if _settings_object.debug:

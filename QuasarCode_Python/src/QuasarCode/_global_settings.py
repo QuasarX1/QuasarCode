@@ -1,3 +1,5 @@
+import os
+
 class _Settings(object):
     __singleton = None
 
@@ -13,6 +15,7 @@ class _Settings(object):
                        "verbose" : False,
                          "debug" : False,
                   "mpi_avalible" : False,
+                         "slurm" : "SLURM_JOB_ID" in os.environ,
                "datetime_format" : r"%d/%m/%Y, %H:%M:%S",
                    "date_format" : r"%d/%m/%Y",
                    "time_format" : r"%H:%M:%S",
