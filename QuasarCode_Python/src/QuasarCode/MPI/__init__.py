@@ -16,9 +16,9 @@ except:
 if __settings_object.mpi_avalible:
     from ._mpi_configs import mpi_config as MPI_Config
 
-    def get_mpi_rank():
+    def get_mpi_rank() -> int:
         return MPI_Config.rank
 
 else:
-    def get_mpi_rank():
+    def get_mpi_rank() -> int:
         return 0
