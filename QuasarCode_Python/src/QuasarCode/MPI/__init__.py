@@ -18,7 +18,13 @@ if __settings_object.mpi_avalible:
 
     def get_mpi_rank() -> int:
         return MPI_Config.rank
+    
+    from ._convinience_methods import synchronyse, if_mpi_root
 
 else:
+    # This dummy function needs to be here to avoid circular imports when all that is needed is the current rank
     def get_mpi_rank() -> int:
         return 0
+
+    # Load everything else from the _dummy subpackage instead
+    from ._dummy import *

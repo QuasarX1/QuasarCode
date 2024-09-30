@@ -25,6 +25,7 @@ class _MPI_Config(object):
             self.__MPI_COMM: MPI.Intracomm = comm
             self.__MPI_COMM_SIZE: int = int(self.__MPI_COMM.Get_size())
             self.__MPI_RANK: int = self.__MPI_COMM.Get_rank()
+            self.__MPI_ROOT_RANK: int = 0
 
         else:
             raise RuntimeError("Only one instance of the MPI_Config object may exist. Change configuration using the update method.")
@@ -41,13 +42,21 @@ class _MPI_Config(object):
     def rank(self) -> int:
         return self.__MPI_RANK
 
-    def update(self, comm) -> None:
-        _MPI_Config.__update(comm)
+    @property
+    def root(self) -> int:
+        return self.__MPI_ROOT_RANK
+    @root.setter
+    def _(self, rank: int) -> None:
+        self.__MPI_ROOT_RANK = rank
+
+    def update(self, comm: MPI.Intracomm, root: int|None = None) -> None:
+        _MPI_Config.__update(comm, self.root if root is None else root)
 
     @staticmethod
-    def __update(comm) -> None:
+    def __update(comm: MPI.Intracomm, root: int) -> None:
         _MPI_Config.__update = True
-        _MPI_Config(comm)
+        instance = _MPI_Config(comm)
+        instance.root = root
 
 if not _MPI_Config._is_singleton_avalible():
     _MPI_Config(MPI.COMM_WORLD)
