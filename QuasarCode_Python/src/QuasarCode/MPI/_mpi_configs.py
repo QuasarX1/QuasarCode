@@ -49,6 +49,15 @@ class _MPI_Config(object):
     def _(self, rank: int) -> None:
         self.__MPI_ROOT_RANK = rank
 
+    @property
+    def is_root(self) -> bool:
+        return self.rank == self.root
+    def check_is_root(self, root: int|None = None):
+        """
+        Equivilant of .root == x but allows for the default case where x is the default root rank.
+        """
+        return self.rank == (self.root if root is None else root)
+
     def update(self, comm: MPI.Intracomm, root: int|None = None) -> None:
         _MPI_Config.__update(comm, self.root if root is None else root)
 
