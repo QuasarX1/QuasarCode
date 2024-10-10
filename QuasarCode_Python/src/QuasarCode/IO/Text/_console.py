@@ -46,7 +46,7 @@ class Console(object):
     def __print_custom_newline_format(mpi_rank_insert, s):
         return str(s).replace("\n", f"\n{Console.__print_custom_newline_spaces}" + (" " * len(mpi_rank_insert)) + (" " * len(Console.__create_locak_rank_insert())))
     
-    _limit_mpi_output_ranks: int|None = None
+    _limit_mpi_output_ranks: tuple[int]|None = None
     @staticmethod
     def mpi_output_all_ranks() -> None:
         Console._limit_mpi_output_ranks = None
