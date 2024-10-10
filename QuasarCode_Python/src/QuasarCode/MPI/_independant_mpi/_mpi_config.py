@@ -36,7 +36,7 @@ class _MPI_Config(_MPI_Config_Base[MPI.Intracomm]):
         super().__init__(
             comm = comm,
             size = comm.Get_size(),
-            rank = self.comm.Get_rank(),
+            rank = comm.Get_rank(),
             root = 0
         )
 
