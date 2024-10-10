@@ -24,7 +24,9 @@ def synchronyse(target: T, /, root: int|None = None, comm: MPI.Intracomm|None = 
         root = MPI_Config.root
     if comm == None:
         comm = MPI_Config.comm
-    return comm.bcast(target, root)
+    result = comm.bcast(target, root)
+    comm.barrier()
+    return result
 
 
 
