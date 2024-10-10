@@ -1,7 +1,9 @@
 from collections.abc import Callable, Iterable, Sequence
+import ctypes
 from typing import TypeVar, ParamSpec
 from functools import wraps
 import inspect
+import sys
 
 
 
@@ -59,6 +61,9 @@ def update_locals(*local_variable_parameter_names_or_indexes: str|int, remove_ta
                     raise IndexError(f"Unable to unpack {len(result)} values into {len(target_variable_names)} variables.")
                 for i in range(len(target_variable_names)):
                     calling_scope_locals[target_variable_names[i]] = result[i]
+
+            if sys.version_info < (3, 13):
+                ctypes.pythonapi.PyFrame_LocalsToFast(ctypes.py_object(frame), ctypes.c_int(0))
 
         return wrapper
     return inner
@@ -178,6 +183,9 @@ def use_locals(readable_parameter_names_or_indexes: str|int|Sequence[str|int], u
                     raise IndexError(f"Unable to unpack {len(result)} values into {len(target_variable_names)} variables.")
                 for i in range(len(target_variable_names)):
                     calling_scope_locals[target_variable_names[i]] = result[i]
+
+            if sys.version_info < (3, 13):
+                ctypes.pythonapi.PyFrame_LocalsToFast(ctypes.py_object(frame), ctypes.c_int(0))
 
         return wrapper
     return inner
