@@ -65,7 +65,7 @@ def update_locals(*local_variable_parameter_names_or_indexes: str|int, remove_ta
 
 
 
-def read_locals(*local_variable_parameter_names_or_indexes: str|int):
+def read_locals(*local_variable_parameter_names_or_indexes: str|int, treat_unititilised_as_none: bool = True):
 
     if len(local_variable_parameter_names_or_indexes) == 0:
         def inner(func: Callable[P, T]) -> Callable[P, T]:
@@ -88,10 +88,18 @@ def read_locals(*local_variable_parameter_names_or_indexes: str|int):
                     break
 
             for name_param_location in local_variable_parameter_names_or_indexes:
+                var_name: str
                 if isinstance(name_param_location, int):
-                    args[name_param_location] = calling_scope_locals[args[name_param_location]]
+                    var_name = args[name_param_location]
                 else:
-                    kwargs[name_param_location] = calling_scope_locals[kwargs[name_param_location]]
+                    var_name = kwargs[name_param_location]
+                if var_name not in calling_scope_locals:
+                    if treat_unititilised_as_none:
+                        args[name_param_location] = None
+                    else:
+                        raise NameError(f"No initialised variable with the name \"{var_name}\".")
+                else:
+                    args[name_param_location] = calling_scope_locals[var_name]
 
             return func(*args, **kwargs)
 
@@ -100,7 +108,7 @@ def read_locals(*local_variable_parameter_names_or_indexes: str|int):
 
 
 
-def use_locals(readable_parameter_names_or_indexes: str|int|Sequence[str|int], updateable_parameter_names_or_indexes: str|int|Sequence[str|int], remove_extra_updateable_target_arguments: bool = True):
+def use_locals(readable_parameter_names_or_indexes: str|int|Sequence[str|int], updateable_parameter_names_or_indexes: str|int|Sequence[str|int], remove_extra_updateable_target_arguments: bool = True, treat_unititilised_as_none: bool = True):
     if not isinstance(readable_parameter_names_or_indexes, Sequence):
         readable_parameter_names_or_indexes = (readable_parameter_names_or_indexes, )
     if not isinstance(updateable_parameter_names_or_indexes, Sequence):
@@ -139,9 +147,16 @@ def use_locals(readable_parameter_names_or_indexes: str|int|Sequence[str|int], u
 
             for name_param_location in readable_parameter_names_or_indexes:
                 if isinstance(name_param_location, int):
-                    args[name_param_location] = calling_scope_locals[args[name_param_location]]
+                    var_name = args[name_param_location]
                 else:
-                    kwargs[name_param_location] = calling_scope_locals[kwargs[name_param_location]]
+                    var_name = kwargs[name_param_location]
+                if var_name not in calling_scope_locals:
+                    if treat_unititilised_as_none:
+                        args[name_param_location] = None
+                    else:
+                        raise NameError(f"No initialised variable with the name \"{var_name}\".")
+                else:
+                    args[name_param_location] = calling_scope_locals[var_name]
 
             if remove_extra_updateable_target_arguments:
                 removable_args_indexes.sort(reverse = True)
