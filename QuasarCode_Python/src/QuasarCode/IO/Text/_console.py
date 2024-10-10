@@ -30,7 +30,7 @@ class _PrivateModuleFunctions(object):
         def wrapper(*args, **kwargs):
             if "flush" not in kwargs:
                 kwargs["flush"] = True
-            if Console._limit_mpi_output_ranks is None or get_mpi_rank() not in Console._limit_mpi_output_ranks:
+            if Console._limit_mpi_output_ranks is None or get_mpi_rank() in Console._limit_mpi_output_ranks:
                 return func(f" ({get_mpi_rank()})", *args, **kwargs)
             else:
                 return lambda *args, **kwargs: None
