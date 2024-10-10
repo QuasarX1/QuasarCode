@@ -1,5 +1,5 @@
-from ._mpi_configs import mpi_config as MPI_Config
-from ..Tools._edit_locals import use_locals
+from .._independant_mpi._mpi_config import mpi_config as MPI_Config
+from ...Tools._edit_locals import use_locals
 
 from typing import TypeVar, ParamSpec
 from collections.abc import Callable
