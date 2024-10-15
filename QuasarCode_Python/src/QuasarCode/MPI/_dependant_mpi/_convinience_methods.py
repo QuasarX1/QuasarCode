@@ -59,7 +59,7 @@ def mpi_barrier(comm: MPI.Intracomm|None = None) -> None:
 
 
 
-def mpi_get_slice(length: int|Sized, comm: MPI.Intracomm|None = None) -> slice:
+def mpi_get_slice(length: int|Sized, comm: MPI.Intracomm|None = None, rank: int|None = None) -> slice:
     """
     Partition a set of data such that it is distributed evenly accross each MPI rank.
 
@@ -68,12 +68,15 @@ def mpi_get_slice(length: int|Sized, comm: MPI.Intracomm|None = None) -> slice:
     Parameters:
                  int|Sized length -> The length of the target data or the target data if a size can be derived from it.
         MPI.Intracomm|None comm   -> Optional MPI communicator object (defaults to the one from MPI_Config).
+                  int|None comm   -> Optional MPI rank (defaults to the one from MPI_Config if not comm is specified or the one from the provided comm).
 
     Returns:
         slice -> A slice object that can be applied a Sequence of the appropriate length.
     """
 
     comm_size = MPI_Config.comm_size if comm is None else comm.Get_size()
+    if rank == None:
+        rank = MPI_Config.rank if comm is None else comm.Get_rank()
 
     if not isinstance(length, int):
         length = len(length)
@@ -83,13 +86,13 @@ def mpi_get_slice(length: int|Sized, comm: MPI.Intracomm|None = None) -> slice:
     chunk_sizes = np.full(comm_size, base_chunk_size, dtype = int)
     chunk_sizes[:chunks_with_one_extra] += 1
     snaphot_data_offset: int = chunk_sizes[:max(0, comm_size - 1)].sum()
-    snaphot_data_chunk_size: int = chunk_sizes[comm_size]
+    snaphot_data_chunk_size: int = chunk_sizes[rank]
 
-    return slice(snaphot_data_offset, snaphot_data_chunk_size)
+    return slice(snaphot_data_offset, snaphot_data_offset + snaphot_data_chunk_size)
 
 
 
-def mpi_slice(data: Sequence[T], comm: MPI.Intracomm|None = None) -> Sequence[T]:
+def mpi_slice(data: Sequence[T], comm: MPI.Intracomm|None = None, rank: int|None = None) -> Sequence[T]:
     """
     Partition a set of data such that it is distributed evenly accross each MPI rank.
 
@@ -98,8 +101,9 @@ def mpi_slice(data: Sequence[T], comm: MPI.Intracomm|None = None) -> Sequence[T]
     Parameters:
                   Sequence data -> Data to be partitioned.
         MPI.Intracomm|None comm -> Optional MPI communicator object (defaults to the one from MPI_Config).
+                  int|None comm -> Optional MPI rank (defaults to the one from MPI_Config if not comm is specified or the one from the provided comm).
 
     Returns:
         Sequence -> Section of the data assigned to the calling rank.
     """
-    return data[mpi_get_slice(len(data), comm)]
+    return data[mpi_get_slice(len(data), comm, rank)]
