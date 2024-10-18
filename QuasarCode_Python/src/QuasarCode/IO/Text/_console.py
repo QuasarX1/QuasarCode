@@ -92,7 +92,39 @@ class Console(object):
     @staticmethod
     def __create_locak_rank_insert() -> str:
         return f"[{Console.__local_parallel_rank}]" if Console.__local_parallel_rank is not None else ""
-    
+
+    @staticmethod
+    @_PrivateModuleFunctions._mpi_wrapper
+    @_PrivateModuleFunctions._debug_wrapper
+    @_PrivateModuleFunctions._slurm_wrapper
+    def print_raw(_, firstValue = "", *args, **kwargs):
+        """
+        Print with no extra layout alterations but retaining all the functionallity that the Console methods offer for MPI rank limitations and auto-flushing.
+        """
+        print(firstValue, *args, **kwargs)
+
+    @staticmethod
+    @_PrivateModuleFunctions._mpi_wrapper
+    @_PrivateModuleFunctions._debug_wrapper
+    @_PrivateModuleFunctions._slurm_wrapper
+    def print_raw_verbose(_, firstValue = "", *args, **kwargs):
+        """
+        Print (when verbose output is enabled) with no extra layout alterations but retaining all the functionallity that the Console methods offer for MPI rank limitations and auto-flushing.
+        """
+        if _settings_object.verbose:
+            print(firstValue, *args, **kwargs)
+
+    @staticmethod
+    @_PrivateModuleFunctions._mpi_wrapper
+    @_PrivateModuleFunctions._debug_wrapper
+    @_PrivateModuleFunctions._slurm_wrapper
+    def print_raw_debug(_, firstValue = "", *args, **kwargs):
+        """
+        Print (when verbose output is enabled) with no extra layout alterations but retaining all the functionallity that the Console methods offer for MPI rank limitations and auto-flushing.
+        """
+        if _settings_object.debug:
+            print(firstValue, *args, **kwargs)
+
     @staticmethod
     @_PrivateModuleFunctions._mpi_wrapper
     @_PrivateModuleFunctions._debug_wrapper
