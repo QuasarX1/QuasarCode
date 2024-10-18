@@ -85,7 +85,7 @@ def mpi_get_slice(length: int|Sized, comm: MPI.Intracomm|None = None, rank: int|
     chunks_with_one_extra = length % comm_size
     chunk_sizes = np.full(comm_size, base_chunk_size, dtype = int)
     chunk_sizes[:chunks_with_one_extra] += 1
-    snaphot_data_offset: int = chunk_sizes[:max(0, comm_size - 1)].sum()
+    snaphot_data_offset: int = chunk_sizes[:max(0, rank - 1)].sum()
     snaphot_data_chunk_size: int = chunk_sizes[rank]
 
     return slice(snaphot_data_offset, snaphot_data_offset + snaphot_data_chunk_size)
