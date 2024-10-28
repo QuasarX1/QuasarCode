@@ -24,6 +24,14 @@ def synchronyse(target: T, /, root: int = 0, comm: object|None = None) -> T:
 
 
 
+def mpi_check_equal(value: T, /, root: int|None = None, comm: object|None = None) -> bool:
+    """
+    Check all ranks have the same value.
+    """
+    return True
+
+
+
 def if_mpi_root(default: T, root: int|None = None):
     """
     Function decorator for restricting calls to the root rank.
