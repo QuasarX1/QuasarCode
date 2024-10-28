@@ -31,6 +31,24 @@ def synchronyse(target: T, /, root: int|None = None, comm: MPI.Intracomm|None = 
 
 
 
+def mpi_check_equal(value: T, /, root: int|None = None, comm: MPI.Intracomm|None = None) -> bool:
+    """
+    Check all ranks have the same value.
+    """
+    comm = MPI_Config.allow_default_comm(comm)
+    root = MPI_Config.allow_default_root(root)
+    are_equal: bool
+    values: list[T]|None = comm.gather(value, root = root)
+    if comm.rank == root:
+        are_equal = True
+        for v in values[1:]:
+            are_equal = values[0] == v
+            if not are_equal:
+                break
+    synchronyse("are_equal", root = root, comm = comm)
+
+
+
 def if_mpi_root(default: T, root: int|None = None):
     """
     Function decorator for restricting calls to the root rank.
@@ -107,3 +125,72 @@ def mpi_slice(data: Sequence[T], comm: MPI.Intracomm|None = None, rank: int|None
         Sequence -> Section of the data assigned to the calling rank.
     """
     return data[mpi_get_slice(len(data), comm, rank)]
+
+
+
+_MAX_BUFFER_SIZE = 2**31 - 1 # Max length of an signed int32
+def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: int|None = None, target_buffer: np.ndarray|None = None) -> np.ndarray:
+    """
+    Gather numpy array data to the root rank.
+    If the resulting array is larger than the MPI buffer length, data will be transmitted point-to-point in rank order instead of using the Gatherv method.
+    """
+    comm = MPI_Config.allow_default_comm(comm)
+    root = MPI_Config.allow_default_root(root)
+
+    comm.barrier()
+
+    if any(comm.allgather(comm.rank != root and target_buffer is not None)):
+        raise BufferError("Output buffer provided by non-root rank.")
+    comm.barrier()
+
+    local_buffer_length = np.prod(data.shape)
+    local_buffer_length_first_dimension = data.shape[0]
+    one_dimension = local_buffer_length == local_buffer_length_first_dimension
+    local_buffer_step_size = 1 if one_dimension else np.prod(data.shape[1:])
+
+    if not mpi_check_equal([one_dimension, local_buffer_step_size], root = root, comm = comm):
+        raise BufferError("Input buffers on ranks have different shapes beyond first dimension.")
+    comm.barrier()
+
+    use_manual_transfer: int
+    input_buffer_lengths_first_dimension: list[int]|None = comm.gather(data.shape[0], root = root)
+    comm.barrier()
+    if comm.rank == root:
+        input_buffer_lengths_first_dimension: np.ndarray = np.array(input_buffer_lengths_first_dimension, dtype = int)
+        output_buffer_length_first_dimension: int = sum(input_buffer_lengths_first_dimension)
+        output_buffer_length = output_buffer_length_first_dimension * local_buffer_step_size
+        use_manual_transfer = output_buffer_length > _MAX_BUFFER_SIZE
+    synchronyse("use_manual_transfer", root = root, comm = comm)
+
+    can_continue: bool
+    if comm.rank == root:
+        can_continue = target_buffer is None or target_buffer.shape == (output_buffer_length_first_dimension, *data.shape[1:])
+    synchronyse("can_continue", root = root, comm = comm)
+    if not can_continue:
+        raise BufferError("Input buffer size/shape is not correct for the input data.")
+    
+    if comm.rank == root and target_buffer is None:
+        target_buffer = np.empty(shape = (output_buffer_length_first_dimension, *data.shape[1:]), dtype = data.dtype)
+        rank_offsets_first_dimension = np.insert(np.cumsum(input_buffer_lengths_first_dimension), 0, 0)[:-1]
+        rank_offsets = np.insert(np.cumsum(input_buffer_lengths_first_dimension * local_buffer_step_size), 0, 0)[:-1]
+
+    # The output buffer is within the maximum allowed size
+    if not use_manual_transfer:
+        comm.barrier()
+        comm.Gatherv(data, None if comm.rank != root else (target_buffer, input_buffer_lengths_first_dimension * local_buffer_step_size, rank_offsets), root = root)
+        comm.barrier()
+
+    # The output buffer is larger than the maximum buffer length
+    # Data must be communicated manualy
+    else:
+        if comm.rank == root:
+            target_buffer[:data.shape[0]] = data[:]
+        comm.barrier()
+        for i in range(1, comm.size):
+            if comm.rank == root:
+                comm.recv(target_buffer[rank_offsets_first_dimension[i - 1] : rank_offsets_first_dimension[i]], source = i)
+            elif comm.rank == i:    
+                comm.send(data, dest = root)
+            comm.barrier()
+
+    return target_buffer

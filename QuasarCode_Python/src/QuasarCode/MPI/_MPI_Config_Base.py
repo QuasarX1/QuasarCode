@@ -69,3 +69,9 @@ class _MPI_Config_Base(ABC, Generic[T]):
         _MPI_Config_Base.__update = True
         instance = cls(comm)
         instance.root = root
+
+    def allow_default_comm(self, comm: T|None = None):
+        return comm if comm is not None else self.comm
+
+    def allow_default_root(self, root: int|None = None):
+        return root if root is not None else self.root

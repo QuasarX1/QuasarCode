@@ -4,6 +4,8 @@ from typing import TypeVar, ParamSpec
 from collections.abc import Callable, Sized, Sequence
 from functools import wraps
 
+import numpy as np
+
 
 
 P = ParamSpec("P")
@@ -77,3 +79,12 @@ def mpi_slice(data: Sequence[T], comm: object|None = None, rank: int|None = None
         Sequence -> Section of the data assigned to the calling rank.
     """
     return data[:]
+
+
+
+def mpi_gather_array(data: np.ndarray, comm: object|None = None, root: int|None = None, target_buffer: np.ndarray|None = None) -> np.ndarray:
+    """
+    Gather numpy array data to the root rank.
+    If the resulting array is larger than the MPI buffer length, data will be transmitted point-to-point in rank order instead of using the Gatherv method.
+    """
+    return data
