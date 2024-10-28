@@ -95,4 +95,22 @@ def mpi_gather_array(data: np.ndarray, comm: object|None = None, root: int|None 
     Gather numpy array data to the root rank.
     If the resulting array is larger than the MPI buffer length, data will be transmitted point-to-point in rank order instead of using the Gatherv method.
     """
-    return data
+    if target_buffer is None:
+        return data
+    else:
+        target_buffer[:] = data[:]
+        return target_buffer
+
+def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None, elements_per_rank: list[int]|None = None, comm: object|None = None, root: int|None = None, target_buffer: np.ndarray|None = None) -> np.ndarray:
+    """
+    Scatter numpy array data from the root rank to all ranks.
+    If the target array is larger than the MPI buffer length, data will be transmitted point-to-point in rank order instead of using the Scatterv method.
+    """
+    if elements_this_rank is not None and elements_this_rank != data.shape[0]:
+        raise
+
+    if target_buffer is None:
+        return data
+    else:
+        target_buffer[:] = data[:]
+        return target_buffer
