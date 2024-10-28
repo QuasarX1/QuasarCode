@@ -46,6 +46,7 @@ def mpi_check_equal(value: T, /, root: int|None = None, comm: MPI.Intracomm|None
             if not are_equal:
                 break
     synchronyse("are_equal", root = root, comm = comm)
+    return are_equal
 
 
 
@@ -169,8 +170,9 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
     if not can_continue:
         raise BufferError("Input buffer size/shape is not correct for the input data.")
     
-    if comm.rank == root and target_buffer is None:
-        target_buffer = np.empty(shape = (output_buffer_length_first_dimension, *data.shape[1:]), dtype = data.dtype)
+    if comm.rank == root:
+        if target_buffer is None:
+            target_buffer = np.empty(shape = (output_buffer_length_first_dimension, *data.shape[1:]), dtype = data.dtype)
         rank_offsets_first_dimension = np.insert(np.cumsum(input_buffer_lengths_first_dimension), 0, 0)[:-1]
         rank_offsets = np.insert(np.cumsum(input_buffer_lengths_first_dimension * local_buffer_step_size), 0, 0)[:-1]
 
