@@ -130,7 +130,7 @@ def mpi_slice(data: Sequence[T], comm: MPI.Intracomm|None = None, rank: int|None
 
 
 
-def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: int|None = None, target_buffer: np.ndarray|None = None) -> np.ndarray:
+def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: int|None = None, target_buffer: np.ndarray|None = None, return_chunk_sizes: bool = False) -> np.ndarray|tuple[np.ndarray, np.ndarray]:
     """
     Gather numpy array data to the root rank.
     If the resulting array is larger than the MPI buffer length, data will be transmitted point-to-point in rank order instead of using the Gatherv method.
@@ -195,7 +195,10 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
                 comm.send(data, dest = root)
             comm.barrier()
 
-    return target_buffer
+    if return_chunk_sizes:
+        return target_buffer, input_buffer_lengths_first_dimension
+    else:
+        return target_buffer
 
 
 
