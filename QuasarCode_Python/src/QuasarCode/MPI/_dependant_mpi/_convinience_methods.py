@@ -269,7 +269,7 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
 
     if target_buffer is not None:
         if any(comm.allgather(target_buffer is not None and (target_buffer.shape[0] != elements_this_rank or target_buffer.shape[:1] != local_buffer_shape_after_first_dimension))):
-            raise BufferError("Output bufferes provided to ranks did not match their respective expected sizes/shapes.")
+            raise BufferError("Output buffers provided to ranks did not match their respective expected sizes/shapes.")
         comm.barrier()
 
     target_datatype: object
