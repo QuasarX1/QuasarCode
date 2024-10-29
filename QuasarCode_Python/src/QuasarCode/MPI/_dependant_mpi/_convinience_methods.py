@@ -247,7 +247,7 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
                 output_buffer_lengths_first_dimension = np.empty(comm.size, dtype = int)
                 rank_offsets_first_dimension = np.empty(comm.size, dtype = int)
                 for i in range(comm.size):
-                    rank_chunk_start, rank_chunk_stop = mpi_get_slice(data.shape[0], comm = comm, rank = i).indices(data.shape[0])
+                    rank_chunk_start, rank_chunk_stop, _ = mpi_get_slice(data.shape[0], comm = comm, rank = i).indices(data.shape[0])
                     output_buffer_lengths_first_dimension[i] = rank_chunk_stop - rank_chunk_start
                     rank_offsets_first_dimension[i] = rank_chunk_start
             else:
