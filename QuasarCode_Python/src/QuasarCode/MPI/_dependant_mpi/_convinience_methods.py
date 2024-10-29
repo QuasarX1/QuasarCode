@@ -212,7 +212,7 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
     comm.barrier()
 
     if comm.rank == root:
-        can_continue = data is None
+        can_continue = data is not None
     synchronyse("can_continue", root = root, comm = comm)
     if not can_continue:
         raise TypeError("Root rank did not provide any data.")
