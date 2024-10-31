@@ -311,3 +311,15 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
             comm.barrier()
 
     return target_buffer
+
+
+
+def mpi_redistribute_array_evenly(data: np.ndarray, elements_this_rank: int|None = None, elements_per_rank: list[int]|None = None, comm: MPI.Intracomm|None = None, root: int|None = None, target_buffer: np.ndarray|None = None) -> np.ndarray:
+    """
+    Send all data to the root rank for redistribution to all ranks.
+    See mpi_gather_array for information regarting the "data" parameter.
+    See mpi_scatter_array for information regarting the "elements_this_rank" and "elements_per_rank" parameters.
+    """
+#    comm = MPI_Config.allow_default_comm(comm)
+#    root = MPI_Config.allow_default_root(root)
+    return mpi_scatter_array(mpi_gather_array(data, comm = comm, root = root), target_buffer = target_buffer, elements_this_rank = elements_this_rank, elements_per_rank = elements_per_rank, comm = comm, root = root)

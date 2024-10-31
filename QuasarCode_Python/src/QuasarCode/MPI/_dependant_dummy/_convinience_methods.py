@@ -101,6 +101,8 @@ def mpi_gather_array(data: np.ndarray, comm: object|None = None, root: int|None 
         target_buffer[:] = data[:]
         return target_buffer
 
+
+
 def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None, elements_per_rank: list[int]|None = None, comm: object|None = None, root: int|None = None, target_buffer: np.ndarray|None = None) -> np.ndarray:
     """
     Scatter numpy array data from the root rank to all ranks.
@@ -114,3 +116,8 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
     else:
         target_buffer[:] = data[:]
         return target_buffer
+
+
+
+def mpi_redistribute_array_evenly(data: np.ndarray, elements_this_rank: int|None = None, elements_per_rank: list[int]|None = None, comm: object|None = None, root: int|None = None, target_buffer: np.ndarray|None = None) -> np.ndarray:
+    return data
