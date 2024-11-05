@@ -179,7 +179,7 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
     # The output buffer is within the maximum allowed size
     if not use_manual_transfer:
         comm.barrier()
-        comm.Gatherv(data, None if comm.rank != root else (target_buffer, input_buffer_lengths_first_dimension * local_buffer_step_size, rank_offsets), root = root)
+        comm.Gatherv(data, None if comm.rank != root else (target_buffer, (input_buffer_lengths_first_dimension * local_buffer_step_size, rank_offsets)), root = root)
         comm.barrier()
 
     # The output buffer is larger than the maximum buffer length
@@ -294,7 +294,7 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
     # The input buffer is within the maximum allowed size
     if not use_manual_transfer:
         comm.barrier()
-        comm.Scatter(None if comm.rank != root else (data, output_buffer_lengths_first_dimension * buffer_step_size, rank_offsets), target_buffer, root = root)
+        comm.Scatterv(None if comm.rank != root else (data, (output_buffer_lengths_first_dimension * buffer_step_size, rank_offsets)), target_buffer, root = root)
         comm.barrier()
 
     # The input buffer is larger than the maximum buffer length
