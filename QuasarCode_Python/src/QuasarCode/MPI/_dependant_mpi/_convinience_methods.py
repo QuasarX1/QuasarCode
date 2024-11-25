@@ -190,9 +190,9 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
         comm.barrier()
         for i in range(1, comm.size):
             if comm.rank == root:
-                comm.recv(target_buffer[rank_offsets_first_dimension[i - 1] : rank_offsets_first_dimension[i]], source = i)
+                comm.Recv(target_buffer[rank_offsets_first_dimension[i] : rank_offsets_first_dimension[i] + input_buffer_lengths_first_dimension[i]], source = i)
             elif comm.rank == i:
-                comm.send(data, dest = root)
+                comm.Send(data, dest = root)
             comm.barrier()
 
     if return_chunk_sizes:
@@ -301,13 +301,13 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
     # Data must be communicated manualy
     else:
         if comm.rank == root:
-            target_buffer[:] = data[:rank_offsets_first_dimension[1]]
+            target_buffer[:] = data[:rank_offsets_first_dimension[0]]
         comm.barrier()
         for i in range(1, comm.size):
             if comm.rank == root:
-                comm.send(data[rank_offsets_first_dimension[i - 1] : rank_offsets_first_dimension[i]], dest = i)
+                comm.Send(data[rank_offsets_first_dimension[i] : rank_offsets_first_dimension[i] + output_buffer_lengths_first_dimension[i] ], dest = i)
             elif comm.rank == i:
-                comm.recv(target_buffer, source = root)
+                comm.Recv(target_buffer, source = root)
             comm.barrier()
 
     return target_buffer
