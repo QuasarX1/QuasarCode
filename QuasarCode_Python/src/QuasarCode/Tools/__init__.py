@@ -13,3 +13,4 @@ from ._common_casts import *
 from . import StringLiterals
 from . import Validators
 from ._edit_locals import update_locals, read_locals, use_locals
+from ._stopwatch import IStopwatch, SimpleStopwatch

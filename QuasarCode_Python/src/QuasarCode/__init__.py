@@ -27,6 +27,6 @@ from . import Science
 from . import Tools
 
 from .Tools._directorys_and_imports import source_file_relitive_add_to_path
-from .IO.Text import Console
+from .IO.Text import Console, Stopwatch
 from .edp import Event
 from .Tools._async import start_main_async
