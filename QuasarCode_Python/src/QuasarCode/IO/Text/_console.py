@@ -168,7 +168,7 @@ class Console(object):
             Console.__print("<DBUG>", args, show_insert = True, **kwargs)
     @staticmethod
     def print_debug(*args: str, **kwargs) -> None:
-        Console.print_debug(*args, verbosity_level = None, **kwargs)
+        Console.print_verbose_debug(*args, verbosity_level = None, **kwargs)
 
     @staticmethod
     def custom_print(prefix: str, *args: str, show_insert: bool = True, **kwargs) -> None:
@@ -186,7 +186,7 @@ class Console(object):
         if _settings_object.debug and (verbosity_level is None or _settings_object.verbose and verbosity_level >= _settings_object.verbosity_level):
             Console.custom_print(prefix, *args, show_insert = show_insert, **kwargs)
     def custom_print_debug(prefix: str, *args: str, show_insert: bool = True, **kwargs) -> None:
-        Console.custom_print_verbose_debug(prefix, *args, show_insert = show_insert, **kwargs)
+        Console.custom_print_verbose_debug(prefix, *args, show_insert = show_insert, verbosity_level = None, **kwargs)
 
     @staticmethod
     def pause(exit = False):
