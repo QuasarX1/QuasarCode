@@ -301,7 +301,7 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
     # Data must be communicated manualy
     else:
         if comm.rank == root:
-            target_buffer[:] = data[:rank_offsets_first_dimension[0]]
+            target_buffer[:] = data[:output_buffer_lengths_first_dimension[0]]
         comm.barrier()
         for i in range(1, comm.size):
             if comm.rank == root:
