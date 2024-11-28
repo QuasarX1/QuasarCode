@@ -46,7 +46,7 @@ class Console(object):
                     process_list.append(str(Console.__process_id))
                 insert_text += "(" + ",".join(process_list) + ") "#TODO: add padding for numbers with fewer digits than the largest number in each category
             if Console.__show_time:
-                insert_text += f"[{Console.__stopwatch.get_elapsed_time():.3f}] "
+                insert_text += f"[{Console.__stopwatch.get_elapsed_time():10.3f}] "
         insert_test_length = len(insert_text)
 
         # Indent newlines
