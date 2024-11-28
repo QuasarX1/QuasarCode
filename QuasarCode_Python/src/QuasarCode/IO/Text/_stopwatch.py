@@ -57,6 +57,10 @@ class Stopwatch(IStopwatch):
     def start(self) -> None:
         self.__internal_stopwatch.start()
 
+    def print_start(self) -> None:
+        self.start()
+        Console.custom_print("|TIME|", f"{self.__name}: START {Stopwatch.__strftime(self.get_start_time())}", show_insert = True)
+
     def synchronise_start(self, synchronise: IStopwatch) -> None:
         self.__internal_stopwatch.synchronise_start(synchronise)
 
@@ -75,6 +79,16 @@ class Stopwatch(IStopwatch):
         dt = self.stop()
         Console.custom_print("|TIME|", f"{self.__name}: LAP {Stopwatch.__strftime(dt)} ({Stopwatch.__strftime(self.get_elapsed_time())}) STOPPED", show_insert = True)
         return dt
+    
+    def __enter__(self) -> "Stopwatch":
+        self.start()
+        Console.custom_print("|TIME|", f"{self.__name}: STARTED @ {Stopwatch.__strftime(self.start_time)}", show_insert = True)
+        return self
+
+    def __exit__(self, type, value, tb) -> None:
+        self.stop()
+        Console.custom_print("|TIME|", f"{self.__name}: STOPPED @ {Stopwatch.__strftime(self.stop_time)}", show_insert = True)
+        Console.custom_print("|TIME|", f"{self.__name}: ELAPSED   {Stopwatch.__strftime(self.get_elapsed_time())}", show_insert = True)
     
     def get_start_time(self) -> float:
         return self.__internal_stopwatch.get_start_time()
@@ -115,6 +129,16 @@ class Stopwatch(IStopwatch):
     def stopped(self) -> bool:
         return self.__internal_stopwatch.stopped
 
+    @property
+    def start_time(self) -> float|None:
+        return self.__internal_stopwatch.start_time
+    @property
+    def lap_times(self) -> tuple[float]:
+        return self.__internal_stopwatch.lap_times
+    @property
+    def stop_time(self) -> float|None:
+        return self.__internal_stopwatch.stop_time
+
     def __create_print_sting__elapsed_time(self) -> str:
         return f"{self.__name}: {Stopwatch.__strftime(self.get_elapsed_time())}"
     def print_elapsed_time(self, show_insert: bool = True, **kwargs) -> None:
@@ -133,9 +157,9 @@ class Stopwatch(IStopwatch):
     def print_verbose_elapsed_time_lap(self, show_insert: bool = True, verbosity_level: int = -1, **kwargs) -> None:
         Console.custom_print_verbose("|TIME|", self.__create_print_sting__elapsed_time_lap(), show_insert = show_insert, verbosity_level = verbosity_level, **kwargs)
     def print_verbose_debug_elapsed_time_lap(self, show_insert: bool = True, verbosity_level: int = -1, **kwargs) -> None:
-        Console.custom_print_verbose_debug("|TIME|", self.__create_print_sting__elapsed_time_lap(), show_insert = show_insert, verbosity_level = verbosity_level, **kwargs)
+        Console.custom_print_verbose_debug("<TIME>", self.__create_print_sting__elapsed_time_lap(), show_insert = show_insert, verbosity_level = verbosity_level, **kwargs)
     def print_debug_elapsed_time_lap(self, show_insert: bool = True, **kwargs) -> None:
-        Console.custom_print_debug("|TIME|", self.__create_print_sting__elapsed_time_lap(), show_insert = show_insert, **kwargs)
+        Console.custom_print_debug("<TIME>", self.__create_print_sting__elapsed_time_lap(), show_insert = show_insert, **kwargs)
 
     def __create_print_sting__elapsed_time_last_lap(self) -> str:
         return f"{self.__name}: LAP(-1) {Stopwatch.__strftime(self.get_elapsed_time_last_lap())}"
@@ -144,6 +168,6 @@ class Stopwatch(IStopwatch):
     def print_verbose_elapsed_time_last_lap(self, show_insert: bool = True, verbosity_level: int = -1, **kwargs) -> None:
         Console.custom_print_verbose("|TIME|", self.__create_print_sting__elapsed_time_last_lap(), show_insert = show_insert, verbosity_level = verbosity_level, **kwargs)
     def print_verbose_debug_elapsed_time_last_lap(self, show_insert: bool = True, verbosity_level: int = -1, **kwargs) -> None:
-        Console.custom_print_verbose_debug("|TIME|", self.__create_print_sting__elapsed_time_last_lap(), show_insert = show_insert, verbosity_level = verbosity_level, **kwargs)
+        Console.custom_print_verbose_debug("<TIME>", self.__create_print_sting__elapsed_time_last_lap(), show_insert = show_insert, verbosity_level = verbosity_level, **kwargs)
     def print_debug_elapsed_time_last_lap(self, show_insert: bool = True, **kwargs) -> None:
-        Console.custom_print_debug("|TIME|", self.__create_print_sting__elapsed_time_last_lap(), show_insert = show_insert, **kwargs)
+        Console.custom_print_debug("<TIME>", self.__create_print_sting__elapsed_time_last_lap(), show_insert = show_insert, **kwargs)

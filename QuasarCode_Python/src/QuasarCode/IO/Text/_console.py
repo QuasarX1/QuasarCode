@@ -12,6 +12,14 @@ class Console(object):
     """
 
     __stopwatch: IStopwatch = SimpleStopwatch.start_new()
+    @staticmethod
+    def reset_stopwatch(synchronise: IStopwatch|None = None) -> None:
+        Console.__stopwatch.stop()
+        Console.__stopwatch.reset()
+        if synchronise is not None:
+            Console.__stopwatch.synchronise_start(synchronise)
+        else:
+            Console.__stopwatch.start()
 
     __print_newline_indentation: str = " " * 10
     @staticmethod

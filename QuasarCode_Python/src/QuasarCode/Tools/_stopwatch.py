@@ -49,7 +49,7 @@ class IStopwatch(ABC):
     def start(self) -> None:
         raise NotImplementedError()
     @abstractmethod
-    def synchronise_start(self) -> None:
+    def synchronise_start(self, synchronise: "IStopwatch") -> None:
         raise NotImplementedError()
     @abstractmethod
     def lap(self) -> float:
@@ -112,6 +112,19 @@ class IStopwatch(ABC):
     @property
     @abstractmethod
     def stopped(self) -> bool:
+        raise NotImplementedError()
+
+    @property
+    @abstractmethod
+    def start_time(self) -> float|None:
+        raise NotImplementedError()
+    @property
+    @abstractmethod
+    def lap_times(self) -> tuple[float]:
+        raise NotImplementedError()
+    @property
+    @abstractmethod
+    def stop_time(self) -> float|None:
         raise NotImplementedError()
     
 
@@ -203,6 +216,7 @@ class SimpleStopwatch(IStopwatch):
     def get_start_time(self) -> float:
         if not self.__running and self.__stop_time is None:
             raise StopwatchNotStartedError("Unable to get start time of a stopwatch that has not yet been started.")
+        return self.__lap_times[0]
     
     def get_elapsed_time(self) -> float:
         t = time.time()
@@ -258,3 +272,24 @@ class SimpleStopwatch(IStopwatch):
     @property
     def stopped(self) -> bool:
         return self.__stop_time is not None
+
+    @property
+    def start_time(self) -> float|None:
+        if not self.started:
+            return None
+        else:
+            return self.__lap_times[0]
+    @property
+    def lap_times(self) -> tuple[float]:
+        if not self.started:
+            return tuple()
+        elif not self.stopped:
+            return tuple(self.__lap_times[1:])
+        else:
+            return tuple(self.__lap_times[1:-1])
+    @property
+    def stop_time(self) -> float|None:
+        if not self.stopped:
+            return None
+        else:
+            return self.__lap_times[-1]

@@ -7,6 +7,7 @@ from ..IO.Text._console import Console# print_info, print_verbose_info, print_wa
 from .._global_settings import settings_object as _settings_object
 from ..MPI import get_mpi_rank
 from ..Tools._async import start_main_async
+from ..IO.Text._stopwatch import Stopwatch
 
 T = TypeVar("T")
 U = TypeVar("U")
@@ -629,6 +630,8 @@ class ScriptWrapper(object):
         elif isinstance(version, str):
             version = _VersionInfomation.from_string(version)
 
+        self.__stopwatch: Stopwatch = Stopwatch(command if command is not None else filename if filename is not None else "Script")
+
         self.__parameters:               ScriptWrapper_ParamSpec       = parameters
         self.__command_name:             Union[str, None]              = command
         self.__file_name:                Union[str, None]              = filename
@@ -641,7 +644,6 @@ class ScriptWrapper(object):
 
         self.__help_string: str = ""
         self.__render_help_string()
-
 
         self.__parameter_lookup_by_name: Dict[str, ScriptWrapper_ParamBase] = { p.name : p for p in self.__parameters }
         self.__parameter_lookup_by_short_name: Dict[str, ScriptWrapper_ParamBase] = { p.short_name : p for p in self.__parameters if p.short_name is not None }
@@ -755,6 +757,11 @@ Commandline arguments & flags ( p = required positional parameter,
                 param.validate()
         self.__arguments_have_been_parsed = True
 
+    @property
+    def stopwatch(self) -> Stopwatch:
+        self.__stopwatch.print_start
+        return self.__stopwatch
+
     @staticmethod
     def __run(func):
         @wraps(func)
@@ -766,23 +773,32 @@ Commandline arguments & flags ( p = required positional parameter,
 
                 if not self.use_MPI or get_mpi_rank() == 0:
                     # Either the first MPI process or MPI isn't active
-                    return func(self, *args, **kwargs)
+                    self.__stopwatch.print_start()
+                    Console.reset_stopwatch(self.__stopwatch)
+                    result = func(self, *args, **kwargs)
+                    self.__stopwatch.print_stop()
+
                 else:
                     if not _settings_object.mpi_avalible:
-                        raise ImportError("MPI required but not avalible.")
-
+                        raise ImportError("MPI required but not available.")
                     # MPI active and not the first process
                     is_root_process = False
-                    return func(self, *args, **kwargs)
+                    self.__stopwatch.start()
+                    Console.reset_stopwatch(self.__stopwatch)
+                    result = func(self, *args, **kwargs)
+                    self.__stopwatch.stop()
+
+                return result
                     
             except Exception as e:
                 if is_root_process or self.MPI_print_non_root_process_errors:
                     has_message = str(e) != ""
-                    Console.print_error(f"Execution encountered an error{(':' if has_message else ' (no details avalible).') if _settings_object.debug or _settings_object.verbose else '.'}")
+                    Console.print_error(f"Execution encountered an error{(':' if has_message else ' (no details available).') if _settings_object.debug or _settings_object.verbose else '.'}")
                     Console.print_debug("Traceback (most recent call last):\n" + "".join(traceback.format_tb(e.__traceback__)) + type(e).__name__ + (f": {str(e)}" if has_message else ""))
                     if has_message and not _settings_object.debug:
                         Console.print_error(str(e))
-                    Console.print_info("Terminating.")
+                    Console.print_info("Terminating...")
+                    self.stopwatch.print_stop()
 
         return inner
 
