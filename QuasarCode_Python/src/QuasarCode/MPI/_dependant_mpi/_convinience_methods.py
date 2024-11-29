@@ -190,9 +190,31 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
         comm.barrier()
         for i in range(1, comm.size):
             if comm.rank == root:
-                comm.Recv(target_buffer[rank_offsets_first_dimension[i] : rank_offsets_first_dimension[i] + input_buffer_lengths_first_dimension[i]], source = i)
+                total_expected_elements_all_dimensions = input_buffer_lengths_first_dimension[i] * local_buffer_step_size
+                if total_expected_elements_all_dimensions <= _MAX_BUFFER_SIZE:
+                    # Data can be transferred in a single function call
+                    comm.Recv(target_buffer[rank_offsets_first_dimension[i] : rank_offsets_first_dimension[i] + input_buffer_lengths_first_dimension[i]], source = i)
+                else:
+                    # Data is too large be transferred in a single function call
+                    # Multiple calls required
+                    local_chunk_offset: int = 0
+                    elements_first_dimension_remaining: int = input_buffer_lengths_first_dimension[i]
+                    while elements_first_dimension_remaining > 0:
+                        chunk_size_this_transfer = _MAX_BUFFER_SIZE if elements_first_dimension_remaining > _MAX_BUFFER_SIZE else elements_first_dimension_remaining
+                        comm.Recv(target_buffer[rank_offsets_first_dimension[i] + local_chunk_offset : rank_offsets_first_dimension[i] + local_chunk_offset + chunk_size_this_transfer], source = i)
+                        local_chunk_offset += chunk_size_this_transfer
+                        elements_first_dimension_remaining -= chunk_size_this_transfer
             elif comm.rank == i:
-                comm.Send(data, dest = root)
+                if np.prod(data.shape) <= _MAX_BUFFER_SIZE:
+                    comm.Send(data, dest = root)
+                else:
+                    local_chunk_offset: int = 0
+                    elements_first_dimension_remaining: int = data.shape[0]
+                    while elements_first_dimension_remaining > 0:
+                        chunk_size_this_transfer = _MAX_BUFFER_SIZE if elements_first_dimension_remaining > _MAX_BUFFER_SIZE else elements_first_dimension_remaining
+                        comm.Send(data[local_chunk_offset : local_chunk_offset + chunk_size_this_transfer], dest = root)
+                        local_chunk_offset += chunk_size_this_transfer
+                        elements_first_dimension_remaining -= chunk_size_this_transfer
             comm.barrier()
 
     if return_chunk_sizes:
@@ -305,9 +327,31 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
         comm.barrier()
         for i in range(1, comm.size):
             if comm.rank == root:
-                comm.Send(data[rank_offsets_first_dimension[i] : rank_offsets_first_dimension[i] + output_buffer_lengths_first_dimension[i] ], dest = i)
+                total_expected_elements_all_dimensions = output_buffer_lengths_first_dimension[i] * buffer_step_size
+                if total_expected_elements_all_dimensions <= _MAX_BUFFER_SIZE:
+                    # Data can be transferred in a single function call
+                    comm.Send(data[rank_offsets_first_dimension[i] : rank_offsets_first_dimension[i] + output_buffer_lengths_first_dimension[i] ], dest = i)
+                else:
+                    # Data is too large be transferred in a single function call
+                    # Multiple calls required
+                    local_chunk_offset: int = 0
+                    elements_first_dimension_remaining: int = output_buffer_lengths_first_dimension[i]
+                    while elements_first_dimension_remaining > 0:
+                        chunk_size_this_transfer = _MAX_BUFFER_SIZE if elements_first_dimension_remaining > _MAX_BUFFER_SIZE else elements_first_dimension_remaining
+                        comm.Send(data[rank_offsets_first_dimension[i] + local_chunk_offset : rank_offsets_first_dimension[i] + local_chunk_offset + chunk_size_this_transfer], dest = i)
+                        local_chunk_offset += chunk_size_this_transfer
+                        elements_first_dimension_remaining -= chunk_size_this_transfer
             elif comm.rank == i:
-                comm.Recv(target_buffer, source = root)
+                if np.prod(data.shape) <= _MAX_BUFFER_SIZE:
+                    comm.Recv(target_buffer, source = root)
+                else:
+                    local_chunk_offset: int = 0
+                    elements_first_dimension_remaining: int = data.shape[0]
+                    while elements_first_dimension_remaining > 0:
+                        chunk_size_this_transfer = _MAX_BUFFER_SIZE if elements_first_dimension_remaining > _MAX_BUFFER_SIZE else elements_first_dimension_remaining
+                        comm.Recv(target_buffer[local_chunk_offset : local_chunk_offset + chunk_size_this_transfer], source = root)
+                        local_chunk_offset += chunk_size_this_transfer
+                        elements_first_dimension_remaining -= chunk_size_this_transfer
             comm.barrier()
 
     return target_buffer
