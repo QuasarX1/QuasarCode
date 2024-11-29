@@ -342,11 +342,11 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
                         local_chunk_offset += chunk_size_this_transfer
                         elements_first_dimension_remaining -= chunk_size_this_transfer
             elif comm.rank == i:
-                if np.prod(data.shape) <= _MAX_BUFFER_SIZE:
+                if elements_this_rank * np.prod(local_buffer_shape_after_first_dimension) <= _MAX_BUFFER_SIZE:
                     comm.Recv(target_buffer, source = root)
                 else:
                     local_chunk_offset: int = 0
-                    elements_first_dimension_remaining: int = data.shape[0]
+                    elements_first_dimension_remaining: int = elements_this_rank
                     while elements_first_dimension_remaining > 0:
                         chunk_size_this_transfer = _MAX_BUFFER_SIZE if elements_first_dimension_remaining > _MAX_BUFFER_SIZE else elements_first_dimension_remaining
                         comm.Recv(target_buffer[local_chunk_offset : local_chunk_offset + chunk_size_this_transfer], source = root)
