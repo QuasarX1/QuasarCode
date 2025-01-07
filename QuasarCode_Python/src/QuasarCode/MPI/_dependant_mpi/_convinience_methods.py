@@ -367,3 +367,303 @@ def mpi_redistribute_array_evenly(data: np.ndarray, elements_this_rank: int|None
 #    comm = MPI_Config.allow_default_comm(comm)
 #    root = MPI_Config.allow_default_root(root)
     return mpi_scatter_array(mpi_gather_array(data, comm = comm, root = root), target_buffer = target_buffer, elements_this_rank = elements_this_rank, elements_per_rank = elements_per_rank, comm = comm, root = root)
+
+
+
+def mpi_argsort(
+    data: np.ndarray,
+    use_index_dtype = np.int64,
+    output_destination_ranks: bool = False,
+    output_inplace_target_indexes: bool = False
+) -> np.ndarray|tuple[np.ndarray, np.ndarray]|tuple[np.ndarray, np.ndarray, np.ndarray]:
+
+    # Wait for all ranks to be ready
+    mpi_barrier()
+
+    # Compute the total length accross all ranks and index bounaries
+    elements_per_rank: list[int] = MPI_Config.comm.allgather(data.shape[0])
+    total_data_length = sum(elements_per_rank)
+    rank_boundary_indexes: np.ndarray = np.array([0, *np.cumsum(elements_per_rank)], dtype = use_index_dtype) # boundarys are half-open [...)
+    rank_global_start_index = rank_boundary_indexes[MPI_Config.rank]
+    rank_global_end_index = rank_boundary_indexes[MPI_Config.rank + 1]
+
+    # Create somwhere to store the final results of the argsort
+    sorted_indexes = np.empty(shape = data.shape[0], dtype = use_index_dtype)
+    if output_inplace_target_indexes:
+        global_sorted_position_indexes = np.empty(shape = data.shape[0], dtype = use_index_dtype)
+    if output_destination_ranks:
+        destination_rank = np.empty(shape = data.shape[0], dtype = np.int64)
+
+    # Sort the data locally
+    # The smallest value accross all datasets must now be in the first position of the argsort of one of the ranks
+    local_sort_indexes = np.argsort(data)
+    local_sort_indexes_index: int|None = 0
+
+    mpi_barrier()
+
+    if MPI_Config.is_root:
+        # List of rank indexes that can be filtered along with the selection options
+        rank_indexes = np.arange(MPI_Config.comm_size)
+        # Create a staging area to hold the smallest unselected value from each rank
+        options = np.empty(shape = (MPI_Config.comm_size, *data.shape[1:]), dtype = data.dtype)
+        # Create a mask that can be used to ignore ranks that have no remaining test values
+        valid_options_mask = np.full(options.shape, True)
+
+        # Set the first test value locally
+        if data.shape[0] == 0:
+            valid_options_mask[0] = False
+        else:
+            options[0] = data[local_sort_indexes[local_sort_indexes_index]]
+
+        # Check all other ranks for data being avalible then recive the first value from such ranks
+        for rank in range(0, MPI_Config.comm_size):
+            mpi_barrier()
+            # Ignore the root rank as that has already been handled
+            if rank == MPI_Config.root:
+                continue
+            has_value_avalible = MPI_Config.comm.recv(source = rank)
+            mpi_barrier()
+            if has_value_avalible:
+                options[rank] = MPI_Config.comm.recv(source = rank)
+            else:
+                valid_options_mask[rank] = False
+
+    else:
+        # Loop over all non-root ranks
+        for rank in range(0, MPI_Config.comm_size):
+            mpi_barrier()
+            # Ignore the root rank as that has already been handled
+            if rank == MPI_Config.root:
+                continue
+            # Wait for this rank's turn
+            if MPI_Config.rank == rank:
+                if data.shape[0] == 0:
+                    # No data avalible
+                    MPI_Config.comm.send(False, dest = MPI_Config.root)
+                    mpi_barrier()
+                else:
+                    # Data is avalible so confirm this then send the smallest element
+                    MPI_Config.comm.send(True, dest = MPI_Config.root)
+                    mpi_barrier()
+                    MPI_Config.comm.send(data[local_sort_indexes[local_sort_indexes_index]], dest = MPI_Config.root)
+            else:
+                # Everyone needs to call the barrier
+                mpi_barrier()
+
+    mpi_barrier()
+
+    # Select the lowest element a number of times equal to the number of total data elements
+    for sorted_element_index in range(total_data_length):
+
+        # Select the lowest avalible option on the root rank then update all ranks with the rank that sent the smallest value
+        rank_with_next_value: int
+        if MPI_Config.is_root:
+            rank_with_next_value = rank_indexes[valid_options_mask][np.argmin(options[valid_options_mask])]
+        synchronyse("rank_with_next_value")
+
+        global_index_of_selected_value: int
+
+        # If this rank is the one with the current smallest value
+        if MPI_Config.rank == rank_with_next_value:
+            # Update the result for the current smallest item on this rank
+            global_index_of_selected_value = rank_global_start_index + local_sort_indexes[local_sort_indexes_index]
+            if output_inplace_target_indexes:
+                global_sorted_position_indexes[local_sort_indexes[local_sort_indexes_index]] = sorted_element_index
+            if output_destination_ranks:
+                destination_rank[local_sort_indexes[local_sort_indexes_index]] = np.where(rank_boundary_indexes <= sorted_element_index)[0][-1]
+            # Move to the next item
+            local_sort_indexes_index += 1
+            # If there is no next item, scrub the invalid index
+            if local_sort_indexes_index >= data.shape[0]:
+                local_sort_indexes_index = None
+
+            # If the root rank has the selected value, just do all the updates locally
+            if MPI_Config.is_root:
+                if local_sort_indexes_index is not None:
+                    options[0] = data[local_sort_indexes[local_sort_indexes_index]]
+                else:
+                    valid_options_mask[0] = False
+                # Every other rank will have called an extra barrier to account for the usual status check call, so call anyway to match
+                mpi_barrier()
+
+            # If not the root rank, send the next lowest value to the root
+            else:
+                if local_sort_indexes_index is not None:
+                    MPI_Config.comm.send(True, dest = MPI_Config.root)
+                    mpi_barrier()
+                    MPI_Config.comm.send(data[local_sort_indexes[local_sort_indexes_index]], dest = MPI_Config.root)
+                else:
+                    MPI_Config.comm.send(False, dest = MPI_Config.root)
+                    mpi_barrier()
+
+        # If the root rank does not contain the selected value, it still needs to recive an updated value
+        elif MPI_Config.is_root:
+            has_value_avalible = MPI_Config.comm.recv(source = rank_with_next_value)
+            mpi_barrier()
+            if has_value_avalible:
+                options[rank_with_next_value] = MPI_Config.comm.recv(source = rank_with_next_value)
+            else:
+                valid_options_mask[rank_with_next_value] = False
+
+        else:
+            # Uninvolved ranks still need to call the barrier!
+            mpi_barrier()
+
+        mpi_barrier()
+
+        synchronyse("global_index_of_selected_value", root = rank_with_next_value)
+
+        mpi_barrier()
+
+        if rank_global_start_index <= sorted_element_index and sorted_element_index < rank_global_end_index:
+            sorted_indexes[sorted_element_index - rank_global_start_index] = global_index_of_selected_value
+
+        mpi_barrier()
+
+    mpi_barrier()
+
+    result = [sorted_indexes]
+    if output_destination_ranks:
+        result.append(destination_rank)
+    if output_inplace_target_indexes:
+        result.append(global_sorted_position_indexes)
+    return result[0] if len(result) == 1 else tuple(result)
+
+
+
+def mpi_sort(
+        data: np.ndarray,
+        order: tuple[np.ndarray, np.ndarray]|None = None,
+        result_data_buffer: np.ndarray|None = None,
+        assume_memory_limitation: bool = False
+) -> np.ndarray:
+    """
+    Sort a set of data in parallel.
+
+    Parameters:
+
+                           `numpy.ndarray` `data`                     -> The data to be sorted (along axis = 0)
+
+        (`numpy.ndarray`, `numpy.ndarray`) `order`                    -> The ordering information from `mpi_argsort(...)[1:]` (target_ranks, inplace_sort_indexes) (optional)
+
+                           `numpy.ndarray` `result_data_buffer`       -> Buffer to place results into (optional)
+
+                                    `bool` `assume_memory_limitation` -> Perform the sort in a memory-efficient way, at the cost of speed (defaults to False - fastest)
+
+    Returns:
+        `numpy.ndarray` -> The data in a sorted order distributed accross each rank using the same distribution as the input data
+    """
+    if order is None:
+        order = mpi_argsort(data, output_destination_ranks = True, output_inplace_target_indexes = True)[1:]
+
+    sorted_data: np.ndarray
+    unscrambling_indexes: np.ndarray
+    if result_data_buffer is not None:
+        sorted_data = result_data_buffer
+    if not assume_memory_limitation:
+        # Might as well request the memory in parallel
+        if result_data_buffer is None:
+            sorted_data = np.empty_like(data)
+        unscrambling_indexes = np.empty(shape = data.shape[0], dtype = np.int64)
+
+    for target_rank in range(MPI_Config.comm_size):
+        mpi_barrier()
+
+        rank_is_target = MPI_Config.check_is_root(target_rank)
+        send_mask = order[0] == target_rank
+
+        if assume_memory_limitation and rank_is_target:
+            # Avoid requesting the memory until absolutely nessessary
+            if result_data_buffer is None:
+                sorted_data = np.empty_like(data)
+            unscrambling_indexes = np.empty(shape = data.shape[0], dtype = np.int64)
+
+        mpi_gather_array(    data[send_mask], root = target_rank, target_buffer =          sorted_data if rank_is_target else None)
+        mpi_gather_array(order[1][send_mask], root = target_rank, target_buffer = unscrambling_indexes if rank_is_target else None)
+
+        if assume_memory_limitation:
+            # Do the unscramble now to avoid unnessessary memory being held
+            # This will be slower as all ranks must wait for this to be completed
+            if rank_is_target:
+                unscrambled = np.empty_like(sorted_data)
+                unscrambled[unscrambling_indexes - unscrambling_indexes.min()] = sorted_data
+                sorted_data = unscrambled[:]
+                del unscrambling_indexes
+                del unscrambled
+
+    mpi_barrier()
+
+    if not assume_memory_limitation:
+        # Do the unscramble at the end
+        # This will be faster as this can be done in parallel, but uses more memory as the unscramble indexes are stored accross all calls
+        unscrambled = np.empty_like(sorted_data)
+        unscrambled[unscrambling_indexes - unscrambling_indexes.min()] = sorted_data
+        sorted_data = unscrambled[:]
+        del unscrambling_indexes
+        del unscrambled
+
+    return sorted_data
+
+
+
+def mpi_calculate_reorder(
+    input_ids: np.ndarray,
+    output_ids: np.ndarray,
+    assume_memory_limitation: bool = False
+) -> tuple[np.ndarray, np.ndarray]:
+    order = mpi_argsort(input_ids, output_destination_ranks = True, output_inplace_target_indexes = True)
+    reverse_order = mpi_argsort(order[0], output_destination_ranks = True, output_inplace_target_indexes = True)
+    del order
+
+    target_sort_order = mpi_argsort(output_ids, output_destination_ranks = True, output_inplace_target_indexes = True)
+    reverse_target_sort_order = mpi_argsort(target_sort_order[0], output_destination_ranks = True, output_inplace_target_indexes = True)
+    del target_sort_order
+
+    return (
+        mpi_sort(data = reverse_target_sort_order[1], order = reverse_order[1:], assume_memory_limitation = assume_memory_limitation),
+        mpi_sort(data = reverse_target_sort_order[2], order = reverse_order[1:], assume_memory_limitation = assume_memory_limitation)
+    )
+
+
+
+def mpi_reorder(
+    input_ids: np.ndarray,
+    input_data: np.ndarray,
+    output_ids: np.ndarray,
+    output_data_buffer: np.ndarray|None = None,
+    assume_memory_limitation: bool = False
+) -> np.ndarray:
+    order = mpi_calculate_reorder(input_ids, output_ids)
+    return mpi_sort(
+        data = input_data,
+        order = order,
+        result_data_buffer = output_data_buffer,
+        assume_memory_limitation = assume_memory_limitation
+    )
+
+
+
+def mpi_apply_reorder(
+    input_data: np.ndarray,
+    order: tuple[np.ndarray, np.ndarray],
+    output_data_buffer: np.ndarray|None = None,
+    assume_memory_limitation: bool = False
+) -> np.ndarray:
+    """
+    Wrapper for `mpi_sort` using a subset of the parameter names from `mpi_reorder`.
+
+    `input_data` -> `data`
+
+    `order` -> `order`
+
+    `output_data_buffer` -> `result_data_buffer`
+
+    `assume_memory_limitation` -> `assume_memory_limitation`
+    """
+    return mpi_sort(
+        data = input_data,
+        order = order,
+        result_data_buffer = output_data_buffer,
+        assume_memory_limitation = assume_memory_limitation
+    )
+
