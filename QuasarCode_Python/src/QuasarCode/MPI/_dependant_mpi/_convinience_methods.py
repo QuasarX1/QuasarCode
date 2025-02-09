@@ -1,16 +1,19 @@
+from typing import cast as typing_cast, Any, TypeVar, ParamSpec
+from _typeshed import SupportsAdd
+from collections.abc import Callable, Sized, Sequence
+from functools import wraps, singledispatch
+
+from mpi4py import MPI
+import numpy as np
+
 from .._independant_mpi._mpi_config import mpi_config as MPI_Config
 from ...Tools._edit_locals import use_locals
-
-from typing import TypeVar, ParamSpec
-from collections.abc import Callable, Sized, Sequence
-from mpi4py import MPI
-from functools import wraps, singledispatch
-import numpy as np
 
 
 
 P = ParamSpec("P")
 T = TypeVar("T")
+U = TypeVar("U", bound = SupportsAdd[Any, Any])
 _MAX_BUFFER_SIZE = 2**31 - 1 # Max length of an signed int32
 
 
@@ -76,6 +79,78 @@ def mpi_barrier(comm: MPI.Intracomm|None = None) -> None:
     Wait for all ranks in the communicator to reach this barrier.
     """
     (comm if comm is not None else MPI_Config.comm).barrier()
+
+
+
+def mpi_sum(data: Sequence[U], comm: MPI.Intracomm|None = None, root: int|None = None) -> U:
+    """
+    Calculate the sum of data across multiple ranks.
+    """
+
+    comm = MPI_Config.allow_default_comm(comm)
+    root = MPI_Config.allow_default_root(root)
+
+    comm.barrier()
+
+    local_sum: U|None = sum(data[1:], start = data[0]) if len(data) > 1 else data[0] if len(data) > 0 else None
+
+    result: U
+    has_valid_data: bool
+    rank_sums: list[U|None]|None = comm.gather(local_sum, root = root)
+    if MPI_Config.check_is_root(root = root):
+        valid_data: list[U] = [v for v in typing_cast(list[U], rank_sums) if v is not None]
+        has_valid_data = len(valid_data) > 0
+        if has_valid_data:
+            result = sum(valid_data[1:], start = valid_data[0]) if len(valid_data) > 1 else valid_data[0]
+
+    synchronyse("has_valid_data", root = root, comm = comm)
+    if not has_valid_data:
+        raise IndexError("No data provided by any rank.")
+
+    synchronyse("result", root = root, comm = comm)
+
+    comm.barrier()
+
+    return result
+
+
+
+def mpi_mean(data: Sequence[float], weights: Sequence[float]|None = None, comm: MPI.Intracomm|None = None, root: int|None = None) -> float:
+    """
+    Calculate the mean of data across multiple ranks.
+    Optionally, specify weights to calculate the weighted mean.
+    """
+
+    comm = MPI_Config.allow_default_comm(comm)
+    root = MPI_Config.allow_default_root(root)
+
+    comm.barrier()
+
+    local_sum: float = np.sum(data) if weights is None else np.sum(np.array(data) * np.array(weights))
+    local_summed_divisor: float = len(data) if weights is None else np.sum(weights)
+
+    result: float
+    divide_by_zero: bool
+    rank_sums: list[float]|None = comm.gather(local_sum, root = root)
+    rank_divisor_sums: list[float]|None = comm.gather(local_summed_divisor, root = root)
+    if MPI_Config.check_is_root(root = root):
+        divisor = sum(typing_cast(list[float], rank_divisor_sums))
+        divide_by_zero = divisor == 0
+        if not divide_by_zero:
+            result = sum(typing_cast(list[float], rank_sums)) / divisor
+
+    synchronyse("divide_by_zero", root = root, comm = comm)
+    if divide_by_zero:
+        if weights is None:
+            raise IndexError("No data provided by any rank.")
+        else:
+            raise ZeroDivisionError("Sum of weights was 0.")
+
+    synchronyse("result", root = root, comm = comm)
+
+    comm.barrier()
+
+    return result
 
 
 

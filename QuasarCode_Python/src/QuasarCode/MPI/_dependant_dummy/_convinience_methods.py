@@ -1,15 +1,17 @@
-from ...Tools._edit_locals import use_locals
-
-from typing import TypeVar, ParamSpec
+from typing import Any, TypeVar, ParamSpec
+from _typeshed import SupportsAdd
 from collections.abc import Callable, Sized, Sequence
 from functools import wraps
 
 import numpy as np
 
+from ...Tools._edit_locals import use_locals
+
 
 
 P = ParamSpec("P")
 T = TypeVar("T")
+U = TypeVar("U", bound = SupportsAdd[Any, Any])
 
 
 
@@ -49,6 +51,21 @@ def mpi_barrier(comm: object|None = None) -> None:
     Wait for all ranks in the communicator to reach this barrier.
     """
     pass
+
+
+
+def mpi_sum(data: Sequence[U], comm: object|None = None, root: int|None = None) -> U:
+    """
+    Calculate the sum of data across multiple ranks.
+    """
+    if len(data) > 0:
+        raise IndexError("No data provided by any rank.")
+    return sum(data[1:], start = data[0]) if len(data) > 1 else data[0]
+
+
+
+def mpi_mean(data: Sequence[float], weights: Sequence[float]|None = None, comm: object|None = None, root: int|None = None) -> float:
+    return float(np.average(np.array(data), weights = np.array(weights)))
 
 
 
