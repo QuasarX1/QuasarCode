@@ -65,6 +65,10 @@ def mpi_sum(data: Sequence[U], comm: object|None = None, root: int|None = None) 
 
 
 def mpi_mean(data: Sequence[float], weights: Sequence[float]|None = None, comm: object|None = None, root: int|None = None) -> float:
+    """
+    Calculate the mean of data across multiple ranks.
+    Optionally, specify weights to calculate the weighted mean.
+    """
     return float(np.average(np.array(data), weights = np.array(weights)))
 
 
@@ -107,7 +111,7 @@ def mpi_slice(data: Sequence[T], comm: object|None = None, rank: int|None = None
 
 
 
-def mpi_gather_array(data: np.ndarray, comm: object|None = None, root: int|None = None, target_buffer: np.ndarray|None = None) -> np.ndarray:
+def mpi_gather_array(data: np.ndarray, comm: object|None = None, root: int|None = None, target_buffer: np.ndarray|None = None, allgather: bool = False) -> np.ndarray|None|tuple[np.ndarray, np.ndarray]|tuple[None, None]:
     """
     Gather numpy array data to the root rank.
     If the resulting array is larger than the MPI buffer length, data will be transmitted point-to-point in rank order instead of using the Gatherv method.
@@ -138,3 +142,111 @@ def mpi_scatter_array(data: np.ndarray|None, elements_this_rank: int|None = None
 
 def mpi_redistribute_array_evenly(data: np.ndarray, elements_this_rank: int|None = None, elements_per_rank: list[int]|None = None, comm: object|None = None, root: int|None = None, target_buffer: np.ndarray|None = None) -> np.ndarray:
     return data
+
+
+def mpi_argsort(
+    data: np.ndarray,
+    use_index_dtype = np.int64,
+    output_destination_ranks: bool = False,
+    output_inplace_target_indexes: bool = False
+) -> np.ndarray|tuple[np.ndarray, np.ndarray]|tuple[np.ndarray, np.ndarray, np.ndarray]:
+    sorted_indexes = np.argsort(data)
+    result = [sorted_indexes]
+    if output_destination_ranks:
+        result.append(np.zeros(shape = data.shape, dtype = np.int64))
+    if output_inplace_target_indexes:
+        result.append(sorted_indexes)
+    return result[0] if len(result) == 1 else tuple(result)
+
+
+
+def mpi_sort(
+        data: np.ndarray,
+        order: tuple[np.ndarray, np.ndarray]|None = None,
+        result_data_buffer: np.ndarray|None = None,
+        assume_memory_limitation: bool = False
+) -> np.ndarray:
+    """
+    Sort a set of data in parallel.
+
+    Parameters:
+
+                           `numpy.ndarray` `data`                     -> The data to be sorted (along axis = 0)
+
+        (`numpy.ndarray`, `numpy.ndarray`) `order`                    -> The ordering information from `mpi_argsort(...)[1:]` (target_ranks, inplace_sort_indexes) (optional)
+
+                           `numpy.ndarray` `result_data_buffer`       -> Buffer to place results into (optional)
+
+                                    `bool` `assume_memory_limitation` -> Perform the sort in a memory-efficient way, at the cost of speed (defaults to False - fastest)
+
+    Returns:
+        `numpy.ndarray` -> The data in a sorted order distributed accross each rank using the same distribution as the input data
+    """
+    result = np.sort(data)
+    if result_data_buffer is not None:
+        result_data_buffer[...] = result[...]
+    return result
+
+
+
+def mpi_calculate_reorder(
+    input_ids: np.ndarray,
+    output_ids: np.ndarray,
+    assume_memory_limitation: bool = False
+) -> tuple[np.ndarray, np.ndarray]:
+    order = mpi_argsort(input_ids, output_destination_ranks = True, output_inplace_target_indexes = True)
+    reverse_order = mpi_argsort(order[0], output_destination_ranks = True, output_inplace_target_indexes = True)
+    del order
+
+    target_sort_order = mpi_argsort(output_ids, output_destination_ranks = True, output_inplace_target_indexes = True)
+    reverse_target_sort_order = mpi_argsort(target_sort_order[0], output_destination_ranks = True, output_inplace_target_indexes = True)
+    del target_sort_order
+
+    return (
+        mpi_sort(data = reverse_target_sort_order[1], order = reverse_order[1:], assume_memory_limitation = assume_memory_limitation),
+        mpi_sort(data = reverse_target_sort_order[2], order = reverse_order[1:], assume_memory_limitation = assume_memory_limitation)
+    )
+
+
+
+def mpi_reorder(
+    input_ids: np.ndarray,
+    input_data: np.ndarray,
+    output_ids: np.ndarray,
+    output_data_buffer: np.ndarray|None = None,
+    assume_memory_limitation: bool = False
+) -> np.ndarray:
+    order = mpi_calculate_reorder(input_ids, output_ids)
+    return mpi_sort(
+        data = input_data,
+        order = order,
+        result_data_buffer = output_data_buffer,
+        assume_memory_limitation = assume_memory_limitation
+    )
+
+
+
+def mpi_apply_reorder(
+    input_data: np.ndarray,
+    order: tuple[np.ndarray, np.ndarray],
+    output_data_buffer: np.ndarray|None = None,
+    assume_memory_limitation: bool = False
+) -> np.ndarray:
+    """
+    Wrapper for `mpi_sort` using a subset of the parameter names from `mpi_reorder`.
+
+    `input_data` -> `data`
+
+    `order` -> `order`
+
+    `output_data_buffer` -> `result_data_buffer`
+
+    `assume_memory_limitation` -> `assume_memory_limitation`
+    """
+    return mpi_sort(
+        data = input_data,
+        order = order,
+        result_data_buffer = output_data_buffer,
+        assume_memory_limitation = assume_memory_limitation
+    )
+

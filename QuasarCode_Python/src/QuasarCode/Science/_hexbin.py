@@ -1,6 +1,6 @@
 from collections.abc import Callable, Sequence
 from functools import wraps
-from typing import cast as typing_cast, Any
+from typing import cast as typing_cast, Any, TypeVar
 
 from matplotlib import pyplot as plt, _preprocess_data
 from matplotlib.axes import Axes
@@ -11,9 +11,11 @@ from matplotlib._docstring import dedent_interpd
 import numpy as np
 
 from .._global_settings import settings_object as Settings
-from ..MPI import mpi_sum
+from ..MPI import mpi_sum, mpi_mean, mpi_gather_array
 
 
+
+T = TypeVar("T")
 
 class HexbinRenderer(object):
     """
@@ -451,21 +453,218 @@ class HexbinRenderer(object):
         return float(mpi_sum(len(indices)))
 
     @staticmethod
-    def create_bin_statistic_sum(data: np.ndarray[tuple[int], np.dtype[float]]):
+    def bin_statistic_log10_count(indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
+        """
+        Assign hexbin value to log_10 of the number of elements that fall within each bin.
+
+        Parameters:
+            `numpy.ndarray[(I,), numpy.int64]` indices:
+                The indexes into the x and y data arrays that identify the points that fall into
+                the bin.
+
+        Returns `float`:
+            The number of elements within the bin.
+        """
+        return np.log10(HexbinRenderer.bin_statistic_count(indices = indices))
+
+    @staticmethod
+    def gather_bin_values(data: np.ndarray[tuple[int], np.dtype[T]], indices: np.ndarray[tuple[int], np.dtype[np.int64]]) -> np.ndarray[tuple[int], np.dtype[T]]:
+        """
+        Helper function for gathering bin data separated across multiple MPI ranks.
+        This is in effect an 'allgather' operation.
+        """
+        return mpi_gather_array(data[indices], allgather = True)
+
+    @staticmethod
+    def create_bin_statistic_sum(data: np.ndarray[tuple[int], np.dtype[float]]) -> Callable[[np.ndarray[tuple[int], np.dtype[np.int64]]], float]:
+        """
+        Assign hexbin value to the number of elements that fall within each bin.
+
+        Parameters:
+            `numpy.ndarray[(N,), float]` data:
+                Data elements - the same shape as the x and y data arrays.
+
+        Returns `Callable[[numpy.ndarray[(I,), numpy.int64]], float]`:
+            A bin statistic for the number of elements within the bin.
+        """
         def bin_statistic_sum(indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
             """
             Assign hexbin value to the number of elements that fall within each bin.
 
             Parameters:
                 `numpy.ndarray[(I,), numpy.int64]` indices:
-                    The indexes into the x and y data arrays that identify the points that fall into
-                    the bin.
+                    The indexes into the x and y data arrays that identify the points that fall
+                    into the bin.
 
             Returns `float`:
                 The number of elements within the bin.
             """
             return float(mpi_sum(data[indices]))
         return bin_statistic_sum
+
+    @staticmethod
+    def create_bin_statistic_log10_sum(data: np.ndarray[tuple[int], np.dtype[float]], initial_offset: float = 0.0, final_offset: float = 1.0) -> Callable[[np.ndarray[tuple[int], np.dtype[np.int64]]], float]:
+        """
+        Assign hexbin value to log_10 of the number of elements that fall within each bin.
+
+        Parameters:
+            `numpy.ndarray[(N,), float]` data:
+                Data elements - the same shape as the x and y data arrays.
+            (optional) `float` initial_offset:
+                Value to add to each data value BEFORE summation. This is necessary when the data
+                values can be 0!
+                Default is 0.
+            (optional) `float` final_offset:
+                A value to add to the final result - useful for unit conversions.
+                NOTE: this value is not passed through the log_10 function. When applying unit
+                conversions, most units will require a value of `-numpy.log10(value_of_unit)`!
+                Default is 1.
+
+        Returns `Callable[[numpy.ndarray[(I,), numpy.int64]], float]`:
+            A bin statistic for log_10 of the number of elements within the bin.
+        """
+        def bin_statistic_log10_sum(indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
+            """
+            Assign hexbin value to log_10 of the number of elements that fall within each bin.
+
+            Parameters:
+                `numpy.ndarray[(I,), numpy.int64]` indices:
+                    The indexes into the x and y data arrays that identify the points that fall
+                    into the bin.
+
+            Returns `float`:
+                The number log_10 of elements within the bin.
+            """
+            return float(np.log10(mpi_sum(data[indices] + initial_offset))) + final_offset
+        return bin_statistic_log10_sum
+
+    @staticmethod
+    def create_bin_statistic_mean(data: np.ndarray[tuple[int], np.dtype[float]], weights: np.ndarray[tuple[int], np.dtype[float]]|None = None) -> Callable[[np.ndarray[tuple[int], np.dtype[np.int64]]], float]:
+        """
+        Assign hexbin value to the mean of elements that fall within each bin.
+
+        Parameters:
+            `numpy.ndarray[(N,), float]` data:
+                Data elements - the same shape as the x and y data arrays.
+            (optional) `numpy.ndarray[(N,), float]|None` weights:
+                One weight per data element.
+                Default is `None`.
+
+        Returns `Callable[[numpy.ndarray[(I,), numpy.int64]], float]`:
+            A bin statistic for the mean of elements within the bin.
+        """
+        def bin_statistic_weighted_mean(indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
+            """
+            Assign hexbin value to the mean of elements that fall within each bin.
+
+            Parameters:
+                `numpy.ndarray[(I,), numpy.int64]` indices:
+                    The indexes into the x and y data arrays that identify the points that fall
+                    into the bin.
+
+            Returns `float`:
+                The mean of elements within the bin.
+            """
+            return float(mpi_mean(data[indices], weights = weights[indices] if weights is not None else None))
+        return bin_statistic_weighted_mean
+
+    @staticmethod
+    def create_bin_statistic_median(data: np.ndarray[tuple[int], np.dtype[float]]) -> Callable[[np.ndarray[tuple[int], np.dtype[np.int64]]], float]:
+        """
+        Assign hexbin value to the median of elements that fall within each bin.
+
+        Parameters:
+            `numpy.ndarray[(N,), float]` data:
+                Data elements - the same shape as the x and y data arrays.
+
+        Returns `Callable[[numpy.ndarray[(I,), numpy.int64]], float]`:
+            A bin statistic for the median of elements within the bin.
+        """
+        def bin_statistic_median(indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
+            """
+        Assign hexbin value to the median of elements that fall within each bin.
+
+            Parameters:
+                `numpy.ndarray[(I,), numpy.int64]` indices:
+                    The indexes into the x and y data arrays that identify the points that fall
+                    into the bin.
+
+            Returns `float`:
+                The median of elements within the bin.
+            """
+
+            return float(np.median(HexbinRenderer.gather_bin_values(data, indices)))
+        return bin_statistic_median
+
+    @staticmethod
+    def create_bin_statistic_percentile(data: np.ndarray[tuple[int], np.dtype[float]], percentile: float) -> Callable[[np.ndarray[tuple[int], np.dtype[np.int64]]], float]:
+        """
+        Assign hexbin value to the percentile value from elements that fall within each bin.
+
+        Parameters:
+            `numpy.ndarray[(N,), float]` data:
+                Data elements - the same shape as the x and y data arrays.
+            `float` percentile:
+                The percentile at which compute the value.
+                [0 -> 100]
+
+        Returns `Callable[[numpy.ndarray[(I,), numpy.int64]], float]`:
+            A bin statistic for the percentile value of elements within the bin.
+        """
+        def bin_statistic_percentile(indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
+            """
+            Assign hexbin value to the percentile value from elements that fall within each bin.
+
+            Parameters:
+                `numpy.ndarray[(I,), numpy.int64]` indices:
+                    The indexes into the x and y data arrays that identify the points that fall
+                    into the bin.
+
+            Returns `float`:
+                The percentile value of elements within the bin.
+            """
+
+            return float(np.percentile(HexbinRenderer.gather_bin_values(data, indices), percentile))
+        return bin_statistic_percentile
+    
+    @staticmethod
+    def create_bin_statistic_log10_mean(data: np.ndarray[tuple[int], np.dtype[float]], weights: np.ndarray[tuple[int], np.dtype[float]]|None = None, initial_offset: float = 0.0, final_offset: float = 1.0) -> Callable[[np.ndarray[tuple[int], np.dtype[np.int64]]], float]:
+        """
+        Assign hexbin value to the mean of elements that fall within each bin.
+
+        Parameters:
+            `numpy.ndarray[(N,), float]` data:
+                Data elements - the same shape as the x and y data arrays.
+            (optional) `numpy.ndarray[(N,), float]|None` weights:
+                One weight per data element.
+                Default is `None`.
+            (optional) `float` initial_offset:
+                Value to add to each data value BEFORE summation. This is necessary when the data
+                values can be 0!
+                Default is 0.
+            (optional) `float` final_offset:
+                A value to add to the final result - useful for unit conversions.
+                NOTE: this value is not passed through the log_10 function. When applying unit
+                conversions, most units will require a value of `-numpy.log10(value_of_unit)`!
+                Default is 1.
+
+        Returns `Callable[[numpy.ndarray[(I,), numpy.int64]], float]`:
+            A bin statistic for log_10 of the mean of elements within the bin.
+        """
+        def bin_statistic_log10_weighted_mean(indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
+            """
+            Assign hexbin value to the mean of elements that fall within each bin.
+
+            Parameters:
+                `numpy.ndarray[(I,), numpy.int64]` indices:
+                    The indexes into the x and y data arrays that identify the points that fall
+                    into the bin.
+
+            Returns `float`:
+                log_10 of the mean of elements within the bin.
+            """
+            return float(np.log10(mpi_mean(data[indices] + initial_offset, weights = weights[indices] if weights is not None else None))) + final_offset
+        return bin_statistic_log10_weighted_mean
 
     # Built-in bin alpha functions
 
@@ -503,42 +702,65 @@ class HexbinRenderer(object):
             If `len(indices)` is 0, numpy.Infinity is returned.
         """
         return (1 / bin_value) if bin_value != 0 else np.Infinity
-    
-    @staticmethod
-    def bin_alpha_count(bin_value: float, indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
-        """
-        Use the number of element in the bin to set the alpha value of the hex.
-
-        Parameters:
-            `float` bin_value:
-                The calculated value for the bin.
-            `numpy.ndarray[(I,), numpy.int64]` indices:
-                The indexes into the x and y data arrays that identify the points that fall into
-                the bin.
-
-        Returns `float`:
-            The number of elements within the bin.
-        """
-        return float(mpi_sum(len(indices)))
 
     @staticmethod
-    def bin_alpha_reciprocal_count(bin_value: float, indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
+    def create_bin_alpha_statistic(statistic: Callable[[np.ndarray[tuple[int], np.dtype[np.int64]]], float]) -> Callable[[float, np.ndarray[tuple[int], np.dtype[np.int64]]], float]:
         """
-        Use the reciprocal of the number of element in the bin to set the alpha value of the hex.
+        Use an existing statistic function to set the alpha value of the hex.
 
         Parameters:
-            `float` bin_value:
-                The calculated value for the bin.
-            `numpy.ndarray[(I,), numpy.int64]` indices:
-                The indexes into the x and y data arrays that identify the points that fall into
-                the bin.
+            `Callable[[np.ndarray[(I,), numpy.int64]], float]` statistic:
+                A bin statistic function used to calculate a value from the indexes giving which
+                elements fall within a given bin.
 
-        Returns `float`:
-            The reciprocal (1/x) of the number of elements within the bin.
-            If `len(indices)` is 0, numpy.Infinity is returned.
+        Returns `Callable[[numpy.ndarray[(I,), numpy.int64]], float]`:
+            The wrapped statistic function.
         """
-        count = float(mpi_sum(len(indices)))
-        return (1 / count) if count != 0 else np.Infinity
+        def bin_statistic_sum(bin_value: float, indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
+            """
+            Use an existing statistic function to set the alpha value of the hex.
+
+            Parameters:
+                `float` bin_value:
+                    The calculated value for the bin.
+                `numpy.ndarray[(I,), numpy.int64]` indices:
+                    The indexes into the x and y data arrays that identify the points that fall
+                    into the bin.
+
+            Returns `float`:
+                The statistic for the bin.
+            """
+            return statistic(indices)
+        return bin_statistic_sum
+
+    @staticmethod
+    def create_bin_alpha_value_converter(conversion_function: Callable[[float], float]) -> Callable[[float, np.ndarray[tuple[int], np.dtype[np.int64]]], float]:
+        """
+        Use a function to set the alpha value of the hex using the hex's value.
+
+        Parameters:
+            `Callable[[float], float]` conversion_function:
+                Function used to convert a bin's calculated value into an alpha value.
+
+        Returns `Callable[[numpy.ndarray[(I,), numpy.int64]], float]`:
+            The wrapped conversion function.
+        """
+        def bin_statistic_sum(bin_value: float, indices: np.ndarray[tuple[int], np.dtype[np.int64]], /) -> float:
+            """
+            Use a function to set the alpha value of the hex using the hex's value.
+
+            Parameters:
+                `float` bin_value:
+                    The calculated value for the bin.
+                `numpy.ndarray[(I,), numpy.int64]` indices:
+                    The indexes into the x and y data arrays that identify the points that fall
+                    into the bin.
+
+            Returns `float`:
+                The alpha value for the bin.
+            """
+            return conversion_function(bin_value)
+        return bin_statistic_sum
 
 
 
@@ -945,237 +1167,3 @@ class HexbinRenderer(object):
         collection.callbacks.connect('changed', on_changed)
 
         return collection
-
-
-
-
-
-
-
-__all__ = (
-    "plot_hexbin",
-    "create_hexbin_colour_function",
-    "create_hexbin_count",
-    "create_hexbin_log10_count",
-    "create_hexbin_sum",
-    "create_hexbin_log10_sum",
-    "create_hexbin_sum_log10",
-    "create_hexbin_mean",
-    "create_hexbin_weighted_mean",
-    "create_hexbin_median",
-    "create_hexbin_percentile"
-)
-
-
-
-def create_hexbin_colour_function(statistic: Callable[[np.ndarray], float]):
-    """
-    Create a function for calculating the value for colour mapping of hexbin cells.
-
-    The return value of this function can be passed to `plot_hexbin` as an argument for the parameter `colour_function`.
-    """
-
-    def ready_hexbin_colour_function(min_value: float|None = None, max_value: float|None = None, default_bin_value: float = -np.inf):
-
-        @wraps(statistic)
-        def calculate_bin_colour(indices: np.ndarray, /) -> float:
-            if len(indices) == 0:
-                return default_bin_value
-            try:
-                result = statistic(indices)
-            except Exception as e:
-                if Settings.debug and Settings.verbose:
-                    raise e
-                return default_bin_value
-            if min_value is not None and result < min_value:
-                return min_value
-            elif max_value is not None and result > max_value:
-                return max_value
-            else:
-                return result
-
-        return calculate_bin_colour
-
-    return ready_hexbin_colour_function
-
-
-
-def create_hexbin_count():
-    """
-    Assign hexbin cell colour to the number of elements that fall within the bin.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_mean(indices: np.ndarray, /) -> float:
-        return len(indices)
-    return calculate_statistic_mean
-
-
-
-def create_hexbin_log10_count():
-    """
-    Assign hexbin cell colour to the log_10 of the number of elements that fall within the bin.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_mean(indices: np.ndarray, /) -> float:
-        return np.log10(len(indices))
-    return calculate_statistic_mean
-
-
-
-def create_hexbin_sum(data: np.ndarray):
-    """
-    Assign hexbin cell colour to the sum of the elements from this dataset that fall within the bin.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_mean(indices: np.ndarray, /) -> float:
-        return data[indices].sum()
-    return calculate_statistic_mean
-
-
-
-def create_hexbin_log10_sum(data: np.ndarray):
-    """
-    Assign hexbin cell colour to the log_10 of the sum of the elements from this dataset that fall within the bin.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_mean(indices: np.ndarray, /) -> float:
-        return np.log10(data[indices].sum())
-    return calculate_statistic_mean
-
-
-
-def create_hexbin_sum_log10(data: np.ndarray):
-    """
-    Assign hexbin cell colour to the sum of log_10 of the the elements from this dataset that fall within the bin.
-
-    Note, it is advised you use `create_hexbin_sum` and pass the `np.log10(data)` to it instead of using this function, unless retaining a second copy of the data array is problematic.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_mean(indices: np.ndarray, /) -> float:
-        return np.log10(data[indices]).sum()
-    return calculate_statistic_mean
-
-
-
-def create_hexbin_mean(data: np.ndarray, offset: float = 0.0):
-    """
-    Assign hexbin cell colour to the mean of elements from this dataset that fall within the bin.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_mean(indices: np.ndarray, /) -> float:
-        return np.mean(data[indices]) + offset
-    return calculate_statistic_mean
-
-
-
-def create_hexbin_log10_mean(data: np.ndarray, offset: float = 0.0):
-    """
-    Assign hexbin cell colour to the mean of elements from this dataset that fall within the bin.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_mean(indices: np.ndarray, /) -> float:
-        return np.log10(np.mean(data[indices])) + offset
-    return calculate_statistic_mean
-
-
-
-def create_hexbin_weighted_mean(data: np.ndarray, weights: np.ndarray, offset: float = 0.0):
-    """
-    Assign hexbin cell colour to the mean of elements from this dataset that fall within the bin.
-
-    Use the weights from an array of equal length.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_weighted_mean(indices: np.ndarray, /) -> float:
-        return np.average(data[indices], weights = weights[indices]) + offset
-    return calculate_statistic_weighted_mean
-
-
-
-def create_hexbin_log10_weighted_mean(data: np.ndarray, weights: np.ndarray, offset: float = 0.0):
-    """
-    Assign hexbin cell colour to the mean of elements from this dataset that fall within the bin.
-
-    Use the weights from an array of equal length.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_weighted_mean(indices: np.ndarray, /) -> float:
-        return np.log10(np.average(data[indices], weights = weights[indices])) + offset
-    return calculate_statistic_weighted_mean
-
-
-
-def test_function__create_hexbin_log10_weighted_mean(data: np.ndarray, weights: np.ndarray, offset: float = 0.0):
-    """
-    Assign hexbin cell colour to the mean of elements from this dataset that fall within the bin.
-
-    Use the weights from an array of equal length.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_weighted_mean(indices: np.ndarray, /) -> float:
-        return np.log10(np.sum(data[indices] * weights[indices]) / np.sum(weights[indices]) / offset)
-    return calculate_statistic_weighted_mean
-
-
-
-def create_hexbin_median(data: np.ndarray):
-    """
-    Assign hexbin cell colour to the median of elements from this dataset that fall within the bin.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_median(indices: np.ndarray, /) -> float:
-        return np.median(data[indices])
-    return calculate_statistic_median
-
-
-
-def create_hexbin_percentile(data: np.ndarray, percentile: float):
-    """
-    Assign hexbin cell colour to the specified percentile of elements from this dataset that fall within the bin.
-    """
-    @create_hexbin_colour_function
-    def calculate_statistic_percentile(indices: np.ndarray, /) -> float:
-        return np.percentile(data[indices], percentile)
-    return calculate_statistic_percentile
-
-
-
-def plot_hexbin(
-    x: np.ndarray,
-    y: np.ndarray,
-    colour_function: Callable[[float|None, float|None], Callable[[np.ndarray], float]]|None = None,
-    vmin: float|None = None,
-    vmax: float|None = None,
-    vdefault: float = -np.inf,
-    cmap = "viridis",
-    alpha_values: np.ndarray[tuple[int], np.dtype[np.float64]]|None = None,
-    gridsize: int | tuple[int, int] = 500,
-    axis = None,
-    edgecolor = None,
-    **kwargs
-) -> PolyCollection:
-    """
-    Plot a hexbin using a pre-defined colour scheme.
-
-    kwargs will be passed to the `plt.hexbin` function call (or that of the provided axis).
-
-    `colour_function` will default to `create_hexbin_count` if set as `None`.
-    """
-
-    hexes = (axis if axis is not None else plt).hexbin(
-        x = x,
-        y = y,
-        C = np.arange(len(x)),
-        reduce_C_function = (colour_function if colour_function is not None else create_hexbin_count())(vmin, vmax, vdefault),
-        gridsize = gridsize,
-        cmap = cmap,
-        vmin = vmin,
-        vmax = vmax,
-        edgecolor = edgecolor,
-        **kwargs
-    )
-
-    if alpha_values is not None:
-        hexes.set_alpha(alpha_values)
-
-    return hexes

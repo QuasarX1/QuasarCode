@@ -205,7 +205,7 @@ def mpi_slice(data: Sequence[T], comm: MPI.Intracomm|None = None, rank: int|None
 
 
 
-def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: int|None = None, target_buffer: np.ndarray|None = None, return_chunk_sizes: bool = False) -> np.ndarray|None|tuple[np.ndarray, np.ndarray]|tuple[None, None]:
+def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: int|None = None, target_buffer: np.ndarray|None = None, return_chunk_sizes: bool = False, allgather: bool = False) -> np.ndarray|None|tuple[np.ndarray, np.ndarray]|tuple[None, None]:
     """
     Gather numpy array data to the root rank.
     If the resulting array is larger than the MPI buffer length, data will be transmitted point-to-point in rank order instead of using the Gatherv method.
@@ -215,9 +215,14 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
 
     comm.barrier()
 
-    if any(comm.allgather(comm.rank != root and target_buffer is not None)):
-        raise TypeError("Output buffer provided by non-root rank.")
+    if sum(comm.allgather(int(allgather))) not in (0, comm.size):
+        raise ValueError("Not all ranks set parameter \"allgather\" as True.")
     comm.barrier()
+
+    if not allgather:
+        if any(comm.allgather(comm.rank != root and target_buffer is not None)):
+            raise TypeError("Output buffer provided by non-root rank.")
+        comm.barrier()
 
     local_buffer_length = np.prod(data.shape)
     local_buffer_length_first_dimension = data.shape[0]
@@ -229,10 +234,10 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
     comm.barrier()
 
     use_manual_transfer: int
-    input_buffer_lengths_first_dimension: list[int]|None = comm.gather(data.shape[0], root = root)
+    input_buffer_lengths_first_dimension: list[int] = comm.allgather(data.shape[0], root = root)
     comm.barrier()
-    if comm.rank == root:
-        input_buffer_lengths_first_dimension: np.ndarray = np.array(input_buffer_lengths_first_dimension, dtype = int)
+    if comm.rank == root or allgather:
+        input_buffer_lengths_first_dimension: np.ndarray = np.array(input_buffer_lengths_first_dimension, dtype = int) # Why is this necessary???
         output_buffer_length_first_dimension: int = sum(input_buffer_lengths_first_dimension)
         output_buffer_length = output_buffer_length_first_dimension * local_buffer_step_size
         use_manual_transfer = output_buffer_length > _MAX_BUFFER_SIZE
@@ -245,7 +250,7 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
     if not can_continue:
         raise BufferError("Input buffer size/shape is not correct for the input data.")
     
-    if comm.rank == root:
+    if comm.rank == root or allgather:
         if target_buffer is None:
             target_buffer = np.empty(shape = (output_buffer_length_first_dimension, *data.shape[1:]), dtype = data.dtype)
         rank_offsets_first_dimension = np.insert(np.cumsum(input_buffer_lengths_first_dimension), 0, 0)[:-1]
@@ -254,21 +259,30 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
     # The output buffer is within the maximum allowed size
     if not use_manual_transfer:
         comm.barrier()
-        comm.Gatherv(data, None if comm.rank != root else (target_buffer, (input_buffer_lengths_first_dimension * local_buffer_step_size, rank_offsets)), root = root)
+        if allgather:
+            comm.Allgatherv(data, None if comm.rank != root else (target_buffer, (input_buffer_lengths_first_dimension * local_buffer_step_size, rank_offsets)))
+        else:
+            comm.Gatherv(data, None if comm.rank != root else (target_buffer, (input_buffer_lengths_first_dimension * local_buffer_step_size, rank_offsets)), root = root)
         comm.barrier()
 
     # The output buffer is larger than the maximum buffer length
     # Data must be communicated manualy
     else:
-        if comm.rank == root:
-            target_buffer[:data.shape[0]] = data[:]
+        if comm.rank == root or allgather:
+            target_buffer[rank_offsets_first_dimension[comm.rank]:data.shape[0]] = data[:]
         comm.barrier()
-        for i in range(1, comm.size):
-            if comm.rank == root:
+        for i in range(0, comm.size):
+            if not allgather and i == root:
+                # The root has already had an opportunity to transfer its data so we can skip this one
+                continue
+            if comm.rank != i:
                 total_expected_elements_all_dimensions = input_buffer_lengths_first_dimension[i] * local_buffer_step_size
                 if total_expected_elements_all_dimensions <= _MAX_BUFFER_SIZE:
                     # Data can be transferred in a single function call
-                    comm.Recv(target_buffer[rank_offsets_first_dimension[i] : rank_offsets_first_dimension[i] + input_buffer_lengths_first_dimension[i]], source = i)
+                    if allgather:
+                        comm.Bcast(target_buffer[rank_offsets_first_dimension[i] : rank_offsets_first_dimension[i] + input_buffer_lengths_first_dimension[i]], root = i)
+                    else:
+                        comm.Recv(target_buffer[rank_offsets_first_dimension[i] : rank_offsets_first_dimension[i] + input_buffer_lengths_first_dimension[i]], source = i)
                 else:
                     # Data is too large be transferred in a single function call
                     # Multiple calls required
@@ -276,18 +290,27 @@ def mpi_gather_array(data: np.ndarray, comm: MPI.Intracomm|None = None, root: in
                     elements_first_dimension_remaining: int = input_buffer_lengths_first_dimension[i]
                     while elements_first_dimension_remaining > 0:
                         chunk_size_this_transfer = _MAX_BUFFER_SIZE if elements_first_dimension_remaining > _MAX_BUFFER_SIZE else elements_first_dimension_remaining
-                        comm.Recv(target_buffer[rank_offsets_first_dimension[i] + local_chunk_offset : rank_offsets_first_dimension[i] + local_chunk_offset + chunk_size_this_transfer], source = i)
+                        if allgather:
+                            comm.Bcast(target_buffer[rank_offsets_first_dimension[i] + local_chunk_offset : rank_offsets_first_dimension[i] + local_chunk_offset + chunk_size_this_transfer], root = i)
+                        else:
+                            comm.Recv(target_buffer[rank_offsets_first_dimension[i] + local_chunk_offset : rank_offsets_first_dimension[i] + local_chunk_offset + chunk_size_this_transfer], source = i)
                         local_chunk_offset += chunk_size_this_transfer
                         elements_first_dimension_remaining -= chunk_size_this_transfer
             elif comm.rank == i:
                 if np.prod(data.shape) <= _MAX_BUFFER_SIZE:
-                    comm.Send(data, dest = root)
+                    if allgather:
+                        comm.Bcast(data, root = comm.rank)
+                    else:
+                        comm.Send(data, dest = root)
                 else:
                     local_chunk_offset: int = 0
                     elements_first_dimension_remaining: int = data.shape[0]
                     while elements_first_dimension_remaining > 0:
                         chunk_size_this_transfer = _MAX_BUFFER_SIZE if elements_first_dimension_remaining > _MAX_BUFFER_SIZE else elements_first_dimension_remaining
-                        comm.Send(data[local_chunk_offset : local_chunk_offset + chunk_size_this_transfer], dest = root)
+                        if allgather:
+                            comm.Bcast(data[local_chunk_offset : local_chunk_offset + chunk_size_this_transfer], root = comm.rank)
+                        else:
+                            comm.Send(data[local_chunk_offset : local_chunk_offset + chunk_size_this_transfer], dest = root)
                         local_chunk_offset += chunk_size_this_transfer
                         elements_first_dimension_remaining -= chunk_size_this_transfer
             comm.barrier()
