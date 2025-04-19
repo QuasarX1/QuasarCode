@@ -1,0 +1,92 @@
+files:
+  
+  input:
+    simulation_snapshots: "filepath"
+    snapshot_file: "file.txt"
+
+    #filters: # Remove this entire section if no filters are needed
+    #
+    #  high_mass_halos:
+    #    field_name: "gas.last_halo_masses"
+    #    min: Null # Set to Null to disregard lower bound limit
+    #    include_lower: True
+    #    max: Null # Set to Null to disregard upper bound limit
+    #    include_upper: True
+
+    zero_metalicity_filters: # Remove this entire section if no metalicity filters are needed
+
+      high_mass_halos:
+        field_name: "gas.last_halo_masses"
+        min: Null # Set to Null to disregard lower bound limit
+        include_lower: True
+        max: Null # Set to Null to disregard upper bound limit
+        include_upper: True
+
+  output:
+
+    raw_data:
+      prefix: "SpecWizard_data"
+      sightline_locations_prefix: "rays"
+      sightline_velocity_info_prefix: "ray_velocity_information"
+      optical_depth_prefix: "optical_depth"
+
+    hdf5:
+      file_name: "data"
+
+    image:
+      file_prefix: "SpecWizard_pixel_optical_depths"
+      file_type: "png"
+      
+    graph:
+      file_name: "SpecWizard_ray_absorbtion"
+      file_type: "png"
+
+
+
+ray_properties:
+  axis: "z"
+  spacing_mpc: 1.0 # 1 ray per Mpc
+  depth_fraction_start: 0.0
+  depth_fraction_end: 1.0
+  velocity_element_depth_kms: 1.0 # ray segments every 1 km/s
+#  spacing_mpc: 0.012 # Mpc/px
+#  spacing_mpc: 0.011111 # Mpc/px
+#  spacing_mpc: 0.01 # Mpc/px
+
+
+
+elements:
+
+  hydrogen_1:
+    element_name: "Hydrogen"
+    ion_symbol: "H I"
+
+  carbon_3:
+    element_name: "Carbon"
+    ion_symbol: "C III"
+
+  carbon_4:
+    element_name: "Carbon"
+    ion_symbol: "C IV"
+
+  oxygen_6:
+    element_name: "Oxygen"
+    ion_symbol: "O VI"
+
+  silicon_3:
+    element_name: "Silicon"
+    ion_symbol: "Si III"
+
+  silicon_4:
+    element_name: "Silicon"
+    ion_symbol: "Si IV"
+
+  magnesium:
+    element_name: "Magnesium"
+    ion_symbol: "MgII"
+
+
+
+parallelization:
+  run_parallel: False
+  cpus: 64

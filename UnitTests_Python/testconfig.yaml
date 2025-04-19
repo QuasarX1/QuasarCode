@@ -1,0 +1,10 @@
+# A set of properties for testing.
+
+value1: a string of text
+value2: 100
+value3: more text # this should be a comment
+value4:
+    sub_value1: "a nested value"
+    sub_value2_longer: 2.8
+    value4_1:
+        sub_sub_value1: "double nest test"

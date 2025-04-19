@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["*"]
+
+[project]
+name = "QuasarCode"
+version = "0.9.0"
+authors = [
+  { name="Christopher Rowe", email="thequasarx1@gmail.com" },
+]
+description = "A general purpose library for Python applications."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3.7",
+    "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "Natural Language :: English",
+    "Topic :: Software Development",
+]
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "scipy",
+    "pyyaml",
+]
+
+[project.scripts]
+#example-script = "QuasarCode.IO.Text.console:pause"
+
+[project.urls]
+"Homepage" = "https://github.com/QuasarX1/QuasarCode"
+"Bug Tracker" = "https://github.com/QuasarX1/QuasarCode/issues"
