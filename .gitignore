@@ -263,7 +263,6 @@ __pycache__/
 # PyPi Packaging
 *.egg-info
 dist/
-build/
-/old__UnitTests_Python/env
-/QuasarCode_Python/env
-/QuasarCode_Python/old-code/env
+env
+old-code/env
+old__UnitTests_Python/env
