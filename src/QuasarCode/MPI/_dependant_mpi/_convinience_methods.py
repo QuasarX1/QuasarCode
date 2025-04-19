@@ -1,5 +1,4 @@
 from typing import cast as typing_cast, Any, TypeVar, ParamSpec
-from _typeshed import SupportsAdd
 from collections.abc import Callable, Sized, Sequence
 from functools import wraps, singledispatch
 
@@ -13,7 +12,6 @@ from ...Tools._edit_locals import use_locals
 
 P = ParamSpec("P")
 T = TypeVar("T")
-U = TypeVar("U", bound = SupportsAdd[Any, Any])
 _MAX_BUFFER_SIZE = 2**31 - 1 # Max length of an signed int32
 
 
@@ -82,7 +80,7 @@ def mpi_barrier(comm: MPI.Intracomm|None = None) -> None:
 
 
 
-def mpi_sum(data: Sequence[U], comm: MPI.Intracomm|None = None, root: int|None = None) -> U:
+def mpi_sum(data: Sequence[T], comm: MPI.Intracomm|None = None, root: int|None = None) -> T:
     """
     Calculate the sum of data across multiple ranks.
     """
@@ -92,13 +90,13 @@ def mpi_sum(data: Sequence[U], comm: MPI.Intracomm|None = None, root: int|None =
 
     comm.barrier()
 
-    local_sum: U|None = sum(data[1:], start = data[0]) if len(data) > 1 else data[0] if len(data) > 0 else None
+    local_sum: T|None = sum(data[1:], start = data[0]) if len(data) > 1 else data[0] if len(data) > 0 else None
 
-    result: U
+    result: T
     has_valid_data: bool
-    rank_sums: list[U|None]|None = comm.gather(local_sum, root = root)
+    rank_sums: list[T|None]|None = comm.gather(local_sum, root = root)
     if MPI_Config.check_is_root(root = root):
-        valid_data: list[U] = [v for v in typing_cast(list[U], rank_sums) if v is not None]
+        valid_data: list[T] = [v for v in typing_cast(list[T], rank_sums) if v is not None]
         has_valid_data = len(valid_data) > 0
         if has_valid_data:
             result = sum(valid_data[1:], start = valid_data[0]) if len(valid_data) > 1 else valid_data[0]
