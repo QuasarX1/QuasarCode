@@ -1,5 +1,4 @@
 from typing import Any, TypeVar, ParamSpec
-from _typeshed import SupportsAdd
 from collections.abc import Callable, Sized, Sequence
 from functools import wraps
 
@@ -11,7 +10,6 @@ from ...Tools._edit_locals import use_locals
 
 P = ParamSpec("P")
 T = TypeVar("T")
-U = TypeVar("U", bound = SupportsAdd[Any, Any])
 
 
 
@@ -54,7 +52,7 @@ def mpi_barrier(comm: object|None = None) -> None:
 
 
 
-def mpi_sum(data: Sequence[U], comm: object|None = None, root: int|None = None) -> U:
+def mpi_sum(data: Sequence[T], comm: object|None = None, root: int|None = None) -> T:
     """
     Calculate the sum of data across multiple ranks.
     """
