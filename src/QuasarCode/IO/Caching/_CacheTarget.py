@@ -1,6 +1,6 @@
 import os
 import pickle
-from typing import Type, TypeVar
+from typing import Any, Type, TypeVar
 
 from ._Cacheable import Cacheable
 
@@ -44,13 +44,15 @@ class CacheTarget(object):
         """
         return os.path.join(root_directory, self.__relative_file_path)
     
-    def save_data(self, root_directory: str, data: dict[str, object]) -> None:
+    def save_data(self, root_directory: str, data: dict[str, Any]) -> None:
         """
         Save data to a pickle file using this target from a given root directory.
 
         Parameters:
             str root_directory:
                 The root directory to which the relative file path will be appended.
+            dict[str, Any] data:
+                The data to save to the pickle file.
         """
         filepath = self.get_filepath(os.path.abspath(root_directory))
         directory = os.path.dirname(self.get_filepath(root_directory))
@@ -65,7 +67,7 @@ class CacheTarget(object):
         with open(filepath, "wb") as file:
             pickle.dump(data, file)
 
-    def load_data(self, root_directory: str) -> dict[str, object]:
+    def load_data(self, root_directory: str) -> dict[str, Any]:
         """
         Load data from a pickle file using this target from a given root directory.
 
@@ -74,7 +76,7 @@ class CacheTarget(object):
                 The root directory to which the relative file path will be appended.
 
         Returns:
-            dict[str, object] -> The data loaded from the pickle file.
+            dict[str, Any] -> The data loaded from the pickle file.
         """
         filepath = self.get_filepath(os.path.abspath(root_directory))
         if not os.path.exists(filepath):

@@ -25,11 +25,11 @@ class Cacheable(ABC):
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
-    def __get_cache_data__(self) -> dict[str, object]:
+    def __get_cache_data__(self) -> dict[str, Any]:
         """
         Get the data to be cached.
 
         Returns:
-            dict[str, object] -> The data to be cached.
+            dict[str, Any] -> The data to be cached.
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
