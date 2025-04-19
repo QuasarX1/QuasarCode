@@ -1,5 +1,10 @@
 import os
 import pickle
+from typing import Type, TypeVar
+
+from ._Cacheable import Cacheable
+
+T = TypeVar("T", bound = Cacheable)
 
 class CacheTarget(object):
     """
@@ -76,3 +81,35 @@ class CacheTarget(object):
             raise FileNotFoundError(f"Unable to locate cache file at \"{filepath}\".")
         with open(filepath, "rb") as file:
             return pickle.load(file)
+        
+    # Handle objects of type Cacheable
+
+    def save_object(self, root_directory: str, obj: Cacheable) -> None:
+        """
+        Save a Cacheable object to a pickle file using this target from a given root directory.
+
+        Parameters:
+            str root_directory:
+                The root directory to which the relative file path will be appended.
+            object obj:
+                The Cacheable object to save.
+        """
+        if not isinstance(obj, Cacheable):
+            raise TypeError("The object must be an instance of Cacheable.")
+        self.save_data(root_directory, obj.__get_cache_data__())
+
+    def load_object(self, root_directory: str, cls: Type[T]) -> T:
+        """
+        Load a Cacheable object from a pickle file using this target from a given root directory.
+
+        Parameters:
+            str root_directory:
+                The root directory to which the relative file path will be appended.
+            Type[T] cls:
+                The class type of the Cacheable object to load.
+
+        Returns:
+            T -> The Cacheable object loaded from the pickle file.
+        """
+        data = self.load_data(root_directory)
+        return cls.__from_cache_data__(data)
