@@ -2,8 +2,6 @@ from typing import Union, Collection, TypeVar, Type, Any
 
 from ..IO.Caching._Cacheable import Cacheable
 
-T = TypeVar("T", bound = "CacheableStruct")
-
 class Struct(object):
     """
     Structure type definition.
@@ -30,6 +28,10 @@ class Struct(object):
         Overload this to specify a string to appear in the error message provided when attempting to initalise a nonexistant attribute.
         """
         return None
+
+
+
+T = TypeVar("T", bound = "CacheableStruct")
 
 class CacheableStruct(Struct, Cacheable):
     """
