@@ -16,12 +16,10 @@ authors = [
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.7",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
   "Operating System :: OS Independent",
@@ -38,7 +36,7 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/QuasarX1/QuasarCode/tree/dev-python/QuasarCode_Python/README.md"
+Documentation = "https://github.com/QuasarX1/QuasarCode/blob/master/README.md"
 Issues = "https://github.com/QuasarX1/QuasarCode/issues"
 Source = "https://github.com/QuasarX1/QuasarCode"
 
@@ -66,7 +64,7 @@ cov = [
 ]
 
 [[tool.hatch.envs.all.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+python = ["3.10", "3.11", "3.12", "3.13"]
 
 [tool.hatch.envs.types]
 dependencies = [
@@ -78,7 +76,7 @@ check = "mypy --install-types --non-interactive {args:src/QuasarCode tests}"
 [tool.hatch.build.targets.sdist]
 exclude = [
   "old-code/",
-  "QuasarCode_Python.pyproj",
+  "old_UnitTests_Python/",
 ]
 
 [tool.hatch.build.targets.wheel]
