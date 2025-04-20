@@ -12,8 +12,8 @@ class Cacheable(ABC):
         __get_cache_data__
     """
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def __from_cache_data__(cls: Type[T], data: dict[str, Any]) -> T:
         """
         Load the object from a cache target.
