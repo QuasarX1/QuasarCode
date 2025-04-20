@@ -6,3 +6,4 @@ from ._CachedPlotElements import \
     CachedPlotHexbin,   \
     CachedPlotColourbar
 from ._CachedPlot import CachedPlot
+from ._CachedPlotFactory import CachedPlotFactory

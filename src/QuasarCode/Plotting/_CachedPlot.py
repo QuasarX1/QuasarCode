@@ -60,23 +60,3 @@ class CachedPlot(CacheableStruct):
 
         if self.show_legend:
             axis.legend()
-
-
-
-#class CachedPlotFactory(object):
-#    def __init__(self, cache_directory: str) -> None:
-#        self.__cache_directory: str = cache_directory
-#
-#    def new(self) -> CachedPlot:
-#        return CachedPlot()
-#    
-#    def load(self, target: CacheTarget) -> CachedPlot:
-#        data: dict[str, object] = target.load_data(self.__cache_directory)
-#        result = CachedPlot()
-#        for attr in CachedPlot.__all__:
-#            result.__setattr__(attr, data.get(attr, None))
-#        return result
-#
-#    def save(self, plot: CachedPlot, target: CacheTarget) -> None:
-#        target.save_data(self.__cache_directory, { attr : plot.__getattribute__(attr) for attr in CachedPlot.__all__ })
-
