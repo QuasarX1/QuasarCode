@@ -42,16 +42,29 @@ class CachedPlotElement[T](CacheableStruct):
         """
         raise NotImplementedError("Subclasses must implement this method.")
 
-class CachedPlotLine(CachedPlotElement[list[Line2D]]):
+class CachedPlotLine(CachedPlotElement[Line2D]):
     x = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     y = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     label = AutoProperty[str]()
     colour = AutoProperty[str]()
     linestyle = AutoProperty[str]()
+    linewidth = AutoProperty[float]()
     def __init__(self, **kwargs):
         super().__init__("x", "y", "label", "colour", "linestyle", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
-        self._result = axis.plot(self.x, self.y, label = self.label, colour = self.colour, linestyle = self.linestyle)
+        self._result = axis.plot(self.x, self.y, label = self.label, colour = self.colour, linestyle = self.linestyle, linewidth = self.linewidth)[0]
+    @staticmethod
+    def from_line(line: Line2D) -> "CachedPlotLine":
+        coords: np.ndarray[tuple[int, int], np.dtype[np.floating]] = line.get_xydata()
+        return CachedPlotLine(
+            x = coords[:, 0],
+            y = coords[:, 1],
+            label = line.get_label(),
+            colour = line.get_color(),
+            linestyle = line.get_linestyle(),
+            linewidth = line.get_linewidth(),
+            _result = line
+        )
 
 class CachedPlotScatter(CachedPlotElement[PathCollection]):
     x = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
