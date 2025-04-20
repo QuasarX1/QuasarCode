@@ -43,6 +43,19 @@ class CacheTarget(object):
                  the relative file path.
         """
         return os.path.join(root_directory, self.__relative_file_path)
+
+    def check_exists(self, root_directory: str) -> bool:
+        """
+        Check if the cache file exists at the specified location.
+
+        Parameters:
+            str root_directory:
+                The root directory to which the relative file path will be appended.
+
+        Returns:
+            bool -> True if the cache file exists, False otherwise.
+        """
+        return os.path.exists(self.get_filepath(root_directory))
     
     def save_data(self, root_directory: str, data: dict[str, Any]) -> None:
         """

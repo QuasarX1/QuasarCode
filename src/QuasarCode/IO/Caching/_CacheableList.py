@@ -1,7 +1,11 @@
 from typing import Any, Iterable
+from typing import TypeVar
+
 from ._Cacheable import Cacheable
 
-class CacheableList(list, Cacheable):
+T = TypeVar("T", bound = Cacheable)
+
+class CacheableList[T](list[T], Cacheable):
     """
     A list of cacheable objects.
     
@@ -13,11 +17,11 @@ class CacheableList(list, Cacheable):
             The list of cacheable objects.
     """
     
-    def __init__(self, iterable: Iterable[Cacheable]) -> None:
+    def __init__(self, iterable: Iterable[T]) -> None:
         super().__init__(iterable)
 
     @classmethod
-    def __from_cache_data__(cls, data: dict[str, Any]) -> "CacheableList":
+    def __from_cache_data__(cls, data: dict[str, Any]) -> "CacheableList[T]":
         """
         Load the list of cacheable objects from a cache target.
         
