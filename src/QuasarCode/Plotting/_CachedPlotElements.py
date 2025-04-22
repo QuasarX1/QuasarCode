@@ -102,11 +102,47 @@ class CachedPlotErrorbar(CachedPlotElement[ErrorbarContainer]):
     y = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     xerr = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     yerr = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    label = AutoProperty[str]()
+    line_colour = AutoProperty[ColorType|Sequence[ColorType]]()
+    marker_colour = AutoProperty[ColorType|Sequence[ColorType]]()
+    error_colour = AutoProperty[ColorType|Sequence[ColorType]]()
+    error_line_width = AutoProperty[float]()
     colourmap = AutoProperty[str|Colormap]()
+    marker = AutoProperty[MarkerType](default_value = "")
+    size = AutoProperty[float|ArrayLike]()
+    alpha = AutoProperty[float|ArrayLike]()
     def __init__(self, **kwargs):
         super().__init__("x", "y", "xerr", "yerr", "colourmap", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
-        self._result = axis.errorbar(self.x, self.y, self.yerr, self.xerr, cmap = self.colourmap)
+        self._result = axis.errorbar(
+            x = self.x,
+            y = self.y,
+            yerr = self.yerr,
+            xerr = self.xerr,
+            label = self.label,
+            ecolor = self.error_colour,
+            elinewidth = self.error_line_width,
+            cmap = self.colourmap,
+            marker = self.marker,
+            markersize = self.size,
+            alpha = self.alpha,
+            color = self.line_colour,
+            **kwargs
+        )
+    @staticmethod
+    def from_errorbar(bars: ErrorbarContainer) -> "CachedPlotErrorbar":
+        coords: np.ndarray[tuple[int, int], np.dtype[np.floating]] = bars.get_offsets()
+        return CachedPlotErrorbar(
+            x = coords[:, 0],
+            y = coords[:, 1],
+            label = bars.get_label(),
+            colour = bars.get_facecolor(),
+            colourmap = bars.get_cmap(),
+            marker = bars.get_paths()[0],
+            size = bars.get_sizes(),
+            alpha = bars.get_alpha(),
+            _result = bars
+        )
 
 class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
     extent = AutoProperty_NonNullable[Rect]()
