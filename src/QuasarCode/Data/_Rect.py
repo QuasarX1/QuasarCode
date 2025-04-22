@@ -136,3 +136,11 @@ class Rect:
     
     def __repr__(self) -> str:
         return self.__str__()
+    
+    def __eq__(self, value):
+        if isinstance(value, Rect):
+            return self.__x_min == value.__x_min and self.__x_max == value.__x_max and self.__y_min == value.__y_min and self.__y_max == value.__y_max
+        return False
+    
+    def __ne__(self, value):
+        return not self.__eq__(value)
