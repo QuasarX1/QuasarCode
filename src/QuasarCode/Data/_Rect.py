@@ -1,3 +1,8 @@
+from decimal import Decimal
+
+import numpy as np
+
+
 class Rect:
     """
     A 2D rectangle.
@@ -121,7 +126,17 @@ class Rect:
             tuple[float, float] -> (x, y)
         """
         return ((self.__x_max + self.__x_min) / 2, (self.__y_max + self.__y_min) / 2)
-    
+
+    @property
+    def area(self) -> float:
+        """
+        The area of the rectangle.
+
+        Returns:
+            float -> The area of the rectangle.
+        """
+        return self.width * self.height
+
     def __copy__(self) -> "Rect":
         """
         Create a shallow copy of the rectangle.
@@ -144,3 +159,31 @@ class Rect:
     
     def __ne__(self, value):
         return not self.__eq__(value)
+    
+    def __gt__(self, value):
+        if isinstance(value, Rect):
+            return self.area > value.area
+        elif isinstance(value, (int, float, Decimal, np.integer, np.floating)):
+            return self.area > value
+        return False
+    
+    def __ge__(self, value):
+        if isinstance(value, Rect):
+            return self.area >= value.area
+        elif isinstance(value, (int, float, Decimal, np.integer, np.floating)):
+            return self.area >= value
+        return False
+    
+    def __lt__(self, value):
+        if isinstance(value, Rect):
+            return self.area < value.area
+        elif isinstance(value, (int, float, Decimal, np.integer, np.floating)):
+            return self.area < value
+        return False
+    
+    def __le__(self, value):
+        if isinstance(value, Rect):
+            return self.area <= value.area
+        elif isinstance(value, (int, float, Decimal, np.integer, np.floating)):
+            return self.area <= value
+        return False
