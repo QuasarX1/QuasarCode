@@ -1,3 +1,4 @@
+from ._Bins import Bins
 from ._CachedPlotElements import \
     CachedPlotElement,  \
     CachedPlotLine,     \
