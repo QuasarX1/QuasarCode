@@ -189,7 +189,8 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
             max_value = max_value,
             edgecolour = hexes.get_edgecolor(),
             colourmap = hexes.get_cmap(),
-            bin_alphas = hexes.get_alpha()
+            bin_alphas = hexes.get_alpha(),
+            _result = hexes
         )
 
 class CachedPlotColourbar(CachedPlotElement[Colorbar]):

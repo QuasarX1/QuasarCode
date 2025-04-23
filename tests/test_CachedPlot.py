@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from QuasarCode.Data import Rect
-from QuasarCode.Plotting import CachedPlotFactory, CachedPlot, CachedPlotLine, CachedPlotScatter, CachedPlotErrorbar, CachedPlotHexbin
+from QuasarCode.Plotting import CachedPlotFactory, CachedPlot, CachedPlotLine, CachedPlotScatter, CachedPlotErrorbar, CachedPlotHexbin, Hexbin
 from QuasarCode.IO.Caching import CacheTargetFactory, CacheTarget
 
 class Test_CachedPlot(object):
@@ -111,7 +111,7 @@ class Test_CachedPlot(object):
 
         fig = plt.figure()
         ax = fig.gca()
-        mplt_hex_object = plt.hexbin(coords[:, 0], coords[:, 1], label = "Hexbin", cmap = "viridis", gridsize = 100, extent = plot_data.extent.extent)
+        mplt_hex_object = plt.hexbin(coords[:, 0], coords[:, 1], cmap = "viridis", gridsize = 100, extent = plot_data.extent.extent)
         plt.legend()
 
         plot_data.add_element("hexbin", CachedPlotHexbin.from_hexes(mplt_hex_object, plot_data.extent, 100))
@@ -135,3 +135,49 @@ class Test_CachedPlot(object):
         assert np.all(loaded_re_rendered_test_hexbin.get_array() == mplt_hex_object.get_array())
         assert np.all(loaded_re_rendered_test_hexbin.get_alpha() == mplt_hex_object.get_alpha())
 
+    def test_Hexbin(self):
+
+        plot_factory = CachedPlotFactory(".")
+        assert isinstance(plot_factory, CachedPlotFactory)
+
+        plot_data = plot_factory.new(Rect.create_from_size(0, 0, 10, 10))
+        assert isinstance(plot_data, CachedPlot)
+        assert plot_data.extent == Rect.create_from_size(0, 0, 10, 10)
+        assert plot_data.flip_x is False
+
+        cache_factory = CacheTargetFactory("test_cache/Test_CachedPlot/test_hex/{file}.pickle", "file")
+
+        cache = cache_factory.new(file = "test_hex_from_Hexbin")
+
+        coords = np.random.rand(1000, 2) * 10
+
+        hexbin_object = Hexbin(coords[:, 0], coords[:, 1])
+        hexbin_object.plot_hexbin(extent = plot_data.extent, gridsize = 100, colourmap = "viridis")
+        mplt_hex_object = hexbin_object.data.result
+        assert isinstance(mplt_hex_object, PolyCollection)
+
+        fig = plt.figure()
+        ax = fig.gca()
+
+        plot_data.add_element("hexbin", hexbin_object.data)
+        plot_data.render(fig, ax)
+
+        re_rendered_test_hexbin: PolyCollection = plot_data.plot_elements["hexbin"].result
+        assert isinstance(re_rendered_test_hexbin, PolyCollection)
+        assert np.all(re_rendered_test_hexbin.get_offsets() == mplt_hex_object.get_offsets())
+        assert np.all(re_rendered_test_hexbin.get_array() == mplt_hex_object.get_array())
+        assert np.all(re_rendered_test_hexbin.get_alpha() == mplt_hex_object.get_alpha())
+
+        plot_factory.save(plot_data, cache)
+
+        loaded_plot_data: CachedPlot = plot_factory.load(cache)
+        assert isinstance(loaded_plot_data, CachedPlot)
+        assert loaded_plot_data.extent == Rect.create_from_size(0, 0, 10, 10)
+        assert loaded_plot_data.flip_x is False
+
+        loaded_plot_data.render(fig, ax)
+        loaded_re_rendered_test_hexbin: PolyCollection = loaded_plot_data.plot_elements["hexbin"].result
+        assert isinstance(loaded_re_rendered_test_hexbin, PolyCollection)
+        assert np.all(loaded_re_rendered_test_hexbin.get_offsets() == mplt_hex_object.get_offsets())
+        assert np.all(loaded_re_rendered_test_hexbin.get_array() == mplt_hex_object.get_array())
+        assert np.all(loaded_re_rendered_test_hexbin.get_alpha() == mplt_hex_object.get_alpha())
