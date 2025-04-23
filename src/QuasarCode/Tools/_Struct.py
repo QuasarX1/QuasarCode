@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import Union, Collection, TypeVar, Type, Any
 
 from ..IO.Caching._Cacheable import Cacheable
@@ -53,15 +54,19 @@ class CacheableStruct(Struct, Cacheable):
 
     @classmethod
     def __from_cache_data__(cls: Type[T], data: dict[str, Any]) -> T:
-        instance = cls(data.keys())
+        cacheable_attributes = data.pop("cacheable_attributes", None)
+        instance = cls()
         for attribute_name in data:
-            if attribute_name not in data:
-                raise KeyError(f"Cache data is missing required attribute \"{attribute_name}\".")
+            if attribute_name == "__has_cacheables":
+                continue
             setattr(instance, attribute_name, data[attribute_name] if not isinstance(data[attribute_name], dict) or "datatype" not in data[attribute_name] else data[attribute_name]["datatype"].__from_cache_data__(data[attribute_name]["data"]))
-            if isinstance(getattr(instance, attribute_name), dict):
+            if isinstance(getattr(instance, attribute_name), dict) and "__has_cacheables" in getattr(instance, attribute_name):
                 for sub_key in getattr(instance, attribute_name):
-                    if isinstance(getattr(instance, attribute_name)[sub_key], dict) and "datatype" in getattr(instance, attribute_name)[sub_key]:
+                    if sub_key == "__has_cacheables":
+                        continue
+                    elif isinstance(getattr(instance, attribute_name)[sub_key], dict) and "datatype" in getattr(instance, attribute_name)[sub_key]:
                         getattr(instance, attribute_name)[sub_key] = getattr(instance, attribute_name)[sub_key]["datatype"].__from_cache_data__(getattr(instance, attribute_name)[sub_key]["data"])
+                getattr(instance, attribute_name).pop("__has_cacheables")
         return instance
 
     def __get_cache_data__(self) -> dict[str, Any]:
@@ -80,5 +85,5 @@ class CacheableStruct(Struct, Cacheable):
                         contains_cacheable = True
                         data[key][sub_key] = { "datatype" : type(data[key][sub_key]), "data" : data[key][sub_key].__get_cache_data__() }
                 if contains_cacheable:
-                    data[key]["has_cacheables"] = True
+                    data[key]["__has_cacheables"] = True
         return data

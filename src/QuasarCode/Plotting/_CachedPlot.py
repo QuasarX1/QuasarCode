@@ -10,8 +10,8 @@ class CachedPlot(CacheableStruct):
     plot_elements = AutoProperty_NonNullable[dict[str, CachedPlotElement]]()
     colourbars = AutoProperty_NonNullable[dict[str, CachedPlotColourbar]]()
     extent = AutoProperty_NonNullable[Rect]()
-    x_axis_label = AutoProperty[str]()
-    y_axis_label = AutoProperty[str]()
+    x_axis_label = AutoProperty[str](allow_uninitialised = True)
+    y_axis_label = AutoProperty[str](allow_uninitialised = True)
     flip_x = AutoProperty_NonNullable[bool](default_value = False)
     flip_y = AutoProperty_NonNullable[bool](default_value = False)
     show_legend = AutoProperty_NonNullable[bool](default_value = False)
@@ -39,7 +39,7 @@ class CachedPlot(CacheableStruct):
         self.colourbars[name] = colourbar
 
     def render(self, figure: Figure, axis: Axes):
-        for element in self.plot_elements:
+        for element in self.plot_elements:#TODO: why can this be __has_cacheables after loading from file!!!!!
             self.plot_elements[element].render(figure, axis)
 
         for name, colourbar in self.colourbars.items():

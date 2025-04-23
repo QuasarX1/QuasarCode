@@ -1,4 +1,4 @@
-from typing import Any, Literal, Sequence, TypeVar
+from typing import TYPE_CHECKING, Any, Literal, Sequence, TypeVar, Generic
 from abc import abstractmethod
 
 from matplotlib.axes import Axes
@@ -7,7 +7,8 @@ from matplotlib.colorbar import Colorbar
 from matplotlib.colorizer import ColorizingArtist
 from matplotlib.colors import Colormap
 from matplotlib.figure import Figure
-from matplotlib.pylab import ArrayLike
+if TYPE_CHECKING:
+    from matplotlib.pylab import ArrayLike
 from matplotlib.typing import ColorType, MarkerType
 import numpy as np
 from matplotlib.collections import PathCollection, PolyCollection
@@ -20,8 +21,8 @@ from ..Tools._autoproperty import AutoProperty, AutoProperty_NonNullable
 
 T = TypeVar("T")
 
-class CachedPlotElement[T](CacheableStruct):
-    _result = AutoProperty[T]()
+class CachedPlotElement(CacheableStruct, Generic[T]):
+    _result = AutoProperty[T](allow_uninitialised = True)
     def __init__(self, *cacheable_attributes: str, **kwargs):
         super().__init__(
             cacheable_attributes = cacheable_attributes,#list(cacheable_attributes) + ["_result"],
@@ -46,15 +47,23 @@ class CachedPlotElement[T](CacheableStruct):
 class CachedPlotLine(CachedPlotElement[Line2D]):
     x = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     y = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    label = AutoProperty[str]()
-    colour = AutoProperty[ColorType]()
-    linestyle = AutoProperty[str]()
-    linewidth = AutoProperty[float]()
+    label = AutoProperty[str](allow_uninitialised = True)
+    colour = AutoProperty[ColorType](allow_uninitialised = True)
+    linestyle = AutoProperty[str](allow_uninitialised = True)
+    linewidth = AutoProperty[float](allow_uninitialised = True)
     alpha = AutoProperty_NonNullable[float](default_value = 1.0)
     def __init__(self, **kwargs):
         super().__init__("x", "y", "label", "colour", "linestyle", "linewidth", "alpha", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
-        self._result = axis.plot(self.x, self.y, label = self.label, colour = self.colour, linestyle = self.linestyle, linewidth = self.linewidth, alpha = self.alpha)[0]
+        self._result = axis.plot(
+            self.x,
+            self.y,
+            label = self.label,
+            color = self.colour,
+            linestyle = self.linestyle,
+            linewidth = self.linewidth,
+            alpha = self.alpha
+        )[0]
     @staticmethod
     def from_line(line: Line2D) -> "CachedPlotLine":
         coords: np.ndarray[tuple[int, int], np.dtype[np.floating]] = line.get_xydata()
@@ -72,12 +81,12 @@ class CachedPlotLine(CachedPlotElement[Line2D]):
 class CachedPlotScatter(CachedPlotElement[PathCollection]):
     x = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     y = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    label = AutoProperty[str]()
-    colour = AutoProperty[ColorType|Sequence[ColorType]]()
-    colourmap = AutoProperty[str|Colormap]()
-    marker = AutoProperty[MarkerType]()
-    size = AutoProperty[float|ArrayLike]()
-    alpha = AutoProperty[float|ArrayLike]()
+    label = AutoProperty[str](allow_uninitialised = True)
+    colour = AutoProperty[ColorType|Sequence[ColorType]](allow_uninitialised = True)
+    colourmap = AutoProperty[str|Colormap](allow_uninitialised = True)
+    marker = AutoProperty[MarkerType](allow_uninitialised = True)
+    size = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
+    alpha = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("x", "y", "label", "colour", "colourmap", "marker", "size", "alpha", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
@@ -100,17 +109,17 @@ class CachedPlotScatter(CachedPlotElement[PathCollection]):
 class CachedPlotErrorbar(CachedPlotElement[ErrorbarContainer]):
     x = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     y = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    xerr = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    yerr = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    label = AutoProperty[str]()
-    line_colour = AutoProperty[ColorType|Sequence[ColorType]]()
-    marker_colour = AutoProperty[ColorType|Sequence[ColorType]]()
-    error_colour = AutoProperty[ColorType|Sequence[ColorType]]()
-    error_line_width = AutoProperty[float]()
-    colourmap = AutoProperty[str|Colormap]()
-    marker = AutoProperty[MarkerType](default_value = "")
-    size = AutoProperty[float|ArrayLike]()
-    alpha = AutoProperty[float|ArrayLike]()
+    xerr = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
+    yerr = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
+    label = AutoProperty[str](allow_uninitialised = True)
+    line_colour = AutoProperty[ColorType|Sequence[ColorType]](allow_uninitialised = True)
+    marker_colour = AutoProperty[ColorType|Sequence[ColorType]](allow_uninitialised = True)
+    error_colour = AutoProperty[ColorType|Sequence[ColorType]](allow_uninitialised = True)
+    error_line_width = AutoProperty[float](allow_uninitialised = True)
+    colourmap = AutoProperty[str|Colormap](allow_uninitialised = True)
+    marker = AutoProperty[MarkerType](allow_uninitialised = True, default_value = "")
+    size = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
+    alpha = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("x", "y", "xerr", "yerr", "colourmap", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
@@ -149,11 +158,11 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
     gridsize = AutoProperty_NonNullable[int|tuple[int, int]]()
     polygon_offsets = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
     bin_values = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    min_value = AutoProperty[float]()
-    max_value = AutoProperty[float]()
-    colourmap = AutoProperty[str|Colormap]()
+    min_value = AutoProperty[float](allow_uninitialised = True)
+    max_value = AutoProperty[float](allow_uninitialised = True)
+    colourmap = AutoProperty[str|Colormap](allow_uninitialised = True)
     edgecolour = AutoProperty_NonNullable[ColorType|Literal["face", "none"]](default_value = "face")
-    bin_alphas = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    bin_alphas = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("extent", "gridsize", "polygon_offsets", "bin_values", "min_value", "max_value", "colourmap", "edgecolour", "bin_alphas", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
@@ -185,10 +194,10 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
 
 class CachedPlotColourbar(CachedPlotElement[Colorbar]):
     target_element = AutoProperty_NonNullable[str]()
-    label =  AutoProperty[str]()
-    location =  AutoProperty[Literal["left", "right", "top", "bottom"]]()
-    extend = AutoProperty[Literal["neither", "both", "min", "max"]]()
-    bin_alphas = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    label =  AutoProperty[str](allow_uninitialised = True)
+    location =  AutoProperty[Literal["left", "right", "top", "bottom"]](default_value = "right")
+    extend = AutoProperty[Literal["neither", "both", "min", "max"]](default_value = "neither")
+    bin_alphas = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("target_element", "label", "location", "extend", **kwargs)
     def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, *args: Any, **kwargs: Any) -> None:
