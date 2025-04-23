@@ -14,6 +14,7 @@ import numpy as np
 from matplotlib.collections import PathCollection, PolyCollection
 from matplotlib.container import ErrorbarContainer
 from matplotlib.lines import Line2D
+from matplotlib.contour import QuadContourSet
 
 from ..Data._Rect import Rect
 from ..Tools._Struct import CacheableStruct
@@ -62,7 +63,8 @@ class CachedPlotLine(CachedPlotElement[Line2D]):
             color = self.colour,
             linestyle = self.linestyle,
             linewidth = self.linewidth,
-            alpha = self.alpha
+            alpha = self.alpha,
+            **kwargs
         )[0]
     @staticmethod
     def from_line(line: Line2D) -> "CachedPlotLine":
@@ -175,7 +177,8 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
             vmin = self.min_value,
             vmax = self.max_value,
             edgecolor = self.edgecolour,
-            extent = self.extent.extent
+            extent = self.extent.extent,
+            **kwargs
         )
         self._result.set_alpha(self.bin_alphas) # type: ignore[arg-type]
     @staticmethod
@@ -198,7 +201,6 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
     label =  AutoProperty[str](allow_uninitialised = True)
     location =  AutoProperty[Literal["left", "right", "top", "bottom"]](default_value = "right")
     extend = AutoProperty[Literal["neither", "both", "min", "max"]](default_value = "neither")
-    bin_alphas = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("target_element", "label", "location", "extend", **kwargs)
     def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, *args: Any, **kwargs: Any) -> None:
@@ -219,4 +221,40 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
             location = self.location,
             label = self.label,
             extend = self.extend
+        )
+
+class CachedPlotContour(CachedPlotElement[QuadContourSet]):
+    x = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    y = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    z = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
+    levels = AutoProperty_NonNullable[tuple[float]]()
+    linewidths = AutoProperty["ArrayLike"](allow_uninitialised = True)
+    linestyles = AutoProperty[tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
+    alpha_values = AutoProperty[tuple["float|ArrayLike"]](allow_uninitialised = True)
+    colors = AutoProperty[tuple[ColorType]](allow_uninitialised = True)
+    def __init__(self, **kwargs):
+        super().__init__("x", "y", "z", "linewidths", "linestyles", "alpha_values", "colors", **kwargs)
+    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
+        self._result = axis.contour(
+            self.x,
+            self.y,
+            self.z,
+            linewidths = self.linewidths,
+            linestyles = self.linestyles,
+            alpha = self.alpha_values,
+            colors = self.colors,
+            **kwargs
+        )
+    @staticmethod
+    def from_contours(contours: QuadContourSet, x: np.ndarray[tuple[int], np.dtype[np.floating]], y: np.ndarray[tuple[int], np.dtype[np.floating]], z: np.ndarray[tuple[int], np.dtype[np.floating]]) -> "CachedPlotContour":
+        return CachedPlotContour(
+            x = x,
+            y = y,
+            z = z,
+            levels = tuple(contours.levels),
+            linewidths = contours.linewidths,
+            linestyles = tuple(contours.linestyles),
+            alpha = contours.alpha,
+            colors = contours.colors if isinstance(contours.colors, ColorType) else (contours.colors,),
+            _result = contours
         )

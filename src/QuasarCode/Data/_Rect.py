@@ -72,6 +72,7 @@ class Rect:
     def create_from_limits(x_min: float, x_max: float, y_min: float, y_max: float) -> "Rect":
         """
         Create a Rect instance from the specified boundary limits.
+        This is the same as the constructor parameters and is implemented for consistency.
 
         Parameters:
             float x_min:
@@ -92,10 +93,17 @@ class Rect:
     def extent(self) -> tuple[float, float, float, float]:
         """
         The limits of the rectangle in the form (x_min, x_max, y_min, y_max).
-        This is the same as the constructor parameters and is implemented for consistency.
         This corresponds to the format of a matplotlib 'extent' parameter.
         """
         return (self.__x_min, self.__x_max, self.__y_min, self.__y_max)
+
+    @property
+    def range(self) -> tuple[tuple[float, float], tuple[float, float]]:
+        """
+        The limits of the rectangle in the form ((x_min, x_max), (y_min, y_max)).
+        This corresponds to the format of a numpy histogram2d 'range' parameter.
+        """
+        return ((self.__x_min, self.__x_max), (self.__y_min, self.__y_max))
 
     @property
     def width(self) -> float:
