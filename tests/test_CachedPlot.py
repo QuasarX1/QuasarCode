@@ -1,6 +1,6 @@
 from typing import Union, List, Tuple, Dict, cast
 
-from matplotlib.collections import PathCollection
+from matplotlib.collections import PathCollection, PolyCollection
 from matplotlib.lines import Line2D
 import numpy as np
 import matplotlib.pyplot as plt
@@ -62,9 +62,9 @@ class Test_CachedPlot(object):
         assert plot_data.extent == Rect.create_from_size(0, 0, 10, 10)
         assert plot_data.flip_x is False
 
-        cache_factory = CacheTargetFactory("test_cache/Test_CachedPlot/test_line/{file}.pickle", "file")
+        cache_factory = CacheTargetFactory("test_cache/Test_CachedPlot/test_scatter/{file}.pickle", "file")
 
-        cache = cache_factory.new(file = "test_line")
+        cache = cache_factory.new(file = "test_scatter")
 
         line_coords = (
             [0, 1, 2, 3, 4, 5, 6, 7, 8,  9, 10],
@@ -92,3 +92,46 @@ class Test_CachedPlot(object):
         loaded_plot_data.render(fig, ax)
         loaded_re_rendered_test_scatter: PathCollection = loaded_plot_data.plot_elements["scatter"].result
         assert np.all(loaded_re_rendered_test_scatter.get_offsets() == mplt_scatter_object.get_offsets())
+
+    def test_hexbin(self):
+
+        plot_factory = CachedPlotFactory(".")
+        assert isinstance(plot_factory, CachedPlotFactory)
+
+        plot_data = plot_factory.new(Rect.create_from_size(0, 0, 10, 10))
+        assert isinstance(plot_data, CachedPlot)
+        assert plot_data.extent == Rect.create_from_size(0, 0, 10, 10)
+        assert plot_data.flip_x is False
+
+        cache_factory = CacheTargetFactory("test_cache/Test_CachedPlot/test_hex/{file}.pickle", "file")
+
+        cache = cache_factory.new(file = "test_hex")
+
+        coords = np.random.rand(1000, 2) * 10
+
+        fig = plt.figure()
+        ax = fig.gca()
+        mplt_hex_object = plt.hexbin(coords[:, 0], coords[:, 1], label = "Hexbin", cmap = "viridis", gridsize = 100, extent = plot_data.extent.extent)
+        plt.legend()
+
+        plot_data.add_element("hexbin", CachedPlotHexbin.from_hexes(mplt_hex_object, plot_data.extent, 100))
+        plot_data.render(fig, ax)
+
+        re_rendered_test_hexbin: PolyCollection = plot_data.plot_elements["hexbin"].result
+        assert np.all(re_rendered_test_hexbin.get_offsets() == mplt_hex_object.get_offsets())
+        assert np.all(re_rendered_test_hexbin.get_array() == mplt_hex_object.get_array())
+        assert np.all(re_rendered_test_hexbin.get_alpha() == mplt_hex_object.get_alpha())
+
+        plot_factory.save(plot_data, cache)
+
+        loaded_plot_data: CachedPlot = plot_factory.load(cache)
+        assert isinstance(loaded_plot_data, CachedPlot)
+        assert loaded_plot_data.extent == Rect.create_from_size(0, 0, 10, 10)
+        assert loaded_plot_data.flip_x is False
+
+        loaded_plot_data.render(fig, ax)
+        loaded_re_rendered_test_hexbin: PolyCollection = loaded_plot_data.plot_elements["hexbin"].result
+        assert np.all(loaded_re_rendered_test_hexbin.get_offsets() == mplt_hex_object.get_offsets())
+        assert np.all(loaded_re_rendered_test_hexbin.get_array() == mplt_hex_object.get_array())
+        assert np.all(loaded_re_rendered_test_hexbin.get_alpha() == mplt_hex_object.get_alpha())
+
