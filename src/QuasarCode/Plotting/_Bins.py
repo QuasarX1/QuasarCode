@@ -75,7 +75,7 @@ class Bins(Cacheable):
             centred_limits (bool): Whether the limits are for the centre of the outermost bins or the outside edges (default).
 
         Returns:
-            LinearBins -> The linear bins.
+            Bins -> The linear bins.
         """
         bin_edges: np.ndarray[tuple[int], np.dtype[np.floating]] = np.linspace(min, max, number + 1) if not centred_limits else np.linspace(min - ((max - min) / (2 * number)), max + ((max - min) / (2 * number)), number + 1)
         return Bins(bin_edges)
@@ -92,7 +92,7 @@ class Bins(Cacheable):
             centred_limits (bool): Whether the limits are for the centre of the outermost bins or the outside edges (default).
 
         Returns:
-            LogarithmicBins -> The logarithmic bins.
+            Bins -> The logarithmic bins.
         """
         bin_edges: np.ndarray[tuple[int], np.dtype[np.floating]] = np.logspace(np.log10(min), np.log10(max), number + 1) if not centred_limits else np.logspace(np.log10(min - ((max - min) / (2 * number))), np.log10(max + ((max - min) / (2 * number))), number + 1)
         return Bins(bin_edges)
