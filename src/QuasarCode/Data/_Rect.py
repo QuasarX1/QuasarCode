@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import Iterable
 
 import numpy as np
 
@@ -88,6 +89,22 @@ class Rect:
             Rect -> A new instance of the Rect class defined by the given limits.
         """
         return Rect(x_min, x_max, y_min, y_max)
+
+    @staticmethod
+    def create_from_data(x_data: Iterable[float], y_data: Iterable[float]) -> "Rect":
+        """
+        Create a Rect instance that encompasses the provided data.
+
+        Parameters:
+            Iterable[float] x_data:
+                X-coordinates.
+            Iterable[float] y_data:
+                Y-coordinates.
+
+        Returns:
+            Rect -> A new instance of the Rect class that encompasses the data.
+        """
+        return Rect(min(x_data), max(x_data), min(y_data), max(y_data))
 
     @property
     def extent(self) -> tuple[float, float, float, float]:
