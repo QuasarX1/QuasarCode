@@ -13,7 +13,7 @@ from ._CachedPlotElements import CachedPlotContour
 
 class Contour(object):
 
-    def __init__(self, x_data: np.ndarray[tuple[int], np.dtype[np.floating]], y_data: np.ndarray[tuple[int], np.dtype[np.floating]], values: np.ndarray[tuple[int], np.dtype[np.floating]]) -> None:
+    def __init__(self, x_data: np.ndarray[tuple[int], np.dtype[np.floating]], y_data: np.ndarray[tuple[int], np.dtype[np.floating]], values: np.ndarray[tuple[int], np.dtype[np.floating]]|None = None) -> None:
         self.__can_compute: bool = True
         self.__x_data = x_data
         self.__y_data = y_data
@@ -44,8 +44,23 @@ class Contour(object):
         return self.__cache_object
 
     @property
+    def plotting_result(self) -> QuadContourSet|None:
+        """
+        Get the plotting result for this contour.
+        """
+        return self.__result
+
+    @property
     def levels(self) -> np.ndarray[tuple[int, int], np.dtype[np.floating]]|None:
         return self.__levels
+
+    @property
+    def min_level(self) -> float|None:
+        return self.__levels.min() if self.__levels is not None else None
+
+    @property
+    def max_level(self) -> float|None:
+        return self.__levels.max() if self.__levels is not None else None
 
     @property
     def contour_levels(self) -> set[float]:
@@ -56,7 +71,7 @@ class Contour(object):
         return tuple(self.__contour_levels[level][0] for level in sorted(self.__contour_levels.keys()))
     
     @property
-    def contour_linewidths(self) -> tuple[ArrayLike, ...]:
+    def contour_linewidths(self) -> tuple["ArrayLike", ...]:
         return tuple(self.__contour_levels[level][1] for level in sorted(self.__contour_levels.keys()))
     
     @property
@@ -70,7 +85,7 @@ class Contour(object):
     def add_contours(self, *levels: float) -> None:
         for level in levels:
             if level not in self.__contour_levels:
-                self.__contour_levels[level] = [None, None, "solid", 1.0]
+                self.__contour_levels[level] = ["black", 1, "solid", 1.0]
 
     def remove_contours(self, *levels: float) -> None:
         for level in levels:
@@ -86,7 +101,7 @@ class Contour(object):
         else:
             raise ValueError(f"Contour level {level} not found.")
         
-    def set_linewidth(self, level: float, linewidth: ArrayLike) -> None:
+    def set_linewidth(self, level: float, linewidth: "ArrayLike") -> None:
         if level in self.__contour_levels:
             self.__contour_levels[level][1] = linewidth
         else:

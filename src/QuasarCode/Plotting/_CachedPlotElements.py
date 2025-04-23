@@ -233,12 +233,13 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
     alpha_values = AutoProperty[tuple["float|ArrayLike"]](allow_uninitialised = True)
     colors = AutoProperty[tuple[ColorType]](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("x", "y", "z", "linewidths", "linestyles", "alpha_values", "colors", **kwargs)
+        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colors", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
         self._result = axis.contour(
             self.x,
             self.y,
             self.z,
+            levels = self.levels,
             linewidths = self.linewidths,
             linestyles = self.linestyles,
             alpha = self.alpha_values,
@@ -246,15 +247,15 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             **kwargs
         )
     @staticmethod
-    def from_contours(contours: QuadContourSet, x: np.ndarray[tuple[int], np.dtype[np.floating]], y: np.ndarray[tuple[int], np.dtype[np.floating]], z: np.ndarray[tuple[int], np.dtype[np.floating]]) -> "CachedPlotContour":
+    def from_contours(contours: QuadContourSet, x: np.ndarray[tuple[int], np.dtype[np.floating]], y: np.ndarray[tuple[int], np.dtype[np.floating]], z: np.ndarray[tuple[int], np.dtype[np.floating]], uses_single_colour_value: bool = False) -> "CachedPlotContour":
         return CachedPlotContour(
             x = x,
             y = y,
             z = z,
             levels = tuple(contours.levels),
-            linewidths = contours.linewidths,
+            linewidths = contours.get_linewidths(),
             linestyles = tuple(contours.linestyles),
-            alpha = contours.alpha,
-            colors = contours.colors if isinstance(contours.colors, ColorType) else (contours.colors,),
+            alpha_values = contours.alpha,
+            colors = contours.colors if not uses_single_colour_value else tuple([contours.colors] * len(contours.levels)),
             _result = contours
         )
