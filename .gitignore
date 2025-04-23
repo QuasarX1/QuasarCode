@@ -263,6 +263,7 @@ __pycache__/
 # PyPi Packaging
 *.egg-info
 dist/
+test_cache/
 env
 old-code/env
 old__UnitTests_Python/env
