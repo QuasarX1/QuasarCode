@@ -21,7 +21,7 @@ class AutoProperty(property, Generic[T]):
     def __init__(self, default_value: Union[T, None] = None, doc: Union[str, None] = None, allow_uninitialised: bool = False) -> None:
         self.__name: Union[str, None] = None
         self.__declaring_type_name: Union[str, None] = None
-        self.__check_uninitialised: bool = not allow_uninitialised
+        self.__check_uninitialised: bool = not (allow_uninitialised or default_value is not None)
         self.__default_value = default_value
         super().__init__(doc = doc)
 
@@ -52,7 +52,7 @@ class AutoProperty(property, Generic[T]):
         if self.__check_uninitialised:
             if not self.is_initialised(instance):
                 raise ValueError("Attempted to access value of uninitialised AutoProperty with initialisation enforcement enabled.")
-            
+
         try:
             return getattr(instance, self.__get_storage_attribute_name())
         except AttributeError:
