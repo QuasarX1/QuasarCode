@@ -14,7 +14,7 @@ from ._CachedPlotElements import CachedPlotHexbin
 
 COLOUR_FUNCTION_TYPE: TypeAlias = Callable[[float|None, float|None, float|None], Callable[[np.ndarray[tuple[int], np.dtype[np.integer]]], float]]
 
-class Hexbin(CachedPlotHexbin):
+class Hexbin(object):
 
     COLOUR_FUNCTION_TYPE = COLOUR_FUNCTION_TYPE
     
