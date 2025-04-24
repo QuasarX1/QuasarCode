@@ -24,6 +24,8 @@ from . import MPI
 
 from . import Science
 
+from . import Plotting
+
 from . import Tools
 
 from .Tools._directorys_and_imports import source_file_relitive_add_to_path

@@ -6,7 +6,7 @@ from ._multiItterator import MultiItterator
 from ._script_wrapper import ScriptWrapper, ScriptWrapper_ParamSpec_Error, ScriptWrapper_Param_ValidityError, \
                              ScriptWrapper_Param_ValueError, ScriptWrapper_Param_TypeError, ScriptWrapper_Param_UnsetError, \
                              ScriptWrapper_Param_ConflictError, ScriptWrapper_Param_MissingRequirementError
-from ._Struct import Struct
+from ._Struct import Struct, CacheableStruct
 from ._typeshield import TypeShield_Base, TypeShield, NestedTypeShield
 from ._cast import Cast, non_nullable_cast, nullable_cast, NestedCast
 from ._common_casts import *
