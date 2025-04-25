@@ -136,6 +136,16 @@ class Contour(object):
 
         self.__can_plot = True
 
+        self.__cache_object = CachedPlotContour()
+        self.__cache_object.x = self.__x_bin_locations
+        self.__cache_object.y = self.__y_bin_locations
+        self.__cache_object.z = self.__levels
+        self.__cache_object.levels = tuple(sorted(self.__contour_levels))
+        self.__cache_object.linewidths = self.contour_linewidths
+        self.__cache_object.linestyles = self.contour_linestyles
+        self.__cache_object.alpha_values = self.contour_alphas
+        self.__cache_object.colours = self.contour_alphas
+
     def plot(self, axis: Axes, **kwargs) -> QuadContourSet:
         if not self.__can_plot:
             raise RuntimeError("Cannot plot contours before calling \"generate\".")
@@ -152,6 +162,7 @@ class Contour(object):
             **kwargs
         )
 
-        self.__cache_object = CachedPlotContour.from_contours(self.__result, self.__x_bin_locations, self.__y_bin_locations, self.__levels)
+        #self.__cache_object = CachedPlotContour.from_contours(self.__result, self.__x_bin_locations, self.__y_bin_locations, self.__levels)
+        self.__cache_object._result = self.__result
 
         return self.__result
