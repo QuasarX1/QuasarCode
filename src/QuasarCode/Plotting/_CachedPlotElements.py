@@ -237,7 +237,7 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
     linewidths = AutoProperty["ArrayLike"](allow_uninitialised = True)
     linestyles = AutoProperty[tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
     alpha_values = AutoProperty[tuple["float|ArrayLike"]](allow_uninitialised = True)
-    colors = AutoProperty[tuple[ColorType]](allow_uninitialised = True)
+    colours = AutoProperty[tuple[ColorType]](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colors", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
@@ -249,7 +249,7 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             linewidths = self.linewidths,
             linestyles = self.linestyles,
             alpha = self.alpha_values,
-            colors = self.colors,
+            colors = self.colours,
             **kwargs
         )
     @staticmethod
@@ -262,6 +262,6 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             linewidths = contours.get_linewidths(),
             linestyles = tuple(contours.linestyles),
             alpha_values = contours.alpha,
-            colors = contours.colors if not uses_single_colour_value else tuple([contours.colors] * len(contours.levels)),
+            colours = contours.colors if not uses_single_colour_value else tuple([contours.colors] * len(contours.levels)),
             _result = contours
         )
