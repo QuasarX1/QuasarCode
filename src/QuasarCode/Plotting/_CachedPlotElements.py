@@ -182,7 +182,13 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
         )
         self._result.set_alpha(self.bin_alphas) # type: ignore[arg-type]
     @staticmethod
-    def from_hexes(hexes: PolyCollection, extent: Rect, gridsize: int|tuple[int, int], min_value: float|None = None, max_value: float|None = None) -> "CachedPlotHexbin":
+    def from_hexes(hexes: PolyCollection, extent: Rect, gridsize: int|tuple[int, int], min_value: float|None = None, max_value: float|None = None, edgecolours_match_faces: bool = False) -> "CachedPlotHexbin":
+        n_hexes = hexes.get_array().shape[0]
+        edgecolour = hexes.get_edgecolor()
+        if edgecolours_match_faces:
+            edgecolour = "face"
+        elif isinstance(edgecolour, np.ndarray) and edgecolour.shape[0] == 0 and n_hexes > 0:
+            edgecolour = "none"
         return CachedPlotHexbin(
             extent = extent,
             gridsize = gridsize,
@@ -190,7 +196,7 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
             bin_values = hexes.get_array(),
             min_value = min_value,
             max_value = max_value,
-            edgecolour = hexes.get_edgecolor(),
+            edgecolour = edgecolour,
             colourmap = hexes.get_cmap(),
             bin_alphas = hexes.get_alpha(),
             _result = hexes

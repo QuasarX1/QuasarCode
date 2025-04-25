@@ -91,7 +91,7 @@ class Hexbin(object):
         if alpha_values is not None:
             hexes.set_alpha(alpha_values)
 
-        self.__cache_object = CachedPlotHexbin.from_hexes(hexes, extent, gridsize, min_value, max_value)
+        self.__cache_object = CachedPlotHexbin.from_hexes(hexes, extent, gridsize, min_value, max_value, edgecolours_match_faces = edge_colour == "face")
 
         return hexes
 
