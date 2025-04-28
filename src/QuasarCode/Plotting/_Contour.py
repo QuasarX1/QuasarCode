@@ -144,7 +144,7 @@ class Contour(object):
         self.__cache_object.linewidths = self.contour_linewidths
         self.__cache_object.linestyles = self.contour_linestyles
         self.__cache_object.alpha_values = self.contour_alphas
-        self.__cache_object.colours = self.contour_alphas
+        self.__cache_object.colours = self.contour_colours
 
     def plot(self, axis: Axes, **kwargs) -> QuadContourSet:
         if not self.__can_plot:
