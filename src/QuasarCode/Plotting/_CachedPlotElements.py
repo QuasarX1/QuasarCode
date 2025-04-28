@@ -239,7 +239,7 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
     alpha_values = AutoProperty[tuple["float|ArrayLike"]](allow_uninitialised = True)
     colours = AutoProperty[tuple[ColorType]](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colors", **kwargs)
+        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
         self._result = axis.contour(
             self.x,
