@@ -123,13 +123,15 @@ class Contour(object):
         if not self.__can_compute:
             raise RuntimeError("Cannot compute contours after resources have been released.")
 
-        self.__levels, bin_x, bin_y = np.histogram2d(
+        hist, bin_x, bin_y = np.histogram2d(
             self.__x_data,
             self.__y_data,
             weights = self.__values,
             bins = gridsize,
             range = extent.range if extent is not None else None
         )
+
+        self.__levels = hist.T
 
         self.__x_bin_locations = bin_x[:-1] + (bin_x[1] - bin_x[0]) / 2
         self.__y_bin_locations = bin_y[:-1] + (bin_y[1] - bin_y[0]) / 2
