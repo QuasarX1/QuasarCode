@@ -86,44 +86,63 @@ class Contour(object):
         for level in levels:
             if level not in self.__contour_levels:
                 self.__contour_levels[level] = ["black", 1, "solid", 1.0]
+        self.__cache_object.levels = tuple(sorted(self.__contour_levels))
+        self.__cache_object.linewidths = self.contour_linewidths
+        self.__cache_object.linestyles = self.contour_linestyles
+        self.__cache_object.alpha_values = self.contour_alphas
+        self.__cache_object.colours = self.contour_colours
 
     def remove_contours(self, *levels: float) -> None:
         for level in levels:
             if level in self.__contour_levels:
                 del self.__contour_levels[level]
+        self.__cache_object.levels = tuple(sorted(self.__contour_levels))
+        self.__cache_object.linewidths = self.contour_linewidths
+        self.__cache_object.linestyles = self.contour_linestyles
+        self.__cache_object.alpha_values = self.contour_alphas
+        self.__cache_object.colours = self.contour_colours
     
     def clear_contours(self) -> None:
         self.__contour_levels.clear()
+        del self.__cache_object.levels
+        del self.__cache_object.linewidths
+        del self.__cache_object.linestyles
+        del self.__cache_object.alpha_values
+        del self.__cache_object.colours
 
     def set_colour(self, level: float, colour: ColorType) -> None:
         if level in self.__contour_levels:
             self.__contour_levels[level][0] = colour
         else:
             raise ValueError(f"Contour level {level} not found.")
+        self.__cache_object.colours = self.contour_colours
         
     def set_linewidth(self, level: float, linewidth: "ArrayLike") -> None:
         if level in self.__contour_levels:
             self.__contour_levels[level][1] = linewidth
         else:
             raise ValueError(f"Contour level {level} not found.")
+        self.__cache_object.linewidths = self.contour_linewidths
         
     def set_linestyle(self, level: float, linestyle: Literal["solid", "dashed", "dashdot", "dotted"]) -> None:
         if level in self.__contour_levels:
             self.__contour_levels[level][2] = linestyle
         else:
             raise ValueError(f"Contour level {level} not found.")
+        self.__cache_object.linestyles = self.contour_linestyles
 
     def set_alpha(self, level: float, alpha: float) -> None:
         if level in self.__contour_levels:
             self.__contour_levels[level][3] = alpha
         else:
             raise ValueError(f"Contour level {level} not found.")
+        self.__cache_object.alpha_values = self.contour_alphas
 
     def generate(self, gridsize = int|tuple[int,int], extent: Rect|None = None, **kwargs) -> None:
         if not self.__can_compute:
             raise RuntimeError("Cannot compute contours after resources have been released.")
 
-        self.__levels, bin_x, bin_y = np.histogram2d(
+        hist, bin_x, bin_y = np.histogram2d(
             self.__x_data,
             self.__y_data,
             weights = self.__values,
@@ -131,10 +150,22 @@ class Contour(object):
             range = extent.range if extent is not None else None
         )
 
+        self.__levels = hist.T
+
         self.__x_bin_locations = bin_x[:-1] + (bin_x[1] - bin_x[0]) / 2
         self.__y_bin_locations = bin_y[:-1] + (bin_y[1] - bin_y[0]) / 2
 
         self.__can_plot = True
+
+        self.__cache_object = CachedPlotContour()
+        self.__cache_object.x = self.__x_bin_locations
+        self.__cache_object.y = self.__y_bin_locations
+        self.__cache_object.z = self.__levels
+        self.__cache_object.levels = tuple(sorted(self.__contour_levels))
+        self.__cache_object.linewidths = self.contour_linewidths
+        self.__cache_object.linestyles = self.contour_linestyles
+        self.__cache_object.alpha_values = self.contour_alphas
+        self.__cache_object.colours = self.contour_colours
 
     def plot(self, axis: Axes, **kwargs) -> QuadContourSet:
         if not self.__can_plot:
@@ -152,6 +183,7 @@ class Contour(object):
             **kwargs
         )
 
-        self.__cache_object = CachedPlotContour.from_contours(self.__result, self.__x_bin_locations, self.__y_bin_locations, self.__levels)
+        #self.__cache_object = CachedPlotContour.from_contours(self.__result, self.__x_bin_locations, self.__y_bin_locations, self.__levels)
+        self.__cache_object._result = self.__result
 
         return self.__result

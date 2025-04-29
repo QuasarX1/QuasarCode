@@ -182,7 +182,13 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
         )
         self._result.set_alpha(self.bin_alphas) # type: ignore[arg-type]
     @staticmethod
-    def from_hexes(hexes: PolyCollection, extent: Rect, gridsize: int|tuple[int, int], min_value: float|None = None, max_value: float|None = None) -> "CachedPlotHexbin":
+    def from_hexes(hexes: PolyCollection, extent: Rect, gridsize: int|tuple[int, int], min_value: float|None = None, max_value: float|None = None, edgecolours_match_faces: bool = False) -> "CachedPlotHexbin":
+        n_hexes = hexes.get_array().shape[0]
+        edgecolour = hexes.get_edgecolor()
+        if edgecolours_match_faces:
+            edgecolour = "face"
+        elif isinstance(edgecolour, np.ndarray) and edgecolour.shape[0] == 0 and n_hexes > 0:
+            edgecolour = "none"
         return CachedPlotHexbin(
             extent = extent,
             gridsize = gridsize,
@@ -190,7 +196,7 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
             bin_values = hexes.get_array(),
             min_value = min_value,
             max_value = max_value,
-            edgecolour = hexes.get_edgecolor(),
+            edgecolour = edgecolour,
             colourmap = hexes.get_cmap(),
             bin_alphas = hexes.get_alpha(),
             _result = hexes
@@ -231,9 +237,9 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
     linewidths = AutoProperty["ArrayLike"](allow_uninitialised = True)
     linestyles = AutoProperty[tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
     alpha_values = AutoProperty[tuple["float|ArrayLike"]](allow_uninitialised = True)
-    colors = AutoProperty[tuple[ColorType]](allow_uninitialised = True)
+    colours = AutoProperty[tuple[ColorType]](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colors", **kwargs)
+        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
         self._result = axis.contour(
             self.x,
@@ -243,7 +249,7 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             linewidths = self.linewidths,
             linestyles = self.linestyles,
             alpha = self.alpha_values,
-            colors = self.colors,
+            colors = self.colours,
             **kwargs
         )
     @staticmethod
@@ -256,6 +262,6 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             linewidths = contours.get_linewidths(),
             linestyles = tuple(contours.linestyles),
             alpha_values = contours.alpha,
-            colors = contours.colors if not uses_single_colour_value else tuple([contours.colors] * len(contours.levels)),
+            colours = contours.colors if not uses_single_colour_value else tuple([contours.colors] * len(contours.levels)),
             _result = contours
         )
