@@ -200,7 +200,9 @@ class Test_CachedPlot(object):
         coords = np.random.rand(1000, 2) * 10
 
         contour_object = Contour(coords[:, 0], coords[:, 1])
-        contour_object.generate(gridsize = 100)
+
+        contour_object.generate(gridsize = 100) # Run this early to get the min/max levels
+
         contour_object.add_contours(
             (contour_object.max_level - contour_object.min_level) / 4,
             (contour_object.max_level - contour_object.min_level) / 2,

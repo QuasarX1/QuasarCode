@@ -34,7 +34,7 @@ class CachedPlot(CacheableStruct):
     def add_colourbar(self, name: str, colourbar: CachedPlotColourbar) -> None:
         if name in self.colourbars:
             raise KeyError(f"A colourbar already exists with the name \"{name}\".")
-        if not self.__check_element_name_is_new(colourbar.target_element):
+        if self.__check_element_name_is_new(colourbar.target_element):
             raise KeyError(f"No element exists with the target name \"{colourbar.target_element}\".")
         self.colourbars[name] = colourbar
 

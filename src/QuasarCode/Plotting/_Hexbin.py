@@ -14,7 +14,7 @@ from ._CachedPlotElements import CachedPlotHexbin
 
 COLOUR_FUNCTION_TYPE: TypeAlias = Callable[[float|None, float|None, float|None], Callable[[np.ndarray[tuple[int], np.dtype[np.integer]]], float]]
 
-class Hexbin(CachedPlotHexbin):
+class Hexbin(object):
 
     COLOUR_FUNCTION_TYPE = COLOUR_FUNCTION_TYPE
     
@@ -91,7 +91,7 @@ class Hexbin(CachedPlotHexbin):
         if alpha_values is not None:
             hexes.set_alpha(alpha_values)
 
-        self.__cache_object = CachedPlotHexbin.from_hexes(hexes, extent, gridsize, min_value, max_value)
+        self.__cache_object = CachedPlotHexbin.from_hexes(hexes, extent, gridsize, min_value, max_value, edgecolours_match_faces = edge_colour == "face")
 
         return hexes
 
