@@ -1,3 +1,5 @@
+from typing import Any
+
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 
@@ -38,9 +40,13 @@ class CachedPlot(CacheableStruct):
             raise KeyError(f"No element exists with the target name \"{colourbar.target_element}\".")
         self.colourbars[name] = colourbar
 
-    def render(self, figure: Figure, axis: Axes):
-        for element in self.plot_elements:#TODO: why can this be __has_cacheables after loading from file!!!!!
-            self.plot_elements[element].render(figure, axis)
+    def render(self, figure: Figure, axis: Axes, forward_kwargs: dict[str, dict[str, Any]]|None = None, forward_colourbar_kwargs: dict[str, dict[str, Any]]|None = None) -> None:
+        if forward_kwargs is None:
+            forward_kwargs = {}
+        if forward_colourbar_kwargs is None:
+            forward_colourbar_kwargs = {}
+        for element in self.plot_elements:
+            self.plot_elements[element].render(figure, axis, **forward_kwargs.get(element, {}))
 
         for name, colourbar in self.colourbars.items():
             target: object
@@ -48,7 +54,7 @@ class CachedPlot(CacheableStruct):
                 target = self.plot_elements[colourbar.target_element]._result
             else:
                 raise RuntimeError(f"Unable to locate target for colourbar \"{name}\".")
-            colourbar.render(figure, axis, target)
+            colourbar.render(figure, axis, target, **forward_colourbar_kwargs.get(name, {}))
 
         if self.x_axis_label is not None:
             axis.set_xlabel(self.x_axis_label)
