@@ -39,7 +39,7 @@ class CachedPlot(CacheableStruct):
         self.colourbars[name] = colourbar
 
     def render(self, figure: Figure, axis: Axes):
-        for element in self.plot_elements:#TODO: why can this be __has_cacheables after loading from file!!!!!
+        for element in self.plot_elements:
             self.plot_elements[element].render(figure, axis)
 
         for name, colourbar in self.colourbars.items():
