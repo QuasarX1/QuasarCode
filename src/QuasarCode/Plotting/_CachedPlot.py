@@ -55,7 +55,7 @@ class CachedPlot(CacheableStruct):
         if self.y_axis_label is not None:
             axis.set_ylabel(self.y_axis_label)
         
-        axis.set_xlim(self.extent.extent[0:2] if not self.flip_x else self.extent.extent[1:-1:-1])
+        axis.set_xlim(self.extent.extent[0:2] if not self.flip_x else self.extent.extent[1::-1])
         axis.set_ylim(self.extent.extent[2:4] if not self.flip_y else self.extent.extent[3:1:-1])
 
         if self.show_legend:
