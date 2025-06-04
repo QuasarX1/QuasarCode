@@ -122,4 +122,4 @@ class NestedTypeShield(TypeShield_Base[T]):
                 valid = True
                 break
 
-        return (self.check_type(value[tuple(value.keys())[0]] if isinstance(value, dict) else value[0], level = level + 1) if level < len(self) - 1 else True) if valid else False
+        return (self.check_type(value[0] if not isinstance(value, dict) else value[tuple(value.keys())[0]], level = level + 1) if level < len(self) - 1 or len(value) == 0 else True) if valid else False

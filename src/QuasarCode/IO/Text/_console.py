@@ -79,7 +79,7 @@ class Console(object):
                 raise TypeError(f"Argument provided for parameter root_rank (instance of {type(root_rank)}) is not an integer and cannot be interpreted as one.")
         if root_rank < 0:
             raise ValueError("Negative values cannot be MPI rank indexes.")
-        Console.__limit_mpi_output_ranks = (root_rank, )
+        Console._limit_mpi_output_ranks = (root_rank, )
         Console.__debug_bypasses_mpi_output_restriction = bypass_when_debug
     @staticmethod
     def mpi_output_ranks_only(*ranks: int, bypass_when_debug = False) -> None:
