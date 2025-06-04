@@ -226,7 +226,8 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
             ax = axis,
             location = self.location,
             label = self.label,
-            extend = self.extend
+            extend = self.extend,
+            **kwargs
         )
 
 class CachedPlotContour(CachedPlotElement[QuadContourSet]):
