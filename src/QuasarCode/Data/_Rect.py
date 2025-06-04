@@ -107,6 +107,26 @@ class Rect:
         return Rect(min(x_data), max(x_data), min(y_data), max(y_data))
 
     @property
+    def x(self) -> float:
+        """
+        The x-coordinate of the bottom-left corner of the rectangle.
+
+        Returns:
+            float -> The x-coordinate of the bottom-left corner.
+        """
+        return self.__x_min
+
+    @property
+    def y(self) -> float:
+        """
+        The y-coordinate of the bottom-left corner of the rectangle.
+
+        Returns:
+            float -> The y-coordinate of the bottom-left corner.
+        """
+        return self.__y_min
+
+    @property
     def extent(self) -> tuple[float, float, float, float]:
         """
         The limits of the rectangle in the form (x_min, x_max, y_min, y_max).
