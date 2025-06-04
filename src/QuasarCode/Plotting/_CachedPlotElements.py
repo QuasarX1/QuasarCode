@@ -210,7 +210,7 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
     orientation    = AutoProperty[Literal["horizontal", "vertical", "top", "bottom"]](default_value = "vertical")
     extend         = AutoProperty[Literal["neither", "both", "min", "max"]](default_value = "neither")
     def __init__(self, **kwargs):
-        super().__init__("target_element", "label", "location", "extend", **kwargs)
+        super().__init__("target_element", "label", "add_to_axis", "location", "orientation", "extend", **kwargs)
     def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, *args: Any, **kwargs: Any) -> None:
         """
         Render the element on the given figure and axis, using the target element.
