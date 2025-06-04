@@ -1,5 +1,6 @@
 from typing import Any, Literal
 
+from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 import numpy as np
@@ -17,8 +18,8 @@ class CachedFigureGrid(CacheableStruct):
     columns = AutoProperty_NonNullable[int](default_value = 1)
     figure_size = AutoProperty_NonNullable[tuple[int, int]](default_value = (6, 8))
     layout = AutoProperty[Literal["constrained", "compressed", "tight"]](allow_uninitialised = True)
-    relative_heights = AutoProperty[list[float]]()
-    relative_widths = AutoProperty[list[float]]()
+    relative_heights = AutoProperty[list[float]](allow_uninitialised = True)
+    relative_widths = AutoProperty[list[float]](allow_uninitialised = True)
     vertical_spacing = AutoProperty_NonNullable[float](default_value = 0)
     horizontal_spacing = AutoProperty_NonNullable[float](default_value = 0)
     plots = AutoProperty_NonNullable[dict[str, CachedPlot]]()
@@ -72,6 +73,8 @@ class CachedFigureGrid(CacheableStruct):
     def add_row(self, number = 1, insert_at_index: int = -1, height: float = 1.0, physical_height: bool = False, expand_figure: bool = False) -> None:
         if number < 1:
             raise ValueError("Number of rows to add must be at least 1.")
+        if insert_at_index < 0:
+            insert_at_index = self.rows + insert_at_index
         if self.__locked:
             raise RuntimeError("Cannot add rows after the figure has been created. Call `clear_axes` first.")
         if physical_height and not expand_figure:
@@ -93,6 +96,8 @@ class CachedFigureGrid(CacheableStruct):
     def add_column(self, number = 1, insert_at_index: int = -1, width: float = 1.0, physical_width: bool = False, expand_figure: bool = False) -> None:
         if number < 1:
             raise ValueError("Number of columns to add must be at least 1.")
+        if insert_at_index < 0:
+            insert_at_index = self.columns + insert_at_index
         if self.__locked:
             raise RuntimeError("Cannot add columns after the figure has been created. Call `clear_axes` first.")
         if physical_width and not expand_figure:
@@ -212,7 +217,7 @@ class CachedFigureGrid(CacheableStruct):
     def make_figure_and_axes(self, figure_kwargs: dict[str, Any]|None = None, mosaic_kwargs: dict[str, Any]|None = None, gridspec_kwargs: dict[str, Any]|None = None) -> tuple[Figure, dict[str, Axes]]:
         if self.__locked:
             raise RuntimeError("Figure and axes have already been created. Cannot create them again without first calling `clear_axes`.")
-        self.__figure = Figure(figsize = self.figure_size, layout = self.layout, **(figure_kwargs if figure_kwargs is not None else {}))
+        self.__figure = plt.figure(figsize = self.figure_size, layout = self.layout, **(figure_kwargs if figure_kwargs is not None else {}))
         if self.title is not None:
             self.__figure.suptitle(self.title)
         self.__axes = self.__figure.subplot_mosaic(
@@ -222,6 +227,7 @@ class CachedFigureGrid(CacheableStruct):
             gridspec_kw = { "wspace": self.horizontal_spacing, "hspace": self.vertical_spacing, **(gridspec_kwargs if gridspec_kwargs is not None else {}) },
             **(mosaic_kwargs if mosaic_kwargs is not None else {})
         )
+        self.__locked = True
         return self.__figure, self.__axes
     
     @property
