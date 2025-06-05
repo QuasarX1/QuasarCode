@@ -204,11 +204,14 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
 
 class CachedPlotColourbar(CachedPlotElement[Colorbar]):
     target_element = AutoProperty_NonNullable[str]()
-    label =  AutoProperty[str](allow_uninitialised = True)
-    location =  AutoProperty[Literal["left", "right", "top", "bottom"]](default_value = "right")
-    extend = AutoProperty[Literal["neither", "both", "min", "max"]](default_value = "neither")
+    target_plot    = AutoProperty[str](allow_uninitialised = True)
+    label          = AutoProperty[str](allow_uninitialised = True)
+    add_to_axis    = AutoProperty_NonNullable[bool](default_value = True)
+    location       = AutoProperty[Literal["left", "right", "top", "bottom"]|None](default_value = "right", allow_uninitialised = True)
+    orientation    = AutoProperty[Literal["horizontal", "vertical", "top", "bottom"]](default_value = "vertical")
+    extend         = AutoProperty[Literal["neither", "both", "min", "max"]](default_value = "neither")
     def __init__(self, **kwargs):
-        super().__init__("target_element", "label", "location", "extend", **kwargs)
+        super().__init__("target_element", "target_plot", "label", "add_to_axis", "location", "orientation", "extend", **kwargs)
     def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, *args: Any, **kwargs: Any) -> None:
         """
         Render the element on the given figure and axis, using the target element.
@@ -223,10 +226,13 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
         """
         self._result = figure.colorbar(
             target,
-            ax = axis,
-            location = self.location,
+            ax = axis if not self.add_to_axis else None,
+            cax = axis if self.add_to_axis else None,
+            location = self.location if not self.add_to_axis else None,
             label = self.label,
-            extend = self.extend
+            extend = self.extend,
+            orientation = self.orientation if not self.add_to_axis else None,
+            **kwargs
         )
 
 class CachedPlotContour(CachedPlotElement[QuadContourSet]):
