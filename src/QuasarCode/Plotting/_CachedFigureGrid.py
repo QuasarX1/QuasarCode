@@ -10,6 +10,7 @@ from ..Tools._ScreenResolution import ScreenResolution
 from ..Tools._Struct import CacheableStruct
 from ..Tools._autoproperty import AutoProperty, AutoProperty_NonNullable
 from ._CachedPlot import CachedPlot
+from ._CachedPlotElements import CachedPlotColourbar
 
 class CachedFigureGrid(CacheableStruct):
     """
@@ -28,6 +29,7 @@ class CachedFigureGrid(CacheableStruct):
     vertical_spacing = AutoProperty_NonNullable[float](default_value = 0)
     horizontal_spacing = AutoProperty_NonNullable[float](default_value = 0)
     plots = AutoProperty_NonNullable[dict[str, CachedPlot]]()
+    colourbars = AutoProperty_NonNullable[dict[str, CachedPlotColourbar]]()
     resolution = AutoProperty_NonNullable[int](default_value = 100)
     resolution_for_files = AutoProperty[int](allow_uninitialised = True)
 
@@ -436,6 +438,30 @@ class CachedFigureGrid(CacheableStruct):
             self.plots.pop(name)
         except KeyError: pass
 
+    def set_colourbar(self, name: str, colourbar: CachedPlotColourbar, target_plot: str, target_element: str) -> None:
+        if name in self.colourbars:
+            raise KeyError(f"A colourbar already exists with the name \"{name}\".")
+        if not any([name in row for row in self.mosaic]):
+            raise KeyError(f"No plot with the name \"{name}\" exists in the mosaic. Add the plot first with `assign_plot`.")
+        if not any([target_plot in row for row in self.mosaic]):
+            raise KeyError(f"No plot with the name \"{target_plot}\" exists in the mosaic. Add the plot first with `assign_plot`.")
+        colourbar.target_element = target_element
+        colourbar.target_plot = target_plot
+        colourbar.add_to_axis = False
+        self.colourbars[name] = colourbar
+        
+    def remove_colourbar(self, name: str) -> None:
+        """
+        Remove an added CachedPlotColourbar instance.
+
+        Parameters:
+            str name:
+                Name of the axis to unlink.
+        """
+        try:
+            self.colourbars.pop(name)
+        except KeyError: pass
+
     def get_axis_rect_relative(self, name: str) -> Rect:
         """
         Get a Rect instance containing the relative position and size of a named axis.
@@ -590,6 +616,8 @@ class CachedFigureGrid(CacheableStruct):
             forward_colourbar_kwargs = {}
         for plot_tag, plot in self.plots.items():
             plot.render(self.__figure, self.__axes[plot_tag], forward_kwargs = forward_kwargs.get(plot_tag, {}), forward_colourbar_kwargs = forward_colourbar_kwargs.get(plot_tag, {}))
+        for plot_tag, colourbar in self.colourbars.items():
+            colourbar.render(self.__figure, self.__axes[plot_tag], self.plots[colourbar.target_plot].plot_elements[colourbar.target_element]._result, **forward_colourbar_kwargs.get(plot_tag, {}))
 
     def save_png(self):
         """
