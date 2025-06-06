@@ -16,8 +16,8 @@ class IRect(Generic[T]):
         - create_from_limits(x_min, x_max, y_min, y_max)
     """
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def create_from_size(cls, x: T, y: T, width: T, height: T) -> "IRect[T]":
         """
         Creates an IRect instance using the specified position of the bottom-left corner and size.
@@ -37,8 +37,8 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def create_from_centre(cls, x: T, y: T, width: T, height: T) -> "IRect[T]":
         """
         Create a IRect instance using the centre coordinates and dimensions.
@@ -58,8 +58,8 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def create_from_limits(cls, x_min: T, x_max: T, y_min: T, y_max: T) -> "IRect[T]":
         """
         Create a IRect instance from the specified boundary limits.
@@ -80,8 +80,8 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def create_from_data(cls, x_data: Iterable[T], y_data: Iterable[T]) -> "IRect[T]":
         """
         Create a IRect instance that encompasses the provided data.
@@ -97,8 +97,8 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @property
+    @abstractmethod
     def x(self) -> T:
         """
         The x-coordinate of the bottom-left corner of the rectangle.
@@ -108,13 +108,13 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @x.setter
+    @abstractmethod
     def _(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @property
+    @abstractmethod
     def y(self) -> T:
         """
         The y-coordinate of the bottom-left corner of the rectangle.
@@ -124,13 +124,13 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @y.setter
+    @abstractmethod
     def _(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
-        
-    @abstractmethod
+
     @property
+    @abstractmethod
     def x1(self) -> T:
         """
         The x-coordinate of the top-right corner of the rectangle.
@@ -140,13 +140,13 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @x1.setter
+    @abstractmethod
     def _(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @property
+    @abstractmethod
     def y1(self) -> T:
         """
         The y-coordinate of the top-right corner of the rectangle.
@@ -156,13 +156,13 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @y1.setter
+    @abstractmethod
     def _(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @property
+    @abstractmethod
     def extent(self) -> tuple[T, T, T, T]:
         """
         The limits of the rectangle in the form (x_min, x_max, y_min, y_max).
@@ -170,8 +170,8 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @property
+    @abstractmethod
     def range(self) -> tuple[tuple[T, T], tuple[T, T]]:
         """
         The limits of the rectangle in the form ((x_min, x_max), (y_min, y_max)).
@@ -179,8 +179,8 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @property
+    @abstractmethod
     def width(self) -> T:
         """
         The width of the rectangle.
@@ -190,8 +190,8 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @property
+    @abstractmethod
     def height(self) -> T:
         """
         The height of the rectangle.
@@ -201,8 +201,8 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @property
+    @abstractmethod
     def centre(self) -> tuple[T, T]:
         """
         The coordinates of the center of the rectangle.
@@ -212,8 +212,8 @@ class IRect(Generic[T]):
         """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
-    @abstractmethod
     @property
+    @abstractmethod
     def area(self) -> T:
         """
         The area of the rectangle.
