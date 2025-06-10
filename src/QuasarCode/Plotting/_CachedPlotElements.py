@@ -227,8 +227,8 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
         """
         self._result = figure.colorbar(
             target,
-            ax = axis if not self.add_to_axis else None,
-            cax = axis if self.add_to_axis else None,
+            ax = axis if self.add_to_axis else None,
+            cax = axis if not self.add_to_axis else None,
             location = self.location if not self.add_to_axis else None,
             label = self.label,
             extend = self.extend,
