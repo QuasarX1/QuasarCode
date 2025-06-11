@@ -278,6 +278,8 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
     extent = AutoProperty_NonNullable[Rect]()
     origin = AutoProperty_NonNullable[Literal["upper", "lower"]](default_value = "upper")
     colourmap = AutoProperty[str|Colormap](allow_uninitialised = True)
+    min_colour_value = AutoProperty[float](allow_uninitialised = True)
+    max_colour_value = AutoProperty[float](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("image", "extent", "origin", "colourmap", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
@@ -286,6 +288,8 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
             extent = self.extent.extent,
             origin = self.origin,
             cmap = self.colourmap,
+            vmin = self.min_colour_value,
+            vmax = self.max_colour_value,
             **kwargs
         )
     @staticmethod
@@ -294,5 +298,7 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
             image = image.get_array(),
             extent = Rect.create_from_limits(*image.get_extent()),
             origin = image.origin,
-            colourmap = image.get_cmap()
+            colourmap = image.get_cmap(),
+            min_colour_value = image.get_clim()[0],
+            max_colour_value = image.get_clim()[1]
         )
