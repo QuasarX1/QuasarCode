@@ -1,12 +1,13 @@
 from ._Bins import Bins
 from ._CachedPlotElements import \
-    CachedPlotElement,  \
-    CachedPlotLine,     \
-    CachedPlotScatter,  \
-    CachedPlotErrorbar, \
-    CachedPlotHexbin,   \
-    CachedPlotContour,  \
-    CachedPlotColourbar
+    CachedPlotElement,           \
+    CachedPlotLine,              \
+    CachedPlotScatter,           \
+    CachedPlotErrorbar,          \
+    CachedPlotHexbin,            \
+    CachedPlotContour,           \
+    CachedPlotColourbar,         \
+    CachedPlotImage
 from ._CachedPlot import CachedPlot
 from ._CachedFigureGrid import CachedFigureGrid
 from ._CachedPlotFactory import CachedPlotFactory

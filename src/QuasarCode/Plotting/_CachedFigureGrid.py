@@ -87,6 +87,7 @@ class CachedFigureGrid(CacheableStruct):
             self.columns = max(len(row) for row in self.mosaic)
 
         self.plots = {}
+        self.colourbars = {}
         
     def set_resolution_custom(self, width_pixels: int|None = None, height_pixels: int|None = None, file_only: bool = False) -> None:
         """
@@ -439,6 +440,17 @@ class CachedFigureGrid(CacheableStruct):
         except KeyError: pass
 
     def set_colourbar(self, name: str, colourbar: CachedPlotColourbar, target_plot: str, target_element: str) -> None:
+        """
+        Link an axis name in the figure layout with a CachedPlotColourbar instance for easy rendering.
+        Note: this circumvents the need to create a separate CachedPlot instance to host the colourbar.
+        Adding colourbars into the layout mosaic is recommended as this allows greater control over the sizes of individual plots.
+
+        Parameters:
+            str name:
+                Name of the axis to link.
+            CachedPlotColourbar colourbar:
+                CachedPlotColourbar instance to insert.
+        """
         if name in self.colourbars:
             raise KeyError(f"A colourbar already exists with the name \"{name}\".")
         if not any([name in row for row in self.mosaic]):

@@ -15,6 +15,7 @@ from matplotlib.collections import PathCollection, PolyCollection
 from matplotlib.container import ErrorbarContainer
 from matplotlib.lines import Line2D
 from matplotlib.contour import QuadContourSet
+from matplotlib.image import AxesImage
 
 from ..Data._Rect import Rect
 from ..Tools._Struct import CacheableStruct
@@ -226,8 +227,8 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
         """
         self._result = figure.colorbar(
             target,
-            ax = axis if not self.add_to_axis else None,
-            cax = axis if self.add_to_axis else None,
+            ax = axis if self.add_to_axis else None,
+            cax = axis if not self.add_to_axis else None,
             location = self.location if not self.add_to_axis else None,
             label = self.label,
             extend = self.extend,
@@ -270,4 +271,28 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             alpha_values = contours.alpha,
             colours = contours.colors if not uses_single_colour_value else tuple([contours.colors] * len(contours.levels)),
             _result = contours
+        )
+
+class CachedPlotImage(CachedPlotElement[AxesImage]):
+    image = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
+    extent = AutoProperty_NonNullable[Rect]()
+    origin = AutoProperty_NonNullable[Literal["upper", "lower"]](default_value = "upper")
+    colourmap = AutoProperty[str|Colormap](allow_uninitialised = True)
+    def __init__(self, **kwargs):
+        super().__init__("image", "extent", "origin", "colourmap", **kwargs)
+    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
+        self._result = axis.imshow(
+            self.image,
+            extent = self.extent.extent,
+            origin = self.origin,
+            cmap = self.colourmap,
+            **kwargs
+        )
+    @staticmethod
+    def from_image(image: AxesImage) -> "CachedPlotImage":
+        return CachedPlotImage(
+            image = image.get_array(),
+            extent = Rect.create_from_limits(*image.get_extent()),
+            origin = image.origin,
+            colourmap = image.get_cmap()
         )

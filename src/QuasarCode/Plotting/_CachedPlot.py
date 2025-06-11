@@ -1,11 +1,15 @@
+import math
 from typing import Any
 
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
+from matplotlib.axes._secondary_axes import SecondaryAxis
 
 from ..Data._Rect import Rect
+from ..IO.Caching._CacheableList import CacheableList
 from ..Tools._Struct import CacheableStruct
 from ..Tools._autoproperty import AutoProperty, AutoProperty_NonNullable
+from ..Tools._CacheableFunction import CacheableFunction
 from ._CachedPlotElements import CachedPlotElement, CachedPlotColourbar
 
 class CachedPlot(CacheableStruct):
@@ -17,9 +21,31 @@ class CachedPlot(CacheableStruct):
     flip_x = AutoProperty_NonNullable[bool](default_value = False)
     flip_y = AutoProperty_NonNullable[bool](default_value = False)
     show_legend = AutoProperty_NonNullable[bool](default_value = False)
+    show_x_ticks = AutoProperty_NonNullable[bool](default_value = True)
+    show_y_ticks = AutoProperty_NonNullable[bool](default_value = True)
+    show_x_ticks_on_other_side = AutoProperty_NonNullable[bool](default_value = False)
+    show_y_ticks_on_other_side = AutoProperty_NonNullable[bool](default_value = False)
+    show_x_tick_labels = AutoProperty_NonNullable[bool](default_value = True)
+    show_y_tick_labels = AutoProperty_NonNullable[bool](default_value = True)
+    show_x_tick_labels_on_other_side = AutoProperty_NonNullable[bool](default_value = False)
+    show_y_tick_labels_on_other_side = AutoProperty_NonNullable[bool](default_value = False)
+    x_ticks_inside = AutoProperty_NonNullable[bool](default_value = False)
+    y_ticks_inside = AutoProperty_NonNullable[bool](default_value = False)
+    alt_x_axis_functions = AutoProperty[CacheableList[CacheableFunction]](allow_uninitialised = True)
+    alt_y_axis_functions = AutoProperty[CacheableList[CacheableFunction]](allow_uninitialised = True)
+    alt_x_axis_label = AutoProperty[str](allow_uninitialised = True)
+    alt_y_axis_label = AutoProperty[str](allow_uninitialised = True)
+    _alt_x_axis = AutoProperty[SecondaryAxis](allow_uninitialised = True)
+    _alt_y_axis = AutoProperty[SecondaryAxis](allow_uninitialised = True)
+    show_alt_x_ticks = AutoProperty_NonNullable[bool](default_value = True)
+    show_alt_y_ticks = AutoProperty_NonNullable[bool](default_value = True)
+    show_alt_x_tick_labels = AutoProperty_NonNullable[bool](default_value = True)
+    show_alt_y_tick_labels = AutoProperty_NonNullable[bool](default_value = True)
+    alt_x_ticks_inside = AutoProperty_NonNullable[bool](default_value = False)
+    alt_y_ticks_inside = AutoProperty_NonNullable[bool](default_value = False)
     def __init__(self, **kwargs):
         super().__init__(
-            cacheable_attributes = ("plot_elements", "colourbars", "extent", "x_axis_label", "y_axis_label", "flip_x", "flip_y", "show_legend"),
+            cacheable_attributes = ("plot_elements", "colourbars", "extent", "x_axis_label", "y_axis_label", "flip_x", "flip_y", "show_legend", "show_x_ticks", "show_y_ticks", "show_x_ticks_on_other_side", "show_y_ticks_on_other_side", "show_x_tick_labels", "show_y_tick_labels", "show_x_tick_labels_on_other_side", "show_y_tick_labels_on_other_side", "x_ticks_inside", "y_ticks_inside", "alt_x_axis_functions", "alt_y_axis_functions", "alt_x_axis_label", "alt_y_axis_label", "show_alt_x_ticks", "show_alt_y_ticks", "show_alt_x_tick_labels", "show_alt_y_tick_labels", "alt_x_ticks_inside", "alt_y_ticks_inside"),
             **kwargs
         )
         self.plot_elements = {}
@@ -60,9 +86,30 @@ class CachedPlot(CacheableStruct):
             axis.set_xlabel(self.x_axis_label)
         if self.y_axis_label is not None:
             axis.set_ylabel(self.y_axis_label)
-        
+
+        axis.tick_params(axis = "x", bottom = self.show_x_ticks, top = self.show_x_ticks_on_other_side and self.alt_x_axis_functions is None, direction = "in" if self.x_ticks_inside else "out", labelbottom = self.show_x_tick_labels, labeltop = self.show_x_tick_labels_on_other_side)
+        axis.tick_params(axis = "y", left = self.show_y_ticks, right = self.show_y_ticks_on_other_side and self.alt_y_axis_functions is None, direction = "in" if self.y_ticks_inside else "out", labelleft = self.show_y_tick_labels, labelright = self.show_y_tick_labels_on_other_side)
+
         axis.set_xlim(self.extent.extent[0:2] if not self.flip_x else self.extent.extent[1::-1])
         axis.set_ylim(self.extent.extent[2:4] if not self.flip_y else self.extent.extent[3:1:-1])
+
+        if self.alt_x_axis_functions is not None:
+            self._alt_x_axis = axis.secondary_xaxis(
+                "top",
+                functions = tuple(self.alt_x_axis_functions)
+            )
+            if self.alt_x_axis_label is not None:
+                self._alt_x_axis.set_xlabel(self.alt_x_axis_label)
+            self._alt_x_axis.tick_params(axis = "x", top = self.show_alt_x_ticks, direction = "in" if self.alt_x_ticks_inside else "out", labeltop = self.show_alt_x_tick_labels)
+
+        if self.alt_y_axis_functions is not None:
+            self._alt_y_axis = axis.secondary_yaxis(
+                "right",
+                functions = tuple(self.alt_y_axis_functions)
+            )
+            if self.alt_y_axis_label is not None:
+                self._alt_y_axis.set_xlabel(self.alt_y_axis_label)
+            self._alt_y_axis.tick_params(axis = "y", right = self.show_alt_y_ticks, direction = "in" if self.alt_y_ticks_inside else "out", labelright = self.show_alt_y_tick_labels)
 
         if self.show_legend:
             axis.legend()
