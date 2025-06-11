@@ -229,7 +229,7 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
             target,
             ax = axis if self.add_to_axis else None,
             cax = axis if not self.add_to_axis else None,
-            location = self.location if not self.add_to_axis else None,
+            location = self.location if self.add_to_axis else None,
             label = self.label,
             extend = self.extend,
             orientation = self.orientation if not self.add_to_axis else None,
