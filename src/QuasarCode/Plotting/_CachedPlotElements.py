@@ -280,8 +280,9 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
     colourmap = AutoProperty[str|Colormap](allow_uninitialised = True)
     min_colour_value = AutoProperty[float](allow_uninitialised = True)
     max_colour_value = AutoProperty[float](allow_uninitialised = True)
+    alpha = AutoProperty[np.ndarray[tuple[int, int], np.dtype[np.floating]]](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("image", "extent", "origin", "colourmap", **kwargs)
+        super().__init__("image", "extent", "origin", "colourmap", "alpha", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
         self._result = axis.imshow(
             self.image,
@@ -290,6 +291,7 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
             cmap = self.colourmap,
             vmin = self.min_colour_value,
             vmax = self.max_colour_value,
+            alpha = self.alpha,
             **kwargs
         )
     @staticmethod
@@ -300,5 +302,6 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
             origin = image.origin,
             colourmap = image.get_cmap(),
             min_colour_value = image.get_clim()[0],
-            max_colour_value = image.get_clim()[1]
+            max_colour_value = image.get_clim()[1],
+            alpha = image.get_alpha()
         )
