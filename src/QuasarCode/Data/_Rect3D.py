@@ -275,35 +275,53 @@ class IRect3D(Generic[T]):
     @property
     @abstractmethod
     def plane_x_y(self) -> IRect[T]:
+        """
+        The X-Y plane of the cuboid (normal vector pointing in the Z direction).
+        """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
     @abstractmethod
     def plane_y_x(self) -> IRect[T]:
+        """
+        The Y-X plane of the cuboid (normal vector pointing in the -Z direction).
+        """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
     @abstractmethod
     def plane_x_z(self) -> IRect[T]:
+        """
+        The X-Z plane of the cuboid (normal vector pointing in the Y direction).
+        """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
     @abstractmethod
     def plane_z_x(self) -> IRect[T]:
+        """
+        The Z-X plane of the cuboid (normal vector pointing in the -Y direction).
+        """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
     @abstractmethod
     def plane_y_z(self) -> IRect[T]:
+        """
+        The Y-Z plane of the cuboid (normal vector pointing in the -X direction).
+        """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
     @abstractmethod
     def plane_z_y(self) -> IRect[T]:
+        """
+        The Z-Y plane of the cuboid (normal vector pointing in the X direction).
+        """
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
-    def get_plane(self, axis: int, flip: bool = False) -> IRect[T]:
+    def get_plane(self, axis_index: int = 2, flip: bool = False) -> IRect[T]:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
@@ -670,14 +688,14 @@ class GenericRect3D(IRect3D[T]):
     def plane_z_y(self) -> GenericRect[T]:
         return GenericRect.create_from_limits(self.z, self.z1, self.y, self.y1)
 
-    def get_plane(self, axis: int, flip: bool = False) -> GenericRect[T]:
-        match axis:
+    def get_plane(self, axis_index: int = 2, flip: bool = False) -> GenericRect[T]:
+        match axis_index:
             case 0:
-                return self.plane_x_y if not flip else self.plane_y_x
+                return self.plane_z_y if not flip else self.plane_y_z
             case 1:
-                return self.plane_y_z if not flip else self.plane_z_y
-            case 2:
                 return self.plane_x_z if not flip else self.plane_z_x
+            case 2:
+                return self.plane_x_y if not flip else self.plane_y_x
             case _:
                 raise ValueError("Axis must be 0 (X-Y), 1 (Y-Z), or 2 (X-Z).")
 
@@ -1090,8 +1108,8 @@ class Rect3D(GenericRect3D[float]):
     def plane_z_y(self) -> Rect:
         return GenericRect3D.plane_z_y.fget(self)
 
-    def get_plane(self, axis: int, flip: bool = False) -> Rect:
-        return GenericRect3D.get_plane(self, axis, flip)
+    def get_plane(self, axis_index: int = 2, flip: bool = False) -> Rect:
+        return GenericRect3D.get_plane(self, axis_index, flip)
 
     def __copy__(self) -> "Rect3D":
         """
@@ -1401,8 +1419,8 @@ class DiscreteRect3D(GenericRect3D[int]):
     def plane_z_y(self) -> DiscreteRect:
         return GenericRect3D.plane_z_y.fget(self)
 
-    def get_plane(self, axis: int, flip: bool = False) -> DiscreteRect:
-        return GenericRect3D.get_plane(self, axis, flip)
+    def get_plane(self, axis_index: int = 2, flip: bool = False) -> DiscreteRect:
+        return GenericRect3D.get_plane(self, axis_index, flip)
 
     def __copy__(self) -> "DiscreteRect3D":
         """
