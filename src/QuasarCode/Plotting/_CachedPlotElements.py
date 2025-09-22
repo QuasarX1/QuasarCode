@@ -229,7 +229,7 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
             target,
             ax = axis if self.add_to_axis else None,
             cax = axis if not self.add_to_axis else None,
-            location = self.location if not self.add_to_axis else None,
+            location = self.location if self.add_to_axis else None,
             label = self.label,
             extend = self.extend,
             orientation = self.orientation if not self.add_to_axis else None,
@@ -278,14 +278,20 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
     extent = AutoProperty_NonNullable[Rect]()
     origin = AutoProperty_NonNullable[Literal["upper", "lower"]](default_value = "upper")
     colourmap = AutoProperty[str|Colormap](allow_uninitialised = True)
+    min_colour_value = AutoProperty[float](allow_uninitialised = True)
+    max_colour_value = AutoProperty[float](allow_uninitialised = True)
+    alpha = AutoProperty[np.ndarray[tuple[int, int], np.dtype[np.floating]]](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("image", "extent", "origin", "colourmap", **kwargs)
+        super().__init__("image", "extent", "origin", "colourmap", "alpha", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
         self._result = axis.imshow(
             self.image,
             extent = self.extent.extent,
             origin = self.origin,
             cmap = self.colourmap,
+            vmin = self.min_colour_value,
+            vmax = self.max_colour_value,
+            alpha = self.alpha,
             **kwargs
         )
     @staticmethod
@@ -294,5 +300,8 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
             image = image.get_array(),
             extent = Rect.create_from_limits(*image.get_extent()),
             origin = image.origin,
-            colourmap = image.get_cmap()
+            colourmap = image.get_cmap(),
+            min_colour_value = image.get_clim()[0],
+            max_colour_value = image.get_clim()[1],
+            alpha = image.get_alpha()
         )

@@ -1,3 +1,4 @@
+import os
 from typing import Any, Literal
 
 from matplotlib import pyplot as plt
@@ -631,35 +632,71 @@ class CachedFigureGrid(CacheableStruct):
         for plot_tag, colourbar in self.colourbars.items():
             colourbar.render(self.__figure, self.__axes[plot_tag], self.plots[colourbar.target_plot].plot_elements[colourbar.target_element]._result, **forward_colourbar_kwargs.get(plot_tag, {}))
 
-    def save_png(self):
+    def save_png(self, filename: str, directory: str|None = None) -> None:
         """
         Save the figure as a PNG file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
+
+        Parameters:
+            str filename:
+                The name of the file to save the figure as (without extension).
+            str|None directory:
+                The directory to save the file in. If None, the current working directory is used.
         """
+        filepath = f"{filename}.png"
+        if directory is not None:
+            filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig("figure.png", dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
-    def save_jpeg(self):
+        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
+    def save_jpeg(self, filename: str, directory: str|None = None) -> None:
         """
         Save the figure as a JPEG file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
+
+        Parameters:
+            str filename:
+                The name of the file to save the figure as (without extension).
+            str|None directory:
+                The directory to save the file in. If None, the current working directory is used.
         """
+        filepath = f"{filename}.jpeg"
+        if directory is not None:
+            filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig("figure.jpeg", dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
-    def save_pdf(self):
+        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
+    def save_pdf(self, filename: str, directory: str|None = None) -> None:
         """
         Save the figure as a PDF file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
+
+        Parameters:
+            str filename:
+                The name of the file to save the figure as (without extension).
+            str|None directory:
+                The directory to save the file in. If None, the current working directory is used.
         """
+        filepath = f"{filename}.pdf"
+        if directory is not None:
+            filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig("figure.pdf", dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
-    def save_svg(self):
+        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
+    def save_svg(self, filename: str, directory: str|None = None) -> None:
         """
         Save the figure as a SVG (Simple Vector Graphic) file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
+
+        Parameters:
+            str filename:
+                The name of the file to save the figure as (without extension).
+            str|None directory:
+                The directory to save the file in. If None, the current working directory is used.
         """
+        filepath = f"{filename}.svg"
+        if directory is not None:
+            filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig("figure.svg", dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
+        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)

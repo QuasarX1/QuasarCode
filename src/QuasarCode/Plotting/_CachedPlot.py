@@ -1,5 +1,5 @@
 import math
-from typing import Any
+from typing import Any, Literal
 
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
@@ -16,6 +16,9 @@ class CachedPlot(CacheableStruct):
     plot_elements = AutoProperty_NonNullable[dict[str, CachedPlotElement]]()
     colourbars = AutoProperty_NonNullable[dict[str, CachedPlotColourbar]]()
     extent = AutoProperty_NonNullable[Rect]()
+    aspect = AutoProperty[Literal["auto", "equal"]|float](allow_uninitialised = True)
+    aspect_adjustable = AutoProperty[Literal["box", "datalim"]](allow_uninitialised = True)
+    aspect_anchor = AutoProperty[Literal["C", "N", "NE", "E", "SE", "S", "SW", "W", "N"]|tuple[float, float]](allow_uninitialised = True)
     x_axis_label = AutoProperty[str](allow_uninitialised = True)
     y_axis_label = AutoProperty[str](allow_uninitialised = True)
     flip_x = AutoProperty_NonNullable[bool](default_value = False)
@@ -45,7 +48,7 @@ class CachedPlot(CacheableStruct):
     alt_y_ticks_inside = AutoProperty_NonNullable[bool](default_value = False)
     def __init__(self, **kwargs):
         super().__init__(
-            cacheable_attributes = ("plot_elements", "colourbars", "extent", "x_axis_label", "y_axis_label", "flip_x", "flip_y", "show_legend", "show_x_ticks", "show_y_ticks", "show_x_ticks_on_other_side", "show_y_ticks_on_other_side", "show_x_tick_labels", "show_y_tick_labels", "show_x_tick_labels_on_other_side", "show_y_tick_labels_on_other_side", "x_ticks_inside", "y_ticks_inside", "alt_x_axis_functions", "alt_y_axis_functions", "alt_x_axis_label", "alt_y_axis_label", "show_alt_x_ticks", "show_alt_y_ticks", "show_alt_x_tick_labels", "show_alt_y_tick_labels", "alt_x_ticks_inside", "alt_y_ticks_inside"),
+            cacheable_attributes = ("plot_elements", "colourbars", "extent", "aspect", "aspect_adjustable", "aspect_anchor", "x_axis_label", "y_axis_label", "flip_x", "flip_y", "show_legend", "show_x_ticks", "show_y_ticks", "show_x_ticks_on_other_side", "show_y_ticks_on_other_side", "show_x_tick_labels", "show_y_tick_labels", "show_x_tick_labels_on_other_side", "show_y_tick_labels_on_other_side", "x_ticks_inside", "y_ticks_inside", "alt_x_axis_functions", "alt_y_axis_functions", "alt_x_axis_label", "alt_y_axis_label", "show_alt_x_ticks", "show_alt_y_ticks", "show_alt_x_tick_labels", "show_alt_y_tick_labels", "alt_x_ticks_inside", "alt_y_ticks_inside"),
             **kwargs
         )
         self.plot_elements = {}
@@ -110,6 +113,9 @@ class CachedPlot(CacheableStruct):
             if self.alt_y_axis_label is not None:
                 self._alt_y_axis.set_xlabel(self.alt_y_axis_label)
             self._alt_y_axis.tick_params(axis = "y", right = self.show_alt_y_ticks, direction = "in" if self.alt_y_ticks_inside else "out", labelright = self.show_alt_y_tick_labels)
+
+        if self.aspect is not None:
+            axis.set_aspect(self.aspect, adjustable = self.aspect_adjustable, anchor = self.aspect_anchor)
 
         if self.show_legend:
             axis.legend()
