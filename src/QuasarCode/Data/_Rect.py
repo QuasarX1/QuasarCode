@@ -195,7 +195,7 @@ class IRect(Generic[T]):
     def height(self) -> T:
         """
         The height of the rectangle.
-        
+
         Returns:
             T -> The height of the rectangle.
         """
@@ -270,7 +270,7 @@ class IRect(Generic[T]):
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
-    def __iadd__(self, value: "IRect[T]") -> None:
+    def __iadd__(self, value: "IRect[T]") -> "IRect[T]":
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
@@ -278,7 +278,7 @@ class IRect(Generic[T]):
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
-    def __isub__(self, value: "IRect[T]") -> None:
+    def __isub__(self, value: "IRect[T]") -> "IRect[T]":
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
@@ -286,7 +286,7 @@ class IRect(Generic[T]):
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
-    def __imul__(self, value: float) -> None:
+    def __imul__(self, value: float) -> "IRect[T]":
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
@@ -294,7 +294,7 @@ class IRect(Generic[T]):
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @abstractmethod
-    def __idiv__(self, value: float) -> None:
+    def __idiv__(self, value: float) -> "IRect[T]":
         raise NotImplementedError("This method must be implemented by subclasses.")
 
 
@@ -573,13 +573,14 @@ class GenericRect(IRect[T]):
             self.height + value.height
         )
 
-    def __iadd__(self, value: IRect[T]) -> None:
+    def __iadd__(self, value: IRect[T]) -> "GenericRect[T]":
         current_width = self.width
         current_height = self.height
         self.__x_min += value.x
         self.__y_min += value.y
         self.__x_max = self.__x_min + current_width + value.width
         self.__y_max = self.__y_min + current_height + value.height
+        return self
 
     def __sub__(self, value: IRect[T]) -> "GenericRect[T]":
         return type(self).create_from_size(
@@ -589,13 +590,14 @@ class GenericRect(IRect[T]):
             self.height - value.height
         )
 
-    def __isub__(self, value: IRect[T]) -> None:
+    def __isub__(self, value: IRect[T]) -> "GenericRect[T]":
         current_width = self.width
         current_height = self.height
         self.__x_min -= value.x
         self.__y_min -= value.y
         self.__x_max = self.__x_min + current_width - value.width
         self.__y_max = self.__y_min + current_height - value.height
+        return self
 
     def __mul__(self, value: float) -> "GenericRect[T]":
         return type(self).create_from_size(
@@ -605,7 +607,7 @@ class GenericRect(IRect[T]):
             self.height * value
         )
 
-    def __imul__(self, value: float) -> None:
+    def __imul__(self, value: float) -> "GenericRect[T]":
         self.__x_max = self.__x_min + (self.width * value)
         self.__y_max = self.__y_min + (self.height * value)
         return self
@@ -618,7 +620,7 @@ class GenericRect(IRect[T]):
             self.height / value
         )
 
-    def __idiv__(self, value: float) -> None:
+    def __idiv__(self, value: float) -> "GenericRect[T]":
         self.__x_max = self.__x_min + (self.width / value)
         self.__y_max = self.__y_min + (self.height / value)
         return self
@@ -1058,7 +1060,7 @@ class DiscreteRect(GenericRect[int]):
         Returns:
             tuple[int, int] -> (x, y)
         """
-        return (math.floor((self.__x_max + self.__x_min) / 2), math.floor((self.__y_max + self.__y_min) / 2))
+        return (math.floor((self.x1 + self.x) / 2), math.floor((self.y1 + self.y) / 2))
 
     @property
     def area(self) -> int:
@@ -1096,9 +1098,10 @@ class DiscreteRect(GenericRect[int]):
             math.floor(self.height * value)
         )
 
-    def __imul__(self, value: float) -> None:
+    def __imul__(self, value: float) -> "DiscreteRect":
         self.x1 = self.x + math.floor(self.width * value)
         self.y1 = self.y + math.floor(self.height * value)
+        return self
 
     def __div__(self, value: float) -> "DiscreteRect":
         return type(self).create_from_size(
@@ -1108,6 +1111,7 @@ class DiscreteRect(GenericRect[int]):
             math.floor(self.height / value)
         )
 
-    def __idiv__(self, value: float) -> None:
+    def __idiv__(self, value: float) -> "DiscreteRect":
         self.x1 = self.x + math.floor(self.width / value)
         self.y1 = self.y + math.floor(self.height / value)
+        return self
