@@ -110,7 +110,7 @@ class IRect(Generic[T]):
 
     @x.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def x(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -126,7 +126,7 @@ class IRect(Generic[T]):
 
     @y.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def y(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -142,7 +142,7 @@ class IRect(Generic[T]):
 
     @x1.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def x1(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -158,7 +158,7 @@ class IRect(Generic[T]):
 
     @y1.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def y1(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -413,7 +413,7 @@ class GenericRect(IRect[T]):
         return self.__x_min
 
     @x.setter
-    def _(self, value: T) -> None:
+    def x(self, value: T) -> None:
         self.__x_min = value
 
     @property
@@ -427,7 +427,7 @@ class GenericRect(IRect[T]):
         return self.__y_min
 
     @y.setter
-    def _(self, value: T) -> None:
+    def y(self, value: T) -> None:
         self.__y_min = value
 
     @property
@@ -441,7 +441,7 @@ class GenericRect(IRect[T]):
         return self.__x_max
 
     @x1.setter
-    def _(self, value: T) -> None:
+    def x1(self, value: T) -> None:
         self.__x_max = value
 
     @property
@@ -455,7 +455,7 @@ class GenericRect(IRect[T]):
         return self.__y_max
 
     @y1.setter
-    def _(self, value: T) -> None:
+    def y1(self, value: T) -> None:
         self.__y_max = value
 
     @property
@@ -735,7 +735,7 @@ class Rect(GenericRect[float]):
         return GenericRect.x.fget(self)
 
     @x.setter
-    def _(self, value: float) -> None:
+    def x(self, value: float) -> None:
         return GenericRect.x.fset(self, value)
 
     @property
@@ -749,7 +749,7 @@ class Rect(GenericRect[float]):
         return GenericRect.y.fget(self)
 
     @y.setter
-    def _(self, value: float) -> None:
+    def y(self, value: float) -> None:
         return GenericRect.y.fset(self, value)
 
     @property
@@ -763,7 +763,7 @@ class Rect(GenericRect[float]):
         return GenericRect.x1.fget(self)
 
     @x1.setter
-    def _(self, value: float) -> None:
+    def x1(self, value: float) -> None:
         return GenericRect.x1.fset(self, value)
 
     @property
@@ -777,7 +777,7 @@ class Rect(GenericRect[float]):
         return GenericRect.y1.fget(self)
 
     @y1.setter
-    def _(self, value: float) -> None:
+    def y1(self, value: float) -> None:
         return GenericRect.y1.fset(self, value)
 
     @property
@@ -971,7 +971,7 @@ class DiscreteRect(GenericRect[int]):
         return GenericRect.x.fget(self)
 
     @x.setter
-    def _(self, value: int) -> None:
+    def x(self, value: int) -> None:
         return GenericRect.x.fset(self, value)
 
     @property
@@ -985,7 +985,7 @@ class DiscreteRect(GenericRect[int]):
         return GenericRect.y.fget(self)
 
     @y.setter
-    def _(self, value: int) -> None:
+    def y(self, value: int) -> None:
         return GenericRect.y.fset(self, value)
 
     @property
@@ -999,7 +999,7 @@ class DiscreteRect(GenericRect[int]):
         return GenericRect.x1.fget(self)
 
     @x1.setter
-    def _(self, value: int) -> None:
+    def x1(self, value: int) -> None:
         return GenericRect.x1.fset(self, value)
 
     @property
@@ -1013,7 +1013,7 @@ class DiscreteRect(GenericRect[int]):
         return GenericRect.y1.fget(self)
 
     @y1.setter
-    def _(self, value: int) -> None:
+    def y1(self, value: int) -> None:
         return GenericRect.y1.fset(self, value)
 
     @property
