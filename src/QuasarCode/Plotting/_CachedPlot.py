@@ -13,6 +13,7 @@ from ..Tools._CacheableFunction import CacheableFunction
 from ._CachedPlotElements import CachedPlotElement, CachedPlotColourbar
 
 class CachedPlot(CacheableStruct):
+    title = AutoProperty[str](allow_uninitialised = True)
     plot_elements = AutoProperty_NonNullable[dict[str, CachedPlotElement]]()
     colourbars = AutoProperty_NonNullable[dict[str, CachedPlotColourbar]]()
     extent = AutoProperty_NonNullable[Rect]()
@@ -48,7 +49,7 @@ class CachedPlot(CacheableStruct):
     alt_y_ticks_inside = AutoProperty_NonNullable[bool](default_value = False)
     def __init__(self, **kwargs):
         super().__init__(
-            cacheable_attributes = ("plot_elements", "colourbars", "extent", "aspect", "aspect_adjustable", "aspect_anchor", "x_axis_label", "y_axis_label", "flip_x", "flip_y", "show_legend", "show_x_ticks", "show_y_ticks", "show_x_ticks_on_other_side", "show_y_ticks_on_other_side", "show_x_tick_labels", "show_y_tick_labels", "show_x_tick_labels_on_other_side", "show_y_tick_labels_on_other_side", "x_ticks_inside", "y_ticks_inside", "alt_x_axis_functions", "alt_y_axis_functions", "alt_x_axis_label", "alt_y_axis_label", "show_alt_x_ticks", "show_alt_y_ticks", "show_alt_x_tick_labels", "show_alt_y_tick_labels", "alt_x_ticks_inside", "alt_y_ticks_inside"),
+            cacheable_attributes = ("title", "plot_elements", "colourbars", "extent", "aspect", "aspect_adjustable", "aspect_anchor", "x_axis_label", "y_axis_label", "flip_x", "flip_y", "show_legend", "show_x_ticks", "show_y_ticks", "show_x_ticks_on_other_side", "show_y_ticks_on_other_side", "show_x_tick_labels", "show_y_tick_labels", "show_x_tick_labels_on_other_side", "show_y_tick_labels_on_other_side", "x_ticks_inside", "y_ticks_inside", "alt_x_axis_functions", "alt_y_axis_functions", "alt_x_axis_label", "alt_y_axis_label", "show_alt_x_ticks", "show_alt_y_ticks", "show_alt_x_tick_labels", "show_alt_y_tick_labels", "alt_x_ticks_inside", "alt_y_ticks_inside"),
             **kwargs
         )
         self.plot_elements = {}
@@ -84,6 +85,9 @@ class CachedPlot(CacheableStruct):
             else:
                 raise RuntimeError(f"Unable to locate target for colourbar \"{name}\".")
             colourbar.render(figure, axis, target, **forward_colourbar_kwargs.get(name, {}))
+
+        if self. title is not None:
+            axis.set_title(self.title)
 
         if self.x_axis_label is not None:
             axis.set_xlabel(self.x_axis_label)
