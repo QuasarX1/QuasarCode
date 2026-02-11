@@ -26,6 +26,7 @@ class CachedPlot(CacheableStruct):
     flip_x = AutoProperty_NonNullable[bool](default_value = False)
     flip_y = AutoProperty_NonNullable[bool](default_value = False)
     show_legend = AutoProperty_NonNullable[bool](default_value = False)
+    legend_position = AutoProperty_NonNullable[Literal["best", "upper left", "upper center", "upper right", "center left", "center", "center right", "lower left", "lower center", "lower right"]|tuple[float, float]](default_value = "best")
     show_x_ticks = AutoProperty_NonNullable[bool](default_value = True)
     show_y_ticks = AutoProperty_NonNullable[bool](default_value = True)
     show_x_ticks_on_other_side = AutoProperty_NonNullable[bool](default_value = False)
@@ -184,4 +185,4 @@ class CachedPlot(CacheableStruct):
             axis.set_aspect(self.aspect, adjustable = self.aspect_adjustable, anchor = self.aspect_anchor)
 
         if self.show_legend:
-            axis.legend()
+            axis.legend(loc = self.legend_position)
