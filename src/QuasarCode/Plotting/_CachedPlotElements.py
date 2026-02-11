@@ -206,16 +206,20 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
         )
 
 class CachedPlotColourbar(CachedPlotElement[Colorbar]):
-    target_element = AutoProperty_NonNullable[str]()
-    target_plot    = AutoProperty[str](allow_uninitialised = True)
-    label          = AutoProperty[str](allow_uninitialised = True)
-    add_to_axis    = AutoProperty_NonNullable[bool](default_value = True)
-    location       = AutoProperty[Literal["left", "right", "top", "bottom"]|None](default_value = "right", allow_uninitialised = True)
-    orientation    = AutoProperty[Literal["horizontal", "vertical", "top", "bottom"]](default_value = "vertical")
-    extend         = AutoProperty[Literal["neither", "both", "min", "max"]](default_value = "neither")
+    target_element  = AutoProperty_NonNullable[str]()
+    target_plot     = AutoProperty[str](allow_uninitialised = True)
+    label           = AutoProperty[str](allow_uninitialised = True)
+    add_to_axis     = AutoProperty_NonNullable[bool](default_value = True)
+    location        = AutoProperty[Literal["left", "right", "top", "bottom"]|None](default_value = "right", allow_uninitialised = True)
+    orientation     = AutoProperty[Literal["horizontal", "vertical", "top", "bottom"]](default_value = "vertical")
+    extend          = AutoProperty[Literal["neither", "both", "min", "max"]](default_value = "neither")
+    default_font    = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    label_font      = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    tick_label_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
-        super().__init__("target_element", "target_plot", "label", "add_to_axis", "location", "orientation", "extend", **kwargs)
-    def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, *args: Any, **kwargs: Any) -> None:
+        super().__init__("target_element", "target_plot", "label", "add_to_axis", "location", "orientation", "extend", "label_font", "tick_label_font", **kwargs)
+        self.label_font = CachedPlotFontInfo()
+    def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         """
         Render the element on the given figure and axis, using the target element.
         
@@ -236,6 +240,14 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
             extend = self.extend,
             orientation = self.orientation if not self.add_to_axis else None,
             **kwargs
+        )
+        self._result.ax.xaxis.label.set_fontproperties(self.label_font.with_default(self.default_font).with_default(default_font).fontproperties)
+        self._result.ax.yaxis.label.set_fontproperties(self.label_font.with_default(self.default_font).with_default(default_font).fontproperties)
+        tick_label_font = self.tick_label_font.with_default(self.default_font).with_default(default_font)
+        self._result.ax.tick_params(
+            labelsize       = tick_label_font.size,
+            labelcolor      = tick_label_font.color,
+            labelfontfamily = tick_label_font.family,
         )
 
 class CachedPlotContour(CachedPlotElement[QuadContourSet]):

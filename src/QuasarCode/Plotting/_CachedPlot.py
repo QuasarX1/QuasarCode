@@ -105,7 +105,7 @@ class CachedPlot(CacheableStruct):
                 target = self.plot_elements[colourbar.target_element]._result
             else:
                 raise RuntimeError(f"Unable to locate target for colourbar \"{name}\".")
-            colourbar.render(figure, axis, target, **forward_colourbar_kwargs.get(name, {}))
+            colourbar.render(figure, axis, target, default_font = self.default_font.with_default(figure_default_font), **forward_colourbar_kwargs.get(name, {}))
 
         if self.title is not None:
             axis.set_title(self.title, **self.title_font.with_default(self.default_font).with_default(figure_default_font).fontdict)
