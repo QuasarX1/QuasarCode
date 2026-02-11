@@ -1,5 +1,5 @@
 import os
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
@@ -183,7 +183,7 @@ class CachedFigureGrid(CacheableStruct):
         """
         self.set_resolution(ScreenResolution.get_8K(), file_only = file_only)
 
-    def add_row(self, number: int = 1, insert_at_index: int = -1, height: float = 1.0, physical_height: bool = False, expand_figure: bool = False) -> None:
+    def add_row(self, number: int = 1, insert_at_index: Optional[int] = None, height: float = 1.0, physical_height: bool = False, expand_figure: bool = False) -> None:
         """
         Add a new row of axes to the figure layout.
 
@@ -208,7 +208,7 @@ class CachedFigureGrid(CacheableStruct):
         """
         if number < 1:
             raise ValueError("Number of rows to add must be at least 1.")
-        if insert_at_index < 0:
+        if insert_at_index is not None and insert_at_index < 0:
             insert_at_index = self.rows + insert_at_index
         if self.__locked:
             raise RuntimeError("Cannot add rows after the figure has been created. Call `clear_axes` first.")
@@ -224,11 +224,15 @@ class CachedFigureGrid(CacheableStruct):
         elif expand_figure:
             self.figure_size = (self.figure_size[0], self.figure_size[1] + (height * (self.figure_size[1] / sum(self.relative_heights))) * number)
         for _ in range(number):
-            self.mosaic.insert(insert_at_index, ["." for _ in range(self.columns)])
-            self.relative_heights.insert(insert_at_index, height)
+            if insert_at_index is not None:
+                self.mosaic.insert(insert_at_index, ["." for _ in range(self.columns)])
+                self.relative_heights.insert(insert_at_index, height)
+            else:
+                self.mosaic.append(["." for _ in range(self.columns)])
+                self.relative_heights.append(height)
         self.rows += number
 
-    def add_column(self, number: int = 1, insert_at_index: int = -1, width: float = 1.0, physical_width: bool = False, expand_figure: bool = False) -> None:
+    def add_column(self, number: int = 1, insert_at_index: Optional[int] = None, width: float = 1.0, physical_width: bool = False, expand_figure: bool = False) -> None:
         """
         Add a new column of axes to the figure layout.
 
@@ -239,7 +243,7 @@ class CachedFigureGrid(CacheableStruct):
                 Default is  1.
             int insert_at_index:
                 Index at which to insert the new columns.
-                Default is -1, which means to append at the end.
+                Default is None, which means to append at the end.
             float width:
                 Width of the new columns (relative unless specified as physical).
             bool physical_width:
@@ -253,7 +257,7 @@ class CachedFigureGrid(CacheableStruct):
         """
         if number < 1:
             raise ValueError("Number of columns to add must be at least 1.")
-        if insert_at_index < 0:
+        if insert_at_index is not None and insert_at_index < 0:
             insert_at_index = self.columns + insert_at_index
         if self.__locked:
             raise RuntimeError("Cannot add columns after the figure has been created. Call `clear_axes` first.")
@@ -270,10 +274,16 @@ class CachedFigureGrid(CacheableStruct):
             self.figure_size = (self.figure_size[0] + (width * (self.figure_size[0] / sum(self.relative_widths))) * number, self.figure_size[1])
         for row in self.mosaic:
             for _ in range(number):
-                row.insert(insert_at_index, ".")
+                if insert_at_index is not None:
+                    row.insert(insert_at_index, ".")
+                else:
+                    row.append(".")
         self.columns += number
         for _ in range(number):
-            self.relative_widths.insert(insert_at_index, width)
+            if insert_at_index is not None:
+                self.relative_widths.insert(insert_at_index, width)
+            else:
+                self.relative_widths.append(width)
 
     def resize_row(self, row: int|list[int], height: float, physical_height: bool = False, resize_figure: bool = False) -> None:
         """
