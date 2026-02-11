@@ -1,6 +1,7 @@
 from typing import Sequence, Literal
 
 from matplotlib.font_manager import FontProperties
+from matplotlib.typing import ColorType
 
 from ..Tools._Struct import CacheableStruct
 from ..Tools._autoproperty import AutoProperty
@@ -12,8 +13,12 @@ class CachedPlotFontInfo(CacheableStruct):
     variant = AutoProperty[str          ](allow_uninitialised = True)
     weight  = AutoProperty[str|float    ](allow_uninitialised = True)
     stretch = AutoProperty[str          ](allow_uninitialised = True)
+    colour  = AutoProperty[ColorType    ](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("size", "family", "style", "variant", "weight", "stretch", **kwargs)
+        super().__init__(
+            cacheable_attributes = ["size", "family", "style", "variant", "weight", "stretch", "colour"],
+            **kwargs
+        )
 
     @staticmethod
     def from_font_properties(font_properties: FontProperties) -> "CachedPlotFontInfo":

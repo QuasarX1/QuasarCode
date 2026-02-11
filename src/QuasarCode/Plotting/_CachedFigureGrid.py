@@ -11,8 +11,9 @@ from ..Tools._ScreenResolution import ScreenResolution
 from ..Tools._Struct import CacheableStruct
 from ..Tools._autoproperty import AutoProperty, AutoProperty_NonNullable
 from ._CachedPlotFontInfo import CachedPlotFontInfo
-from ._CachedPlot import CachedPlot
+from ._CachedPlotCustomLegend import CachedPlotCustomLegend
 from ._CachedPlotElements import CachedPlotColourbar
+from ._CachedPlot import CachedPlot
 
 class CachedFigureGrid(CacheableStruct):
     """
@@ -32,6 +33,7 @@ class CachedFigureGrid(CacheableStruct):
     horizontal_spacing = AutoProperty_NonNullable[float](default_value = 0)
     plots = AutoProperty_NonNullable[dict[str, CachedPlot]]()
     colourbars = AutoProperty_NonNullable[dict[str, CachedPlotColourbar]]()
+    custom_legends = AutoProperty_NonNullable[dict[str, CachedPlotCustomLegend]]()
     resolution = AutoProperty_NonNullable[int](default_value = 100)
     resolution_for_files = AutoProperty[int](allow_uninitialised = True)
     default_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
@@ -92,6 +94,9 @@ class CachedFigureGrid(CacheableStruct):
 
         self.plots = {}
         self.colourbars = {}
+        self.custom_legends = {}
+        self.default_font = CachedPlotFontInfo()
+        self.title_font = CachedPlotFontInfo()
         
     def set_resolution_custom(self, width_pixels: int|None = None, height_pixels: int|None = None, file_only: bool = False) -> None:
         """
@@ -615,6 +620,8 @@ class CachedFigureGrid(CacheableStruct):
             plot.render(self.__figure, self.__axes[plot_tag], figure_default_font = self.default_font, forward_kwargs = forward_kwargs.get(plot_tag, {}), forward_colourbar_kwargs = forward_colourbar_kwargs.get(plot_tag, {}))
         for plot_tag, colourbar in self.colourbars.items():
             colourbar.render(self.__figure, self.__axes[plot_tag], self.plots[colourbar.target_plot].plot_elements[colourbar.target_element]._result, **forward_colourbar_kwargs.get(plot_tag, {}))
+        for legend in self.custom_legends.values():
+            legend.render(self.__figure, None, default_font = self.default_font, elements_by_figure_plot = { plot_tag : plot.plot_elements for plot_tag, plot in self.plots.items() })
 
     def save_png(self, filename: str, directory: str|None = None, **kwargs) -> None:
         """

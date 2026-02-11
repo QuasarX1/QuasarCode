@@ -1,5 +1,6 @@
 from ._Bins import Bins
 from ._CachedPlotFontInfo import CachedPlotFontInfo
+from ._CachedPlotCustomLegend import CachedPlotCustomLegend, CachedPlotLegendBoxProperties
 from ._CachedPlotElements import \
     CachedPlotElement,           \
     CachedPlotLine,              \
@@ -9,7 +10,8 @@ from ._CachedPlotElements import \
     CachedPlotContour,           \
     CachedPlotColourbar,         \
     CachedPlotImage,             \
-    CachedPlotText
+    CachedPlotText,              \
+    CachedPlotPie
 from ._CachedPlot import CachedPlot
 from ._CachedFigureGrid import CachedFigureGrid
 from ._CachedPlotFactory import CachedPlotFactory
