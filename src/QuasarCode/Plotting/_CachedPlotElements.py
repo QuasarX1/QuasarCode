@@ -22,6 +22,7 @@ from matplotlib.patches import Wedge
 from ..Data._Rect import Rect
 from ..Tools._Struct import CacheableStruct
 from ..Tools._autoproperty import AutoProperty, AutoProperty_NonNullable
+from ..Tools._CacheableFunction import CacheableFunction
 from ._CachedPlotFontInfo import CachedPlotFontInfo
 
 T = TypeVar("T")
@@ -356,27 +357,51 @@ class CachedPlotText(CachedPlotElement[Text]):
         )
 
 class CachedPlotPie(CachedPlotElement[tuple[list[Wedge], list[Text]] | tuple[list[Wedge], list[Text], list[Text]]]):
-    values            = AutoProperty_NonNullable[Sequence[float]]()
-    labels            = AutoProperty_NonNullable[Sequence[str]]()
-    colours           = AutoProperty_NonNullable[Sequence[ColorType]]()
-    shadow            = AutoProperty_NonNullable[bool](default_value = False)
-    explode_distance  = AutoProperty[Sequence[float]](allow_uninitialised = True)
-    percentage_format = AutoProperty[str](allow_uninitialised = True)
-    wedge_properties  = AutoProperty[dict](allow_uninitialised = True)
-    font              = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    values              = AutoProperty_NonNullable[Sequence[float]|Sequence[str]]()
+    colours             = AutoProperty_NonNullable[Sequence[ColorType]|Sequence[str]]()
+    texture             = AutoProperty_NonNullable[Sequence[Literal["/","\\","|","-","+", "x", "o", "O", ".", "*"]]]()
+    shadow              = AutoProperty_NonNullable[bool](default_value = False)
+    labels              = AutoProperty_NonNullable[Sequence[str]]()
+    label_distance      = AutoProperty[float](default_value = 1.1, allow_uninitialised = True)
+    rotate_labels       = AutoProperty_NonNullable[bool](default_value = False)
+    percentage_format   = AutoProperty[str|CacheableFunction](allow_uninitialised = True)
+    percentage_distance = AutoProperty_NonNullable[float](default_value = 0.6)
+    centre              = AutoProperty_NonNullable[tuple[float,float]](default_value = (0, 0))
+    radius              = AutoProperty_NonNullable[float](default_value = 1.0)
+    start_angle         = AutoProperty_NonNullable[float](default_value = 0.0)
+    segment_rotation    = AutoProperty_NonNullable[Literal["clockwise", "anticlockwise"]](default_value = "anticlockwise")
+    wedge_properties    = AutoProperty[dict](allow_uninitialised = True)
+    explode_distance    = AutoProperty[Sequence[float]|Sequence[str]](allow_uninitialised = True)
+    font                = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    hide_axes           = AutoProperty_NonNullable[bool](default_value = True)
+    ensure_complete_pie = AutoProperty_NonNullable[bool](default_value = True)
+    labled_data         = AutoProperty[dict](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("values", "labels", "colours", "shadow", "explode_distance", "percentage_format", "wedge_properties", "font", **kwargs)
+        super().__init__("values", "labels", "colours", "texture", "shadow", "label_distance", "percentage_distance", "explode_distance", "percentage_format", "wedge_properties", "font", **kwargs)
         self.font = CachedPlotFontInfo()
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
+        if not self.ensure_complete_pie and sum(self.values) > 1:
+            raise ValueError("The sum of the values must not exceed 1 when ensure_complete_pie is False.")
         self._result = axis.pie(
-            x          = self.values,
-            labels     = self.labels,
-            colors     = self.colours,
-            shadow     = self.shadow,
-            explode    = self.explode_distance,
-            autopct    = self.percentage_format,
-            wedgeprops = self.wedge_properties,
-            textprops  = self.font.with_default(default_font).fontdict,
+            x             = self.values,
+            explode       = self.explode_distance,
+            labels        = self.labels,
+            colors        = self.colours,
+            autopct       = self.percentage_format,
+            pctdistance   = self.percentage_distance,
+            shadow        = self.shadow,
+            labeldistance = self.label_distance,
+            startangle    = self.start_angle,
+            radius        = self.radius,
+            counterclock  = self.segment_rotation == "anticlockwise",
+            wedgeprops    = self.wedge_properties,
+            textprops     = self.font.with_default(default_font).fontdict,
+            center        = self.centre,
+            frame         = not self.hide_axes,
+            rotatelabels  = self.rotate_labels,
+            normalize     = self.ensure_complete_pie,
+            hatch         = self.texture,
+            data         = self.labled_data,
             **kwargs
         )
     @property
