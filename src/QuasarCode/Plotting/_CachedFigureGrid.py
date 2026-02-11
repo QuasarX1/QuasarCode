@@ -10,6 +10,7 @@ from ..Data._Rect import Rect
 from ..Tools._ScreenResolution import ScreenResolution
 from ..Tools._Struct import CacheableStruct
 from ..Tools._autoproperty import AutoProperty, AutoProperty_NonNullable
+from ._CachedPlotFontInfo import CachedPlotFontInfo
 from ._CachedPlot import CachedPlot
 from ._CachedPlotElements import CachedPlotColourbar
 
@@ -33,6 +34,8 @@ class CachedFigureGrid(CacheableStruct):
     colourbars = AutoProperty_NonNullable[dict[str, CachedPlotColourbar]]()
     resolution = AutoProperty_NonNullable[int](default_value = 100)
     resolution_for_files = AutoProperty[int](allow_uninitialised = True)
+    default_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    title_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
 
     @property
     def physical_rect(self) -> Rect:
@@ -537,7 +540,7 @@ class CachedFigureGrid(CacheableStruct):
         self.__figure = plt.figure(figsize = self.figure_size, layout = self.layout, **(figure_kwargs if figure_kwargs is not None else {}))
         self.__figure.dpi = self.resolution
         if self.title is not None:
-            self.__figure.suptitle(self.title)
+            self.__figure.suptitle(self.title, **self.title_font.with_default(self.default_font).fontdict)
         self.__axes = self.__figure.subplot_mosaic(
             self.mosaic,
             width_ratios = self.relative_widths,
@@ -609,7 +612,7 @@ class CachedFigureGrid(CacheableStruct):
         if forward_colourbar_kwargs is None:
             forward_colourbar_kwargs = {}
         for plot_tag, plot in self.plots.items():
-            plot.render(self.__figure, self.__axes[plot_tag], forward_kwargs = forward_kwargs.get(plot_tag, {}), forward_colourbar_kwargs = forward_colourbar_kwargs.get(plot_tag, {}))
+            plot.render(self.__figure, self.__axes[plot_tag], figure_default_font = self.default_font, forward_kwargs = forward_kwargs.get(plot_tag, {}), forward_colourbar_kwargs = forward_colourbar_kwargs.get(plot_tag, {}))
         for plot_tag, colourbar in self.colourbars.items():
             colourbar.render(self.__figure, self.__axes[plot_tag], self.plots[colourbar.target_plot].plot_elements[colourbar.target_element]._result, **forward_colourbar_kwargs.get(plot_tag, {}))
 
