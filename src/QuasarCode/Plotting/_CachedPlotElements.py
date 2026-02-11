@@ -17,6 +17,7 @@ from matplotlib.lines import Line2D
 from matplotlib.contour import QuadContourSet
 from matplotlib.image import AxesImage
 from matplotlib.text import Text
+from matplotlib.patches import Wedge
 
 from ..Data._Rect import Rect
 from ..Tools._Struct import CacheableStruct
@@ -352,4 +353,26 @@ class CachedPlotText(CachedPlotElement[Text]):
             linestyle = text.get_linestyle(),
             linewidth = text.get_linewidth(),
             alpha     = text.get_alpha(),
+        )
+
+class CachedPlotPie(CachedPlotElement[tuple[list[Wedge], list[Text]] | tuple[list[Wedge], list[Text], list[Text]]]):
+    percentages       = AutoProperty_NonNullable[Sequence[float]]()
+    labels            = AutoProperty_NonNullable[Sequence[str]]()
+    colours           = AutoProperty_NonNullable[Sequence[ColorType]]()
+    shadow            = AutoProperty_NonNullable[bool](default_value = False)
+    explode_distance  = AutoProperty[Sequence[float]](allow_uninitialised = True)
+    percentage_format = AutoProperty[str](allow_uninitialised = True)
+    wedge_properties  = AutoProperty[dict](allow_uninitialised = True)
+    def __init__(self, **kwargs):
+        super().__init__("percentages", "labels", "colours", "shadow", "explode_distance", "percentage_format", "wedge_properties", **kwargs)
+    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
+        self._result = axis.pie(
+            self.percentages,
+            labels  = self.labels,
+            colors  = self.colours,
+            shadow  = self.shadow,
+            explode = self.explode_distance,
+            autopct = self.percentage_format,
+            wedgeprops = self.wedge_properties,
+            **kwargs
         )
