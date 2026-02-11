@@ -632,7 +632,7 @@ class CachedFigureGrid(CacheableStruct):
         for plot_tag, colourbar in self.colourbars.items():
             colourbar.render(self.__figure, self.__axes[plot_tag], self.plots[colourbar.target_plot].plot_elements[colourbar.target_element]._result, **forward_colourbar_kwargs.get(plot_tag, {}))
 
-    def save_png(self, filename: str, directory: str|None = None) -> None:
+    def save_png(self, filename: str, directory: str|None = None, **kwargs) -> None:
         """
         Save the figure as a PNG file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
@@ -648,8 +648,10 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
-    def save_jpeg(self, filename: str, directory: str|None = None) -> None:
+        if "dpi" in kwargs:
+            kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
+        self.__figure.savefig(filepath, **kwargs)
+    def save_jpeg(self, filename: str, directory: str|None = None, **kwargs) -> None:
         """
         Save the figure as a JPEG file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
@@ -665,8 +667,10 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
-    def save_pdf(self, filename: str, directory: str|None = None) -> None:
+        if "dpi" in kwargs:
+            kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
+        self.__figure.savefig(filepath, **kwargs)
+    def save_pdf(self, filename: str, directory: str|None = None, **kwargs) -> None:
         """
         Save the figure as a PDF file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
@@ -682,8 +686,12 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
-    def save_svg(self, filename: str, directory: str|None = None) -> None:
+        if "dpi" in kwargs:
+            kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
+        if self.layout == "tight":
+            kwargs["bbox_inches"] = "tight"
+        self.__figure.savefig(filepath, **kwargs)
+    def save_svg(self, filename: str, directory: str|None = None, **kwargs) -> None:
         """
         Save the figure as a SVG (Simple Vector Graphic) file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
@@ -699,4 +707,6 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
+        if "dpi" in kwargs:
+            kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
+        self.__figure.savefig(filepath, **kwargs)
