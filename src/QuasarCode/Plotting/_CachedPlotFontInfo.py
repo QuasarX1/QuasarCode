@@ -42,6 +42,23 @@ class CachedPlotFontInfo(CacheableStruct):
         if self.stretch is not None:
             fontdict["fontstretch"] = self.stretch
         return fontdict
+
+    @property
+    def fontproperties(self) -> FontProperties:
+        kwargs = {}
+        if self.size is not None:
+            kwargs["size"] = self.size
+        if self.family is not None:
+            kwargs["family"] = self.family
+        if self.style is not None:
+            kwargs["style"] = self.style
+        if self.variant is not None:
+            kwargs["variant"] = self.variant
+        if self.weight is not None:
+            kwargs["weight"] = self.weight
+        if self.stretch is not None:
+            kwargs["stretch"] = self.stretch
+        return FontProperties(**kwargs)
     
     def copy(self) -> "CachedPlotFontInfo":
         """
