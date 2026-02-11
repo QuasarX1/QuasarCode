@@ -9,7 +9,6 @@ from ._CachedPlotElements import \
     CachedPlotContour,           \
     CachedPlotColourbar,         \
     CachedPlotImage,             \
-    CachedPlotText_FontInfo,     \
     CachedPlotText
 from ._CachedPlot import CachedPlot
 from ._CachedFigureGrid import CachedFigureGrid
