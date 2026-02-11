@@ -25,6 +25,23 @@ class CachedPlotFontInfo(CacheableStruct):
         instance.weight  = font_properties.get_weight()
         instance.stretch = font_properties.get_stretch()
         return instance
+
+    @property
+    def fontdict(self) -> dict[str, object]:
+        fontdict = {}
+        if self.size is not None:
+            fontdict["fontsize"] = self.size
+        if self.family is not None:
+            fontdict["fontfamily"] = self.family
+        if self.style is not None:
+            fontdict["fontstyle"] = self.style
+        if self.variant is not None:
+            fontdict["fontvariant"] = self.variant
+        if self.weight is not None:
+            fontdict["fontweight"] = self.weight
+        if self.stretch is not None:
+            fontdict["fontstretch"] = self.stretch
+        return fontdict
     
     def copy(self) -> "CachedPlotFontInfo":
         """
@@ -45,10 +62,12 @@ class CachedPlotFontInfo(CacheableStruct):
             instance.stretch = self.stretch
         return instance
     
-    def with_default(self, default: "CachedPlotFontInfo") -> "CachedPlotFontInfo":
+    def with_default(self, default: "CachedPlotFontInfo|None") -> "CachedPlotFontInfo":
         """
         Return a new instance using the default values specified (where there are any).
         """
+        if default is None:
+            return self.copy()
         instance = default.copy()
         if self.size is not None:
             instance.size = self.size
