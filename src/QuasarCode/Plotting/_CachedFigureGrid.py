@@ -120,6 +120,9 @@ class CachedFigureGrid(CacheableStruct):
         """
         Set the resolution of the final image to fit within the specified screen resolution.
 
+        NOTE: This applies to the CURRENT size of the figure. If the figure size changes, the
+            resolution will remain fixed but the number of pixels used will increase/decrease!
+
         Parameters:
             bool file_only:
                 Apply this only to a saved image and not when displaying the image.
