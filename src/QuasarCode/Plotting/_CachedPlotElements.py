@@ -253,17 +253,22 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
         )
 
 class CachedPlotContour(CachedPlotElement[QuadContourSet]):
-    x = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    y = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    z = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
-    levels = AutoProperty_NonNullable[tuple[float]]()
-    linewidths = AutoProperty[ArrayLike](allow_uninitialised = True)
-    linestyles = AutoProperty[tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
-    alpha_values = AutoProperty[tuple[float|ArrayLike]](allow_uninitialised = True)
-    colours = AutoProperty[ColorType|tuple[ColorType]](allow_uninitialised = True)
+    x                     = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    y                     = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    z                     = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
+    levels                = AutoProperty_NonNullable[tuple[float]]()
+    linewidths            = AutoProperty[ArrayLike](allow_uninitialised = True)
+    linestyles            = AutoProperty[tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
+    alpha_values          = AutoProperty[tuple[float|ArrayLike]](allow_uninitialised = True)
+    colours               = AutoProperty[ColorType|tuple[ColorType]](allow_uninitialised = True)
+    labeled_level_indexes = AutoProperty[Sequence[int]](allow_uninitialised = True)
+    label_positions       = AutoProperty[Sequence[tuple[float, float]]](allow_uninitialised = True)
+    label_format          = AutoProperty[CacheableFunction](allow_uninitialised = True)
+    font                  = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
+        self.font = CachedPlotFontInfo()
         super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", **kwargs)
-    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         self._result = axis.contour(
             self.x,
             self.y,
@@ -275,6 +280,16 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             colors = self.colours,
             **kwargs
         )
+        if self.labeled_level_indexes is not None:
+            labelled_levels = [self._result[-1].levels[i] for i in self.labeled_level_indexes]
+            axis.clabel(
+                CS     = self._result[-1],
+                levels = labelled_levels,
+                fmt    = [self.label_format(level) for level in labelled_levels] if self.label_format is not None else None,
+                inline = 1,
+                manual = self.label_positions,
+                **self.font.with_default(default_font).fontdict,
+            )
     @staticmethod
     def from_contours(contours: QuadContourSet, x: np.ndarray[tuple[int], np.dtype[np.floating]], y: np.ndarray[tuple[int], np.dtype[np.floating]], z: np.ndarray[tuple[int], np.dtype[np.floating]], uses_single_colour_value: bool = False) -> "CachedPlotContour":
         return CachedPlotContour(
