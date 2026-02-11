@@ -10,6 +10,7 @@ from ..IO.Caching._CacheableList import CacheableList
 from ..Tools._Struct import CacheableStruct
 from ..Tools._autoproperty import AutoProperty, AutoProperty_NonNullable
 from ..Tools._CacheableFunction import CacheableFunction
+from ._CachedPlotFontInfo import CachedPlotFontInfo
 from ._CachedPlotElements import CachedPlotElement, CachedPlotColourbar
 
 class CachedPlot(CacheableStruct):

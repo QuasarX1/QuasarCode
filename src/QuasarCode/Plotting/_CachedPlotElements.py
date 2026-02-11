@@ -306,19 +306,12 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
             max_colour_value = image.get_clim()[1],
             alpha = image.get_alpha()
         )
-    
-class CachedPlotText_FontInfo(CacheableStruct):
-    family  = AutoProperty[Sequence[str]](allow_uninitialised = True)
-    style   = AutoProperty[str          ](allow_uninitialised = True)
-    variant = AutoProperty[str          ](allow_uninitialised = True)
-    weight  = AutoProperty[str|float    ](allow_uninitialised = True)
-    stretch = AutoProperty[str          ](allow_uninitialised = True)
 
 class CachedPlotText(CachedPlotElement[Text]):
     text          = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     x             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     y             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    font          = AutoProperty[CachedPlotText_FontInfo](allow_uninitialised = True)
+    font          = AutoProperty[CachedPlotFontInfo](allow_uninitialised = True)
     alpha         = AutoProperty_NonNullable[float](default_value = 1.0)
     box_colour    = AutoProperty[ColorType](allow_uninitialised = True)
     border_colour = AutoProperty[ColorType](allow_uninitialised = True)

@@ -1,4 +1,5 @@
 from ._Bins import Bins
+from ._CachedPlotFontInfo import CachedPlotFontInfo
 from ._CachedPlotElements import \
     CachedPlotElement,           \
     CachedPlotLine,              \
@@ -7,7 +8,9 @@ from ._CachedPlotElements import \
     CachedPlotHexbin,            \
     CachedPlotContour,           \
     CachedPlotColourbar,         \
-    CachedPlotImage
+    CachedPlotImage,             \
+    CachedPlotText_FontInfo,     \
+    CachedPlotText
 from ._CachedPlot import CachedPlot
 from ._CachedFigureGrid import CachedFigureGrid
 from ._CachedPlotFactory import CachedPlotFactory
