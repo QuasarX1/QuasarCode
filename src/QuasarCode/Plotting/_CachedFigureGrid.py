@@ -115,6 +115,30 @@ class CachedFigureGrid(CacheableStruct):
             self.resolution = resolution
             if self.__figure is not None:
                 self.__figure.dpi = resolution
+
+    def set_resolution(self, resolution_spec: ScreenResolution, file_only: bool = False) -> None:
+        """
+        Set the resolution of the final image to fit within the specified screen resolution.
+
+        Parameters:
+            bool file_only:
+                Apply this only to a saved image and not when displaying the image.
+        """
+        resolution: int
+        target_ratio = resolution_spec.value.height / resolution_spec.value.width
+        plot_ratio = self.figure_size[1] / self.figure_size[0]
+        if plot_ratio <= target_ratio:
+            # The width is the limiting factor
+            resolution = int(resolution_spec.value.width / self.figure_size[0])
+        else:
+            # The height is the limiting factor
+            resolution = int(resolution_spec.value.height / self.figure_size[1])
+        if file_only:
+            self.resolution_for_files = resolution
+        else:
+            self.resolution = resolution
+            if self.__figure is not None:
+                self.__figure.dpi = resolution
         
     def set_resolution_720p(self, file_only: bool = False) -> None:
         """
@@ -124,21 +148,7 @@ class CachedFigureGrid(CacheableStruct):
             bool file_only:
                 Apply this only to a saved image and not when displaying the image.
         """
-        resolution: int
-        target_ratio = ScreenResolution.get_720p().value.height / ScreenResolution.get_720p().value.width
-        plot_ratio = self.figure_size[1] / self.figure_size[0]
-        if plot_ratio <= target_ratio:
-            # The width is the limiting factor
-            resolution = int(ScreenResolution.get_720p().value.width / self.figure_size[0])
-        else:
-            # The height is the limiting factor
-            resolution = int(ScreenResolution.get_720p().value.height / self.figure_size[1])
-        if file_only:
-            self.resolution_for_files = resolution
-        else:
-            self.resolution = resolution
-            if self.__figure is not None:
-                self.__figure.dpi = resolution
+        self.set_resolution(ScreenResolution.get_720p(), file_only = file_only)
 
     def set_resolution_1080p(self, file_only: bool = False) -> None:
         """
@@ -148,21 +158,7 @@ class CachedFigureGrid(CacheableStruct):
             bool file_only:
                 Apply this only to a saved image and not when displaying the image.
         """
-        resolution: int
-        target_ratio = ScreenResolution.get_1080p().value.height / ScreenResolution.get_1080p().value.width
-        plot_ratio = self.figure_size[1] / self.figure_size[0]
-        if plot_ratio <= target_ratio:
-            # The width is the limiting factor
-            resolution = int(ScreenResolution.get_1080p().value.width / self.figure_size[0])
-        else:
-            # The height is the limiting factor
-            resolution = int(ScreenResolution.get_1080p().value.height / self.figure_size[1])
-        if file_only:
-            self.resolution_for_files = resolution
-        else:
-            self.resolution = resolution
-            if self.__figure is not None:
-                self.__figure.dpi = resolution
+        self.set_resolution(ScreenResolution.get_1080p(), file_only = file_only)
 
     def set_resolution_4K(self, file_only: bool = False) -> None:
         """
@@ -172,21 +168,7 @@ class CachedFigureGrid(CacheableStruct):
             bool file_only:
                 Apply this only to a saved image and not when displaying the image.
         """
-        resolution: int
-        target_ratio = ScreenResolution.get_4K().value.height / ScreenResolution.get_4K().value.width
-        plot_ratio = self.figure_size[1] / self.figure_size[0]
-        if plot_ratio <= target_ratio:
-            # The width is the limiting factor
-            resolution = int(ScreenResolution.get_4K().value.width / self.figure_size[0])
-        else:
-            # The height is the limiting factor
-            resolution = int(ScreenResolution.get_4K().value.height / self.figure_size[1])
-        if file_only:
-            self.resolution_for_files = resolution
-        else:
-            self.resolution = resolution
-            if self.__figure is not None:
-                self.__figure.dpi = resolution
+        self.set_resolution(ScreenResolution.get_4K(), file_only = file_only)
 
     def set_resolution_8K(self, file_only: bool = False) -> None:
         """
@@ -196,21 +178,7 @@ class CachedFigureGrid(CacheableStruct):
             bool file_only:
                 Apply this only to a saved image and not when displaying the image.
         """
-        resolution: int
-        target_ratio = ScreenResolution.EIGHT_K.value.height / ScreenResolution.EIGHT_K.value.width
-        plot_ratio = self.figure_size[1] / self.figure_size[0]
-        if plot_ratio <= target_ratio:
-            # The width is the limiting factor
-            resolution = int(ScreenResolution.EIGHT_K.value.width / self.figure_size[0])
-        else:
-            # The height is the limiting factor
-            resolution = int(ScreenResolution.EIGHT_K.value.height / self.figure_size[1])
-        if file_only:
-            self.resolution_for_files = resolution
-        else:
-            self.resolution = resolution
-            if self.__figure is not None:
-                self.__figure.dpi = resolution
+        self.set_resolution(ScreenResolution.get_8K(), file_only = file_only)
 
     def add_row(self, number: int = 1, insert_at_index: int = -1, height: float = 1.0, physical_height: bool = False, expand_figure: bool = False) -> None:
         """
