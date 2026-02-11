@@ -267,7 +267,7 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
     font                  = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
         self.font = CachedPlotFontInfo()
-        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", **kwargs)
+        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", "labeled_level_indexes", "label_positions", "label_format", "font", **kwargs)
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         self._result = axis.contour(
             self.x,
@@ -392,7 +392,7 @@ class CachedPlotPie(CachedPlotElement[tuple[list[Wedge], list[Text]] | tuple[lis
     ensure_complete_pie = AutoProperty_NonNullable[bool](default_value = True)
     labled_data         = AutoProperty[dict](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("values", "labels", "colours", "texture", "shadow", "label_distance", "percentage_distance", "explode_distance", "percentage_format", "wedge_properties", "font", **kwargs)
+        super().__init__("values", "colours", "texture", "shadow", "labels", "label_distance", "rotate_labels", "percentage_format", "percentage_distance", "centre", "radius", "start_angle", "segment_rotation", "wedge_properties", "explode_distance", "font", "hide_axes", "ensure_complete_pie", "labled_data", **kwargs)
         self.font = CachedPlotFontInfo()
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         if not self.ensure_complete_pie and sum(self.values) > 1:
