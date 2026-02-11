@@ -257,10 +257,10 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
     y = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     z = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
     levels = AutoProperty_NonNullable[tuple[float]]()
-    linewidths = AutoProperty["ArrayLike"](allow_uninitialised = True)
+    linewidths = AutoProperty[ArrayLike](allow_uninitialised = True)
     linestyles = AutoProperty[tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
-    alpha_values = AutoProperty[tuple["float|ArrayLike"]](allow_uninitialised = True)
-    colours = AutoProperty[tuple[ColorType]](allow_uninitialised = True)
+    alpha_values = AutoProperty[tuple[float|ArrayLike]](allow_uninitialised = True)
+    colours = AutoProperty[ColorType|tuple[ColorType]](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", **kwargs)
     def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
