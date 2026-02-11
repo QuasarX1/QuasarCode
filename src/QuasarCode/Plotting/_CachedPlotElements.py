@@ -356,23 +356,33 @@ class CachedPlotText(CachedPlotElement[Text]):
         )
 
 class CachedPlotPie(CachedPlotElement[tuple[list[Wedge], list[Text]] | tuple[list[Wedge], list[Text], list[Text]]]):
-    percentages       = AutoProperty_NonNullable[Sequence[float]]()
+    values            = AutoProperty_NonNullable[Sequence[float]]()
     labels            = AutoProperty_NonNullable[Sequence[str]]()
     colours           = AutoProperty_NonNullable[Sequence[ColorType]]()
     shadow            = AutoProperty_NonNullable[bool](default_value = False)
     explode_distance  = AutoProperty[Sequence[float]](allow_uninitialised = True)
     percentage_format = AutoProperty[str](allow_uninitialised = True)
     wedge_properties  = AutoProperty[dict](allow_uninitialised = True)
+    font              = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
-        super().__init__("percentages", "labels", "colours", "shadow", "explode_distance", "percentage_format", "wedge_properties", **kwargs)
-    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
+        super().__init__("values", "labels", "colours", "shadow", "explode_distance", "percentage_format", "wedge_properties", "font", **kwargs)
+        self.font = CachedPlotFontInfo()
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         self._result = axis.pie(
-            self.percentages,
-            labels  = self.labels,
-            colors  = self.colours,
-            shadow  = self.shadow,
-            explode = self.explode_distance,
-            autopct = self.percentage_format,
+            x          = self.values,
+            labels     = self.labels,
+            colors     = self.colours,
+            shadow     = self.shadow,
+            explode    = self.explode_distance,
+            autopct    = self.percentage_format,
             wedgeprops = self.wedge_properties,
+            textprops  = self.font.with_default(default_font).fontdict,
             **kwargs
         )
+    @property
+    def fractions(self) -> Sequence[float]:
+        total = sum(self.values)
+        return [value / total for value in self.values]
+    @property
+    def percentages(self) -> Sequence[float]:
+        return [value * 100 for value in self.fractions]
