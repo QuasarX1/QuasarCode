@@ -16,6 +16,7 @@ from matplotlib.container import ErrorbarContainer
 from matplotlib.lines import Line2D
 from matplotlib.contour import QuadContourSet
 from matplotlib.image import AxesImage
+from matplotlib.text import Text
 
 from ..Data._Rect import Rect
 from ..Tools._Struct import CacheableStruct
@@ -304,4 +305,49 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
             min_colour_value = image.get_clim()[0],
             max_colour_value = image.get_clim()[1],
             alpha = image.get_alpha()
+        )
+    
+class CachedPlotText_FontInfo(CacheableStruct):
+    family  = AutoProperty[Sequence[str]](allow_uninitialised = True)
+    style   = AutoProperty[str          ](allow_uninitialised = True)
+    variant = AutoProperty[str          ](allow_uninitialised = True)
+    weight  = AutoProperty[str|float    ](allow_uninitialised = True)
+    stretch = AutoProperty[str          ](allow_uninitialised = True)
+
+class CachedPlotText(CachedPlotElement[Text]):
+    text          = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    x             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    y             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    font          = AutoProperty[CachedPlotText_FontInfo](allow_uninitialised = True)
+    alpha         = AutoProperty_NonNullable[float](default_value = 1.0)
+    box_colour    = AutoProperty[ColorType](allow_uninitialised = True)
+    border_colour = AutoProperty[ColorType](allow_uninitialised = True)
+    def __init__(self, **kwargs):
+        super().__init__("text", "x", "y", "font", "alpha", "box_colour", "border_colour", **kwargs)
+    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
+        self._result = axis.text(
+            x           = self.x,
+            y           = self.y,
+            s           = self.text,
+            color       = self.font.color   if self.font is not None else None,
+            fontfamily  = self.font.family  if self.font is not None else None,
+            fontstyle   = self.font.style   if self.font is not None else None,
+            fontvariant = self.font.variant if self.font is not None else None,
+            fontweight  = self.font.weight  if self.font is not None else None,
+            fontstretch = self.font.stretch if self.font is not None else None,
+            alpha       = self.alpha,
+            bbox        = dict(facecolor = self.box_colour, edgecolor = self.border_colour) if (self.box_colour is not None or self.border_colour is not None) else None,
+            **kwargs,
+        )
+    @staticmethod
+    def from_text(text: Text) -> "CachedPlotText":
+        coords: np.ndarray[tuple[int, int], np.dtype[np.floating]] = text.get_xydata()
+        return CachedPlotText(
+            x         = coords[:, 0],
+            y         = coords[:, 1],
+            label     = text.get_label(),
+            colour    = text.get_color(),
+            linestyle = text.get_linestyle(),
+            linewidth = text.get_linewidth(),
+            alpha     = text.get_alpha(),
         )
