@@ -220,7 +220,9 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
     tick_label_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
         super().__init__("target_element", "target_plot", "label", "add_to_axis", "location", "orientation", "extend", "label_font", "tick_label_font", **kwargs)
-        self.label_font = CachedPlotFontInfo()
+        self.default_font    = CachedPlotFontInfo()
+        self.label_font      = CachedPlotFontInfo()
+        self.tick_label_font = CachedPlotFontInfo()
     def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         """
         Render the element on the given figure and axis, using the target element.
