@@ -248,11 +248,17 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
         self._result.ax.xaxis.label.set_fontproperties(self.label_font.with_default(self.default_font).with_default(default_font).fontproperties)
         self._result.ax.yaxis.label.set_fontproperties(self.label_font.with_default(self.default_font).with_default(default_font).fontproperties)
         tick_label_font = self.tick_label_font.with_default(self.default_font).with_default(default_font)
-        self._result.ax.tick_params(
-            labelsize       = tick_label_font.size,
-            labelcolor      = tick_label_font.colour,
-            labelfontfamily = tick_label_font.family,
-        )
+        tich_param_kwargs = {}
+        if tick_label_font.size is not None:
+            tich_param_kwargs["labelsize"] = tick_label_font.size
+        if tick_label_font.colour is not None:
+            tich_param_kwargs["labelcolor"] = tick_label_font.colour
+        if tick_label_font.family is not None:
+            tich_param_kwargs["labelfontfamily"] = tick_label_font.family
+        if len(tich_param_kwargs) > 0:
+            self._result.ax.tick_params(
+                **tich_param_kwargs
+            )
 
 class CachedPlotContour(CachedPlotElement[QuadContourSet]):
     x                     = AutoProperty            [np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
