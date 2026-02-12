@@ -16,10 +16,14 @@ from matplotlib.container import ErrorbarContainer
 from matplotlib.lines import Line2D
 from matplotlib.contour import QuadContourSet
 from matplotlib.image import AxesImage
+from matplotlib.text import Text
+from matplotlib.patches import Wedge
 
 from ..Data._Rect import Rect
 from ..Tools._Struct import CacheableStruct
 from ..Tools._autoproperty import AutoProperty, AutoProperty_NonNullable
+from ..Tools._CacheableFunction import CacheableFunction
+from ._CachedPlotFontInfo import CachedPlotFontInfo
 
 T = TypeVar("T")
 
@@ -34,7 +38,7 @@ class CachedPlotElement(CacheableStruct, Generic[T]):
     def result(self) -> T|None:
         return self._result
     @abstractmethod
-    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         """
         Render the element on the given figure and axis.
         
@@ -56,7 +60,7 @@ class CachedPlotLine(CachedPlotElement[Line2D]):
     alpha = AutoProperty_NonNullable[float](default_value = 1.0)
     def __init__(self, **kwargs):
         super().__init__("x", "y", "label", "colour", "linestyle", "linewidth", "alpha", **kwargs)
-    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         self._result = axis.plot(
             self.x,
             self.y,
@@ -92,7 +96,7 @@ class CachedPlotScatter(CachedPlotElement[PathCollection]):
     alpha = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("x", "y", "label", "colour", "colourmap", "marker", "size", "alpha", **kwargs)
-    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         self._result = axis.scatter(self.x, self.y, c = self.colour, cmap = self.colourmap, marker = self.marker, s = self.size, alpha = self.alpha, label = self.label, **kwargs)
     @staticmethod
     def from_points(points: PathCollection) -> "CachedPlotScatter":
@@ -125,7 +129,7 @@ class CachedPlotErrorbar(CachedPlotElement[ErrorbarContainer]):
     alpha = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("x", "y", "xerr", "yerr", "colourmap", **kwargs)
-    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         self._result = axis.errorbar(
             x = self.x,
             y = self.y,
@@ -168,7 +172,7 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
     bin_alphas = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("extent", "gridsize", "polygon_offsets", "bin_values", "min_value", "max_value", "colourmap", "edgecolour", "bin_alphas", **kwargs)
-    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         self._result = axis.hexbin(
             x = self.polygon_offsets[:, 0],
             y = self.polygon_offsets[:, 1],
@@ -204,16 +208,20 @@ class CachedPlotHexbin(CachedPlotElement[PolyCollection]):
         )
 
 class CachedPlotColourbar(CachedPlotElement[Colorbar]):
-    target_element = AutoProperty_NonNullable[str]()
-    target_plot    = AutoProperty[str](allow_uninitialised = True)
-    label          = AutoProperty[str](allow_uninitialised = True)
-    add_to_axis    = AutoProperty_NonNullable[bool](default_value = True)
-    location       = AutoProperty[Literal["left", "right", "top", "bottom"]|None](default_value = "right", allow_uninitialised = True)
-    orientation    = AutoProperty[Literal["horizontal", "vertical", "top", "bottom"]](default_value = "vertical")
-    extend         = AutoProperty[Literal["neither", "both", "min", "max"]](default_value = "neither")
+    target_element  = AutoProperty_NonNullable[str]()
+    target_plot     = AutoProperty[str](allow_uninitialised = True)
+    label           = AutoProperty[str](allow_uninitialised = True)
+    add_to_axis     = AutoProperty_NonNullable[bool](default_value = True)
+    location        = AutoProperty[Literal["left", "right", "top", "bottom"]|None](default_value = "right", allow_uninitialised = True)
+    orientation     = AutoProperty[Literal["horizontal", "vertical", "top", "bottom"]](default_value = "vertical")
+    extend          = AutoProperty[Literal["neither", "both", "min", "max"]](default_value = "neither")
+    default_font    = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    label_font      = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    tick_label_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
-        super().__init__("target_element", "target_plot", "label", "add_to_axis", "location", "orientation", "extend", **kwargs)
-    def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, *args: Any, **kwargs: Any) -> None:
+        super().__init__("target_element", "target_plot", "label", "add_to_axis", "location", "orientation", "extend", "label_font", "tick_label_font", **kwargs)
+        self.label_font = CachedPlotFontInfo()
+    def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         """
         Render the element on the given figure and axis, using the target element.
         
@@ -235,19 +243,32 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
             orientation = self.orientation if not self.add_to_axis else None,
             **kwargs
         )
+        self._result.ax.xaxis.label.set_fontproperties(self.label_font.with_default(self.default_font).with_default(default_font).fontproperties)
+        self._result.ax.yaxis.label.set_fontproperties(self.label_font.with_default(self.default_font).with_default(default_font).fontproperties)
+        tick_label_font = self.tick_label_font.with_default(self.default_font).with_default(default_font)
+        self._result.ax.tick_params(
+            labelsize       = tick_label_font.size,
+            labelcolor      = tick_label_font.color,
+            labelfontfamily = tick_label_font.family,
+        )
 
 class CachedPlotContour(CachedPlotElement[QuadContourSet]):
-    x = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    y = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    z = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
-    levels = AutoProperty_NonNullable[tuple[float]]()
-    linewidths = AutoProperty["ArrayLike"](allow_uninitialised = True)
-    linestyles = AutoProperty[tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
-    alpha_values = AutoProperty[tuple["float|ArrayLike"]](allow_uninitialised = True)
-    colours = AutoProperty[tuple[ColorType]](allow_uninitialised = True)
+    x                     = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    y                     = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    z                     = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
+    levels                = AutoProperty_NonNullable[tuple[float]]()
+    linewidths            = AutoProperty["ArrayLike"](allow_uninitialised = True)
+    linestyles            = AutoProperty[tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
+    alpha_values          = AutoProperty["tuple[float|ArrayLike]"](allow_uninitialised = True)
+    colours               = AutoProperty[ColorType|tuple[ColorType]](allow_uninitialised = True)
+    labeled_level_indexes = AutoProperty[Sequence[int]](allow_uninitialised = True)
+    label_positions       = AutoProperty[Sequence[tuple[float, float]]](allow_uninitialised = True)
+    label_format          = AutoProperty[CacheableFunction](allow_uninitialised = True)
+    font                  = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
-        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", **kwargs)
-    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any) -> None:
+        self.font = CachedPlotFontInfo()
+        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", "labeled_level_indexes", "label_positions", "label_format", "font", **kwargs)
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         self._result = axis.contour(
             self.x,
             self.y,
@@ -259,6 +280,16 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             colors = self.colours,
             **kwargs
         )
+        if self.labeled_level_indexes is not None:
+            labelled_levels = [self._result[-1].levels[i] for i in self.labeled_level_indexes]
+            axis.clabel(
+                CS     = self._result[-1],
+                levels = labelled_levels,
+                fmt    = [self.label_format(level) for level in labelled_levels] if self.label_format is not None else None,
+                inline = 1,
+                manual = self.label_positions,
+                **self.font.with_default(default_font).fontdict,
+            )
     @staticmethod
     def from_contours(contours: QuadContourSet, x: np.ndarray[tuple[int], np.dtype[np.floating]], y: np.ndarray[tuple[int], np.dtype[np.floating]], z: np.ndarray[tuple[int], np.dtype[np.floating]], uses_single_colour_value: bool = False) -> "CachedPlotContour":
         return CachedPlotContour(
@@ -283,7 +314,7 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
     alpha = AutoProperty[np.ndarray[tuple[int, int], np.dtype[np.floating]]](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("image", "extent", "origin", "colourmap", "alpha", **kwargs)
-    def render(self, figure: Figure, axis: Axes, *args: Any, **kwargs: Any):
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         self._result = axis.imshow(
             self.image,
             extent = self.extent.extent,
@@ -305,3 +336,94 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
             max_colour_value = image.get_clim()[1],
             alpha = image.get_alpha()
         )
+
+class CachedPlotText(CachedPlotElement[Text]):
+    text          = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    x             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    y             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    font          = AutoProperty_NonNullable[CachedPlotFontInfo                           ]()
+    colour        = AutoProperty            [ColorType                                    ]()
+    alpha         = AutoProperty_NonNullable[float                                        ](default_value = 1.0)
+    box_colour    = AutoProperty            [ColorType                                    ](allow_uninitialised = True)
+    border_colour = AutoProperty            [ColorType                                    ](allow_uninitialised = True)
+    def __init__(self, **kwargs):
+        super().__init__("text", "x", "y", "font", "alpha", "box_colour", "border_colour", **kwargs)
+        self.font = CachedPlotFontInfo()
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
+        self._result = axis.text(
+            x           = self.x,
+            y           = self.y,
+            s           = self.text,
+            **self.font.with_default(default_font).fontdict,
+            alpha       = self.alpha,
+            bbox        = dict(facecolor = self.box_colour, edgecolor = self.border_colour) if (self.box_colour is not None or self.border_colour is not None) else None,
+            **kwargs,
+        )
+    @staticmethod
+    def from_text(text: Text) -> "CachedPlotText":
+        coords: np.ndarray[tuple[int, int], np.dtype[np.floating]] = text.get_xydata()
+        return CachedPlotText(
+            x         = coords[:, 0],
+            y         = coords[:, 1],
+            label     = text.get_label(),
+            colour    = text.get_color(),
+            linestyle = text.get_linestyle(),
+            linewidth = text.get_linewidth(),
+            alpha     = text.get_alpha(),
+        )
+
+class CachedPlotPie(CachedPlotElement[tuple[list[Wedge], list[Text]] | tuple[list[Wedge], list[Text], list[Text]]]):
+    values              = AutoProperty_NonNullable[Sequence[float]|Sequence[str]]()
+    colours             = AutoProperty_NonNullable[Sequence[ColorType]|Sequence[str]]()
+    texture             = AutoProperty_NonNullable[Sequence[Literal["/","\\","|","-","+", "x", "o", "O", ".", "*"]]]()
+    shadow              = AutoProperty_NonNullable[bool](default_value = False)
+    labels              = AutoProperty_NonNullable[Sequence[str]]()
+    label_distance      = AutoProperty[float](default_value = 1.1, allow_uninitialised = True)
+    rotate_labels       = AutoProperty_NonNullable[bool](default_value = False)
+    percentage_format   = AutoProperty[str|CacheableFunction](allow_uninitialised = True)
+    percentage_distance = AutoProperty_NonNullable[float](default_value = 0.6)
+    centre              = AutoProperty_NonNullable[tuple[float,float]](default_value = (0, 0))
+    radius              = AutoProperty_NonNullable[float](default_value = 1.0)
+    start_angle         = AutoProperty_NonNullable[float](default_value = 0.0)
+    segment_rotation    = AutoProperty_NonNullable[Literal["clockwise", "anticlockwise"]](default_value = "anticlockwise")
+    wedge_properties    = AutoProperty[dict](allow_uninitialised = True)
+    explode_distance    = AutoProperty[Sequence[float]|Sequence[str]](allow_uninitialised = True)
+    font                = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    hide_axes           = AutoProperty_NonNullable[bool](default_value = True)
+    ensure_complete_pie = AutoProperty_NonNullable[bool](default_value = True)
+    labled_data         = AutoProperty[dict](allow_uninitialised = True)
+    def __init__(self, **kwargs):
+        super().__init__("values", "colours", "texture", "shadow", "labels", "label_distance", "rotate_labels", "percentage_format", "percentage_distance", "centre", "radius", "start_angle", "segment_rotation", "wedge_properties", "explode_distance", "font", "hide_axes", "ensure_complete_pie", "labled_data", **kwargs)
+        self.font = CachedPlotFontInfo()
+    def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
+        if not self.ensure_complete_pie and sum(self.values) > 1:
+            raise ValueError("The sum of the values must not exceed 1 when ensure_complete_pie is False.")
+        self._result = axis.pie(
+            x             = self.values,
+            explode       = self.explode_distance,
+            labels        = self.labels,
+            colors        = self.colours,
+            autopct       = self.percentage_format,
+            pctdistance   = self.percentage_distance,
+            shadow        = self.shadow,
+            labeldistance = self.label_distance,
+            startangle    = self.start_angle,
+            radius        = self.radius,
+            counterclock  = self.segment_rotation == "anticlockwise",
+            wedgeprops    = self.wedge_properties,
+            textprops     = self.font.with_default(default_font).fontdict,
+            center        = self.centre,
+            frame         = not self.hide_axes,
+            rotatelabels  = self.rotate_labels,
+            normalize     = self.ensure_complete_pie,
+            hatch         = self.texture,
+            data         = self.labled_data,
+            **kwargs
+        )
+    @property
+    def fractions(self) -> Sequence[float]:
+        total = sum(self.values)
+        return [value / total for value in self.values]
+    @property
+    def percentages(self) -> Sequence[float]:
+        return [value * 100 for value in self.fractions]

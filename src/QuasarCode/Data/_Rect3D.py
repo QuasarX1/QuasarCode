@@ -126,7 +126,7 @@ class IRect3D(Generic[T]):
 
     @x.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def x(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -142,7 +142,7 @@ class IRect3D(Generic[T]):
 
     @y.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def y(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -158,7 +158,7 @@ class IRect3D(Generic[T]):
 
     @z.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def z(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -174,7 +174,7 @@ class IRect3D(Generic[T]):
 
     @x1.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def x1(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -190,7 +190,7 @@ class IRect3D(Generic[T]):
 
     @y1.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def y1(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -206,7 +206,7 @@ class IRect3D(Generic[T]):
 
     @z1.setter
     @abstractmethod
-    def _(self, value: T) -> None:
+    def z1(self, value: T) -> None:
         raise NotImplementedError("This method must be implemented by subclasses.")
 
     @property
@@ -534,7 +534,7 @@ class GenericRect3D(IRect3D[T]):
         return self.__x_min
 
     @x.setter
-    def _(self, value: T) -> None:
+    def x(self, value: T) -> None:
         self.__x_min = value
 
     @property
@@ -548,7 +548,7 @@ class GenericRect3D(IRect3D[T]):
         return self.__y_min
 
     @y.setter
-    def _(self, value: T) -> None:
+    def y(self, value: T) -> None:
         self.__y_min = value
 
     @property
@@ -562,7 +562,7 @@ class GenericRect3D(IRect3D[T]):
         return self.__z_min
     
     @z.setter
-    def _(self, value: T) -> None:
+    def z(self, value: T) -> None:
         self.__z_min = value
 
     @property
@@ -576,7 +576,7 @@ class GenericRect3D(IRect3D[T]):
         return self.__x_max
 
     @x1.setter
-    def _(self, value: T) -> None:
+    def x1(self, value: T) -> None:
         self.__x_max = value
 
     @property
@@ -590,7 +590,7 @@ class GenericRect3D(IRect3D[T]):
         return self.__y_max
 
     @y1.setter
-    def _(self, value: T) -> None:
+    def y1(self, value: T) -> None:
         self.__y_max = value
 
     @property
@@ -604,7 +604,7 @@ class GenericRect3D(IRect3D[T]):
         return self.__z_max
     
     @z1.setter
-    def _(self, value: T) -> None:
+    def z1(self, value: T) -> None:
         self.__z_max = value
 
     @property
@@ -954,7 +954,7 @@ class Rect3D(GenericRect3D[float]):
         return GenericRect3D.x.fget(self)
 
     @x.setter
-    def _(self, value: float) -> None:
+    def x(self, value: float) -> None:
         return GenericRect3D.x.fset(self, value)
 
     @property
@@ -968,7 +968,7 @@ class Rect3D(GenericRect3D[float]):
         return GenericRect3D.y.fget(self)
 
     @y.setter
-    def _(self, value: float) -> None:
+    def y(self, value: float) -> None:
         return GenericRect3D.y.fset(self, value)
 
     @property
@@ -982,7 +982,7 @@ class Rect3D(GenericRect3D[float]):
         return GenericRect3D.z.fget(self)
 
     @z.setter
-    def _(self, value: float) -> None:
+    def z(self, value: float) -> None:
         return GenericRect3D.z.fset(self, value)
 
     @property
@@ -996,7 +996,7 @@ class Rect3D(GenericRect3D[float]):
         return GenericRect3D.x1.fget(self)
 
     @x1.setter
-    def _(self, value: float) -> None:
+    def x1(self, value: float) -> None:
         return GenericRect3D.x1.fset(self, value)
 
     @property
@@ -1010,7 +1010,7 @@ class Rect3D(GenericRect3D[float]):
         return GenericRect3D.y1.fget(self)
 
     @y1.setter
-    def _(self, value: float) -> None:
+    def y1(self, value: float) -> None:
         return GenericRect3D.y1.fset(self, value)
 
     @property
@@ -1024,7 +1024,7 @@ class Rect3D(GenericRect3D[float]):
         return GenericRect3D.z1.fget(self)
 
     @z1.setter
-    def _(self, value: float) -> None:
+    def z1(self, value: float) -> None:
         return GenericRect3D.z1.fset(self, value)
 
     @property
@@ -1265,8 +1265,8 @@ class DiscreteRect3D(GenericRect3D[int]):
         return GenericRect3D.x.fget(self)
 
     @x.setter
-    def _(self, value: int) -> None:
-        return GenericRect.x.fset(self, value)
+    def x(self, value: int) -> None:
+        return GenericRect3D.x.fset(self, value)
 
     @property
     def y(self) -> int:
@@ -1279,8 +1279,8 @@ class DiscreteRect3D(GenericRect3D[int]):
         return GenericRect3D.y.fget(self)
 
     @y.setter
-    def _(self, value: int) -> None:
-        return GenericRect.y.fset(self, value)
+    def y(self, value: int) -> None:
+        return GenericRect3D.y.fset(self, value)
     
     @property
     def z(self) -> int:
@@ -1293,7 +1293,7 @@ class DiscreteRect3D(GenericRect3D[int]):
         return GenericRect3D.z.fget(self)
 
     @z.setter
-    def _(self, value: int) -> None:
+    def z(self, value: int) -> None:
         return GenericRect3D.z.fset(self, value)
 
     @property
@@ -1307,8 +1307,8 @@ class DiscreteRect3D(GenericRect3D[int]):
         return GenericRect3D.x1.fget(self)
 
     @x1.setter
-    def _(self, value: int) -> None:
-        return GenericRect.x1.fset(self, value)
+    def x1(self, value: int) -> None:
+        return GenericRect3D.x1.fset(self, value)
 
     @property
     def y1(self) -> int:
@@ -1321,8 +1321,8 @@ class DiscreteRect3D(GenericRect3D[int]):
         return GenericRect3D.y1.fget(self)
 
     @y1.setter
-    def _(self, value: int) -> None:
-        return GenericRect.y1.fset(self, value)
+    def y1(self, value: int) -> None:
+        return GenericRect3D.y1.fset(self, value)
 
     @property
     def z1(self) -> int:
@@ -1335,7 +1335,7 @@ class DiscreteRect3D(GenericRect3D[int]):
         return GenericRect3D.z1.fget(self)
 
     @z1.setter
-    def _(self, value: int) -> None:
+    def z1(self, value: int) -> None:
         return GenericRect3D.z1.fset(self, value)
 
     @property

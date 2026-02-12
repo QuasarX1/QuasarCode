@@ -1,5 +1,5 @@
 import os
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
@@ -10,8 +10,10 @@ from ..Data._Rect import Rect
 from ..Tools._ScreenResolution import ScreenResolution
 from ..Tools._Struct import CacheableStruct
 from ..Tools._autoproperty import AutoProperty, AutoProperty_NonNullable
-from ._CachedPlot import CachedPlot
+from ._CachedPlotFontInfo import CachedPlotFontInfo
+from ._CachedPlotCustomLegend import CachedPlotCustomLegend
 from ._CachedPlotElements import CachedPlotColourbar
+from ._CachedPlot import CachedPlot
 
 class CachedFigureGrid(CacheableStruct):
     """
@@ -31,8 +33,11 @@ class CachedFigureGrid(CacheableStruct):
     horizontal_spacing = AutoProperty_NonNullable[float](default_value = 0)
     plots = AutoProperty_NonNullable[dict[str, CachedPlot]]()
     colourbars = AutoProperty_NonNullable[dict[str, CachedPlotColourbar]]()
+    custom_legends = AutoProperty_NonNullable[dict[str, CachedPlotCustomLegend]]()
     resolution = AutoProperty_NonNullable[int](default_value = 100)
     resolution_for_files = AutoProperty[int](allow_uninitialised = True)
+    default_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    title_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
 
     @property
     def physical_rect(self) -> Rect:
@@ -89,6 +94,9 @@ class CachedFigureGrid(CacheableStruct):
 
         self.plots = {}
         self.colourbars = {}
+        self.custom_legends = {}
+        self.default_font = CachedPlotFontInfo()
+        self.title_font = CachedPlotFontInfo()
         
     def set_resolution_custom(self, width_pixels: int|None = None, height_pixels: int|None = None, file_only: bool = False) -> None:
         """
@@ -115,6 +123,33 @@ class CachedFigureGrid(CacheableStruct):
             self.resolution = resolution
             if self.__figure is not None:
                 self.__figure.dpi = resolution
+
+    def set_resolution(self, resolution_spec: ScreenResolution, file_only: bool = False) -> None:
+        """
+        Set the resolution of the final image to fit within the specified screen resolution.
+
+        NOTE: This applies to the CURRENT size of the figure. If the figure size changes, the
+            resolution will remain fixed but the number of pixels used will increase/decrease!
+
+        Parameters:
+            bool file_only:
+                Apply this only to a saved image and not when displaying the image.
+        """
+        resolution: int
+        target_ratio = resolution_spec.value.height / resolution_spec.value.width
+        plot_ratio = self.figure_size[1] / self.figure_size[0]
+        if plot_ratio <= target_ratio:
+            # The width is the limiting factor
+            resolution = int(resolution_spec.value.width / self.figure_size[0])
+        else:
+            # The height is the limiting factor
+            resolution = int(resolution_spec.value.height / self.figure_size[1])
+        if file_only:
+            self.resolution_for_files = resolution
+        else:
+            self.resolution = resolution
+            if self.__figure is not None:
+                self.__figure.dpi = resolution
         
     def set_resolution_720p(self, file_only: bool = False) -> None:
         """
@@ -124,21 +159,7 @@ class CachedFigureGrid(CacheableStruct):
             bool file_only:
                 Apply this only to a saved image and not when displaying the image.
         """
-        resolution: int
-        target_ratio = ScreenResolution.get_720p().value.height / ScreenResolution.get_720p().value.width
-        plot_ratio = self.figure_size[1] / self.figure_size[0]
-        if plot_ratio <= target_ratio:
-            # The width is the limiting factor
-            resolution = int(ScreenResolution.get_720p().value.width / self.figure_size[0])
-        else:
-            # The height is the limiting factor
-            resolution = int(ScreenResolution.get_720p().value.height / self.figure_size[1])
-        if file_only:
-            self.resolution_for_files = resolution
-        else:
-            self.resolution = resolution
-            if self.__figure is not None:
-                self.__figure.dpi = resolution
+        self.set_resolution(ScreenResolution.get_720p(), file_only = file_only)
 
     def set_resolution_1080p(self, file_only: bool = False) -> None:
         """
@@ -148,21 +169,7 @@ class CachedFigureGrid(CacheableStruct):
             bool file_only:
                 Apply this only to a saved image and not when displaying the image.
         """
-        resolution: int
-        target_ratio = ScreenResolution.get_1080p().value.height / ScreenResolution.get_1080p().value.width
-        plot_ratio = self.figure_size[1] / self.figure_size[0]
-        if plot_ratio <= target_ratio:
-            # The width is the limiting factor
-            resolution = int(ScreenResolution.get_1080p().value.width / self.figure_size[0])
-        else:
-            # The height is the limiting factor
-            resolution = int(ScreenResolution.get_1080p().value.height / self.figure_size[1])
-        if file_only:
-            self.resolution_for_files = resolution
-        else:
-            self.resolution = resolution
-            if self.__figure is not None:
-                self.__figure.dpi = resolution
+        self.set_resolution(ScreenResolution.get_1080p(), file_only = file_only)
 
     def set_resolution_4K(self, file_only: bool = False) -> None:
         """
@@ -172,21 +179,7 @@ class CachedFigureGrid(CacheableStruct):
             bool file_only:
                 Apply this only to a saved image and not when displaying the image.
         """
-        resolution: int
-        target_ratio = ScreenResolution.get_4K().value.height / ScreenResolution.get_4K().value.width
-        plot_ratio = self.figure_size[1] / self.figure_size[0]
-        if plot_ratio <= target_ratio:
-            # The width is the limiting factor
-            resolution = int(ScreenResolution.get_4K().value.width / self.figure_size[0])
-        else:
-            # The height is the limiting factor
-            resolution = int(ScreenResolution.get_4K().value.height / self.figure_size[1])
-        if file_only:
-            self.resolution_for_files = resolution
-        else:
-            self.resolution = resolution
-            if self.__figure is not None:
-                self.__figure.dpi = resolution
+        self.set_resolution(ScreenResolution.get_4K(), file_only = file_only)
 
     def set_resolution_8K(self, file_only: bool = False) -> None:
         """
@@ -196,23 +189,9 @@ class CachedFigureGrid(CacheableStruct):
             bool file_only:
                 Apply this only to a saved image and not when displaying the image.
         """
-        resolution: int
-        target_ratio = ScreenResolution.EIGHT_K.value.height / ScreenResolution.EIGHT_K.value.width
-        plot_ratio = self.figure_size[1] / self.figure_size[0]
-        if plot_ratio <= target_ratio:
-            # The width is the limiting factor
-            resolution = int(ScreenResolution.EIGHT_K.value.width / self.figure_size[0])
-        else:
-            # The height is the limiting factor
-            resolution = int(ScreenResolution.EIGHT_K.value.height / self.figure_size[1])
-        if file_only:
-            self.resolution_for_files = resolution
-        else:
-            self.resolution = resolution
-            if self.__figure is not None:
-                self.__figure.dpi = resolution
+        self.set_resolution(ScreenResolution.get_8K(), file_only = file_only)
 
-    def add_row(self, number: int = 1, insert_at_index: int = -1, height: float = 1.0, physical_height: bool = False, expand_figure: bool = False) -> None:
+    def add_row(self, number: int = 1, insert_at_index: Optional[int] = None, height: float = 1.0, physical_height: bool = False, expand_figure: bool = False) -> None:
         """
         Add a new row of axes to the figure layout.
 
@@ -237,7 +216,7 @@ class CachedFigureGrid(CacheableStruct):
         """
         if number < 1:
             raise ValueError("Number of rows to add must be at least 1.")
-        if insert_at_index < 0:
+        if insert_at_index is not None and insert_at_index < 0:
             insert_at_index = self.rows + insert_at_index
         if self.__locked:
             raise RuntimeError("Cannot add rows after the figure has been created. Call `clear_axes` first.")
@@ -253,11 +232,15 @@ class CachedFigureGrid(CacheableStruct):
         elif expand_figure:
             self.figure_size = (self.figure_size[0], self.figure_size[1] + (height * (self.figure_size[1] / sum(self.relative_heights))) * number)
         for _ in range(number):
-            self.mosaic.insert(insert_at_index, ["." for _ in range(self.columns)])
-            self.relative_heights.insert(insert_at_index, height)
+            if insert_at_index is not None:
+                self.mosaic.insert(insert_at_index, ["." for _ in range(self.columns)])
+                self.relative_heights.insert(insert_at_index, height)
+            else:
+                self.mosaic.append(["." for _ in range(self.columns)])
+                self.relative_heights.append(height)
         self.rows += number
 
-    def add_column(self, number: int = 1, insert_at_index: int = -1, width: float = 1.0, physical_width: bool = False, expand_figure: bool = False) -> None:
+    def add_column(self, number: int = 1, insert_at_index: Optional[int] = None, width: float = 1.0, physical_width: bool = False, expand_figure: bool = False) -> None:
         """
         Add a new column of axes to the figure layout.
 
@@ -268,7 +251,7 @@ class CachedFigureGrid(CacheableStruct):
                 Default is  1.
             int insert_at_index:
                 Index at which to insert the new columns.
-                Default is -1, which means to append at the end.
+                Default is None, which means to append at the end.
             float width:
                 Width of the new columns (relative unless specified as physical).
             bool physical_width:
@@ -282,7 +265,7 @@ class CachedFigureGrid(CacheableStruct):
         """
         if number < 1:
             raise ValueError("Number of columns to add must be at least 1.")
-        if insert_at_index < 0:
+        if insert_at_index is not None and insert_at_index < 0:
             insert_at_index = self.columns + insert_at_index
         if self.__locked:
             raise RuntimeError("Cannot add columns after the figure has been created. Call `clear_axes` first.")
@@ -299,10 +282,16 @@ class CachedFigureGrid(CacheableStruct):
             self.figure_size = (self.figure_size[0] + (width * (self.figure_size[0] / sum(self.relative_widths))) * number, self.figure_size[1])
         for row in self.mosaic:
             for _ in range(number):
-                row.insert(insert_at_index, ".")
+                if insert_at_index is not None:
+                    row.insert(insert_at_index, ".")
+                else:
+                    row.append(".")
         self.columns += number
         for _ in range(number):
-            self.relative_widths.insert(insert_at_index, width)
+            if insert_at_index is not None:
+                self.relative_widths.insert(insert_at_index, width)
+            else:
+                self.relative_widths.append(width)
 
     def resize_row(self, row: int|list[int], height: float, physical_height: bool = False, resize_figure: bool = False) -> None:
         """
@@ -556,7 +545,7 @@ class CachedFigureGrid(CacheableStruct):
         self.__figure = plt.figure(figsize = self.figure_size, layout = self.layout, **(figure_kwargs if figure_kwargs is not None else {}))
         self.__figure.dpi = self.resolution
         if self.title is not None:
-            self.__figure.suptitle(self.title)
+            self.__figure.suptitle(self.title, **self.title_font.with_default(self.default_font).fontdict)
         self.__axes = self.__figure.subplot_mosaic(
             self.mosaic,
             width_ratios = self.relative_widths,
@@ -628,11 +617,13 @@ class CachedFigureGrid(CacheableStruct):
         if forward_colourbar_kwargs is None:
             forward_colourbar_kwargs = {}
         for plot_tag, plot in self.plots.items():
-            plot.render(self.__figure, self.__axes[plot_tag], forward_kwargs = forward_kwargs.get(plot_tag, {}), forward_colourbar_kwargs = forward_colourbar_kwargs.get(plot_tag, {}))
+            plot.render(self.__figure, self.__axes[plot_tag], figure_default_font = self.default_font, forward_kwargs = forward_kwargs.get(plot_tag, {}), forward_colourbar_kwargs = forward_colourbar_kwargs.get(plot_tag, {}))
         for plot_tag, colourbar in self.colourbars.items():
             colourbar.render(self.__figure, self.__axes[plot_tag], self.plots[colourbar.target_plot].plot_elements[colourbar.target_element]._result, **forward_colourbar_kwargs.get(plot_tag, {}))
+        for legend in self.custom_legends.values():
+            legend.render(self.__figure, None, default_font = self.default_font, elements_by_figure_plot = { plot_tag : plot.plot_elements for plot_tag, plot in self.plots.items() })
 
-    def save_png(self, filename: str, directory: str|None = None) -> None:
+    def save_png(self, filename: str, directory: str|None = None, **kwargs) -> None:
         """
         Save the figure as a PNG file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
@@ -648,8 +639,10 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
-    def save_jpeg(self, filename: str, directory: str|None = None) -> None:
+        if "dpi" in kwargs:
+            kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
+        self.__figure.savefig(filepath, **kwargs)
+    def save_jpeg(self, filename: str, directory: str|None = None, **kwargs) -> None:
         """
         Save the figure as a JPEG file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
@@ -665,8 +658,10 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
-    def save_pdf(self, filename: str, directory: str|None = None) -> None:
+        if "dpi" in kwargs:
+            kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
+        self.__figure.savefig(filepath, **kwargs)
+    def save_pdf(self, filename: str, directory: str|None = None, **kwargs) -> None:
         """
         Save the figure as a PDF file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
@@ -682,8 +677,12 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
-    def save_svg(self, filename: str, directory: str|None = None) -> None:
+        if "dpi" in kwargs:
+            kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
+        if self.layout == "tight":
+            kwargs["bbox_inches"] = "tight"
+        self.__figure.savefig(filepath, **kwargs)
+    def save_svg(self, filename: str, directory: str|None = None, **kwargs) -> None:
         """
         Save the figure as a SVG (Simple Vector Graphic) file with the specified resolution.
         The resolution for the file may be set differently to the display resolution using `resolution_for_files`.
@@ -699,4 +698,6 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        self.__figure.savefig(filepath, dpi = self.resolution_for_files if self.resolution_for_files is not None else self.resolution)
+        if "dpi" in kwargs:
+            kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
+        self.__figure.savefig(filepath, **kwargs)
