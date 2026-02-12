@@ -279,6 +279,7 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             *xy_args,
             self.z,
             levels = self.levels,
+            extent = self.extent.extent,
             linewidths = self.linewidths,
             linestyles = self.linestyles,
             alpha = self.alpha_values,
