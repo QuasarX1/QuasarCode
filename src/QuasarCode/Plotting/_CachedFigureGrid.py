@@ -619,7 +619,7 @@ class CachedFigureGrid(CacheableStruct):
         for plot_tag, plot in self.plots.items():
             plot.render(self.__figure, self.__axes[plot_tag], figure_default_font = self.default_font, forward_kwargs = forward_kwargs.get(plot_tag, {}), forward_colourbar_kwargs = forward_colourbar_kwargs.get(plot_tag, {}))
         for plot_tag, colourbar in self.colourbars.items():
-            colourbar.render(self.__figure, self.__axes[plot_tag], self.plots[colourbar.target_plot].plot_elements[colourbar.target_element]._result, **forward_colourbar_kwargs.get(plot_tag, {}))
+            colourbar.render(self.__figure, self.__axes[plot_tag], self.plots[colourbar.target_plot].plot_elements[colourbar.target_element]._result, default_font = self.default_font, **forward_colourbar_kwargs.get(plot_tag, {}))
         for legend in self.custom_legends.values():
             legend.render(self.__figure, None, default_font = self.default_font, elements_by_figure_plot = { plot_tag : plot.plot_elements for plot_tag, plot in self.plots.items() })
 
