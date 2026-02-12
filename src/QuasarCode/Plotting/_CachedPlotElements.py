@@ -253,9 +253,9 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
         )
 
 class CachedPlotContour(CachedPlotElement[QuadContourSet]):
-    x                     = AutoProperty            [np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    y                     = AutoProperty            [np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    extent                = AutoProperty            [Rect                         ]()
+    x                     = AutoProperty            [np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
+    y                     = AutoProperty            [np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
+    extent                = AutoProperty            [Rect                         ](allow_uninitialised = True)
     z                     = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
     levels                = AutoProperty_NonNullable[tuple[float]                 ]()
     linewidths            = AutoProperty            ["ArrayLike"                  ](allow_uninitialised = True)
