@@ -250,7 +250,7 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
         tick_label_font = self.tick_label_font.with_default(self.default_font).with_default(default_font)
         self._result.ax.tick_params(
             labelsize       = tick_label_font.size,
-            labelcolor      = tick_label_font.color,
+            labelcolor      = tick_label_font.colour,
             labelfontfamily = tick_label_font.family,
         )
 
