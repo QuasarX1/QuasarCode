@@ -253,25 +253,30 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
         )
 
 class CachedPlotContour(CachedPlotElement[QuadContourSet]):
-    x                     = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    y                     = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    x                     = AutoProperty            [np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    y                     = AutoProperty            [np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    extent                = AutoProperty            [Rect                         ]()
     z                     = AutoProperty_NonNullable[np.ndarray[tuple[int, int], np.dtype[np.floating]]]()
-    levels                = AutoProperty_NonNullable[tuple[float]]()
-    linewidths            = AutoProperty["ArrayLike"](allow_uninitialised = True)
-    linestyles            = AutoProperty[tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
-    alpha_values          = AutoProperty["tuple[float|ArrayLike]"](allow_uninitialised = True)
-    colours               = AutoProperty[ColorType|tuple[ColorType]](allow_uninitialised = True)
-    labeled_level_indexes = AutoProperty[Sequence[int]](allow_uninitialised = True)
-    label_positions       = AutoProperty[Sequence[tuple[float, float]]](allow_uninitialised = True)
-    label_format          = AutoProperty[CacheableFunction](allow_uninitialised = True)
+    levels                = AutoProperty_NonNullable[tuple[float]                 ]()
+    linewidths            = AutoProperty            ["ArrayLike"                  ](allow_uninitialised = True)
+    linestyles            = AutoProperty            [tuple[Literal["solid", "dashed", "dashdot", "dotted"]]](allow_uninitialised = True)
+    alpha_values          = AutoProperty            ["tuple[float|ArrayLike]"     ](allow_uninitialised = True)
+    colours               = AutoProperty            [ColorType|tuple[ColorType]   ](allow_uninitialised = True)
+    labeled_level_indexes = AutoProperty            [Sequence[int]                ](allow_uninitialised = True)
+    label_positions       = AutoProperty            [Sequence[tuple[float, float]]](allow_uninitialised = True)
+    label_format          = AutoProperty            [CacheableFunction            ](allow_uninitialised = True)
     font                  = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
         self.font = CachedPlotFontInfo()
-        super().__init__("x", "y", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", "labeled_level_indexes", "label_positions", "label_format", "font", **kwargs)
+        super().__init__("x", "y", "extent", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", "labeled_level_indexes", "label_positions", "label_format", "font", **kwargs)
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
+        if sum([self.x is not None, self.y is not None]) == 1:
+            raise ValueError("Both x and y must be provided together or not at all.")
+        if self.x is None and self.extent is None:
+            raise ValueError("If x and y are not provided, extent must be provided.")
+        xy_args = [] if self.x is None else [self.x, self.y]
         self._result = axis.contour(
-            self.x,
-            self.y,
+            *xy_args,
             self.z,
             levels = self.levels,
             linewidths = self.linewidths,
