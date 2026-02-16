@@ -180,7 +180,7 @@ class CachedPlot(CacheableStruct):
                 functions = tuple(self.alt_x_axis_functions)
             )
             if self.alt_x_axis_label is not None:
-                self._alt_x_axis.set_xlabel(self.alt_x_axis_label, **self.alt_x_axis_label_font.with_default(self.default_font).with_default(figure_default_font).fontdict)
+                self._alt_x_axis.set_xlabel(self.alt_x_axis_label, **self.alt_x_axis_label_font.with_default(self.x_axis_label_font).with_default(self.default_font).with_default(figure_default_font).fontdict)
             alt_x_tick_label_font = self.alt_x_tick_label_font.with_default(self.x_tick_label_font).with_default(self.default_font).with_default(figure_default_font)
             alt_x_tick_label_font_kwargs = {}
             if alt_x_tick_label_font.size is not None:
@@ -203,7 +203,7 @@ class CachedPlot(CacheableStruct):
                 functions = tuple(self.alt_y_axis_functions)
             )
             if self.alt_y_axis_label is not None:
-                self._alt_y_axis.set_xlabel(self.alt_y_axis_label, **self.alt_y_axis_label_font.with_default(self.default_font).with_default(figure_default_font).fontdict)
+                self._alt_y_axis.set_xlabel(self.alt_y_axis_label, **self.alt_y_axis_label_font.with_default(self.y_axis_label_font).with_default(self.default_font).with_default(figure_default_font).fontdict)
             alt_y_tick_label_font = self.alt_y_tick_label_font.with_default(self.y_tick_label_font).with_default(self.default_font).with_default(figure_default_font)
             alt_y_tick_label_font_kwargs = {}
             if alt_y_tick_label_font.size is not None:
