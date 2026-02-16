@@ -76,7 +76,7 @@ class CachedFigureGrid(CacheableStruct):
         mosaic_provided = "mosaic" in kwargs
 
         super().__init__(
-            cacheable_attributes = ("title", "mosaic", "rows", "columns", "figure_size", "layout", "relative_widths", "relative_heights", "vertical_spacing", "horizontal_spacing", "plots", "resolution", "resolution_for_files"),
+            cacheable_attributes = ("title", "mosaic", "rows", "columns", "figure_size", "layout", "relative_heights", "relative_widths", "vertical_spacing", "horizontal_spacing", "plots", "colourbars", "custom_legends", "resolution", "resolution_for_files", "default_font", "title_font"),
             **kwargs
         )
 
