@@ -287,7 +287,7 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             *xy_args,
             self.z,
             levels = self.levels,
-            extent = self.extent.extent,
+            extent = self.extent.extent if self.extent is not None else None,
             linewidths = self.linewidths,
             linestyles = self.linestyles,
             alpha = self.alpha_values,
@@ -295,9 +295,9 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
             **kwargs
         )
         if self.labeled_level_indexes is not None:
-            labelled_levels = [self._result[-1].levels[i] for i in self.labeled_level_indexes]
+            labelled_levels = [self._result.levels[i] for i in self.labeled_level_indexes]
             axis.clabel(
-                CS     = self._result[-1],
+                CS     = self._result,
                 levels = labelled_levels,
                 fmt    = [self.label_format(level) for level in labelled_levels] if self.label_format is not None else None,
                 inline = 1,
