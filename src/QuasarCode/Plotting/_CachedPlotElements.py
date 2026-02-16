@@ -356,7 +356,7 @@ class CachedPlotText(CachedPlotElement[Text]):
     x             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     y             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
     font          = AutoProperty_NonNullable[CachedPlotFontInfo                           ]()
-    colour        = AutoProperty            [ColorType                                    ]()
+#    colour        = AutoProperty            [ColorType                                    ]()
     alpha         = AutoProperty_NonNullable[float                                        ](default_value = 1.0)
     box_colour    = AutoProperty            [ColorType                                    ](allow_uninitialised = True)
     border_colour = AutoProperty            [ColorType                                    ](allow_uninitialised = True)
@@ -369,6 +369,7 @@ class CachedPlotText(CachedPlotElement[Text]):
             y           = self.y,
             s           = self.text,
             **self.font.with_default(default_font).fontdict,
+            color = self.font.colour,
             alpha       = self.alpha,
             bbox        = dict(facecolor = self.box_colour, edgecolor = self.border_colour) if (self.box_colour is not None or self.border_colour is not None) else None,
             **kwargs,

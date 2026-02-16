@@ -27,33 +27,33 @@ class CachedPlotLegendBoxProperties(CacheableStruct):
         )
 
 class CachedPlotCustomLegend(CacheableStruct):
-    title                          = AutoProperty            [str                          ](allow_uninitialised = True)
-    element_targets                = AutoProperty_NonNullable[dict[str,str|tuple[str,str]] ]() # Label : target element | (target plot, target element)
-    reverse_order                  = AutoProperty_NonNullable[bool                         ](default_value = False)
-    columns                        = AutoProperty_NonNullable[int                          ](default_value = 1)
-    position                       = AutoProperty_NonNullable[Literal["best", "upper left", "upper center", "upper right", "center left", "center", "center right", "lower left", "lower center", "lower right"]|tuple[float, float]](default_value = "best")
-    anchor_region                  = AutoProperty            [Rect                         ](allow_uninitialised = True) # Max. one of these \/ can be set
-    anchor                         = AutoProperty            [tuple[int,int]               ](allow_uninitialised = True) # Max. one of these /\ can be set
-    anchor_space                   = AutoProperty            [Literal["figure-space", "axis-space", "axis-data-space"]](allow_uninitialised = True)
-    label_font                     = AutoProperty_NonNullable[CachedPlotFontInfo           ]()
-    label_colours                  = AutoProperty            [str|Literal["linecolor", "markerfacecolor", "markeredgecolor"]|list[str|Literal["linecolor", "markerfacecolor", "markeredgecolor"]]](allow_uninitialised = True)
-    title_font                     = AutoProperty_NonNullable[CachedPlotFontInfo           ]()
-    alignment                      = AutoProperty_NonNullable[Literal["left", "center", "right"]](default_value = "center")
+    title                           = AutoProperty            [str                          ](allow_uninitialised = True)
+    element_targets                 = AutoProperty_NonNullable[dict[str,str|tuple[str,str]] ]() # Label : target element | (target plot, target element)
+    reverse_order                   = AutoProperty_NonNullable[bool                         ](default_value = False)
+    columns                         = AutoProperty_NonNullable[int                          ](default_value = 1)
+    position                        = AutoProperty_NonNullable[Literal["best", "upper left", "upper center", "upper right", "center left", "center", "center right", "lower left", "lower center", "lower right"]|tuple[float, float]](default_value = "best")
+    anchor_region                   = AutoProperty            [Rect                         ](allow_uninitialised = True) # Max. one of these \/ can be set
+    anchor                          = AutoProperty            [tuple[int,int]               ](allow_uninitialised = True) # Max. one of these /\ can be set
+    anchor_space                    = AutoProperty            [Literal["figure-space", "axis-space", "axis-data-space"]](allow_uninitialised = True)
+    label_font                      = AutoProperty_NonNullable[CachedPlotFontInfo           ]()
+    label_colours                   = AutoProperty            [str|Literal["linecolor", "markerfacecolor", "markeredgecolor"]|list[str|Literal["linecolor", "markerfacecolor", "markeredgecolor"]]](allow_uninitialised = True)
+    title_font                      = AutoProperty_NonNullable[CachedPlotFontInfo           ]()
+    alignment                       = AutoProperty_NonNullable[Literal["left", "center", "right"]](default_value = "center")
 
-    line_render_points             = AutoProperty            [int                          ](allow_uninitialised = True)
-    scatter_render_points          = AutoProperty            [int                          ](allow_uninitialised = True)
+    line_render_points              = AutoProperty            [int                          ](allow_uninitialised = True)
+    scatter_render_points           = AutoProperty            [int                          ](allow_uninitialised = True)
     scatter_render_points_y_offsets = AutoProperty_NonNullable[list[float]                  ](default_value = [0.375, 0.5, 0.3125]) # Relative to the font height (0 -> 1)
-    marker_scale                   = AutoProperty            [float                        ](allow_uninitialised = True)
-    marker_location                = AutoProperty_NonNullable[Literal["left", "right"]     ](default_value = "left")
-    vertical_spacing               = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
-    horizontal_spacing             = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
-    handle_length                  = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
-    handle_height                  = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
-    handle_text_space              = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
+    marker_scale                    = AutoProperty            [float                        ](allow_uninitialised = True)
+    marker_location                 = AutoProperty_NonNullable[Literal["left", "right"]     ](default_value = "left")
+    vertical_spacing                = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
+    horizontal_spacing              = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
+    handle_length                   = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
+    handle_height                   = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
+    handle_text_space               = AutoProperty            [float                        ](allow_uninitialised = True) # in units of font-size
 
-    box                            = AutoProperty_NonNullable[CachedPlotLegendBoxProperties]()
-    expand_into_horizontal_space   = AutoProperty_NonNullable[bool                         ](default_value = False)
-    mouse_draggable                = AutoProperty_NonNullable[bool                         ](default_value = False)
+    box                             = AutoProperty_NonNullable[CachedPlotLegendBoxProperties]()
+    expand_into_horizontal_space    = AutoProperty_NonNullable[bool                         ](default_value = False)
+    mouse_draggable                 = AutoProperty_NonNullable[bool                         ](default_value = False)
 
     def __init__(self, **kwargs):
         super().__init__(
