@@ -219,7 +219,7 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
     label_font      = AutoProperty_NonNullable[CachedPlotFontInfo]()
     tick_label_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
-        super().__init__("target_element", "target_plot", "label", "add_to_axis", "location", "orientation", "extend", "label_font", "tick_label_font", **kwargs)
+        super().__init__("target_element", "target_plot", "label", "add_to_axis", "location", "orientation", "extend", "default_font", "label_font", "tick_label_font", **kwargs)
         self.default_font    = CachedPlotFontInfo()
         self.label_font      = CachedPlotFontInfo()
         self.tick_label_font = CachedPlotFontInfo()
@@ -327,7 +327,7 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
     max_colour_value = AutoProperty[float](allow_uninitialised = True)
     alpha = AutoProperty[np.ndarray[tuple[int, int], np.dtype[np.floating]]](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("image", "extent", "origin", "colourmap", "alpha", **kwargs)
+        super().__init__("image", "extent", "origin", "colourmap", "min_colour_value", "max_colour_value", "alpha", **kwargs)
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         self._result = axis.imshow(
             self.image,
