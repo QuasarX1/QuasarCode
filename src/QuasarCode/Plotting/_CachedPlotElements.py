@@ -276,11 +276,9 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
     labeled_level_indexes = AutoProperty            [Sequence[int]                ](allow_uninitialised = True)
     label_positions       = AutoProperty            [Sequence[tuple[float, float]]](allow_uninitialised = True)
     label_format          = AutoProperty            [CacheableFunction            ](allow_uninitialised = True)
-    font                  = AutoProperty_NonNullable[CachedPlotFontInfo]()
+    fontsize              = AutoProperty[float|Literal["xx-small","x-small","small","medium","large","x-large","xx-large"]](allow_uninitialised = True) # Matplotlib default is 10.0
     def __init__(self, **kwargs):
-        super().__init__("x", "y", "extent", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", "labeled_level_indexes", "label_positions", "label_format", "font", **kwargs)
-        if "font" not in kwargs:
-            self.font = CachedPlotFontInfo()
+        super().__init__("x", "y", "extent", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", "labeled_level_indexes", "label_positions", "label_format", "fontsize", **kwargs)
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         if sum([self.x is not None, self.y is not None]) == 1:
             raise ValueError("Both x and y must be provided together or not at all.")
@@ -300,13 +298,16 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
         )
         if self.labeled_level_indexes is not None:
             labelled_levels = [self._result.levels[i] for i in self.labeled_level_indexes]
+            font_kwargs = {}
+            if self.fontsize is not None:
+                font_kwargs["fontsize"] = self.fontsize
             axis.clabel(
-                CS     = self._result,
-                levels = labelled_levels,
-                fmt    = [self.label_format(level) for level in labelled_levels] if self.label_format is not None else None,
-                inline = 1,
-                manual = self.label_positions,
-                **self.font.with_default(default_font).fontdict,
+                CS       = self._result,
+                levels   = labelled_levels,
+                fmt      = [self.label_format(level) for level in labelled_levels] if self.label_format is not None else None,
+                inline   = 1,
+                manual   = self.label_positions,
+                **font_kwargs,
             )
     @staticmethod
     def from_contours(contours: QuadContourSet, x: np.ndarray[tuple[int], np.dtype[np.floating]], y: np.ndarray[tuple[int], np.dtype[np.floating]], z: np.ndarray[tuple[int], np.dtype[np.floating]], uses_single_colour_value: bool = False) -> "CachedPlotContour":
