@@ -82,19 +82,33 @@ class CachedPlot(CacheableStruct):
             ),
             **kwargs
         )
-        self.plot_elements = {}
-        self.colourbars = {}
-        self.custom_legends = {}
-        self.default_font = CachedPlotFontInfo()
-        self.title_font = CachedPlotFontInfo()
-        self.x_axis_label_font = CachedPlotFontInfo()
-        self.y_axis_label_font = CachedPlotFontInfo()
-        self.alt_x_axis_label_font = CachedPlotFontInfo()
-        self.alt_y_axis_label_font = CachedPlotFontInfo()
-        self.x_tick_label_font = CachedPlotFontInfo()
-        self.y_tick_label_font = CachedPlotFontInfo()
-        self.alt_x_tick_label_font = CachedPlotFontInfo()
-        self.alt_y_tick_label_font = CachedPlotFontInfo()
+        
+        if "plot_elements" not in kwargs:
+            self.plot_elements = {}
+        if "colourbars" not in kwargs:
+            self.colourbars = {}
+        if "custom_legends" not in kwargs:
+            self.custom_legends = {}
+        if "default_font" not in kwargs:
+            self.default_font = CachedPlotFontInfo()
+        if "title_font" not in kwargs:
+            self.title_font = CachedPlotFontInfo()
+        if "x_axis_label_font" not in kwargs:
+            self.x_axis_label_font = CachedPlotFontInfo()
+        if "y_axis_label_font" not in kwargs:
+            self.y_axis_label_font = CachedPlotFontInfo()
+        if "alt_x_axis_label_font" not in kwargs:
+            self.alt_x_axis_label_font = CachedPlotFontInfo()
+        if "alt_y_axis_label_font" not in kwargs:
+            self.alt_y_axis_label_font = CachedPlotFontInfo()
+        if "x_tick_label_font" not in kwargs:
+            self.x_tick_label_font = CachedPlotFontInfo()
+        if "y_tick_label_font" not in kwargs:
+            self.y_tick_label_font = CachedPlotFontInfo()
+        if "alt_x_tick_label_font" not in kwargs:
+            self.alt_x_tick_label_font = CachedPlotFontInfo()
+        if "alt_y_tick_label_font" not in kwargs:
+            self.alt_y_tick_label_font = CachedPlotFontInfo()
     
     def __check_element_name_is_new(self, name: str) -> bool:
         return name not in self.plot_elements

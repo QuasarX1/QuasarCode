@@ -92,11 +92,16 @@ class CachedFigureGrid(CacheableStruct):
             self.rows = len(self.mosaic)
             self.columns = max(len(row) for row in self.mosaic)
 
-        self.plots = {}
-        self.colourbars = {}
-        self.custom_legends = {}
-        self.default_font = CachedPlotFontInfo()
-        self.title_font = CachedPlotFontInfo()
+        if "plots" not in kwargs:
+            self.plots = {}
+        if "colourbars" not in kwargs:
+            self.colourbars = {}
+        if "custom_legends" not in kwargs:
+            self.custom_legends = {}
+        if "default_font" not in kwargs:
+            self.default_font = CachedPlotFontInfo()
+        if "title_font" not in kwargs:
+            self.title_font = CachedPlotFontInfo()
         
     def set_resolution_custom(self, width_pixels: int|None = None, height_pixels: int|None = None, file_only: bool = False) -> None:
         """

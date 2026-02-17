@@ -67,10 +67,14 @@ class CachedPlotCustomLegend(CacheableStruct):
             ],
             **kwargs
         )
-        self.element_targets = {}
-        self.label_font = CachedPlotFontInfo()
-        self.title_font = CachedPlotFontInfo()
-        self.box = CachedPlotLegendBoxProperties()
+        if "element_targets" not in kwargs:
+            self.element_targets = {}
+        if "label_font" not in kwargs:
+            self.label_font = CachedPlotFontInfo()
+        if "title_font" not in kwargs:
+            self.title_font = CachedPlotFontInfo()
+        if "box" not in kwargs:
+            self.box = CachedPlotLegendBoxProperties()
 
     def render(self, figure: Figure, axis: Axes|None, default_font: CachedPlotFontInfo, plot_elements: Optional[dict[str, CachedPlotElement]] = None, elements_by_figure_plot: Optional[dict[str, dict[str, CachedPlotElement]]] = None, *args: Any, **kwargs: Any) -> None:
 

@@ -220,9 +220,12 @@ class CachedPlotColourbar(CachedPlotElement[Colorbar]):
     tick_label_font = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
         super().__init__("target_element", "target_plot", "label", "add_to_axis", "location", "orientation", "extend", "default_font", "label_font", "tick_label_font", **kwargs)
-        self.default_font    = CachedPlotFontInfo()
-        self.label_font      = CachedPlotFontInfo()
-        self.tick_label_font = CachedPlotFontInfo()
+        if "default_font" not in kwargs:
+            self.default_font = CachedPlotFontInfo()
+        if "label_font" not in kwargs:
+            self.label_font = CachedPlotFontInfo()
+        if "tick_label_font" not in kwargs:
+            self.tick_label_font = CachedPlotFontInfo()
     def render(self, figure: Figure, axis: Axes, target: ScalarMappable|ColorizingArtist, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         """
         Render the element on the given figure and axis, using the target element.
@@ -275,8 +278,9 @@ class CachedPlotContour(CachedPlotElement[QuadContourSet]):
     label_format          = AutoProperty            [CacheableFunction            ](allow_uninitialised = True)
     font                  = AutoProperty_NonNullable[CachedPlotFontInfo]()
     def __init__(self, **kwargs):
-        self.font = CachedPlotFontInfo()
         super().__init__("x", "y", "extent", "z", "levels", "linewidths", "linestyles", "alpha_values", "colours", "labeled_level_indexes", "label_positions", "label_format", "font", **kwargs)
+        if "font" not in kwargs:
+            self.font = CachedPlotFontInfo()
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         if sum([self.x is not None, self.y is not None]) == 1:
             raise ValueError("Both x and y must be provided together or not at all.")
@@ -362,7 +366,8 @@ class CachedPlotText(CachedPlotElement[Text]):
     border_colour = AutoProperty            [ColorType                                    ](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("text", "x", "y", "font", "alpha", "box_colour", "border_colour", **kwargs)
-        self.font = CachedPlotFontInfo()
+        if "font" not in kwargs:
+            self.font = CachedPlotFontInfo()
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
         self._result = axis.text(
             x           = self.x,
@@ -409,7 +414,8 @@ class CachedPlotPie(CachedPlotElement[tuple[list[Wedge], list[Text]] | tuple[lis
     labled_data         = AutoProperty[dict](allow_uninitialised = True)
     def __init__(self, **kwargs):
         super().__init__("values", "colours", "texture", "shadow", "labels", "label_distance", "rotate_labels", "percentage_format", "percentage_distance", "centre", "radius", "start_angle", "segment_rotation", "wedge_properties", "explode_distance", "font", "hide_axes", "ensure_complete_pie", "labled_data", **kwargs)
-        self.font = CachedPlotFontInfo()
+        if "font" not in kwargs:
+            self.font = CachedPlotFontInfo()
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         if not self.ensure_complete_pie and sum(self.values) > 1:
             raise ValueError("The sum of the values must not exceed 1 when ensure_complete_pie is False.")
