@@ -82,7 +82,7 @@ class CachedPlot(CacheableStruct):
                 "show_x_ticks_on_other_side", "show_y_ticks_on_other_side", "show_x_tick_labels",
                 "show_y_tick_labels", "show_x_tick_labels_on_other_side",
                 "show_y_tick_labels_on_other_side", "x_ticks_inside", "y_ticks_inside",
-                "alt_x_axis_functions", "alt_y_axis_functions"
+                "alt_x_axis_functions", "alt_y_axis_functions",
                 "alt_x_tick_locations", "alt_y_tick_locations", "alt_x_tick_format",
                 "alt_y_tick_format", "alt_x_axis_label", "alt_y_axis_label", "show_alt_x_ticks",
                 "show_alt_y_ticks", "show_alt_x_tick_labels", "show_alt_y_tick_labels",
