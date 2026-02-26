@@ -357,16 +357,17 @@ class CachedPlotImage(CachedPlotElement[AxesImage]):
         )
 
 class CachedPlotText(CachedPlotElement[Text]):
-    text          = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    x             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    y             = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
-    font          = AutoProperty_NonNullable[CachedPlotFontInfo                           ]()
-#    colour        = AutoProperty            [ColorType                                    ]()
-    alpha         = AutoProperty_NonNullable[float                                        ](default_value = 1.0)
-    box_colour    = AutoProperty            [ColorType                                    ](allow_uninitialised = True)
-    border_colour = AutoProperty            [ColorType                                    ](allow_uninitialised = True)
+    text                 = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    x                    = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    y                    = AutoProperty_NonNullable[np.ndarray[tuple[int], np.dtype[np.floating]]]()
+    font                 = AutoProperty_NonNullable[CachedPlotFontInfo                           ]()
+#    colour               = AutoProperty            [ColorType                                    ]()
+    alpha                = AutoProperty_NonNullable[float                                        ](default_value = 1.0)
+    box_colour           = AutoProperty            [ColorType                                    ](allow_uninitialised = True)
+    border_colour        = AutoProperty            [ColorType                                    ](allow_uninitialised = True)
+    use_data_coordinates = AutoProperty_NonNullable[bool                                         ](default_value = False)
     def __init__(self, **kwargs):
-        super().__init__("text", "x", "y", "font", "alpha", "box_colour", "border_colour", **kwargs)
+        super().__init__("text", "x", "y", "font", "alpha", "box_colour", "border_colour", "use_data_coordinates", **kwargs)
         if "font" not in kwargs:
             self.font = CachedPlotFontInfo()
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any) -> None:
@@ -378,6 +379,7 @@ class CachedPlotText(CachedPlotElement[Text]):
             color = self.font.colour,
             alpha       = self.alpha,
             bbox        = dict(facecolor = self.box_colour, edgecolor = self.border_colour) if (self.box_colour is not None or self.border_colour is not None) else None,
+            transform = axis.transData if self.use_data_coordinates else axis.transAxes,
             **kwargs,
         )
     @staticmethod
