@@ -4,6 +4,7 @@ from typing import Any, Literal, Optional
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from matplotlib.axes._secondary_axes import SecondaryAxis
+from matplotlib.ticker import FixedLocator, FixedFormatter, StrMethodFormatter, FuncFormatter, Formatter
 
 from ..Data._Rect import Rect
 from ..IO.Caching._CacheableList import CacheableList
@@ -31,6 +32,10 @@ class CachedPlot(CacheableStruct):
     custom_legends = AutoProperty_NonNullable[dict[str, CachedPlotCustomLegend]]()
     show_x_ticks = AutoProperty_NonNullable[bool](default_value = True)
     show_y_ticks = AutoProperty_NonNullable[bool](default_value = True)
+    x_tick_locations = AutoProperty[CacheableList[float]](allow_uninitialised = True)
+    y_tick_locations = AutoProperty[CacheableList[float]](allow_uninitialised = True)
+    x_tick_format = AutoProperty[CacheableList[int|float|str]|str|CacheableFunction](allow_uninitialised = True) # [0, 1, 2, 3] or ["a", "b", "c", "d"] or "{x:.3f}" or lambda x, pos: _
+    y_tick_format = AutoProperty[CacheableList[int|float|str]|str|CacheableFunction](allow_uninitialised = True)
     show_x_ticks_on_other_side = AutoProperty_NonNullable[bool](default_value = False)
     show_y_ticks_on_other_side = AutoProperty_NonNullable[bool](default_value = False)
     show_x_tick_labels = AutoProperty_NonNullable[bool](default_value = True)
@@ -41,6 +46,10 @@ class CachedPlot(CacheableStruct):
     y_ticks_inside = AutoProperty_NonNullable[bool](default_value = False)
     alt_x_axis_functions = AutoProperty[CacheableList[CacheableFunction]](allow_uninitialised = True)
     alt_y_axis_functions = AutoProperty[CacheableList[CacheableFunction]](allow_uninitialised = True)
+    alt_x_tick_locations = AutoProperty[CacheableList[float]](allow_uninitialised = True)
+    alt_y_tick_locations = AutoProperty[CacheableList[float]](allow_uninitialised = True)
+    alt_x_tick_format = AutoProperty[CacheableList[int|float|str]|str|CacheableFunction](allow_uninitialised = True)
+    alt_y_tick_format = AutoProperty[CacheableList[int|float|str]|str|CacheableFunction](allow_uninitialised = True)
     alt_x_axis_label = AutoProperty[str](allow_uninitialised = True)
     alt_y_axis_label = AutoProperty[str](allow_uninitialised = True)
     show_alt_x_ticks = AutoProperty_NonNullable[bool](default_value = True)
@@ -69,16 +78,18 @@ class CachedPlot(CacheableStruct):
                 "title", "plot_elements", "colourbars", "extent", "aspect", "aspect_adjustable",
                 "aspect_anchor", "x_axis_label", "y_axis_label", "flip_x", "flip_y", "show_legend",
                 "legend_position", "custom_legends", "show_x_ticks", "show_y_ticks",
+                "x_tick_locations", "y_tick_locations", "x_tick_format", "y_tick_format",
                 "show_x_ticks_on_other_side", "show_y_ticks_on_other_side", "show_x_tick_labels",
                 "show_y_tick_labels", "show_x_tick_labels_on_other_side",
                 "show_y_tick_labels_on_other_side", "x_ticks_inside", "y_ticks_inside",
-                "alt_x_axis_functions", "alt_y_axis_functions", "alt_x_axis_label",
-                "alt_y_axis_label", "show_alt_x_ticks", "show_alt_y_ticks",
-                "show_alt_x_tick_labels", "show_alt_y_tick_labels", "alt_x_ticks_inside",
-                "alt_y_ticks_inside", "default_font", "title_font", "x_axis_label_font",
-                "y_axis_label_font", "alt_x_axis_label_font", "alt_y_axis_label_font",
-                "x_tick_label_font", "y_tick_label_font", "alt_x_tick_label_font",
-                "alt_y_tick_label_font"
+                "alt_x_axis_functions", "alt_y_axis_functions"
+                "alt_x_tick_locations", "alt_y_tick_locations", "alt_x_tick_format",
+                "alt_y_tick_format", "alt_x_axis_label", "alt_y_axis_label", "show_alt_x_ticks",
+                "show_alt_y_ticks", "show_alt_x_tick_labels", "show_alt_y_tick_labels",
+                "alt_x_ticks_inside", "alt_y_ticks_inside", "default_font", "title_font",
+                "x_axis_label_font", "y_axis_label_font", "alt_x_axis_label_font",
+                "alt_y_axis_label_font", "x_tick_label_font", "y_tick_label_font",
+                "alt_x_tick_label_font", "alt_y_tick_label_font"
             ),
             **kwargs
         )
@@ -149,6 +160,31 @@ class CachedPlot(CacheableStruct):
         if self.y_axis_label is not None:
             axis.set_ylabel(self.y_axis_label, **self.y_axis_label_font.with_default(self.default_font).with_default(figure_default_font).fontdict)
 
+        if self.x_tick_locations is not None:
+            axis.xaxis.set_major_locator(FixedLocator(self.x_tick_locations))
+        if self.y_tick_locations is not None:
+            axis.yaxis.set_major_locator(FixedLocator(self.y_tick_locations))
+            
+        formatter: Formatter
+
+        if self.x_tick_format is not None:
+            if isinstance(self.x_tick_format, list):
+                formatter = FixedFormatter(map(str, self.x_tick_format))
+            elif isinstance(self.x_tick_format, str):
+                formatter = StrMethodFormatter(self.x_tick_format)
+            else:
+                formatter = FuncFormatter(self.x_tick_format)
+            axis.xaxis.set_major_formatter(formatter)
+
+        if self.y_tick_format is not None:
+            if isinstance(self.y_tick_format, list):
+                formatter = FixedFormatter(map(str, self.y_tick_format))
+            elif isinstance(self.y_tick_format, str):
+                formatter = StrMethodFormatter(self.y_tick_format)
+            else:
+                formatter = FuncFormatter(self.y_tick_format)
+            axis.yaxis.set_major_formatter(formatter)
+
         x_tick_label_font = self.x_tick_label_font.with_default(self.default_font).with_default(figure_default_font)
         x_tick_label_font_kwargs = {}
         if x_tick_label_font.size is not None:
@@ -195,6 +231,16 @@ class CachedPlot(CacheableStruct):
             )
             if self.alt_x_axis_label is not None:
                 self._alt_x_axis.set_xlabel(self.alt_x_axis_label, **self.alt_x_axis_label_font.with_default(self.x_axis_label_font).with_default(self.default_font).with_default(figure_default_font).fontdict)
+            if self.alt_x_tick_locations is not None:
+                self._alt_x_axis.xaxis.set_major_locator(FixedLocator(self.alt_x_tick_locations))
+            if self.alt_x_tick_format is not None:
+                if isinstance(self.alt_x_tick_format, list):
+                    formatter = FixedFormatter(map(str, self.alt_x_tick_format))
+                elif isinstance(self.alt_x_tick_format, str):
+                    formatter = StrMethodFormatter(self.alt_x_tick_format)
+                else:
+                    formatter = FuncFormatter(self.alt_x_tick_format)
+                self._alt_x_axis.xaxis.set_major_formatter(formatter)
             alt_x_tick_label_font = self.alt_x_tick_label_font.with_default(self.x_tick_label_font).with_default(self.default_font).with_default(figure_default_font)
             alt_x_tick_label_font_kwargs = {}
             if alt_x_tick_label_font.size is not None:
@@ -218,6 +264,16 @@ class CachedPlot(CacheableStruct):
             )
             if self.alt_y_axis_label is not None:
                 self._alt_y_axis.set_xlabel(self.alt_y_axis_label, **self.alt_y_axis_label_font.with_default(self.y_axis_label_font).with_default(self.default_font).with_default(figure_default_font).fontdict)
+            if self.alt_y_tick_locations is not None:
+                self._alt_y_axis.yaxis.set_major_locator(FixedLocator(self.alt_y_tick_locations))
+            if self.alt_y_tick_format is not None:
+                if isinstance(self.alt_y_tick_format, list):
+                    formatter = FixedFormatter(map(str, self.alt_y_tick_format))
+                elif isinstance(self.alt_y_tick_format, str):
+                    formatter = StrMethodFormatter(self.alt_y_tick_format)
+                else:
+                    formatter = FuncFormatter(self.alt_y_tick_format)
+                self._alt_y_axis.yaxis.set_major_formatter(formatter)
             alt_y_tick_label_font = self.alt_y_tick_label_font.with_default(self.y_tick_label_font).with_default(self.default_font).with_default(figure_default_font)
             alt_y_tick_label_font_kwargs = {}
             if alt_y_tick_label_font.size is not None:
