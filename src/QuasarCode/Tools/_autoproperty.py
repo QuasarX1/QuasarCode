@@ -11,11 +11,11 @@ class AutoProperty(property, Generic[T]):
 
     Uninitialised properties are assigned None and are considered uninitialised (i.e. like NULLPTR).
 
-    Calling the deleter will uninitialise the value back to None.
+    Calling the deleter will uninitialize the value back to None.
 
     Constructor:
         str | None doc                 -> Optional documentation string for the property. Defaults to None.
-              bool allow_uninitialised -> If the property is unititialised, should None be returned upon attempting to access the value? Default is False.
+              bool allow_uninitialised -> If the property is uninitialised, should None be returned upon attempting to access the value? Default is False.
     """
     
     def __init__(self, default_value: Union[T, None] = None, doc: Union[str, None] = None, allow_uninitialised: bool = False) -> None:
@@ -78,7 +78,7 @@ class AutoProperty_NonNullable(AutoProperty[T]):
     Syntactic sugar for AutoProperty(..., allow_uninitialised = False)
     Also adds a more appropriate type hint for the underlying property __get__ method.
 
-    Calling the deleter will uninitialise the value making the property unreadable.
+    Calling the deleter will uninitialize the value making the property unreadable.
 
     Constructor:
         str | None doc -> Optional documentation string for the property. Defaults to None.
@@ -96,7 +96,7 @@ class NullableTypedAutoProperty(AutoProperty[T]):
 
     Uninitialised properties are assigned None by default.
 
-    Calling the deleter will uninitialise the value back to None.
+    Calling the deleter will uninitialize the value back to None.
 
     TypeParam:
         T -> The type of the property's value (when initialised).
@@ -119,7 +119,7 @@ class TypedAutoProperty(AutoProperty_NonNullable[T]):
 
     Uninitialised properties are assigned None and are considered uninitialised (i.e. like NULLPTR).
 
-    Calling the deleter will uninitialise the value back to None.
+    Calling the deleter will uninitialize the value back to None.
 
     TypeParam:
         T -> The type of the property's value (when initialised).
@@ -142,14 +142,14 @@ class TypeCastAutoProperty(AutoProperty[T]):
 
     Uninitialised properties are assigned None and are considered uninitialised (i.e. like NULLPTR).
 
-    Calling the deleter will uninitialise the value back to None.
+    Calling the deleter will uninitialize the value back to None.
 
     TypeParam:
         T -> The return type of the cast operation. Also the type of the property's value (when initialised).
 
     Constructor:
         str | None doc                 -> Optional documentation string for the property. Defaults to None.
-              bool allow_uninitialised -> If the property is unititialised, should None be returned upon attempting to access the value? Default is False.
+              bool allow_uninitialised -> If the property is uninitialised, should None be returned upon attempting to access the value? Default is False.
     """
 
     def __init__(self, cast: Union[Cast[T], Callable[[Any], T]], default_value: Union[T, None] = None, doc: Union[str, None] = None) -> None:
