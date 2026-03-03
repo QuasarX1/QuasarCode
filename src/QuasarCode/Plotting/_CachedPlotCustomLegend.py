@@ -124,7 +124,7 @@ class CachedPlotCustomLegend(CacheableStruct):
             scatterpoints        = self.scatter_render_points,
             scatteryoffsets      = self.scatter_render_points_y_offsets,
             markerscale          = self.marker_scale,
-            markerfirst          = self.marker_location == "first",
+            markerfirst          = self.marker_location.lower().strip() == "left",
             reverse              = self.reverse_order,
             frameon              = self.box.show,
             fancybox             = self.box.round_corners,
