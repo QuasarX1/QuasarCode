@@ -128,7 +128,7 @@ class CachedPlotErrorbar(CachedPlotElement[ErrorbarContainer]):
     size = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
     alpha = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("x", "y", "xerr", "yerr", "colourmap", **kwargs)
+        super().__init__("x", "y", "xerr", "yerr", "label", "line_colour", "marker_colour", "error_colour", "error_line_width", "colourmap", "marker", "size", "alpha", **kwargs)
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         self._result = axis.errorbar(
             x = self.x,
