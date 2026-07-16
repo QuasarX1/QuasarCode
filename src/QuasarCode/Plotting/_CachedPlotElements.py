@@ -120,7 +120,8 @@ class CachedPlotErrorbar(CachedPlotElement[ErrorbarContainer]):
     yerr = AutoProperty[np.ndarray[tuple[int], np.dtype[np.floating]]](allow_uninitialised = True)
     label = AutoProperty[str](allow_uninitialised = True)
     line_colour = AutoProperty[ColorType|Sequence[ColorType]](allow_uninitialised = True)
-    marker_colour = AutoProperty[ColorType|Sequence[ColorType]](allow_uninitialised = True)
+    linestyle = AutoProperty[str](allow_uninitialised = True)
+    #marker_colour = AutoProperty[ColorType|Sequence[ColorType]](allow_uninitialised = True)#TODO: is this even an option? DOn't forget to re-add to the cache list!!!!
     error_colour = AutoProperty[ColorType|Sequence[ColorType]](allow_uninitialised = True)
     error_line_width = AutoProperty[float](allow_uninitialised = True)
     colourmap = AutoProperty[str|Colormap](allow_uninitialised = True)
@@ -128,7 +129,7 @@ class CachedPlotErrorbar(CachedPlotElement[ErrorbarContainer]):
     size = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
     alpha = AutoProperty["float|ArrayLike"](allow_uninitialised = True)
     def __init__(self, **kwargs):
-        super().__init__("x", "y", "xerr", "yerr", "label", "line_colour", "marker_colour", "error_colour", "error_line_width", "colourmap", "marker", "size", "alpha", **kwargs)
+        super().__init__("x", "y", "xerr", "yerr", "label", "line_colour", "linestyle", "error_colour", "error_line_width", "colourmap", "marker", "size", "alpha", **kwargs)
     def render(self, figure: Figure, axis: Axes, default_font: CachedPlotFontInfo, *args: Any, **kwargs: Any):
         self._result = axis.errorbar(
             x = self.x,
@@ -143,6 +144,7 @@ class CachedPlotErrorbar(CachedPlotElement[ErrorbarContainer]):
             markersize = self.size,
             alpha = self.alpha,
             color = self.line_colour,
+            linestyle = self.linestyle,
             **kwargs
         )
     @staticmethod
