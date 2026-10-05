@@ -263,7 +263,7 @@ class CachedPlot(CacheableStruct):
                 functions = tuple(self.alt_y_axis_functions)
             )
             if self.alt_y_axis_label is not None:
-                self._alt_y_axis.set_xlabel(self.alt_y_axis_label, **self.alt_y_axis_label_font.with_default(self.y_axis_label_font).with_default(self.default_font).with_default(figure_default_font).fontdict)
+                self._alt_y_axis.set_ylabel(self.alt_y_axis_label, **self.alt_y_axis_label_font.with_default(self.y_axis_label_font).with_default(self.default_font).with_default(figure_default_font).fontdict)
             if self.alt_y_tick_locations is not None:
                 self._alt_y_axis.yaxis.set_major_locator(FixedLocator(self.alt_y_tick_locations))
             if self.alt_y_tick_format is not None:
