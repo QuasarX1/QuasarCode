@@ -136,6 +136,30 @@ class CachedPlot(CacheableStruct):
             raise KeyError(f"No element exists with the target name \"{colourbar.target_element}\".")
         self.colourbars[name] = colourbar
 
+    def add_legend(self, name: str, *element_names: str) -> None:
+        self.custom_legends[name] = CachedPlotCustomLegend()
+        for element_name in element_names:
+            self.add_to_legend(element_name, legend_name = name)
+
+    def add_to_legend(self, element_name: str, label: Optional[str] = None, legend_name: Optional[str] = None) -> None:
+        if legend_name is None:
+            if len(self.custom_legends) > 1:
+                raise KeyError("Unable to assume legend name where multiple legends are specified.")
+            if len(self.custom_legends) == 0:
+                legend_name = "legend"
+                self.add_legend(legend_name)
+            else:
+                legend_name = list(self.custom_legends.keys())[0]
+        if label is None:
+            element = self.plot_elements[element_name]
+            try:
+                label = element.label
+                if element.label is None:
+                    raise KeyError()
+            except:
+                raise KeyError("Element has no assigned label.")
+        self.custom_legends[legend_name].add_element(label, element_name)
+
     def render(self, figure: Figure, axis: Axes, figure_default_font: Optional[CachedPlotFontInfo] = None, forward_kwargs: dict[str, dict[str, Any]]|None = None, forward_colourbar_kwargs: dict[str, dict[str, Any]]|None = None) -> None:
         if forward_kwargs is None:
             forward_kwargs = {}

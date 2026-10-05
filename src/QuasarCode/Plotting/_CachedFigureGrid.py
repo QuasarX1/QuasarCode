@@ -469,6 +469,28 @@ class CachedFigureGrid(CacheableStruct):
             self.colourbars.pop(name)
         except KeyError: pass
 
+    def add_legend(self, name: str) -> None:
+        self.custom_legends[name] = CachedPlotCustomLegend()
+
+    def add_to_legend(self, plot_name: str, element_name: str, label: Optional[str] = None, legend_name: Optional[str] = None) -> None:
+        if legend_name is None:
+            if len(self.custom_legends) > 1:
+                raise KeyError("Unable to assume legend name where multiple legends are specified.")
+            if len(self.custom_legends) == 0:
+                legend_name = "legend"
+                self.add_legend(legend_name)
+            else:
+                legend_name = list(self.custom_legends.keys())[0]
+        if label is None:
+            element = self.plots[plot_name].plot_elements[element_name]
+            try:
+                label = element.label
+                if element.label is None:
+                    raise KeyError()
+            except:
+                raise KeyError("Element has no assigned label.")
+        self.custom_legends[legend_name].add_element(label, (plot_name, element_name))
+
     def get_axis_rect_relative(self, name: str) -> Rect:
         """
         Get a Rect instance containing the relative position and size of a named axis.

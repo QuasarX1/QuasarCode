@@ -29,6 +29,7 @@ class CachedPlotLegendBoxProperties(CacheableStruct):
 class CachedPlotCustomLegend(CacheableStruct):
     title                           = AutoProperty            [str                          ](allow_uninitialised = True)
     element_targets                 = AutoProperty_NonNullable[dict[str,str|tuple[str,str]] ]() # Label : target element | (target plot, target element)
+    order                           = AutoProperty            [list[str]                    ]() # List of labels
     reverse_order                   = AutoProperty_NonNullable[bool                         ](default_value = False)
     columns                         = AutoProperty_NonNullable[int                          ](default_value = 1)
     position                        = AutoProperty_NonNullable[Literal["best", "upper left", "upper center", "upper right", "center left", "center", "center right", "lower left", "lower center", "lower right"]|tuple[float, float]](default_value = "best")
@@ -58,7 +59,7 @@ class CachedPlotCustomLegend(CacheableStruct):
     def __init__(self, **kwargs):
         super().__init__(
             cacheable_attributes = [
-                "title", "element_targets", "reverse_order", "columns", "position",
+                "title", "element_targets", "order", "reverse_order", "columns", "position",
                 "anchor_region", "anchor", "anchor_space", "label_font", "label_colours",
                 "title_font", "alignment", "line_render_points", "scatter_render_points",
                 "scatter_render_points_y_offsets", "marker_scale", "marker_location",
@@ -76,6 +77,12 @@ class CachedPlotCustomLegend(CacheableStruct):
         if "box" not in kwargs:
             self.box = CachedPlotLegendBoxProperties()
 
+    def add_element(self, label: str, target: str|tuple[str,str]) -> None:
+        if self.order is None:
+            self.order = list(self.element_targets.keys())
+        self.element_targets[label] = target
+        self.order.append(label)
+
     def render(self, figure: Figure, axis: Axes|None, default_font: CachedPlotFontInfo, plot_elements: Optional[dict[str, CachedPlotElement]] = None, elements_by_figure_plot: Optional[dict[str, dict[str, CachedPlotElement]]] = None, *args: Any, **kwargs: Any) -> None:
 
         if plot_elements is None and elements_by_figure_plot is None:
@@ -89,9 +96,12 @@ class CachedPlotCustomLegend(CacheableStruct):
 
         anchor_transform = None if self.anchor_space is None else figure.transFigure if self.anchor_space == "figure-space" else axis.transAxes if self.anchor_space == "axis-space" else axis.transData
 
+        target_labels_in_order = self.order if self.order is not None else list(self.element_targets.keys())
+
         artists = []
         labels = []
-        for label, target in self.element_targets.items():
+        for label in target_labels_in_order:
+            target = self.element_targets[label]
             target_plot: str|None
             target_element: str
             artist: Artist
