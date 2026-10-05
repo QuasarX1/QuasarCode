@@ -80,13 +80,13 @@ class CachedPlotCustomLegend(CacheableStruct):
 
         if plot_elements is None and elements_by_figure_plot is None:
             raise ValueError("At least one of plot_elements or elements_by_figure_plot must be provided to render a CachedPlotCustomLegend.")
-        
+
         if self.anchor is None and self.anchor_region is not None:
             raise ValueError("Only one of anchor or anchor_region may be set.")
-        
+
         if self.anchor_space is not None and self.anchor_space != "figure-space" and axis is None:
             raise ValueError("anchor_space cannot be set to a value other than 'figure-space' if axis is not provided.")
-        
+
         anchor_transform = None if self.anchor_space is None else figure.transFigure if self.anchor_space == "figure-space" else axis.transAxes if self.anchor_space == "axis-space" else axis.transData
 
         artists = []
