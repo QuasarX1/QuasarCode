@@ -29,7 +29,7 @@ class CachedPlotLegendBoxProperties(CacheableStruct):
 class CachedPlotCustomLegend(CacheableStruct):
     title                           = AutoProperty            [str                          ](allow_uninitialised = True)
     element_targets                 = AutoProperty_NonNullable[dict[str,str|tuple[str,str]] ]() # Label : target element | (target plot, target element)
-    order                           = AutoProperty            [list[str]                    ]() # List of labels
+    order                           = AutoProperty            [list[str]                    ](allow_uninitialised = True) # List of labels
     reverse_order                   = AutoProperty_NonNullable[bool                         ](default_value = False)
     columns                         = AutoProperty_NonNullable[int                          ](default_value = 1)
     position                        = AutoProperty_NonNullable[Literal["best", "upper left", "upper center", "upper right", "center left", "center", "center right", "lower left", "lower center", "lower right"]|tuple[float, float]](default_value = "best")
