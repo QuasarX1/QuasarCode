@@ -666,7 +666,7 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        if "dpi" in kwargs:
+        if "dpi" not in kwargs:
             kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
         self.__figure.savefig(filepath, **kwargs)
     def save_jpeg(self, filename: str, directory: str|None = None, **kwargs) -> None:
@@ -685,7 +685,7 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        if "dpi" in kwargs:
+        if "dpi" not in kwargs:
             kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
         self.__figure.savefig(filepath, **kwargs)
     def save_pdf(self, filename: str, directory: str|None = None, **kwargs) -> None:
@@ -725,6 +725,6 @@ class CachedFigureGrid(CacheableStruct):
             filepath = os.path.join(directory, filepath)
         if not self.__locked:
             raise RuntimeError("Figure has not been created yet. Call `make_figure_and_axes` first.")
-        if "dpi" in kwargs:
+        if "dpi" not in kwargs:
             kwargs["dpi"] = self.resolution_for_files if self.resolution_for_files is not None else self.resolution
         self.__figure.savefig(filepath, **kwargs)
